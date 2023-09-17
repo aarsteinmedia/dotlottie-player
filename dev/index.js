@@ -21762,7 +21762,7 @@
 
 	var name = "@aarsteinmedia/dotlottie-player";
 	var version = "2.0.0";
-	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
+	var description = "Web Component for playing Lottie animations in your web app. Previously @aarsteinmedia/dotlottie-player";
 	var exports$1 = {
 		".": {
 			"import": "./dist/esm/index.js",

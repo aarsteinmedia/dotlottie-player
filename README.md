@@ -19,13 +19,13 @@ Here is [a demo](https://www.aarstein.media/en/dev/dotlottie-player), running on
 - Import from CDN:
 
 ```xml
-<script src="https://unpkg.com/@johanaarstein/dotlottie-player@latest/dist/index.js"></script>
+<script src="https://unpkg.com/@aarsteinmedia/dotlottie-player@latest/dist/index.js"></script>
 ```
 
 - Import from node_modules directory:
 
 ```xml
-<script src="/node_modules/@johanaarstein/dotlottie-player/dist/index.js"></script>
+<script src="/node_modules/@aarsteinmedia/dotlottie-player/dist/index.js"></script>
 ```
 
 ### In JavaScript or TypeScript
@@ -33,13 +33,13 @@ Here is [a demo](https://www.aarstein.media/en/dev/dotlottie-player), running on
 1. Install using npm or yarn:
 
 ```shell
-npm install --save @johanaarstein/dotlottie-player
+npm install --save @aarsteinmedia/dotlottie-player
 ```
 
 2. Import in your app:
 
 ```javascript
-import '@johanaarstein/dotlottie-player'
+import '@aarsteinmedia/dotlottie-player'
 ```
 
 ## Usage
@@ -70,7 +70,7 @@ lottiePlayer.load('https://storage.googleapis.com/aarsteinmedia/am.lottie')
 
 ```typescript
 import { Component } from '@angular/core'
-import '@johanaarstein/dotlottie-player'
+import '@aarsteinmedia/dotlottie-player'
 
 @Component({
   selector: 'app-root',
@@ -89,7 +89,7 @@ export class AppComponent {
 If you've already imported the library in a parent component, you don't need to import it again in children of that component. If you want to assign the element a class note that you need to use the `class` namespace, and not `className`.
 
 ```jsx
-import '@johanaarstein/dotlottie-player'
+import '@aarsteinmedia/dotlottie-player'
 
 function App() {
   return (
@@ -114,8 +114,8 @@ If you're using TypeScript and want to assign the component a `ref`, you can do 
 
 ```tsx
 import { useRef } from 'react'
-import '@johanaarstein/dotlottie-player'
-import type { DotLottiePlayer } from '@johanaarstein/dotlottie-player'
+import '@aarsteinmedia/dotlottie-player'
+import type { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player'
 
 function App() {
   const animation = useRef<DotLottiePlayer | null>(null)
@@ -176,7 +176,7 @@ export default defineNuxtConfig({
 
 ```typescript
 import { createApp } from 'vue'
-import { DotLottiePlayer } from '@johanaarstein/dotlottie-player'
+import { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player'
 import App from './App.vue'
 
 const app = createApp(App)
@@ -187,7 +187,7 @@ app.component('DotLottiePlayer', DotLottiePlayer)
 Create a `plugins` folder in your root if it doesn't exist already, add a file named `dotlottie-player.js`:
 
 ```javascript
-import { DotLottiePlayer } from '@johanaarstein/dotlottie-player'
+import { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player'
 
 export default defineNuxtPlugin(({ vueApp }) => {
   vueApp.component('DotLottiePlayer', DotLottiePlayer)
