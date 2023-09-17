@@ -102,7 +102,7 @@ export class AppComponent {
 
 ### React.js / Next.js
 
-If you've already imported the library in a parent component, you don't need to import it again in children of that component. If you want to assign the element a class note that you need to use the `class` namespace, and not `className`.
+If you've already imported the library in a parent component, you don't need to import it again in children of that component. If you want to assign the element a CSS class note that you need to use the `class` namespace, and not `className`.
 
 ```jsx
 import '@aarsteinmedia/dotlottie-player'
