@@ -1,12 +1,10 @@
-# AM LottiePlayer Web Component
+# AM LottiePlayer
 
 ![Awesome Vector Animations](/.github/readmeBanner.svg)
 
-The most versatile and efficient Lottie Player Web Component!
+We proudly claim this to be the most versatile, lightweight and efficient Lottie Player Web Component available. It's built with Lit, compiled with Rust, compatible with server side rendering – and like any good web component it's framework agnostic.
 
-The component is built with Lit and compiled with Rust. It's compatible with server side rendering, and like any good web component it's framework agnostic.
-
-If you only need to render animations as SVG we've made light version: [@aarsteinmedia/dotlottie-player-light](https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light).
+PS: If you only need to render animations as SVG, and don't need to convert or combine animations on the fly, we've made light version: [@aarsteinmedia/dotlottie-player-light](https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light).
 
 ## Demo
 

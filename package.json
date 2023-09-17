@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player",
   "exports": {
     ".": {
@@ -17,10 +17,10 @@
   "type": "module",
   "homepage": "https://www.aarstein.media/en/dev/dotlottie-player",
   "repository": {
-    "url": "https://github.com/johanaarstein/dotlottie-player.git",
+    "url": "https://github.com/aarsteinmedia/dotlottie-player.git",
     "type": "git"
   },
-  "bugs": "https://github.com/johanaarstein/dotlottie-player/issues",
+  "bugs": "https://github.com/aarsteinmedia/dotlottie-player/issues",
   "author": {
     "name": "Johan Martin Aarstein",
     "email": "johan@aarstein.media",
