@@ -2,7 +2,7 @@
 
 ![Awesome Vector Animations](/.github/readmeBanner.svg)
 
-The most versatile and efficient Lottie Player Web Component out there!
+The most versatile and efficient Lottie Player Web Component!
 
 The component is built with Lit and compiled with Rust. It's compatible with server side rendering, and like any good web component it's framework agnostic.
 
@@ -56,13 +56,31 @@ Add the element `dotlottie-player` to your markup and point `src` to a Lottie an
 >
 </dotlottie-player>
 ```
-
+# Load animation
 To set animations programmatically, use the `load()` method.
 
 ```javascript
 const lottiePlayer = document.querySelector('dotlottie-player')
 lottiePlayer.load('https://storage.googleapis.com/aarsteinmedia/am.lottie')
 ```
+
+# Convert to dotLottie
+If you have a Lottie JSON animation and want to convert it to a dotLottie – to leverage compression, combine multiple animations in one file and keep your file library tidy with a discrete file extension –  you can do so with the `convert()` method. This will trigger a download in the browser. If you have `controls` set to visible there's a convert button visible for JSON files.
+
+# Combine animations
+If you want to combine multiple animations in one single dotLottie file you can use the `addAnimation` method. This will trigger a download in the browser. The source files can be either dotLottie or JSON, and the output file will will always be a dotLottie.
+
+```javascript
+const lottiePlayer = document.querySelector('dotlottie-player')
+const combineAnimations = async () => {
+  lottiePlayer?.addAnimation([
+    { id: 'animation_1', url: '/url/to/animation_1.lottie' },
+    { id: 'animation_2', url: '/url/to/animation_2.json', direction: -1, speed: 2 }
+  ])
+} 
+```
+
+The new file wil automatically load the first animation when initialized. You can toggle between animations with the `next()` and `prev()` methods, or you can use the navigation buttons in the controls.
 
 ### Angular
 
