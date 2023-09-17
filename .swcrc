@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/swcrc",
+  "jsc": {
+    "baseUrl": "./src",
+    "assumptions": {
+      "setPublicClassFields": true
+    },
+    "keepClassNames": true,
+    "parser": {
+      "syntax": "typescript",
+      "decorators": true,
+      "dynamicImport": true
+    },
+    "target": "es2015",
+    "minify": {
+      "compress": false,
+      "mangle": false
+    }
+  },
+  "minify": true
+}
