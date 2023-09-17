@@ -124,6 +124,10 @@ export default css`
     outline: 0;
   }
 
+  .toolbar button svg {
+    pointer-events: none;
+  }
+
   .toolbar button svg > * {
     fill: inherit
   }

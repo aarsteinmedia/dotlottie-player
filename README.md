@@ -1,4 +1,4 @@
-# Lottie Player Web Component
+# AM LottiePlayer Web Component
 
 ![Awesome Vector Animations](/.github/readmeBanner.svg)
 
@@ -231,8 +231,14 @@ export default defineNuxtPlugin(({ vueApp }) => {
 
 | Method                                    | Function
 | ----------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `load(src: string) => void`               | Load                                                                                                      |
+| `addAnimation(config: Config[]) => void`  | Add animation. Triggers download of new dotLottie file.                                                   |
+| `convert() => void`                       | If the current animation is in JSON format – convert it to dotLottie. Triggers a download in the browser. |
+| `destroy() => void`                       | Nullify animation and remove element from the DOM.                                                        |
+| `getLottie() => AnimationItem \| null`    | Returns the lottie-web instance used in the component                                                     |
+| `load(src: string) => void`               | Load animation by URL or JSON object                                                                      |
+| `next() => void`                          | Next animation (if several in file)                                                                       |
 | `pause() => void`                         | Pause                                                                                                     |
+| `prev() => void`                          | Previous animation (if several in file)                                                                   |
 | `play() => void`                          | Play                                                                                                      |
 | `reload() => void`                        | Reload                                                                                                    |
 | `seek(value: number \| string) => void`   | Go to frame. Can be a number or a percentage string (e. g. 50%).                                          |
@@ -240,7 +246,7 @@ export default defineNuxtPlugin(({ vueApp }) => {
 | `setLooping(value: boolean) => void`      | Set Looping                                                                                               |
 | `setSpeed(value?: number) => void`        | Set Speed                                                                                                 |
 | `setSubframe(value: boolean) => void`     | Set subframe                                                                                              |
-| `snapshot(download?: boolean) => string`  | Snapshot the current frame as SVG. If 'download' is set to true, a download is triggered in the browser.  |
+| `snapshot() => string`                    | Snapshot the current frame as SVG. Triggers a download in the browser.                                    |
 | `stop() => void`                          | Stop                                                                                                      |
 | `toggleBoomerang() => void`               | Toggle between `bounce` and `normal`                                                                      |
 | `toggleLooping() => void`                 | Toggle looping                                                                                            |

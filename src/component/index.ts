@@ -771,7 +771,7 @@ export class DotLottiePlayer extends LitElement {
   /**
    * Toggle show Settings
    */
-  public toggleSettings(flag?: boolean) {
+  private _toggleSettings(flag?: boolean) {
     if (flag === undefined) {
       this._isSettingsOpen = !this._isSettingsOpen
     } else {
@@ -1007,11 +1007,17 @@ export class DotLottiePlayer extends LitElement {
           </svg>
         </button>
         <button
-          @click=${this.toggleSettings}
-          @blur=${() => setTimeout(() => this.toggleSettings(false), 200)}
+          @click=${({ target }: Event) => {
+            this._toggleSettings()
+            // Because Safari does not add focus on click, we need to add it manually, so the onblur event will fire
+            if (target instanceof HTMLElement) {
+              target.focus()
+            }
+          }}
+          @blur=${() => setTimeout(() => this._toggleSettings(false), 200)}
           aria-label="Settings"
           aria-haspopup="true"
-          aria-expanded=${this._isSettingsOpen}
+          aria-expanded=${!!this._isSettingsOpen}
           aria-controls=${`${this._identifier}-settings`}
         >
           <svg width="24" height="24" aria-hidden="true" focusable="false">
