@@ -54,7 +54,7 @@ Add the element `dotlottie-player` to your markup and point `src` to a Lottie an
 >
 </dotlottie-player>
 ```
-# Load animation
+### Load animation
 To set animations programmatically, use the `load()` method.
 
 ```javascript
@@ -62,10 +62,10 @@ const lottiePlayer = document.querySelector('dotlottie-player')
 lottiePlayer.load('https://storage.googleapis.com/aarsteinmedia/am.lottie')
 ```
 
-# Convert to dotLottie
+### Convert to dotLottie
 If you have a Lottie JSON animation and want to convert it to a dotLottie – to leverage compression, combine multiple animations in one file and keep your file library tidy with a discrete file extension –  you can do so with the `convert()` method. This will trigger a download in the browser. If you have `controls` set to visible there's a convert button visible for JSON files.
 
-# Combine animations
+### Combine animations
 If you want to combine multiple animations in one single dotLottie file you can use the `addAnimation` method. This will trigger a download in the browser. The source files can be either dotLottie or JSON, and the output file will will always be a dotLottie.
 
 ```javascript
