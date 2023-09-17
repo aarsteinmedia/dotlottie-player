@@ -46,19 +46,6 @@ export const aspectRatio = (objectFit: ObjectFit) => {
   },
 
   /**
-   * Convert string to Uint8Array
-   * @param { string } str Base64 encoded string
-   * @returns { Uint8Array} UTF-8/Latin-1 binary
-   */
-  strToU8 = (str: string) => {
-    const u8 = new Uint8Array(str.length)
-    for (let i = 0; i < str.length; i++) {
-      u8[i] = str.charCodeAt(i)
-    }
-    return u8
-  },
-
-  /**
    * Convert a JSON Lottie to dotLottie or combine several animations and download new dotLottie file in your browser.
    * @param { LottieJSON[] } animations The animations to combine
    * @param { LottieManifest } manifest Manifest of meta information
@@ -308,6 +295,19 @@ export const aspectRatio = (objectFit: ObjectFit) => {
 
   isServer = () => {
     return !(typeof window !== 'undefined' && window.document)
+  },
+
+  /**
+   * Convert string to Uint8Array
+   * @param { string } str Base64 encoded string
+   * @returns { Uint8Array} UTF-8/Latin-1 binary
+   */
+  strToU8 = (str: string) => {
+    const u8 = new Uint8Array(str.length)
+    for (let i = 0; i < str.length; i++) {
+      u8[i] = str.charCodeAt(i)
+    }
+    return u8
   },
 
   resolveAssets = async (unzipped: Unzipped, assets?: LottieAsset[]) => {

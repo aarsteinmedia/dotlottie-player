@@ -1,5 +1,10 @@
 import { html, LitElement, nothing } from 'lit'
-import { customElement, property, query, state } from 'lit/decorators.js'
+import {
+  customElement,
+  property,
+  query,
+  state
+} from 'lit/decorators.js'
 import Lottie from 'lottie-web'
 
 import {
