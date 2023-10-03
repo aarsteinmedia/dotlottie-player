@@ -20323,9 +20323,7 @@
 	    if (e == null || e > v.length)
 	        e = v.length;
 	    // can't use .constructor in case user-supplied
-	    var n = new u8(e - s);
-	    n.set(v.subarray(s, e));
-	    return n;
+	    return new u8(v.subarray(s, e));
 	};
 	// error codes
 	var ec = [
@@ -20360,12 +20358,13 @@
 	    var sl = dat.length, dl = dict ? dict.length : 0;
 	    if (!sl || st.f && !st.l)
 	        return buf || new u8(0);
+	    var noBuf = !buf;
 	    // have to estimate size
-	    var noBuf = !buf || st.i != 2;
+	    var resize = noBuf || st.i != 2;
 	    // no state
 	    var noSt = st.i;
 	    // Assumes roughly 33% compression ratio average
-	    if (!buf)
+	    if (noBuf)
 	        buf = new u8(sl * 3);
 	    // ensure buffer can fit at least l elements
 	    var cbuf = function (l) {
@@ -20398,7 +20397,7 @@
 	                    break;
 	                }
 	                // ensure size
-	                if (noBuf)
+	                if (resize)
 	                    cbuf(bt + l);
 	                // Copy over uncompressed data
 	                buf.set(dat.subarray(s, t), bt);
@@ -20468,7 +20467,7 @@
 	        }
 	        // Make sure the buffer can hold this + the largest possible addition
 	        // Maximum chunk size (practically, theoretically infinite) is 2^17
-	        if (noBuf)
+	        if (resize)
 	            cbuf(bt + 131072);
 	        var lms = (1 << lbt) - 1, dms = (1 << dbt) - 1;
 	        var lpos = pos;
@@ -20513,7 +20512,7 @@
 	                        err(0);
 	                    break;
 	                }
-	                if (noBuf)
+	                if (resize)
 	                    cbuf(bt + 131072);
 	                var end = bt + add;
 	                if (bt < dt) {
@@ -20523,20 +20522,16 @@
 	                    for (; bt < dend; ++bt)
 	                        buf[bt] = dict[shift + bt];
 	                }
-	                for (; bt < end; bt += 4) {
+	                for (; bt < end; ++bt)
 	                    buf[bt] = buf[bt - dt];
-	                    buf[bt + 1] = buf[bt + 1 - dt];
-	                    buf[bt + 2] = buf[bt + 2 - dt];
-	                    buf[bt + 3] = buf[bt + 3 - dt];
-	                }
-	                bt = end;
 	            }
 	        }
 	        st.l = lm, st.p = lpos, st.b = bt, st.f = final;
 	        if (lm)
 	            final = 1, st.m = lbt, st.d = dm, st.n = dbt;
 	    } while (!final);
-	    return bt == buf.length ? buf : slc(buf, 0, bt);
+	    // don't reallocate for streams or user buffers
+	    return bt != buf.length && noBuf ? slc(buf, 0, bt) : buf.subarray(0, bt);
 	};
 	// starting at p, write the minimum number of bits that can hold v to d
 	var wbits = function (d, p, v) {
@@ -21761,7 +21756,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.0.4";
+	var version = "2.0.5";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -21801,7 +21796,7 @@
 		preinstall: "npx only-allow pnpm"
 	};
 	var dependencies = {
-		fflate: "^0.8.0",
+		fflate: "^0.8.1",
 		lit: "^2.8.0",
 		"lottie-web": "^5.12.2"
 	};
@@ -21812,12 +21807,12 @@
 		"@rollup/plugin-node-resolve": "^15.2.1",
 		"@rollup/plugin-replace": "^5.0.2",
 		"@swc/core": "1.3.75",
-		"@types/node": "^20.6.2",
-		"@types/react": "^18.2.21",
+		"@types/node": "^20.8.2",
+		"@types/react": "^18.2.24",
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
 		"@typescript-eslint/parser": "^5.62.0",
-		eslint: "^8.49.0",
-		rollup: "^3.29.2",
+		eslint: "^8.50.0",
+		rollup: "^3.29.4",
 		"rollup-plugin-dts": "^6.0.2",
 		"rollup-plugin-html-literals": "^1.1.7",
 		"rollup-plugin-summary": "^2.0.0",
