@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player",
   "exports": {
     ".": {
@@ -30,7 +30,7 @@
   "license": "GPL-2.0-or-later",
   "scripts": {
     "build": "pnpm run cleanup && rollup -c",
-    "build:types": "tsc --declaration",
+    "build:types": "tsc",
     "build:cem": "npx cem analyze --config 'cem.config.mjs'",
     "prod": "pnpm run build:types && pnpm run build && pnpm run build:cem",
     "dev": "pnpm run cleanup && rollup -c --watch",
@@ -61,6 +61,7 @@
     "rollup-plugin-summary": "^2.0.0",
     "rollup-plugin-swc3": "^0.9.1",
     "shx": "^0.3.4",
+    "ts-lit-plugin": "^1.2.1",
     "typescript": "^5.2.2"
   },
   "customElements": "dist/custom-elements.json",

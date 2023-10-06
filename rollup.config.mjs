@@ -43,7 +43,7 @@ const input = './src/index.ts',
 
 export default [
   {
-    input: './types/index.d.ts',
+    input: './types/src/index.d.ts',
     output: {
       file: pkg.types,
       format: 'esm'

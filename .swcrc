@@ -11,7 +11,7 @@
       "decorators": true,
       "dynamicImport": true
     },
-    "target": "es2015",
+    "target": "es2016",
     "minify": {
       "compress": false,
       "mangle": false

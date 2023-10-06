@@ -21786,7 +21786,7 @@
 	var license = "GPL-2.0-or-later";
 	var scripts = {
 		build: "pnpm run cleanup && rollup -c",
-		"build:types": "tsc --declaration",
+		"build:types": "tsc",
 		"build:cem": "npx cem analyze --config 'cem.config.mjs'",
 		prod: "pnpm run build:types && pnpm run build && pnpm run build:cem",
 		dev: "pnpm run cleanup && rollup -c --watch",
@@ -21817,6 +21817,7 @@
 		"rollup-plugin-summary": "^2.0.0",
 		"rollup-plugin-swc3": "^0.9.1",
 		shx: "^0.3.4",
+		"ts-lit-plugin": "^1.2.1",
 		typescript: "^5.2.2"
 	};
 	var customElements$1 = "dist/custom-elements.json";
