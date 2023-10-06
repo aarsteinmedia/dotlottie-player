@@ -21756,7 +21756,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.0.6";
+	var version = "2.0.7";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
