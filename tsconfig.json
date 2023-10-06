@@ -34,10 +34,12 @@
     "resolveJsonModule": true,
     "rootDir": "./",
     "strict": true,
-    "target": "es2015",
+    "target": "es2016",
     "useDefineForClassFields": false
   },
-  "include": ["./src/**/*"],
+  "include": [
+    "./src/**/*"
+  ],
   "exclude": [
     "node_modules",
     "./dist",

@@ -21756,7 +21756,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.0.7";
+	var version = "2.0.8";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -21785,13 +21785,14 @@
 	};
 	var license = "GPL-2.0-or-later";
 	var scripts = {
-		build: "pnpm run cleanup && rollup -c",
-		"build:types": "tsc",
+		build: "pnpm cleanup && rollup -c",
+		"build:types": "pnpm cleanup:types && tsc",
 		"build:cem": "npx cem analyze --config 'cem.config.mjs'",
-		prod: "pnpm run build:types && pnpm run build && pnpm run build:cem",
-		dev: "pnpm run cleanup && rollup -c --watch",
+		prod: "pnpm build:types && pnpm build && pnpm build:cem",
+		dev: "pnpm cleanup && rollup -c --watch",
 		lint: "tsc && eslint . --ext .ts,.js",
 		"lint:fix": "eslint . --ext .ts,.js --fix",
+		"cleanup:types": "shx rm -rf types && shx mkdir types",
 		cleanup: "shx rm -rf dist && shx mkdir dist"
 	};
 	var dependencies = {
