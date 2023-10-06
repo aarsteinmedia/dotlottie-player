@@ -147,6 +147,12 @@ export class DotLottiePlayer extends LitElement {
     segment?: AnimationSegment
 
   /**
+   * Hide advanced controls
+   */
+  @property({ type: Boolean })
+    simple?: boolean = false
+
+  /**
    * Speed
    */
   @property({ type: Number })
@@ -963,7 +969,7 @@ export class DotLottiePlayer extends LitElement {
             </button>
           ` : nothing}
         ` : nothing}
-        <form class="progress-container">
+        <form class="progress-container${this.simple ? ' simple' : ''}">
           <input
             class="seeker"
             type="range"
@@ -987,6 +993,8 @@ export class DotLottiePlayer extends LitElement {
           >
           </progress>
         </form>
+        ${this.simple ? nothing :
+        html`
         <button
           @click=${this.toggleLooping}
           data-active=${this.loop}
@@ -1061,7 +1069,8 @@ export class DotLottiePlayer extends LitElement {
               />
             </svg> Download still image
           </button>
-        </div>
+        </div>`
+        }
       </div>
     `
   }

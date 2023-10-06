@@ -142,6 +142,10 @@ export default css`
     width: 100%;
   }
 
+  .progress-container.simple {
+    margin-right: 12px;
+  }
+
   .seeker, .seeker::-webkit-slider-runnable-track, .seeker::-webkit-slider-thumb, progress {
     -webkit-appearance: none;
     appearance: none;
