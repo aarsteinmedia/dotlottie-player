@@ -99,7 +99,7 @@ declare global {
 declare global {
     namespace JSX {
         interface IntrinsicElements {
-            'dotlottie-player': JSXLottiePlayer;
+            'dotlottie-player': Partial<JSXLottiePlayer>;
         }
     }
 }

@@ -127,7 +127,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      'dotlottie-player': JSXLottiePlayer
+      'dotlottie-player': Partial<JSXLottiePlayer>
     }
   }
 }
