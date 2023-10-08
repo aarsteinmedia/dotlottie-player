@@ -21715,8 +21715,9 @@
 	            return '';
 	    }
 	}, hasExt = (path)=>{
-	    const lastDotIndex = path.lastIndexOf('.');
-	    return lastDotIndex > 1 && path.length - 1 > lastDotIndex;
+	    var _path_split_pop;
+	    const lastDotIndex = (_path_split_pop = path.split('/').pop()) === null || _path_split_pop === void 0 ? void 0 : _path_split_pop.lastIndexOf('.');
+	    return (lastDotIndex !== null && lastDotIndex !== void 0 ? lastDotIndex : 0) > 1 && path.length - 1 > (lastDotIndex !== null && lastDotIndex !== void 0 ? lastDotIndex : 0);
 	}, isAudio = (asset)=>{
 	    return !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset;
 	}, isImage = (asset)=>{
@@ -21774,7 +21775,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.0.11";
+	var version = "2.0.12";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -21822,7 +21823,7 @@
 		"@custom-elements-manifest/analyzer": "^0.6.9",
 		"@rollup/plugin-commonjs": "^25.0.5",
 		"@rollup/plugin-json": "^6.0.1",
-		"@rollup/plugin-node-resolve": "^15.2.2",
+		"@rollup/plugin-node-resolve": "^15.2.3",
 		"@rollup/plugin-replace": "^5.0.3",
 		"@swc/core": "1.3.75",
 		"@types/node": "^20.8.3",

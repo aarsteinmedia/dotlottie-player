@@ -173,7 +173,9 @@ export const aspectRatio = (objectFit: ObjectFit) => {
       }
 
       /**
-       * Check if file is JSON, first by parsing file name for extension, then – if filename has no extension – by cloning the response and parsing it for content.
+       * Check if file is JSON, first by parsing file name for extension,
+       * then – if filename has no extension – by cloning the response
+       * and parsing it for content.
        */
       const ext = getExt(input)
       if (ext === 'json' || !ext) {
@@ -185,7 +187,6 @@ export const aspectRatio = (objectFit: ObjectFit) => {
           }
         }
         const text = await result.clone().text()
-
         try {
           const lottie = JSON.parse(text)
           return {
@@ -303,8 +304,8 @@ export const aspectRatio = (objectFit: ObjectFit) => {
   },
 
   hasExt = (path: string) => {
-    const lastDotIndex = path.lastIndexOf('.')
-    return lastDotIndex > 1 && path.length - 1 > lastDotIndex
+    const lastDotIndex = path.split('/').pop()?.lastIndexOf('.')
+    return (lastDotIndex ?? 0) > 1 && path.length - 1 > (lastDotIndex ?? 0)
   },
 
   isAudio = (asset: LottieAsset) => {
