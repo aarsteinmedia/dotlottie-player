@@ -21756,7 +21756,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.0.9";
+	var version = "2.0.10";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -22146,7 +22146,7 @@
 	        ];
 	        return mandatory.every((field)=>Object.prototype.hasOwnProperty.call(json, field));
 	    }
-	    addAnimation(configs) {
+	    addAnimation(configs, fileName) {
 	        var _this = this;
 	        return _async_to_generator(function*() {
 	            try {
@@ -22175,7 +22175,7 @@
 	                        ...animations
 	                    ];
 	                }
-	                createDotLottie(newAnimations, manifest);
+	                createDotLottie(newAnimations, manifest, fileName);
 	            } catch (err) {
 	                console.error(handleErrors(err).message);
 	            }

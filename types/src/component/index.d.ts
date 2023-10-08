@@ -41,7 +41,7 @@ export declare class DotLottiePlayer extends LitElement {
     private _onVisibilityChange;
     private _handleSeekChange;
     private _isLottie;
-    addAnimation(configs: Config[]): Promise<void>;
+    addAnimation(configs: Config[], fileName?: string): Promise<void>;
     getLottie(): AnimationItem | null;
     play(): void;
     pause(): void;

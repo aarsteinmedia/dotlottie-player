@@ -487,8 +487,9 @@ export class DotLottiePlayer extends LitElement {
   /**
    * Creates a new dotLottie file, by combinig several animations
    * @param { Config } configs
+   * @param { string } name
    */
-  public async addAnimation(configs: Config[]) {
+  public async addAnimation(configs: Config[], fileName?: string) {
     try {
       let manifest: LottieManifest = {
         ...this._manifest,
@@ -523,7 +524,7 @@ export class DotLottiePlayer extends LitElement {
         ]
       }
       
-      createDotLottie(newAnimations, manifest)
+      createDotLottie(newAnimations, manifest, fileName)
     } catch (err) {
       console.error(handleErrors(err).message)
     }
