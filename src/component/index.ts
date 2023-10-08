@@ -487,9 +487,15 @@ export class DotLottiePlayer extends LitElement {
   /**
    * Creates a new dotLottie file, by combinig several animations
    * @param { Config } configs
-   * @param { string } name
+   * @param { string } fileName
+   * @param { boolean } triggerDownload Whether to trigger a download in the browser.
+   * If set to false the function returns an ArrayBuffer. Defaults to true.
    */
-  public async addAnimation(configs: Config[], fileName?: string) {
+  public async addAnimation(
+    configs: Config[],
+    fileName?: string,
+    triggerDownload = true
+  ) {
     try {
       let manifest: LottieManifest = {
         ...this._manifest,
@@ -524,7 +530,12 @@ export class DotLottiePlayer extends LitElement {
         ]
       }
       
-      createDotLottie(newAnimations, manifest, fileName)
+      return createDotLottie(
+        newAnimations,
+        manifest,
+        fileName,
+        triggerDownload
+      )
     } catch (err) {
       console.error(handleErrors(err).message)
     }

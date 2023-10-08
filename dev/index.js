@@ -21504,7 +21504,7 @@
 	    const parsedStr = str.substring(str.indexOf(',') + 1);
 	    return strToU8(isServer() ? Buffer.from(parsedStr, 'base64').toString('binary') : atob(parsedStr));
 	}, createDotLottie = function() {
-	    var _ref = _async_to_generator$1(function*(animations, manifest, filename) {
+	    var _ref = _async_to_generator$1(function*(animations, manifest, filename, triggerDownload = true) {
 	        try {
 	            var _animations;
 	            if (!((_animations = animations) === null || _animations === void 0 ? void 0 : _animations.length) || !manifest) {
@@ -21543,10 +21543,11 @@
 	                    }
 	                ];
 	            }
-	            download((yield getArrayBuffer(dotlottie)), {
+	            const buffer = yield getArrayBuffer(dotlottie);
+	            return triggerDownload ? download(buffer, {
 	                name,
 	                mimeType: 'application/zip'
-	            });
+	            }) : buffer;
 	        } catch (err) {
 	            console.error(handleErrors(err).message);
 	        }
@@ -21775,7 +21776,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.0.12";
+	var version = "2.0.13";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -22165,7 +22166,7 @@
 	        ];
 	        return mandatory.every((field)=>Object.prototype.hasOwnProperty.call(json, field));
 	    }
-	    addAnimation(configs, fileName) {
+	    addAnimation(configs, fileName, triggerDownload = true) {
 	        var _this = this;
 	        return _async_to_generator(function*() {
 	            try {
@@ -22194,7 +22195,7 @@
 	                        ...animations
 	                    ];
 	                }
-	                createDotLottie(newAnimations, manifest, fileName);
+	                return createDotLottie(newAnimations, manifest, fileName, triggerDownload);
 	            } catch (err) {
 	                console.error(handleErrors(err).message);
 	            }

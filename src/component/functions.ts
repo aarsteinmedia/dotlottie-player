@@ -47,14 +47,16 @@ export const aspectRatio = (objectFit: ObjectFit) => {
 
   /**
    * Convert a JSON Lottie to dotLottie or combine several animations and download new dotLottie file in your browser.
-   * @param { LottieJSON[] } animations The animations to combine
-   * @param { LottieManifest } manifest Manifest of meta information
-   * @param { string } filename Name of file to download
+   * @param { LottieJSON[] } animations The animations to combine.
+   * @param { LottieManifest } manifest Manifest of meta information.
+   * @param { string } filename Name of file to download. If not specified a random string will be generated.
+   * @param { boolean } triggerDownload Whether to trigger a download in the browser. Defaults to true.
    */
   createDotLottie = async (
     animations: LottieJSON[],
     manifest: LottieManifest,
-    filename?: string
+    filename?: string,
+    triggerDownload = true
   ) => {
     try {
       if (!animations?.length || !manifest) {
@@ -88,7 +90,13 @@ export const aspectRatio = (objectFit: ObjectFit) => {
           [strToU8(JSON.stringify(animation)), { level: 9 }]
       }
 
-      download(await getArrayBuffer(dotlottie), { name, mimeType: 'application/zip' })    
+      const buffer = await getArrayBuffer(dotlottie)
+
+      return triggerDownload ?
+        download(buffer, {
+          name,
+          mimeType: 'application/zip'
+        }) : buffer
     } catch (err) {
       console.error(handleErrors(err).message)
     }

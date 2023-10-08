@@ -1,6 +1,6 @@
 import type { Unzipped, Zippable } from 'fflate';
 import type { LottieAsset, LottieJSON, LottieManifest, ObjectFit } from './types';
-export declare const aspectRatio: (objectFit: ObjectFit) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", base64ToU8: (str: string) => Uint8Array, createDotLottie: (animations: LottieJSON[], manifest: LottieManifest, filename?: string) => Promise<void>, download: (data: string | ArrayBuffer, options?: {
+export declare const aspectRatio: (objectFit: ObjectFit) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", base64ToU8: (str: string) => Uint8Array, createDotLottie: (animations: LottieJSON[], manifest: LottieManifest, filename?: string, triggerDownload?: boolean) => Promise<void | ArrayBuffer>, download: (data: string | ArrayBuffer, options?: {
     name: string;
     mimeType: string;
 }) => void, handleErrors: (err: unknown) => {
