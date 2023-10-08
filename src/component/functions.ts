@@ -172,12 +172,27 @@ export const aspectRatio = (objectFit: ObjectFit) => {
         throw error
       }
 
-      if (getExt(input) === 'json') {
-        const lottie = await result.json()
-        return {
-          animations: [lottie],
-          manifest: null,
+      /**
+       * Check if file is JSON, first by parsing file name for extension, then – if filename has no extension – by cloning the response and parsing it for content.
+       */
+      const ext = getExt(input)
+      if (ext === 'json' || !ext) {
+        if (ext) {
+          const lottie = await result.json()
+          return {
+            animations: [lottie],
+            manifest: null,
+          }
         }
+        const text = await result.clone().text()
+
+        try {
+          const lottie = JSON.parse(text)
+          return {
+            animations: [lottie],
+            manifest: null,
+          }
+        } catch { /* Empty */ }
       }
 
       const { data, manifest } = await getLottieJSON(result)
@@ -214,8 +229,10 @@ export const aspectRatio = (objectFit: ObjectFit) => {
    * Get extension from filename, URL or path
    * @param { string } str Filename, URL or path
    */
-  getExt = (str: string): string => {
-    return str.split('.').pop()?.toLowerCase() ?? ''
+  getExt = (str: string) => {
+    if (!hasExt(str))
+      return
+    return str.split('.').pop()?.toLowerCase()
   },
 
   getExtFromB64 = (str: string) => {
@@ -232,7 +249,7 @@ export const aspectRatio = (objectFit: ObjectFit) => {
   getFilename = (src: string, keepExt?: boolean) => {
     // Because the regex strips all special characters, we need to extract the file extension, so we can add it later if we need it
     const ext = getExt(src)
-    return `${src.replace(/\.[^.]*$/, '').replace(/\W+/g, '')}${keepExt ? `.${ext}` : ''}`.toLowerCase()
+    return `${src.replace(/\.[^.]*$/, '').replace(/\W+/g, '')}${keepExt && ext ? `.${ext}` : ''}`.toLowerCase()
   },
 
   getLottieJSON = async (resp: Response) => {
@@ -285,6 +302,11 @@ export const aspectRatio = (objectFit: ObjectFit) => {
     }
   },
 
+  hasExt = (path: string) => {
+    const lastDotIndex = path.lastIndexOf('.')
+    return lastDotIndex > 1 && path.length - 1 > lastDotIndex
+  },
+
   isAudio = (asset: LottieAsset) => {
     return !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset
   },
@@ -326,8 +348,6 @@ export const aspectRatio = (objectFit: ObjectFit) => {
       if (!u8)
         continue
 
-      // console.log(asset.p)
-
       toResolve.push(
         new Promise<void>(resolveAsset => {
           const assetB64 = isServer() ? Buffer.from(u8).toString('base64') :
@@ -351,14 +371,15 @@ export const aspectRatio = (objectFit: ObjectFit) => {
     resp: Response,
     // filter: UnzipFileFilter = () => true
   ): Promise<Unzipped> => {
-    const buffer = new Uint8Array(await resp.arrayBuffer()),
+    const u8 = new Uint8Array(await resp.arrayBuffer()),
       unzipped = await new Promise<Unzipped>((resolve, reject) => {
-        unzipOrg(buffer, /*{ filter },*/ (err, file) => {
-          if (err) reject(err)
+        unzipOrg(u8, /*{ filter },*/ (err, file) => {
+          if (err) {
+            reject(err)
+          }
           resolve(file)
         })
       })
-    // console.log('unzipped', unzipped)
     return unzipped
   },
 

@@ -21607,14 +21607,27 @@
 	                error.status = result.status;
 	                throw error;
 	            }
-	            if (getExt(input) === 'json') {
-	                const lottie = yield result.json();
-	                return {
-	                    animations: [
-	                        lottie
-	                    ],
-	                    manifest: null
-	                };
+	            const ext = getExt(input);
+	            if (ext === 'json' || !ext) {
+	                if (ext) {
+	                    const lottie = yield result.json();
+	                    return {
+	                        animations: [
+	                            lottie
+	                        ],
+	                        manifest: null
+	                    };
+	                }
+	                const text = yield result.clone().text();
+	                try {
+	                    const lottie = JSON.parse(text);
+	                    return {
+	                        animations: [
+	                            lottie
+	                        ],
+	                        manifest: null
+	                    };
+	                } catch (e) {}
 	            }
 	            const { data, manifest } = yield getLottieJSON(result);
 	            return {
@@ -21653,14 +21666,14 @@
 	    };
 	}(), getExt = (str)=>{
 	    var _str_split_pop;
-	    var _str_split_pop_toLowerCase;
-	    return (_str_split_pop_toLowerCase = (_str_split_pop = str.split('.').pop()) === null || _str_split_pop === void 0 ? void 0 : _str_split_pop.toLowerCase()) !== null && _str_split_pop_toLowerCase !== void 0 ? _str_split_pop_toLowerCase : '';
+	    if (!hasExt(str)) return;
+	    return (_str_split_pop = str.split('.').pop()) === null || _str_split_pop === void 0 ? void 0 : _str_split_pop.toLowerCase();
 	}, getExtFromB64 = (str)=>{
 	    const mime = str.split(':')[1].split(';')[0];
 	    return mime.split('/')[1].split('+')[0];
 	}, getFilename = (src, keepExt)=>{
 	    const ext = getExt(src);
-	    return `${src.replace(/\.[^.]*$/, '').replace(/\W+/g, '')}${keepExt ? `.${ext}` : ''}`.toLowerCase();
+	    return `${src.replace(/\.[^.]*$/, '').replace(/\W+/g, '')}${keepExt && ext ? `.${ext}` : ''}`.toLowerCase();
 	}, getLottieJSON = function() {
 	    var _ref = _async_to_generator$1(function*(resp) {
 	        const unzipped = yield unzip(resp), manifest = getManifest(unzipped), data = [];
@@ -21701,6 +21714,9 @@
 	        default:
 	            return '';
 	    }
+	}, hasExt = (path)=>{
+	    const lastDotIndex = path.lastIndexOf('.');
+	    return lastDotIndex > 1 && path.length - 1 > lastDotIndex;
 	}, isAudio = (asset)=>{
 	    return !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset;
 	}, isImage = (asset)=>{
@@ -21737,9 +21753,11 @@
 	    };
 	}(), unzip = function() {
 	    var _ref = _async_to_generator$1(function*(resp) {
-	        const buffer = new Uint8Array((yield resp.arrayBuffer())), unzipped = yield new Promise((resolve, reject)=>{
-	            unzip$1(buffer, (err, file)=>{
-	                if (err) reject(err);
+	        const u8 = new Uint8Array((yield resp.arrayBuffer())), unzipped = yield new Promise((resolve, reject)=>{
+	            unzip$1(u8, (err, file)=>{
+	                if (err) {
+	                    reject(err);
+	                }
 	                resolve(file);
 	            });
 	        });
@@ -21756,7 +21774,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.0.10";
+	var version = "2.0.11";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
