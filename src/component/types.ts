@@ -111,10 +111,11 @@ export class CustomError extends Error {
   status?: number
 }
 
-type JSXLottiePlayer = Omit<DotLottiePlayer, 'style'> & {
+type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
   class?: string
   ref?: RefObject<unknown>
   style?: CSSProperties
+  src: string
 }
 
 declare global {
@@ -127,7 +128,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      'dotlottie-player': Partial<JSXLottiePlayer>
+      'dotlottie-player': JSXLottiePlayer
     }
   }
 }
