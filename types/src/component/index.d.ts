@@ -62,7 +62,7 @@ export declare class DotLottiePlayer extends LitElement {
     private _switchInstance;
     next(): void;
     prev(): void;
-    convert(): void;
+    convert(download?: boolean): void;
     static get styles(): CSSResult;
     connectedCallback(): void;
     protected firstUpdated(): Promise<void>;

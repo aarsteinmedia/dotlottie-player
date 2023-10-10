@@ -838,7 +838,7 @@ export class DotLottiePlayer extends LitElement {
   /**
    * Convert JSON Lottie to dotLottie
    */
-  public convert() {
+  public convert(download = true) {
     if (this._isDotLottie)
       return
     const newManifest = {
@@ -848,7 +848,8 @@ export class DotLottiePlayer extends LitElement {
     createDotLottie(
       this._animations,
       newManifest,
-      `${getFilename(this.src)}.lottie`
+      `${getFilename(this.src)}.lottie`,
+      download
     )
   }
 
