@@ -21776,7 +21776,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.0.15";
+	var version = "2.0.16";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -22573,5 +22573,7 @@
 	exports.DotLottiePlayer = _ts_decorate([
 	    e$1('dotlottie-player')
 	], exports.DotLottiePlayer);
+
+	globalThis.dotLottiePlayer = ()=>new exports.DotLottiePlayer();
 
 })(this["@aarsteinmedia/dotlottie-player"] = this["@aarsteinmedia/dotlottie-player"] || {});

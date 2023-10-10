@@ -96,8 +96,7 @@ declare global {
     interface HTMLElementTagNameMap {
         'dotlottie-player': DotLottiePlayer;
     }
-}
-declare global {
+    function dotLottiePlayer(): DotLottiePlayer;
     namespace JSX {
         interface IntrinsicElements {
             'dotlottie-player': JSXLottiePlayer;
