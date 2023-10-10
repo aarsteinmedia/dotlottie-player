@@ -21776,7 +21776,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.0.14";
+	var version = "2.0.15";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -22370,12 +22370,12 @@
 	        this._currentAnimation--;
 	        this._switchInstance();
 	    }
-	    convert(download = true) {
-	        if (this._isDotLottie) return;
-	        const newManifest = _object_spread_props(_object_spread({}, this._manifest), {
+	    convert(typeCheck, manifest, animations, fileName, download = true) {
+	        if (typeCheck || this._isDotLottie) return;
+	        const oldManifest = manifest || this._manifest, newManifest = _object_spread_props(_object_spread({}, oldManifest), {
 	            generator: pkg.name
 	        });
-	        createDotLottie(this._animations, newManifest, `${getFilename(this.src)}.lottie`, download);
+	        return createDotLottie(animations || this._animations, newManifest, `${getFilename(fileName || this.src)}.lottie`, download);
 	    }
 	    static get styles() {
 	        return styles;

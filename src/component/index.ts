@@ -837,18 +837,29 @@ export class DotLottiePlayer extends LitElement {
 
   /**
    * Convert JSON Lottie to dotLottie
+   * @param { boolean | undefined } typeCheck External type safety
+   * @param { LottieManifest | undefined } manifest Externally added manifest
+   * @param { LottieJSON[] | undefined } animations Externally added animations
+   * @param { boolean } download Whether to trigger a download in the browser
    */
-  public convert(download = true) {
-    if (this._isDotLottie)
+  public convert(
+    typeCheck?: boolean,
+    manifest?: LottieManifest,
+    animations?: LottieJSON[],
+    fileName?: string,
+    download = true
+  ) {
+    if (typeCheck || this._isDotLottie)
       return
-    const newManifest = {
-      ...this._manifest,
-      generator: pkg.name
-    }
-    createDotLottie(
-      this._animations,
+    const oldManifest = manifest || this._manifest,
+      newManifest = {
+        ...oldManifest,
+        generator: pkg.name
+      }
+    return createDotLottie(
+      animations || this._animations,
       newManifest,
-      `${getFilename(this.src)}.lottie`,
+      `${getFilename(fileName || this.src)}.lottie`,
       download
     )
   }

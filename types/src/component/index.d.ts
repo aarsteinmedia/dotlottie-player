@@ -2,7 +2,7 @@ import { LitElement } from 'lit';
 import { PlayMode, PlayerState } from './types';
 import type { CSSResult } from 'lit';
 import type { AnimationDirection, AnimationItem, AnimationSegment, RendererType } from 'lottie-web';
-import type { Autoplay, Config, Controls, Loop, LottieJSON, ObjectFit, PreserveAspectRatio, Subframe } from './types';
+import type { Autoplay, Config, Controls, Loop, LottieJSON, LottieManifest, ObjectFit, PreserveAspectRatio, Subframe } from './types';
 export declare class DotLottiePlayer extends LitElement {
     autoplay?: Autoplay;
     background?: string;
@@ -62,7 +62,7 @@ export declare class DotLottiePlayer extends LitElement {
     private _switchInstance;
     next(): void;
     prev(): void;
-    convert(download?: boolean): void;
+    convert(typeCheck?: boolean, manifest?: LottieManifest, animations?: LottieJSON[], fileName?: string, download?: boolean): Promise<void | ArrayBuffer> | undefined;
     static get styles(): CSSResult;
     connectedCallback(): void;
     protected firstUpdated(): Promise<void>;
