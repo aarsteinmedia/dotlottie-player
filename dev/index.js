@@ -21783,7 +21783,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.1.0";
+	var version = "2.1.1";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -22177,9 +22177,10 @@
 	        var _this = this;
 	        return _async_to_generator(function*() {
 	            try {
-	                let manifest = _object_spread_props(_object_spread({}, _this._manifest), {
+	                const oldManifest = _this._manifest || {};
+	                let manifest = _object_spread_props(_object_spread({}, oldManifest), {
 	                    generator: pkg.name
-	                }), animations = _this._animations;
+	                }), animations = _this._animations || [];
 	                for (const config of configs){
 	                    const { url } = config, { animations: animationsToAdd } = yield getAnimationData(url);
 	                    if (!animationsToAdd) {

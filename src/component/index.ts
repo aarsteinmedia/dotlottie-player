@@ -497,11 +497,12 @@ export class DotLottiePlayer extends LitElement {
     triggerDownload = true
   ) {
     try {
+      const oldManifest = this._manifest || {}
       let manifest: LottieManifest = {
-        ...this._manifest,
+        ...oldManifest,
         generator: pkg.name,
       },
-        animations = this._animations
+        animations = this._animations || []
       for (const config of configs) {
         const { url } = config,
           { animations: animationsToAdd } = await getAnimationData(url)
