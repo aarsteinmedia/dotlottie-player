@@ -497,7 +497,9 @@ export class DotLottiePlayer extends LitElement {
     triggerDownload = true
   ) {
     try {
-      const oldManifest = this._manifest || {}
+      const oldManifest = this._manifest || {
+        animations: []
+      }
       let manifest: LottieManifest = {
         ...oldManifest,
         generator: pkg.name,

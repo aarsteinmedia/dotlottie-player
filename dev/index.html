@@ -14,7 +14,7 @@
       id="player-element"
       autoplay
       controls
-      src="/ny-test-av-kombo.lottie"
+      src="/test-av-standalone.lottie"
       simple
     >
     </dotlottie-player>
@@ -27,8 +27,25 @@
 <script>
   const player = document.getElementById('player-element'),
     dl = async () => {
-      if (player) {
-        await player.addAnimation([
+      // if (player) {
+      //   await player.addAnimation([
+      //     {
+      //       id: 'bulb',
+      //       url: '/bulb.lottie'
+      //     },
+      //     {
+      //       id: 'dev',
+      //       url: '/dev.lottie'
+      //     }
+      //   ],
+      //   'ny-test-av-kombo')
+      // }
+      if (dotLottiePlayer) {
+        await dotLottiePlayer().addAnimation([
+          {
+            id: 'am',
+            url: '/am.lottie'
+          },
           {
             id: 'bulb',
             url: '/bulb.lottie'
@@ -38,7 +55,7 @@
             url: '/dev.lottie'
           }
         ],
-        'ny-test-av-kombo')
+          'test-av-standalone')
       }
     }
 </script>
