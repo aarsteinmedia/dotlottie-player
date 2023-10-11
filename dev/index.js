@@ -21515,7 +21515,8 @@
 	        try {
 	            var _animations;
 	            if (!((_animations = animations) === null || _animations === void 0 ? void 0 : _animations.length) || !manifest) {
-	                throw new Error('Missing required params');
+	                var _animations1;
+	                throw new Error(`Missing or malformed required parameter(s):\n ${!((_animations1 = animations) === null || _animations1 === void 0 ? void 0 : _animations1.length) ? '- animations\n' : ''} ${!manifest ? '- manifest \n' : ''}`);
 	            }
 	            const name = addExt('lottie', filename) || `${useId()}.lottie`, dotlottie = {
 	                'manifest.json': [
@@ -21783,7 +21784,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.1.2";
+	var version = "2.1.3";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {

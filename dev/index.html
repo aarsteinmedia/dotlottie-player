@@ -14,11 +14,12 @@
       id="player-element"
       autoplay
       controls
-      src="/test-av-standalone.lottie"
+      src="/intro.json"
       simple
     >
     </dotlottie-player>
     <button onclick="dl()">Kombiner animasjoner, og last ned</button>
+    <button onclick="cl()">Konverter animasjoner, og last ned</button>
   </div>
   <script src="./webcomponents-loader.js"></script>
   <script src="./polyfill-support.js"></script>
@@ -56,6 +57,25 @@
           }
         ],
           'test-av-standalone')
+      }
+    },
+    cl = async () => {
+      if (dotLottiePlayer) {
+        let lottieJSON
+        const res = await fetch('/menuAnimation.json')
+        if (res.ok) {
+          lottieJSON = await res.json()
+        }
+        await dotLottiePlayer().convert(
+          false,
+          {
+            animations: [
+              {id: 'menuAnimation'}
+            ]
+          },
+          [lottieJSON],
+          'menuAnimation'
+        )
       }
     }
 </script>

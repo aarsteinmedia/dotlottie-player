@@ -71,7 +71,11 @@ export const addExt = (ext: string, str?: string) => {
   ) => {
     try {
       if (!animations?.length || !manifest) {
-        throw new Error('Missing required params')
+        throw new Error(
+          `Missing or malformed required parameter(s):\n ${
+            !animations?.length ? '- animations\n' : ''} ${
+              !manifest ? '- manifest \n' : ''}`
+        )
       }
 
       const name = addExt('lottie', filename) || `${useId()}.lottie`,
