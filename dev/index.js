@@ -21486,7 +21486,14 @@
 	        });
 	    };
 	}
-	const aspectRatio = (objectFit)=>{
+	const addExt = (ext, str)=>{
+	    if (!str) return;
+	    if (getExt(str)) {
+	        if (getExt(str) === ext) return str;
+	        return `${getFilename(str)}.${ext}`;
+	    }
+	    return `${str}.${ext}`;
+	}, aspectRatio = (objectFit)=>{
 	    switch(objectFit){
 	        case 'contain':
 	        case 'scale-down':
@@ -21510,7 +21517,7 @@
 	            if (!((_animations = animations) === null || _animations === void 0 ? void 0 : _animations.length) || !manifest) {
 	                throw new Error('Missing required params');
 	            }
-	            const name = filename || `${useId()}.lottie`, dotlottie = {
+	            const name = addExt('lottie', filename) || `${useId()}.lottie`, dotlottie = {
 	                'manifest.json': [
 	                    strToU8(JSON.stringify(manifest)),
 	                    {
@@ -21549,7 +21556,7 @@
 	                mimeType: 'application/zip'
 	            }) : buffer;
 	        } catch (err) {
-	            console.error(handleErrors(err).message);
+	            console.error(`❌ ${handleErrors(err).message}`);
 	        }
 	    });
 	    return function createDotLottie(animations, manifest, filename) {
@@ -21667,7 +21674,7 @@
 	    };
 	}(), getExt = (str)=>{
 	    var _str_split_pop;
-	    if (!hasExt(str)) return;
+	    if (!str || !hasExt(str)) return;
 	    return (_str_split_pop = str.split('.').pop()) === null || _str_split_pop === void 0 ? void 0 : _str_split_pop.toLowerCase();
 	}, getExtFromB64 = (str)=>{
 	    const mime = str.split(':')[1].split(';')[0];
@@ -21716,9 +21723,9 @@
 	            return '';
 	    }
 	}, hasExt = (path)=>{
-	    var _path_split_pop;
-	    const lastDotIndex = (_path_split_pop = path.split('/').pop()) === null || _path_split_pop === void 0 ? void 0 : _path_split_pop.lastIndexOf('.');
-	    return (lastDotIndex !== null && lastDotIndex !== void 0 ? lastDotIndex : 0) > 1 && path.length - 1 > (lastDotIndex !== null && lastDotIndex !== void 0 ? lastDotIndex : 0);
+	    var _path_split_pop, _path;
+	    const lastDotIndex = (_path = path) === null || _path === void 0 ? void 0 : (_path_split_pop = _path.split('/').pop()) === null || _path_split_pop === void 0 ? void 0 : _path_split_pop.lastIndexOf('.');
+	    return (lastDotIndex !== null && lastDotIndex !== void 0 ? lastDotIndex : 0) > 1 && path && path.length - 1 > (lastDotIndex !== null && lastDotIndex !== void 0 ? lastDotIndex : 0);
 	}, isAudio = (asset)=>{
 	    return !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset;
 	}, isImage = (asset)=>{
@@ -21776,7 +21783,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.0.16";
+	var version = "2.1.0";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -21828,7 +21835,7 @@
 		"@rollup/plugin-replace": "^5.0.3",
 		"@swc/core": "1.3.75",
 		"@types/node": "^20.8.4",
-		"@types/react": "^18.2.27",
+		"@types/react": "^18.2.28",
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
 		"@typescript-eslint/parser": "^5.62.0",
 		eslint: "^8.51.0",
@@ -22172,30 +22179,27 @@
 	            try {
 	                let manifest = _object_spread_props(_object_spread({}, _this._manifest), {
 	                    generator: pkg.name
-	                }), newAnimations = _this._animations;
+	                }), animations = _this._animations;
 	                for (const config of configs){
-	                    const { url } = config, { animations } = yield getAnimationData(url);
-	                    if (!animations) {
+	                    const { url } = config, { animations: animationsToAdd } = yield getAnimationData(url);
+	                    if (!animationsToAdd) {
 	                        throw new Error('No animation loaded');
 	                    }
-	                    if (_this._manifest.animations.some(({ id })=>id === config.id)) {
+	                    if (manifest.animations.some(({ id })=>id === config.id)) {
 	                        throw new Error('Duplicate id for animation');
 	                    }
-	                    const newConfig = _object_spread_props(_object_spread({}, config), {
-	                        url: undefined
-	                    });
 	                    manifest = _object_spread_props(_object_spread({}, manifest), {
 	                        animations: [
 	                            ...manifest.animations,
-	                            newConfig
+	                            config
 	                        ]
 	                    });
-	                    newAnimations = [
-	                        ..._this._animations,
-	                        ...animations
+	                    animations = [
+	                        ...animations,
+	                        ...animationsToAdd
 	                    ];
 	                }
-	                return createDotLottie(newAnimations, manifest, fileName, triggerDownload);
+	                return createDotLottie(animations, manifest, fileName, triggerDownload);
 	            } catch (err) {
 	                console.error(handleErrors(err).message);
 	            }

@@ -18,21 +18,32 @@ import type {
   ObjectFit,
 } from './types'
 
-export const aspectRatio = (objectFit: ObjectFit) => {
-  switch (objectFit) {
-    case 'contain':
-    case 'scale-down':
-      return 'xMidYMid meet';
-    case 'cover':
-      return 'xMidYMid slice';
-    case 'fill':
-      return 'none';
-    case 'none':
-      return 'xMinYMin slice';
-    default:
-      return 'xMidYMid meet';
+export const addExt = (ext: string, str?: string) => {
+  if (!str) return
+  if (getExt(str)) {
+    if (getExt(str) === ext)
+      return str
+
+    return `${getFilename(str)}.${ext}`
   }
+  return `${str}.${ext}`
 },
+
+  aspectRatio = (objectFit: ObjectFit) => {
+    switch (objectFit) {
+      case 'contain':
+      case 'scale-down':
+        return 'xMidYMid meet';
+      case 'cover':
+        return 'xMidYMid slice';
+      case 'fill':
+        return 'none';
+      case 'none':
+        return 'xMinYMin slice';
+      default:
+        return 'xMidYMid meet';
+    }
+  },
   /**
    * Convert Base64 encoded string to Uint8Array
    * @param { string } str Base64 encoded string
@@ -63,7 +74,7 @@ export const aspectRatio = (objectFit: ObjectFit) => {
         throw new Error('Missing required params')
       }
 
-      const name = filename || `${useId()}.lottie`,
+      const name = addExt('lottie', filename) || `${useId()}.lottie`,
 
         dotlottie: Zippable = {
           'manifest.json': [
@@ -98,7 +109,7 @@ export const aspectRatio = (objectFit: ObjectFit) => {
           mimeType: 'application/zip'
         }) : buffer
     } catch (err) {
-      console.error(handleErrors(err).message)
+      console.error(`❌ ${handleErrors(err).message}`)
     }
   },
 
@@ -238,8 +249,8 @@ export const aspectRatio = (objectFit: ObjectFit) => {
    * Get extension from filename, URL or path
    * @param { string } str Filename, URL or path
    */
-  getExt = (str: string) => {
-    if (!hasExt(str))
+  getExt = (str?: string) => {
+    if (!str || !hasExt(str))
       return
     return str.split('.').pop()?.toLowerCase()
   },
@@ -311,9 +322,9 @@ export const aspectRatio = (objectFit: ObjectFit) => {
     }
   },
 
-  hasExt = (path: string) => {
-    const lastDotIndex = path.split('/').pop()?.lastIndexOf('.')
-    return (lastDotIndex ?? 0) > 1 && path.length - 1 > (lastDotIndex ?? 0)
+  hasExt = (path?: string) => {
+    const lastDotIndex = path?.split('/').pop()?.lastIndexOf('.')
+    return (lastDotIndex ?? 0) > 1 && path && path.length - 1 > (lastDotIndex ?? 0)
   },
 
   isAudio = (asset: LottieAsset) => {

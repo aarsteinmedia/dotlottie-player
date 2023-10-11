@@ -501,37 +501,33 @@ export class DotLottiePlayer extends LitElement {
         ...this._manifest,
         generator: pkg.name,
       },
-        newAnimations = this._animations
+        animations = this._animations
       for (const config of configs) {
         const { url } = config,
-          { animations } = await getAnimationData(url)
-        if (!animations) {
+          { animations: animationsToAdd } = await getAnimationData(url)
+        if (!animationsToAdd) {
           throw new Error('No animation loaded')
         }
-        if (this._manifest.animations.some(({ id }) => id === config.id)) {
+        if (manifest.animations.some(({ id }) => id === config.id)) {
           throw new Error('Duplicate id for animation')
-        }
-        const newConfig = {
-          ...config,
-          url: undefined
         }
 
         manifest = {
           ...manifest,
           animations: [
             ...manifest.animations,
-            newConfig
+            config
           ]
         }
 
-        newAnimations = [
-          ...this._animations,
-          ...animations
+        animations = [
+          ...animations,
+          ...animationsToAdd
         ]
       }
       
       return createDotLottie(
-        newAnimations,
+        animations,
         manifest,
         fileName,
         triggerDownload

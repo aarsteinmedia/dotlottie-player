@@ -14,11 +14,11 @@
       id="player-element"
       autoplay
       controls
-      src="/minihero.lottie"
+      src="/am.lottie"
       simple
     >
     </dotlottie-player>
-    <!-- <button onclick="dl()">Kombiner animasjoner, og last ned</button> -->
+    <button onclick="dl()">Kombiner animasjoner, og last ned</button>
   </div>
   <script src="./webcomponents-loader.js"></script>
   <script src="./polyfill-support.js"></script>
@@ -28,10 +28,17 @@
   const player = document.getElementById('player-element'),
     dl = async () => {
       if (player) {
-        await player.addAnimation([{
-          id: 'minihero',
-          url: '/minihero.lottie'
-        }])
+        await player.addAnimation([
+          {
+            id: 'minihero',
+            url: '/minihero.lottie'
+          },
+          {
+            id: 'menuAnimation',
+            url: '/menuAnimation.json'
+          }
+        ],
+        'test-av-kombo')
       }
     }
 </script>
