@@ -15,7 +15,7 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
-  "homepage": "https://www.aarstein.media/en/dev/dotlottie-player",
+  "homepage": "https://www.aarstein.media/en/dotlottie-player",
   "repository": {
     "url": "https://github.com/aarsteinmedia/dotlottie-player.git",
     "type": "git"

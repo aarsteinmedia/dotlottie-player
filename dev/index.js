@@ -21799,7 +21799,7 @@
 	var module = "./dist/esm/index.js";
 	var types = "./dist/index.d.ts";
 	var type = "module";
-	var homepage = "https://www.aarstein.media/en/dev/dotlottie-player";
+	var homepage = "https://www.aarstein.media/en/dotlottie-player";
 	var repository = {
 		url: "https://github.com/aarsteinmedia/dotlottie-player.git",
 		type: "git"

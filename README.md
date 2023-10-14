@@ -8,7 +8,7 @@ PS: If you only need to render animations as SVG, and don't need to convert or c
 
 ## Demo
 
-Here is [a demo](https://www.aarstein.media/en/dev/dotlottie-player), running on Next.js 13 using TypeScript.
+Here is [a demo](https://www.aarstein.media/en/dotlottie-player), running on Next.js 13 using TypeScript.
 
 ## Installation
 
