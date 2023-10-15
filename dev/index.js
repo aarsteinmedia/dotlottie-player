@@ -21784,7 +21784,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.1.3";
+	var version = "2.1.4";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -21830,12 +21830,12 @@
 	};
 	var devDependencies = {
 		"@custom-elements-manifest/analyzer": "^0.6.9",
-		"@rollup/plugin-commonjs": "^25.0.5",
+		"@rollup/plugin-commonjs": "^25.0.7",
 		"@rollup/plugin-json": "^6.0.1",
 		"@rollup/plugin-node-resolve": "^15.2.3",
-		"@rollup/plugin-replace": "^5.0.3",
+		"@rollup/plugin-replace": "^5.0.4",
 		"@swc/core": "1.3.75",
-		"@types/node": "^20.8.4",
+		"@types/node": "^20.8.6",
 		"@types/react": "^18.2.28",
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
 		"@typescript-eslint/parser": "^5.62.0",
@@ -22578,6 +22578,9 @@
 	_ts_decorate([
 	    t()
 	], exports.DotLottiePlayer.prototype, "_currentAnimation", void 0);
+	_ts_decorate([
+	    t()
+	], exports.DotLottiePlayer.prototype, "_animations", void 0);
 	exports.DotLottiePlayer = _ts_decorate([
 	    e$1('dotlottie-player')
 	], exports.DotLottiePlayer);

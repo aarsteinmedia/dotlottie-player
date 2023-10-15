@@ -11,11 +11,11 @@ import {
   aspectRatio,
   createDotLottie,
   download,
-  handleErrors,
   frameOutput,
   getAnimationData,
   getFilename,
-  useId
+  handleErrors,
+  useId,
 } from './functions'
 import {
   PlayMode,
@@ -55,153 +55,159 @@ import styles from './styles'
  */
 @customElement('dotlottie-player')
 export class DotLottiePlayer extends LitElement {
-  
+
   /**
    * Autoplay
    */
   @property({ type: Boolean, reflect: true })
-    autoplay?: Autoplay
+  autoplay?: Autoplay
 
   /**
    * Background color
    */
   @property({ type: String })
-    background?: string = 'transparent'
+  background?: string = 'transparent'
 
   /**
    * Display controls
    */
   @property({ type: Boolean, reflect: true })
-    controls?: Controls = false
+  controls?: Controls = false
 
   /**
    * Number of times to loop
    */
   @property({ type: Number })
-    count?: number
+  count?: number
 
   /**
    * Player state
    */
   @property({ type: String })
-    currentState?: PlayerState = PlayerState.Loading
- 
+  currentState?: PlayerState = PlayerState.Loading
+
   /**
    * Description for screen readers
    */
   @property({ type: String })
-    description?: string
+  description?: string
 
   /**
    * Direction of animation
    */
   @property({ type: Number })
-    direction?: AnimationDirection = 1
+  direction?: AnimationDirection = 1
 
   /**
    * Whether to play on mouseover
    */
   @property({ type: Boolean })
-    hover? = false
+  hover?= false
 
   /**
    * Intermission
    */
   @property({ type: Number })
-    intermission? = 0
+  intermission?= 0
 
   /**
    * Whether to loop
    */
   @property({ type: Boolean, reflect: true })
-    loop?: Loop = false
+  loop?: Loop = false
 
   /**
    * Play mode
    */
   @property({ type: String })
-    mode?: PlayMode = PlayMode.Normal
+  mode?: PlayMode = PlayMode.Normal
 
   /**
    * Resizing to container
   */
   @property({ type: String })
-    objectfit?: ObjectFit = 'contain'
+  objectfit?: ObjectFit = 'contain'
 
   /**
    * Resizing to container (Deprecated)
   */
   @property({ type: String })
-    preserveAspectRatio?: PreserveAspectRatio
+  preserveAspectRatio?: PreserveAspectRatio
 
   /**
    * Renderer to use (svg, canvas or html)
    */
   @property({ type: String })
-    renderer?: RendererType = 'svg'
+  renderer?: RendererType = 'svg'
 
   /**
    * Segment
    */
   @property({ type: Array })
-    segment?: AnimationSegment
+  segment?: AnimationSegment
 
   /**
    * Hide advanced controls
    */
   @property({ type: Boolean })
-    simple?: boolean = false
+  simple?: boolean = false
 
   /**
    * Speed
    */
   @property({ type: Number })
-    speed?: number = 1
+  speed?: number = 1
 
   /**
    * JSON/dotLottie data or URL
    */
   @property({ type: String })
-    src!: string
+  src!: string
 
   /**
    * Subframe
    */
   @property({ type: Boolean })
-    subframe?: Subframe = true
+  subframe?: Subframe = true
 
   /**
    * Animaiton Container
    */
   @query('.animation')
-    protected container!: HTMLElement
+  protected container!: HTMLElement
 
   /**
    * Whether settings toolbar is open
    */
   @state()
-    private _isSettingsOpen = false
+  private _isSettingsOpen = false
 
   /**
    * Seeker
    */
   @state()
-    private _seeker = 0
+  private _seeker = 0
 
   /**
    * Which animation to show, if several
    */
   @state()
-    private _currentAnimation = 0
+  private _currentAnimation = 0
 
   private _intersectionObserver?: IntersectionObserver
   private _lottieInstance: AnimationItem | null = null
   private _identifier = this.id || useId('dotlottie')
   private _errorMessage = 'Something went wrong'
-  
+
   private _isDotLottie = false
-  
+
   private _manifest!: LottieManifest
+
+  /**
+   * This is set to state, so that next-button will show up
+   * on load, if controls are visible
+   */
+  @state()
   private _animations!: LottieJSON[]
 
   private _playerState = {
@@ -304,9 +310,9 @@ export class DotLottiePlayer extends LitElement {
         ...this._getOptions(),
         animationData: animations[this._currentAnimation],
       })
-    } catch (err) {      
+    } catch (err) {
       this._errorMessage = handleErrors(err).message
-      
+
       this.currentState = PlayerState.Error
 
       this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
@@ -468,7 +474,7 @@ export class DotLottiePlayer extends LitElement {
     this.seek(
       Math.floor((Number(target.value) / 100) * this._lottieInstance.totalFrames)
     )
-    
+
     setTimeout(() => {
       if (target.parentElement instanceof HTMLFormElement) {
         target.parentElement.reset()
@@ -528,7 +534,7 @@ export class DotLottiePlayer extends LitElement {
           ...animationsToAdd
         ]
       }
-      
+
       return createDotLottie(
         animations,
         manifest,
@@ -628,7 +634,7 @@ export class DotLottiePlayer extends LitElement {
     const frame =
       Math.floor(matches[2] === '%' ?
         (this._lottieInstance.totalFrames * Number(matches[1])) / 100 :
-          Number(matches[1]))
+        Number(matches[1]))
 
     // Set seeker to new frame number
     this._seeker = frame
@@ -636,8 +642,8 @@ export class DotLottiePlayer extends LitElement {
     // Send lottie player to the new frame
     if (
       this.currentState === PlayerState.Playing ||
-        (this.currentState === PlayerState.Frozen &&
-          this._playerState.prev === PlayerState.Playing)
+      (this.currentState === PlayerState.Frozen &&
+        this._playerState.prev === PlayerState.Playing)
     ) {
       this._lottieInstance.goToAndPlay(frame, true)
       this.currentState = PlayerState.Playing
@@ -709,7 +715,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public async reload() {
     if (!this._lottieInstance) return
-    
+
     this._lottieInstance.destroy()
 
     if (this.src) {
@@ -753,7 +759,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public togglePlay() {
     if (!this._lottieInstance) return
-    
+
     const { currentFrame, playDirection, totalFrames } = this._lottieInstance
     if (this.currentState === PlayerState.Playing) {
       return this.pause()
@@ -876,7 +882,7 @@ export class DotLottiePlayer extends LitElement {
    */
   override connectedCallback() {
     super.connectedCallback()
-  
+
     // Add listener for Visibility API's change event.
     if (typeof document.hidden !== 'undefined') {
       document.addEventListener('visibilitychange', this._onVisibilityChange)
@@ -899,7 +905,7 @@ export class DotLottiePlayer extends LitElement {
 
       this._intersectionObserver.observe(this.container)
     }
-    
+
     // Setup lottie player
     if (this.src) {
       await this.load(this.src)
@@ -934,7 +940,7 @@ export class DotLottiePlayer extends LitElement {
 
     return html`
       <div
-        class=${`lottie-controls toolbar ${isError ? 'has-error': ''}`}
+        class=${`lottie-controls toolbar ${isError ? 'has-error' : ''}`}
         aria-label="Lottie Animation controls"
       >
         <button
@@ -968,7 +974,7 @@ export class DotLottiePlayer extends LitElement {
         ${this._animations?.length > 1 ?
         html`
           ${this._currentAnimation > 0 ?
-          html`
+            html`
             <button
               @click=${this.prev}
               tabindex="0"
@@ -980,7 +986,7 @@ export class DotLottiePlayer extends LitElement {
             </button>
           ` : nothing}
           ${(this._currentAnimation + 1) < this._animations?.length ?
-          html`
+            html`
             <button
               @click=${this.next}
               tabindex="0"
@@ -1068,7 +1074,7 @@ export class DotLottiePlayer extends LitElement {
           style="display:${this._isSettingsOpen ? 'block' : 'none'}"
         >
           ${this._isDotLottie ? nothing :
-          html`
+            html`
             <button
               @click=${this.convert}
               aria-label="Convert JSON animation to dotLottie format"
@@ -1093,12 +1099,12 @@ export class DotLottiePlayer extends LitElement {
             </svg> Download still image
           </button>
         </div>`
-        }
+      }
       </div>
     `
   }
 
-  protected override render() {   
+  protected override render() {
     return html`
       <figure
         class=${`animation-container main`}
@@ -1113,7 +1119,7 @@ export class DotLottiePlayer extends LitElement {
           style="background:${this.background}"
         >
           ${this.currentState === PlayerState.Error ?
-            html`
+        html`
               <div class="error">
                 <svg
                   preserveAspectRatio="xMidYMid slice"
@@ -1135,7 +1141,7 @@ export class DotLottiePlayer extends LitElement {
                   >${this._errorMessage}</text>
                 </svg>
               </div>` : nothing
-          }
+      }
         </div>
         ${this.controls ? this.renderControls() : nothing}
       </figure>
