@@ -361,6 +361,11 @@ export class DotLottiePlayer extends LitElement {
     this._lottieInstance.addEventListener<AnimationEventName>('complete', () => {
       this.currentState = PlayerState.Completed
       this.dispatchEvent(new CustomEvent(PlayerEvents.Complete))
+      if (this._animations?.length > 1 &&
+          this.autoplay &&
+            this._currentAnimation < (this._animations?.length - 1)) {
+        this.next()
+      }
     })
 
     //Handle complete loop
@@ -820,8 +825,12 @@ export class DotLottiePlayer extends LitElement {
     // Add event listeners to new Lottie instance
     this._addEventListeners()
 
-    this._lottieInstance.goToAndPlay(0, true)
-    this.currentState = PlayerState.Playing
+    if (this.autoplay) {
+      this._lottieInstance.goToAndPlay(0, true)
+      this.currentState = PlayerState.Playing
+    } else {
+      this._lottieInstance.goToAndStop(0, true)
+    }
   }
 
   /**
