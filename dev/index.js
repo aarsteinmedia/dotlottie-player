@@ -21784,7 +21784,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.1.5";
+	var version = "2.1.6";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -21828,6 +21828,9 @@
 		lit: "^2.8.0",
 		"lottie-web": "^5.12.2"
 	};
+	var peerDependencies = {
+		"@types/react": "^18.2.28"
+	};
 	var devDependencies = {
 		"@custom-elements-manifest/analyzer": "^0.6.9",
 		"@rollup/plugin-commonjs": "^25.0.7",
@@ -21835,14 +21838,13 @@
 		"@rollup/plugin-node-resolve": "^15.2.3",
 		"@rollup/plugin-replace": "^5.0.4",
 		"@swc/core": "1.3.75",
-		"@types/node": "^20.8.6",
-		"@types/react": "^18.2.28",
+		"@types/node": "^20.8.8",
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
 		"@typescript-eslint/parser": "^5.62.0",
-		eslint: "^8.51.0",
+		eslint: "^8.52.0",
 		rollup: "^3.29.4",
 		"rollup-plugin-dts": "^6.1.0",
-		"rollup-plugin-html-literals": "^1.1.7",
+		"rollup-plugin-html-literals": "^1.1.8",
 		"rollup-plugin-summary": "^2.0.0",
 		"rollup-plugin-swc3": "^0.9.1",
 		shx: "^0.3.4",
@@ -21892,6 +21894,7 @@
 		license: license,
 		scripts: scripts,
 		dependencies: dependencies,
+		peerDependencies: peerDependencies,
 		devDependencies: devDependencies,
 		customElements: customElements$1,
 		files: files,
