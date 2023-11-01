@@ -4,7 +4,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
 import replace from '@rollup/plugin-replace'
 import summary from 'rollup-plugin-summary'
-import { swc, minify } from 'rollup-plugin-swc3'
+import { swc, minify as swcMinify } from 'rollup-plugin-swc3'
 
 import template from 'rollup-plugin-html-literals'
 
@@ -19,27 +19,31 @@ const input = './src/index.ts',
     'lottie-web',
     'fflate'
   ],
-  plugins = ( dev = false, preferBuiltins = true ) => {
-    return [
-      template(),
-      replace({
-        preventAssignment: false,
-        'Reflect.decorate': 'undefined'
-      }),
-      json(),
-      nodeResolve({
-        extensions,
-        jsnext: true,
-        module: true,
-        browser: true,
-        preferBuiltins
-      }),
-      commonjs(),
-      swc(),
-      !dev && minify(),
-      !dev && summary(),
-    ]
-  }
+  plugins = (preferBuiltins = false) => ([
+    template(),
+    replace({
+      preventAssignment: false,
+      'Reflect.decorate': 'undefined'
+    }),
+    json(),
+    nodeResolve({
+      extensions,
+      jsnext: true,
+      module: true,
+      preferBuiltins
+    }),
+    commonjs(),
+    swc(),
+  ]),
+  unpkgPlugins = (minify = false) => ([
+    ...plugins(),
+    minify && swcMinify(),
+    minify && summary()
+  ]),
+  modulePlugins = () => ([
+    ...plugins(true),
+    summary(),
+  ])
 
 export default [
   {
@@ -56,7 +60,7 @@ export default [
     input,
     output: {
       extend: true,
-      file: pkg.main,
+      file: pkg.unpkg,
       format: 'iife',
       name: pkg.name,
     },
@@ -64,7 +68,7 @@ export default [
       if (warning.code === 'THIS_IS_UNDEFINED') return
       warn(warning)
     },
-    plugins: plugins(false, false),
+    plugins: unpkgPlugins(true),
   },
   {
     input,
@@ -78,7 +82,7 @@ export default [
       if (warning.code === 'THIS_IS_UNDEFINED') return
       warn(warning)
     },
-    plugins: plugins(true, false),
+    plugins: unpkgPlugins(),
   },
   {
     input,
@@ -97,6 +101,6 @@ export default [
       if (warning.code === 'THIS_IS_UNDEFINED') return
       warn(warning)
     },
-    plugins: plugins(),
+    plugins: modulePlugins(),
   }
 ]

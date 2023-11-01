@@ -6,14 +6,58 @@
     "es6": true
   },
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "lit"
   ],
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:lit/recommended"
   ],
   "parserOptions": {
-    "ecmaVersion": 2020,
+    "ecmaVersion": 2021,
     "sourceType": "module"
+  },
+  "ignorePatterns": [
+    "types/**/*",
+    "dist/**/*",
+    "dev/**/*"
+  ],
+  "rules": {
+    "camelcase": "warn",
+    "no-console": [
+      "warn",
+      {
+        "allow": [
+          "error",
+          "warn",
+          "info"
+        ]
+      }
+    ],
+    "lit/no-legacy-template-syntax": "error",
+    "lit/no-template-arrow": "warn",
+    // Best practices
+    "dot-notation": "error",
+    "no-else-return": "error",
+    "no-floating-decimal": "error",
+    "no-sequences": "error",
+    // Stylistic
+    "array-bracket-spacing": "error",
+    "computed-property-spacing": [
+      "error",
+      "never"
+    ],
+    "no-lonely-if": "error",
+    "no-unneeded-ternary": "error",
+    "one-var-declaration-per-line": "error",
+    "quotes": [
+      "error",
+      "single",
+      {
+        "allowTemplateLiterals": false,
+        "avoidEscape": true
+      }
+    ]
   }
 }

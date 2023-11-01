@@ -59,6 +59,8 @@ export declare class DotLottiePlayer extends LitElement {
     toggleLooping(): void;
     toggleBoomerang(): void;
     private _toggleSettings;
+    private _handleSettingsClick;
+    private _handleBlur;
     private _switchInstance;
     next(): void;
     prev(): void;

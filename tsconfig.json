@@ -3,6 +3,7 @@
     "swc": true
   },
   "compilerOptions": {
+    "allowJs": true,
     "declaration": true,
     "declarationDir": "./types",
     "emitDeclarationOnly": true,
@@ -34,7 +35,7 @@
     "resolveJsonModule": true,
     "rootDir": "./",
     "strict": true,
-    "target": "es2016",
+    "target": "es2021",
     "useDefineForClassFields": false
   },
   "include": [

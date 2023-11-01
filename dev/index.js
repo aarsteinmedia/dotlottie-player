@@ -21425,67 +21425,38 @@
 
 	exports.PlayerState = void 0;
 	(function(PlayerState) {
-	    PlayerState["Completed"] = 'completed';
-	    PlayerState["Destroyed"] = 'destroyed';
-	    PlayerState["Error"] = 'error';
-	    PlayerState["Frozen"] = 'frozen';
-	    PlayerState["Loading"] = 'loading';
-	    PlayerState["Paused"] = 'paused';
-	    PlayerState["Playing"] = 'playing';
-	    PlayerState["Stopped"] = 'stopped';
+	    PlayerState["Completed"] = "completed";
+	    PlayerState["Destroyed"] = "destroyed";
+	    PlayerState["Error"] = "error";
+	    PlayerState["Frozen"] = "frozen";
+	    PlayerState["Loading"] = "loading";
+	    PlayerState["Paused"] = "paused";
+	    PlayerState["Playing"] = "playing";
+	    PlayerState["Stopped"] = "stopped";
 	})(exports.PlayerState || (exports.PlayerState = {}));
 	exports.PlayMode = void 0;
 	(function(PlayMode) {
-	    PlayMode["Bounce"] = 'bounce';
-	    PlayMode["Normal"] = 'normal';
+	    PlayMode["Bounce"] = "bounce";
+	    PlayMode["Normal"] = "normal";
 	})(exports.PlayMode || (exports.PlayMode = {}));
 	exports.PlayerEvents = void 0;
 	(function(PlayerEvents) {
-	    PlayerEvents["Complete"] = 'complete';
-	    PlayerEvents["Destroyed"] = 'destroyed';
-	    PlayerEvents["Error"] = 'error';
-	    PlayerEvents["Frame"] = 'frame';
-	    PlayerEvents["Freeze"] = 'freeze';
-	    PlayerEvents["Load"] = 'load';
-	    PlayerEvents["Loop"] = 'loop';
-	    PlayerEvents["Pause"] = 'pause';
-	    PlayerEvents["Play"] = 'play';
-	    PlayerEvents["Ready"] = 'ready';
-	    PlayerEvents["Rendered"] = 'rendered';
-	    PlayerEvents["Stop"] = 'stop';
+	    PlayerEvents["Complete"] = "complete";
+	    PlayerEvents["Destroyed"] = "destroyed";
+	    PlayerEvents["Error"] = "error";
+	    PlayerEvents["Frame"] = "frame";
+	    PlayerEvents["Freeze"] = "freeze";
+	    PlayerEvents["Load"] = "load";
+	    PlayerEvents["Loop"] = "loop";
+	    PlayerEvents["Pause"] = "pause";
+	    PlayerEvents["Play"] = "play";
+	    PlayerEvents["Ready"] = "ready";
+	    PlayerEvents["Rendered"] = "rendered";
+	    PlayerEvents["Stop"] = "stop";
 	})(exports.PlayerEvents || (exports.PlayerEvents = {}));
 	class CustomError extends Error {
 	}
 
-	function asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, key, arg) {
-	    try {
-	        var info = gen[key](arg);
-	        var value = info.value;
-	    } catch (error) {
-	        reject(error);
-	        return;
-	    }
-	    if (info.done) {
-	        resolve(value);
-	    } else {
-	        Promise.resolve(value).then(_next, _throw);
-	    }
-	}
-	function _async_to_generator$1(fn) {
-	    return function() {
-	        var self = this, args = arguments;
-	        return new Promise(function(resolve, reject) {
-	            var gen = fn.apply(self, args);
-	            function _next(value) {
-	                asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, "next", value);
-	            }
-	            function _throw(err) {
-	                asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, "throw", err);
-	            }
-	            _next(undefined);
-	        });
-	    };
-	}
 	const addExt = (ext, str)=>{
 	    if (!str) return;
 	    if (getExt(str)) {
@@ -21507,69 +21478,74 @@
 	        default:
 	            return 'xMidYMid meet';
 	    }
-	}, base64ToU8 = (str)=>{
+	}, /**
+	   * Convert Base64 encoded string to Uint8Array
+	   * @param { string } str Base64 encoded string
+	   * @returns { Uint8Array} UTF-8/Latin-1 binary
+	   */ base64ToU8 = (str)=>{
 	    const parsedStr = str.substring(str.indexOf(',') + 1);
 	    return strToU8(isServer() ? Buffer.from(parsedStr, 'base64').toString('binary') : atob(parsedStr));
-	}, createDotLottie = function() {
-	    var _ref = _async_to_generator$1(function*(animations, manifest, filename, triggerDownload = true) {
-	        try {
-	            var _animations;
-	            if (!((_animations = animations) === null || _animations === void 0 ? void 0 : _animations.length) || !manifest) {
-	                var _animations1;
-	                throw new Error(`Missing or malformed required parameter(s):\n ${!((_animations1 = animations) === null || _animations1 === void 0 ? void 0 : _animations1.length) ? '- animations\n' : ''} ${!manifest ? '- manifest \n' : ''}`);
-	            }
-	            const name = addExt('lottie', filename) || `${useId()}.lottie`, dotlottie = {
-	                'manifest.json': [
-	                    strToU8(JSON.stringify(manifest)),
-	                    {
-	                        level: 0
-	                    }
-	                ]
-	            };
-	            for (const [i, animation] of animations.entries()){
-	                var _animation_assets;
-	                if ((_animation_assets = animation.assets) === null || _animation_assets === void 0 ? void 0 : _animation_assets.length) {
-	                    for (const asset of animation.assets){
-	                        const { id, p } = asset;
-	                        if (id && p) {
-	                            const ext = getExtFromB64(p);
-	                            asset.p = `${id}.${ext}`;
-	                            asset.e = 0;
-	                            dotlottie[`images/${id}.${ext}`] = [
-	                                base64ToU8(p),
-	                                {
-	                                    level: 9
-	                                }
-	                            ];
-	                        }
+	}, /**
+	   * Convert a JSON Lottie to dotLottie or combine several animations and download new dotLottie file in your browser.
+	   * @param { LottieJSON[] } animations The animations to combine.
+	   * @param { LottieManifest } manifest Manifest of meta information.
+	   * @param { string } filename Name of file to download. If not specified a random string will be generated.
+	   * @param { boolean } triggerDownload Whether to trigger a download in the browser. Defaults to true.
+	   */ createDotLottie = async (animations, manifest, filename, triggerDownload = true)=>{
+	    try {
+	        if (!animations?.length || !manifest) {
+	            throw new Error(`Missing or malformed required parameter(s):\n ${!animations?.length ? '- animations\n' : ''} ${!manifest ? '- manifest \n' : ''}`);
+	        }
+	        const name = addExt('lottie', filename) || `${useId()}.lottie`, dotlottie = {
+	            'manifest.json': [
+	                strToU8(JSON.stringify(manifest)),
+	                {
+	                    level: 0
+	                }
+	            ]
+	        };
+	        for (const [i, animation] of animations.entries()){
+	            if (animation.assets?.length) {
+	                for (const asset of animation.assets){
+	                    const { id, p } = asset;
+	                    if (id && p) {
+	                        const ext = getExtFromB64(p);
+	                        asset.p = `${id}.${ext}`;
+	                        asset.e = 0;
+	                        dotlottie[`images/${id}.${ext}`] = [
+	                            base64ToU8(p),
+	                            {
+	                                level: 9
+	                            }
+	                        ];
 	                    }
 	                }
-	                dotlottie[`animations/${manifest.animations[i].id}.json`] = [
-	                    strToU8(JSON.stringify(animation)),
-	                    {
-	                        level: 9
-	                    }
-	                ];
 	            }
-	            const buffer = yield getArrayBuffer(dotlottie);
-	            return triggerDownload ? download(buffer, {
-	                name,
-	                mimeType: 'application/zip'
-	            }) : buffer;
-	        } catch (err) {
-	            console.error(`❌ ${handleErrors(err).message}`);
+	            dotlottie[`animations/${manifest.animations[i].id}.json`] = [
+	                strToU8(JSON.stringify(animation)),
+	                {
+	                    level: 9
+	                }
+	            ];
 	        }
-	    });
-	    return function createDotLottie(animations, manifest, filename) {
-	        return _ref.apply(this, arguments);
-	    };
-	}(), download = (data, options)=>{
-	    var _options, _options1;
+	        const buffer = await getArrayBuffer(dotlottie);
+	        return triggerDownload ? download(buffer, {
+	            name,
+	            mimeType: 'application/zip'
+	        }) : buffer;
+	    } catch (err) {
+	        console.error(`❌ ${handleErrors(err).message}`);
+	    }
+	}, /**
+	   * Download file, either SVG or dotLottie.
+	   * @param { string } data The data to be downloaded
+	   * @param { string } name Don't include file extension in the filename
+	   */ download = (data, options)=>{
 	    const blob = new Blob([
 	        data
 	    ], {
-	        type: (_options = options) === null || _options === void 0 ? void 0 : _options.mimeType
-	    }), fileName = ((_options1 = options) === null || _options1 === void 0 ? void 0 : _options1.name) || useId(), dataURL = URL.createObjectURL(blob), link = document.createElement('a');
+	        type: options?.mimeType
+	    }), fileName = options?.name || useId(), dataURL = URL.createObjectURL(blob), link = document.createElement('a');
 	    link.href = dataURL;
 	    link.download = fileName;
 	    link.hidden = true;
@@ -21594,112 +21570,109 @@
 	    }
 	    return res;
 	}, frameOutput = (frame)=>{
-	    return ((frame !== null && frame !== void 0 ? frame : 0) + 1).toString().padStart(3, '0');
-	}, getAnimationData = function() {
-	    var _ref = _async_to_generator$1(function*(input) {
-	        try {
-	            if (!input || typeof input !== 'string' && typeof input !== 'object') {
-	                throw new Error('Broken file or invalid file format');
-	            }
-	            if (typeof input !== 'string') {
-	                const animations = Array.isArray(input) ? input : [
-	                    input
-	                ];
-	                return {
-	                    animations,
-	                    manifest: null
-	                };
-	            }
-	            const result = yield fetch(input);
-	            if (!result.ok) {
-	                const error = new CustomError(result.statusText);
-	                error.status = result.status;
-	                throw error;
-	            }
-	            const ext = getExt(input);
-	            if (ext === 'json' || !ext) {
-	                if (ext) {
-	                    const lottie = yield result.json();
-	                    return {
-	                        animations: [
-	                            lottie
-	                        ],
-	                        manifest: null
-	                    };
-	                }
-	                const text = yield result.clone().text();
-	                try {
-	                    const lottie = JSON.parse(text);
-	                    return {
-	                        animations: [
-	                            lottie
-	                        ],
-	                        manifest: null
-	                    };
-	                } catch (e) {}
-	            }
-	            const { data, manifest } = yield getLottieJSON(result);
+	    return ((frame ?? 0) + 1).toString().padStart(3, '0');
+	}, getAnimationData = async (input)=>{
+	    try {
+	        if (!input || typeof input !== 'string' && typeof input !== 'object') {
+	            throw new Error('Broken file or invalid file format');
+	        }
+	        if (typeof input !== 'string') {
+	            const animations = Array.isArray(input) ? input : [
+	                input
+	            ];
 	            return {
-	                animations: data,
-	                manifest,
-	                isDotLottie: true
-	            };
-	        } catch (err) {
-	            console.error(`❌ ${handleErrors(err).message}`);
-	            return {
-	                animations: null,
+	                animations,
 	                manifest: null
 	            };
 	        }
-	    });
-	    return function getAnimationData(input) {
-	        return _ref.apply(this, arguments);
-	    };
-	}(), getArrayBuffer = function() {
-	    var _ref = _async_to_generator$1(function*(zippable) {
-	        const arrayBuffer = yield new Promise((resolve, reject)=>{
-	            zip(zippable, {
-	                level: 9
-	            }, (err, data)=>{
-	                if (err) {
-	                    reject(err);
-	                    return;
-	                }
-	                resolve(data.buffer);
-	            });
+	        const result = await fetch(input);
+	        if (!result.ok) {
+	            const error = new CustomError(result.statusText);
+	            error.status = result.status;
+	            throw error;
+	        }
+	        /**
+	       * Check if file is JSON, first by parsing file name for extension,
+	       * then – if filename has no extension – by cloning the response
+	       * and parsing it for content.
+	       */ const ext = getExt(input);
+	        if (ext === 'json' || !ext) {
+	            if (ext) {
+	                const lottie = await result.json();
+	                return {
+	                    animations: [
+	                        lottie
+	                    ],
+	                    manifest: null
+	                };
+	            }
+	            const text = await result.clone().text();
+	            try {
+	                const lottie = JSON.parse(text);
+	                return {
+	                    animations: [
+	                        lottie
+	                    ],
+	                    manifest: null
+	                };
+	            } catch  {}
+	        }
+	        const { data, manifest } = await getLottieJSON(result);
+	        return {
+	            animations: data,
+	            manifest,
+	            isDotLottie: true
+	        };
+	    } catch (err) {
+	        console.error(`❌ ${handleErrors(err).message}`);
+	        return {
+	            animations: null,
+	            manifest: null
+	        };
+	    }
+	}, getArrayBuffer = async (zippable)=>{
+	    const arrayBuffer = await new Promise((resolve, reject)=>{
+	        zip(zippable, {
+	            level: 9
+	        }, (err, data)=>{
+	            if (err) {
+	                reject(err);
+	                return;
+	            }
+	            resolve(data.buffer);
 	        });
-	        return arrayBuffer;
 	    });
-	    return function getArrayBuffer(zippable) {
-	        return _ref.apply(this, arguments);
-	    };
-	}(), getExt = (str)=>{
-	    var _str_split_pop;
+	    return arrayBuffer;
+	}, /**
+	   * Get extension from filename, URL or path
+	   * @param { string } str Filename, URL or path
+	   */ getExt = (str)=>{
 	    if (!str || !hasExt(str)) return;
-	    return (_str_split_pop = str.split('.').pop()) === null || _str_split_pop === void 0 ? void 0 : _str_split_pop.toLowerCase();
+	    return str.split('.').pop()?.toLowerCase();
 	}, getExtFromB64 = (str)=>{
 	    const mime = str.split(':')[1].split(';')[0];
 	    return mime.split('/')[1].split('+')[0];
-	}, getFilename = (src, keepExt)=>{
+	}, /**
+	   * Parse URL to get filename
+	   * @param { string } src The url string
+	   * @param { boolean } keepExt Whether to include file extension
+	   * @returns { string } Filename, in lowercase
+	   */ getFilename = (src, keepExt)=>{
+	    // Because the regex strips all special characters, we need to extract the file extension, so we can add it later if we need it
 	    const ext = getExt(src);
 	    return `${src.replace(/\.[^.]*$/, '').replace(/\W+/g, '')}${keepExt && ext ? `.${ext}` : ''}`.toLowerCase();
-	}, getLottieJSON = function() {
-	    var _ref = _async_to_generator$1(function*(resp) {
-	        const unzipped = yield unzip(resp), manifest = getManifest(unzipped), data = [];
-	        for (const { id } of manifest.animations){
-	            const str = strFromU8(unzipped[`animations/${id}.json`]), lottie = JSON.parse(str);
-	            yield resolveAssets(unzipped, lottie.assets);
-	            data.push(lottie);
-	        }
-	        return {
-	            data,
-	            manifest
-	        };
-	    });
-	    return function getLottieJSON(resp) {
-	        return _ref.apply(this, arguments);
+	}, getLottieJSON = async (resp)=>{
+	    const unzipped = await unzip(resp), manifest = getManifest(unzipped), data = [];
+	    for (const { id } of manifest.animations){
+	        const str = strFromU8(unzipped[`animations/${id}.json`]), lottie = JSON.parse(str);
+	        await resolveAssets(unzipped, lottie.assets);
+	        data.push(lottie);
+	    }
+	    return {
+	        data,
+	        manifest
 	    };
-	}(), getManifest = (unzipped)=>{
+	}, getManifest = (unzipped)=>{
 	    const file = strFromU8(unzipped['manifest.json'], false), manifest = JSON.parse(file);
 	    if (!('animations' in manifest)) throw new Error('Manifest not found');
 	    if (!manifest.animations.length) throw new Error('No animations listed in manifest');
@@ -21724,67 +21697,59 @@
 	            return '';
 	    }
 	}, hasExt = (path)=>{
-	    var _path_split_pop, _path;
-	    const lastDotIndex = (_path = path) === null || _path === void 0 ? void 0 : (_path_split_pop = _path.split('/').pop()) === null || _path_split_pop === void 0 ? void 0 : _path_split_pop.lastIndexOf('.');
-	    return (lastDotIndex !== null && lastDotIndex !== void 0 ? lastDotIndex : 0) > 1 && path && path.length - 1 > (lastDotIndex !== null && lastDotIndex !== void 0 ? lastDotIndex : 0);
+	    const lastDotIndex = path?.split('/').pop()?.lastIndexOf('.');
+	    return (lastDotIndex ?? 0) > 1 && path && path.length - 1 > (lastDotIndex ?? 0);
 	}, isAudio = (asset)=>{
 	    return !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset;
 	}, isImage = (asset)=>{
 	    return 'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset;
 	}, isServer = ()=>{
 	    return !(typeof window !== 'undefined' && window.document);
-	}, strToU8 = (str)=>{
+	}, /**
+	   * Convert string to Uint8Array
+	   * @param { string } str Base64 encoded string
+	   * @returns { Uint8Array} UTF-8/Latin-1 binary
+	   */ strToU8 = (str)=>{
 	    const u8 = new Uint8Array(str.length);
 	    for(let i = 0; i < str.length; i++){
 	        u8[i] = str.charCodeAt(i);
 	    }
 	    return u8;
-	}, resolveAssets = function() {
-	    var _ref = _async_to_generator$1(function*(unzipped, assets) {
-	        if (!Array.isArray(assets)) return;
-	        const toResolve = [];
-	        for (const asset of assets){
-	            var _unzipped;
-	            if (!isAudio(asset) && !isImage(asset)) continue;
-	            const type = isImage(asset) ? 'images' : 'audio', u8 = (_unzipped = unzipped) === null || _unzipped === void 0 ? void 0 : _unzipped[`${type}/${asset.p}`];
-	            if (!u8) continue;
-	            toResolve.push(new Promise((resolveAsset)=>{
-	                const assetB64 = isServer() ? Buffer.from(u8).toString('base64') : btoa(u8.reduce((dat, byte)=>dat + String.fromCharCode(byte), ''));
-	                asset.p = `data:${getMimeFromExt(getExt(asset.p))};base64,${assetB64}`;
-	                asset.e = 1;
-	                asset.u = '';
-	                resolveAsset();
-	            }));
-	        }
-	        yield Promise.all(toResolve);
-	    });
-	    return function resolveAssets(unzipped, assets) {
-	        return _ref.apply(this, arguments);
-	    };
-	}(), unzip = function() {
-	    var _ref = _async_to_generator$1(function*(resp) {
-	        const u8 = new Uint8Array((yield resp.arrayBuffer())), unzipped = yield new Promise((resolve, reject)=>{
-	            unzip$1(u8, (err, file)=>{
-	                if (err) {
-	                    reject(err);
-	                }
-	                resolve(file);
-	            });
+	}, resolveAssets = async (unzipped, assets)=>{
+	    if (!Array.isArray(assets)) return;
+	    const toResolve = [];
+	    for (const asset of assets){
+	        if (!isAudio(asset) && !isImage(asset)) continue;
+	        const type = isImage(asset) ? 'images' : 'audio', u8 = unzipped?.[`${type}/${asset.p}`];
+	        if (!u8) continue;
+	        toResolve.push(new Promise((resolveAsset)=>{
+	            const assetB64 = isServer() ? Buffer.from(u8).toString('base64') : btoa(u8.reduce((dat, byte)=>dat + String.fromCharCode(byte), ''));
+	            asset.p = `data:${getMimeFromExt(getExt(asset.p))};base64,${assetB64}`;
+	            asset.e = 1;
+	            asset.u = '';
+	            resolveAsset();
+	        }));
+	    }
+	    await Promise.all(toResolve);
+	}, unzip = async (resp)=>{
+	    const u8 = new Uint8Array(await resp.arrayBuffer()), unzipped = await new Promise((resolve, reject)=>{
+	        unzip$1(u8, /*{ filter },*/ (err, file)=>{
+	            if (err) {
+	                reject(err);
+	            }
+	            resolve(file);
 	        });
-	        return unzipped;
 	    });
-	    return function unzip(resp) {
-	        return _ref.apply(this, arguments);
-	    };
-	}(), useId = (prefix)=>{
+	    return unzipped;
+	}, useId = (prefix)=>{
 	    const s4 = ()=>{
 	        return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
 	    };
-	    return `${prefix !== null && prefix !== void 0 ? prefix : `:${s4()}`}-${s4()}`;
+	    return `${prefix ?? `:${s4()}`}-${s4()}`;
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.1.6";
+	var version = "2.1.7";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -21794,7 +21759,7 @@
 			types: "./dist/index.d.ts"
 		}
 	};
-	var main = "./dist/index.js";
+	var main = "./dist/esm/index.js";
 	var unpkg = "./dist/index.js";
 	var module = "./dist/esm/index.js";
 	var types = "./dist/index.d.ts";
@@ -21829,19 +21794,20 @@
 		"lottie-web": "^5.12.2"
 	};
 	var peerDependencies = {
-		"@types/react": "^18.2.28"
+		"@types/react": ">= 16.0.0"
 	};
 	var devDependencies = {
 		"@custom-elements-manifest/analyzer": "^0.6.9",
 		"@rollup/plugin-commonjs": "^25.0.7",
 		"@rollup/plugin-json": "^6.0.1",
 		"@rollup/plugin-node-resolve": "^15.2.3",
-		"@rollup/plugin-replace": "^5.0.4",
-		"@swc/core": "1.3.75",
-		"@types/node": "^20.8.8",
+		"@rollup/plugin-replace": "^5.0.5",
+		"@swc/core": "^1.3.95",
+		"@types/node": "^20.8.10",
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
 		"@typescript-eslint/parser": "^5.62.0",
 		eslint: "^8.52.0",
+		"eslint-plugin-lit": "^1.10.1",
 		rollup: "^3.29.4",
 		"rollup-plugin-dts": "^6.1.0",
 		"rollup-plugin-html-literals": "^1.1.8",
@@ -21906,87 +21872,6 @@
 
 	var styles = i$4`*{box-sizing:border-box}:host{--lottie-player-toolbar-height:35px;--lottie-player-toolbar-background-color:#FFF;--lottie-player-toolbar-icon-color:#000;--lottie-player-toolbar-icon-hover-color:#000;--lottie-player-toolbar-icon-active-color:#4285f4;--lottie-player-seeker-track-color:rgba(0, 0, 0, 0.2);--lottie-player-seeker-thumb-color:#4285f4;--lottie-player-seeker-display:block;display:block;width:100%;height:100%}@media (prefers-color-scheme:dark){:host{--lottie-player-toolbar-background-color:#000;--lottie-player-toolbar-icon-color:#FFF;--lottie-player-toolbar-icon-hover-color:#FFF;--lottie-player-seeker-track-color:rgba(255, 255, 255, 0.6)}}.main{display:flex;flex-direction:column;height:100%;width:100%;margin:0}.animation{width:100%;height:100%;display:flex}[data-controls=true] .animation{height:calc(100% - 35px)}.animation-container{position:relative}.popover{position:absolute;right:5px;bottom:40px;background-color:var(--lottie-player-toolbar-background-color);border-radius:5px;padding:10px 15px;border:solid 2px var(--lottie-player-toolbar-icon-color);animation:fadeIn .2s ease-in-out}.popover::before{content:"";right:10px;border:7px solid transparent;border-top-color:transparent;margin-right:-7px;height:0;width:0;position:absolute;pointer-events:none;top:100%;border-top-color:var(--lottie-player-toolbar-icon-color)}.toolbar{display:flex;align-items:center;justify-items:center;background:var(--lottie-player-toolbar-background-color);margin:0;height:35px;padding:5px;border-radius:5px;gap:5px}.toolbar.has-error{pointer-events:none;opacity:.5}.toolbar button{cursor:pointer;fill:var(--lottie-player-toolbar-icon-color);color:var(--lottie-player-toolbar-icon-color);display:flex;background:0 0;border:0;padding:0;outline:0;height:100%;margin:0;align-items:center;gap:5px;opacity:.9}.toolbar button:hover{opacity:1}.toolbar button[data-active=true]{opacity:1;fill:var(--lottie-player-toolbar-icon-active-color)}.toolbar button:disabled{opacity:.5}.toolbar button:focus{outline:0}.toolbar button svg{pointer-events:none}.toolbar button svg>*{fill:inherit}.toolbar button.disabled svg{display:none}.progress-container{position:relative;width:100%}.progress-container.simple{margin-right:12px}.seeker,.seeker::-webkit-slider-runnable-track,.seeker::-webkit-slider-thumb,progress{-webkit-appearance:none;appearance:none;outline:0}.seeker{width:100%;height:20px;border-radius:3px;border:0;cursor:pointer;background-color:transparent;display:var(--lottie-player-seeker-display);color:var(--lottie-player-seeker-thumb-color);margin:0;padding:7.5px 0;position:relative;z-index:1}progress{position:absolute;width:100%;height:5px;border-radius:3px;border:0;top:0;left:0;margin:7.5px 0;background-color:var(--lottie-player-seeker-track-color);pointer-events:none}::-moz-progress-bar{background-color:var(--lottie-player-seeker-thumb-color)}::-webkit-progress-inner-element{border-radius:3px;overflow:hidden}::-webkit-slider-runnable-track{background-color:transparent}::-webkit-progress-value{background-color:var(--lottie-player-seeker-thumb-color)}.seeker::-webkit-slider-thumb{height:15px;width:15px;border-radius:50%;border:0;background-color:var(--lottie-player-seeker-thumb-color);cursor:pointer;transition:transform .2s ease-in-out;transform:scale(0)}.seeker:focus::-webkit-slider-thumb,.seeker:hover::-webkit-slider-thumb{transform:scale(1)}.seeker::-moz-range-progress{background-color:var(--lottie-player-seeker-thumb-color);height:5px;border-radius:3px}.seeker::-moz-range-thumb{height:15px;width:15px;border-radius:50%;background-color:var(--lottie-player-seeker-thumb-color);border:0;cursor:pointer;transition:transform .2s ease-in-out;transform:scale(0)}.seeker:focus::-moz-range-thumb,.seeker:hover::-moz-range-thumb{transform:scale(1)}.seeker::-ms-track{width:100%;height:5px;cursor:pointer;background:0 0;border-color:transparent;color:transparent}.seeker::-ms-fill-upper{background:var(--lottie-player-seeker-track-color);border-radius:3px}.seeker::-ms-fill-lower{background-color:var(--lottie-player-seeker-thumb-color);border-radius:3px}.seeker::-ms-thumb{border:0;height:15px;width:15px;border-radius:50%;background:var(--lottie-player-seeker-thumb-color);cursor:pointer;transition:transform .2s ease-in-out;transform:scale(0)}.seeker:focus::-ms-thumb,.seeker:hover::-ms-thumb{transform:scale(1)}.seeker:focus::-ms-fill-lower{background:var(--lottie-player-seeker-track-color)}.seeker:focus::-ms-fill-upper{background:var(--lottie-player-seeker-track-color)}.error{display:flex;margin:auto;justify-content:center;height:100%;align-items:center}.error svg{width:100%;height:auto}@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}`;
 
-	function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-	    try {
-	        var info = gen[key](arg);
-	        var value = info.value;
-	    } catch (error) {
-	        reject(error);
-	        return;
-	    }
-	    if (info.done) {
-	        resolve(value);
-	    } else {
-	        Promise.resolve(value).then(_next, _throw);
-	    }
-	}
-	function _async_to_generator(fn) {
-	    return function() {
-	        var self = this, args = arguments;
-	        return new Promise(function(resolve, reject) {
-	            var gen = fn.apply(self, args);
-	            function _next(value) {
-	                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-	            }
-	            function _throw(err) {
-	                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-	            }
-	            _next(undefined);
-	        });
-	    };
-	}
-	function _define_property(obj, key, value) {
-	    if (key in obj) {
-	        Object.defineProperty(obj, key, {
-	            value: value,
-	            enumerable: true,
-	            configurable: true,
-	            writable: true
-	        });
-	    } else {
-	        obj[key] = value;
-	    }
-	    return obj;
-	}
-	function _object_spread(target) {
-	    for(var i = 1; i < arguments.length; i++){
-	        var source = arguments[i] != null ? arguments[i] : {};
-	        var ownKeys = Object.keys(source);
-	        if (typeof Object.getOwnPropertySymbols === "function") {
-	            ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-	                return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-	            }));
-	        }
-	        ownKeys.forEach(function(key) {
-	            _define_property(target, key, source[key]);
-	        });
-	    }
-	    return target;
-	}
-	function ownKeys(object, enumerableOnly) {
-	    var keys = Object.keys(object);
-	    if (Object.getOwnPropertySymbols) {
-	        var symbols = Object.getOwnPropertySymbols(object);
-	        if (enumerableOnly) {
-	            symbols = symbols.filter(function(sym) {
-	                return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-	            });
-	        }
-	        keys.push.apply(keys, symbols);
-	    }
-	    return keys;
-	}
-	function _object_spread_props(target, source) {
-	    source = source != null ? source : {};
-	    if (Object.getOwnPropertyDescriptors) {
-	        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-	    } else {
-	        ownKeys(Object(source)).forEach(function(key) {
-	            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-	        });
-	    }
-	    return target;
-	}
 	function _ts_decorate(decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof undefined === "function") r = undefined(decorators, target, key, desc);
@@ -21994,9 +21879,11 @@
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	}
 	exports.DotLottiePlayer = class DotLottiePlayer extends s {
-	    _getOptions() {
-	        var _this_preserveAspectRatio;
-	        const preserveAspectRatio = (_this_preserveAspectRatio = this.preserveAspectRatio) !== null && _this_preserveAspectRatio !== void 0 ? _this_preserveAspectRatio : this.objectfit && aspectRatio(this.objectfit), initialSegment = !this.segment || this.segment.some((val)=>val < 0) ? undefined : this.segment.every((val)=>val > 0) ? [
+	    /**
+	   * Get options from props
+	   * @returns { AnimationConfig }
+	   */ _getOptions() {
+	        const preserveAspectRatio = this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)), initialSegment = !this.segment || this.segment.some((val)=>val < 0) ? undefined : this.segment.every((val)=>val > 0) ? [
 	            this.segment[0] - 1,
 	            this.segment[1] - 1
 	        ] : this.segment, options = {
@@ -22011,72 +21898,83 @@
 	        };
 	        switch(this.renderer){
 	            case 'svg':
-	                options.rendererSettings = _object_spread_props(_object_spread({}, options.rendererSettings), {
+	                options.rendererSettings = {
+	                    ...options.rendererSettings,
 	                    hideOnTransparent: true,
 	                    preserveAspectRatio,
 	                    progressiveLoad: true
-	                });
+	                };
 	                break;
 	            case 'canvas':
-	                options.rendererSettings = _object_spread_props(_object_spread({}, options.rendererSettings), {
+	                options.rendererSettings = {
+	                    ...options.rendererSettings,
 	                    clearCanvas: true,
 	                    preserveAspectRatio,
 	                    progressiveLoad: true
-	                });
+	                };
 	                break;
 	            case 'html':
-	                options.rendererSettings = _object_spread_props(_object_spread({}, options.rendererSettings), {
+	                options.rendererSettings = {
+	                    ...options.rendererSettings,
 	                    hideOnTransparent: true
-	                });
+	                };
 	        }
 	        return options;
 	    }
-	    load(src) {
-	        var _this = this;
-	        return _async_to_generator(function*() {
-	            if (!_this.shadowRoot) return;
-	            try {
-	                const { animations, manifest, isDotLottie } = yield getAnimationData(src);
-	                if (!animations || animations.some((animation)=>!_this._isLottie(animation))) {
-	                    throw new Error('Broken or corrupted file');
-	                }
-	                _this._isDotLottie = !!isDotLottie;
-	                _this._animations = animations;
-	                _this._manifest = manifest !== null && manifest !== void 0 ? manifest : {
-	                    animations: [
-	                        {
-	                            id: useId(),
-	                            autoplay: _this.autoplay,
-	                            loop: _this.loop,
-	                            direction: _this.direction,
-	                            mode: _this.mode,
-	                            speed: _this.speed
-	                        }
-	                    ]
-	                };
-	                if (_this._lottieInstance) _this._lottieInstance.destroy();
-	                _this._lottieInstance = Lottie.loadAnimation(_object_spread_props(_object_spread({}, _this._getOptions()), {
-	                    animationData: animations[_this._currentAnimation]
-	                }));
-	            } catch (err) {
-	                _this._errorMessage = handleErrors(err).message;
-	                _this.currentState = exports.PlayerState.Error;
-	                _this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Error));
-	                return;
+	    /**
+	   * Initialize Lottie Web player
+	   * @param { string | LottieJSON } src URL to lottie animation, or raw JSON data
+	   */ async load(src) {
+	        if (!this.shadowRoot) return;
+	        // Load the resource
+	        try {
+	            const { animations, manifest, isDotLottie } = await getAnimationData(src);
+	            if (!animations || animations.some((animation)=>!this._isLottie(animation))) {
+	                throw new Error('Broken or corrupted file');
 	            }
-	            _this._addEventListeners();
-	            _this.setSpeed(_this.speed);
-	            var _this_direction;
-	            _this.setDirection((_this_direction = _this.direction) !== null && _this_direction !== void 0 ? _this_direction : 1);
-	            _this.setSubframe(!!_this.subframe);
-	            if (_this.autoplay) {
-	                if (_this.direction === -1) _this.seek('99%');
-	                _this.play();
-	            }
-	        })();
+	            this._isDotLottie = !!isDotLottie;
+	            this._animations = animations;
+	            this._manifest = manifest ?? {
+	                animations: [
+	                    {
+	                        id: useId(),
+	                        autoplay: this.autoplay,
+	                        loop: this.loop,
+	                        direction: this.direction,
+	                        mode: this.mode,
+	                        speed: this.speed
+	                    }
+	                ]
+	            };
+	            // Clear previous animation, if any
+	            if (this._lottieInstance) this._lottieInstance.destroy();
+	            // Initialize lottie player and load animation
+	            this._lottieInstance = Lottie.loadAnimation({
+	                ...this._getOptions(),
+	                animationData: animations[this._currentAnimation]
+	            });
+	        } catch (err) {
+	            this._errorMessage = handleErrors(err).message;
+	            this.currentState = exports.PlayerState.Error;
+	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Error));
+	            return;
+	        }
+	        this._addEventListeners();
+	        // Set initial playback speed and direction
+	        this.setSpeed(this.speed);
+	        this.setDirection(this.direction ?? 1);
+	        this.setSubframe(!!this.subframe);
+	        // Start playing if autoplay is enabled
+	        if (this.autoplay) {
+	            if (this.direction === -1) this.seek('99%');
+	            this.play();
+	        }
 	    }
-	    _addEventListeners() {
+	    /**
+	   * Add event listeners
+	   */ _addEventListeners() {
 	        if (!this._lottieInstance) return;
+	        // Calculate and save the current progress of the animation
 	        this._lottieInstance.addEventListener('enterFrame', ()=>{
 	            if (this._lottieInstance) {
 	                const { currentFrame, totalFrames } = this._lottieInstance;
@@ -22089,16 +21987,16 @@
 	                }));
 	            }
 	        });
+	        // Handle animation play complete
 	        this._lottieInstance.addEventListener('complete', ()=>{
-	            var _this__animations, _this__animations1;
 	            this.currentState = exports.PlayerState.Completed;
 	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Complete));
-	            if (((_this__animations = this._animations) === null || _this__animations === void 0 ? void 0 : _this__animations.length) > 1 && this.autoplay && this._currentAnimation < ((_this__animations1 = this._animations) === null || _this__animations1 === void 0 ? void 0 : _this__animations1.length) - 1) {
+	            if (this._animations?.length > 1 && this.autoplay && this._currentAnimation < this._animations?.length - 1) {
 	                this.next();
 	            }
 	        });
+	        //Handle complete loop
 	        const loopComplete = ()=>{
-	            var _this__lottieInstance;
 	            if (!this._lottieInstance) {
 	                return;
 	            }
@@ -22114,33 +22012,34 @@
 	            }
 	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Loop));
 	            if (this.mode === exports.PlayMode.Bounce) {
-	                var _this__lottieInstance1, _this__lottieInstance2;
-	                (_this__lottieInstance1 = this._lottieInstance) === null || _this__lottieInstance1 === void 0 ? void 0 : _this__lottieInstance1.goToAndStop(playDirection === -1 ? firstFrame : totalFrames * .99, true);
-	                (_this__lottieInstance2 = this._lottieInstance) === null || _this__lottieInstance2 === void 0 ? void 0 : _this__lottieInstance2.setDirection(playDirection * -1);
+	                this._lottieInstance?.goToAndStop(playDirection === -1 ? firstFrame : totalFrames * 0.99, true);
+	                this._lottieInstance?.setDirection(playDirection * -1);
 	                return setTimeout(()=>{
-	                    var _this__lottieInstance;
-	                    (_this__lottieInstance = this._lottieInstance) === null || _this__lottieInstance === void 0 ? void 0 : _this__lottieInstance.play();
+	                    this._lottieInstance?.play();
 	                }, this.intermission);
 	            }
-	            (_this__lottieInstance = this._lottieInstance) === null || _this__lottieInstance === void 0 ? void 0 : _this__lottieInstance.goToAndStop(playDirection === -1 ? totalFrames * .99 : firstFrame, true);
+	            this._lottieInstance?.goToAndStop(playDirection === -1 ? totalFrames * 0.99 : firstFrame, true);
 	            return setTimeout(()=>{
-	                var _this__lottieInstance;
-	                (_this__lottieInstance = this._lottieInstance) === null || _this__lottieInstance === void 0 ? void 0 : _this__lottieInstance.play();
+	                this._lottieInstance?.play();
 	            }, this.intermission);
 	        };
 	        this._lottieInstance.addEventListener('loopComplete', loopComplete);
+	        // Handle lottie-web ready event
 	        this._lottieInstance.addEventListener('DOMLoaded', ()=>{
 	            this._playerState.loaded = true;
 	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Ready));
 	        });
+	        // Handle animation data load complete
 	        this._lottieInstance.addEventListener('data_ready', ()=>{
 	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Load));
 	        });
+	        // Set error state when animation load fail event triggers
 	        this._lottieInstance.addEventListener('data_failed', ()=>{
 	            this.currentState = exports.PlayerState.Error;
 	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Error));
 	        });
 	        if (this.container) {
+	            // Set handlers to auto play animation on hover if enabled
 	            this.container.addEventListener('mouseenter', ()=>{
 	                if (this.hover && this.currentState !== exports.PlayerState.Playing) {
 	                    this.play();
@@ -22153,14 +22052,19 @@
 	            });
 	        }
 	    }
-	    _onVisibilityChange() {
+	    /**
+	   * Handle visibility change events
+	   */ _onVisibilityChange() {
 	        if (document.hidden && this.currentState === exports.PlayerState.Playing) {
 	            this._freeze();
 	        } else if (this.currentState === exports.PlayerState.Frozen) {
 	            this.play();
 	        }
 	    }
-	    _handleSeekChange({ target }) {
+	    /**
+	   * Handles click and drag actions on the progress track
+	   * @param { Event & { HTMLInputElement } } event
+	   */ _handleSeekChange({ target }) {
 	        if (!(target instanceof HTMLInputElement) || !this._lottieInstance || isNaN(Number(target.value))) return;
 	        this.seek(Math.floor(Number(target.value) / 100 * this._lottieInstance.totalFrames));
 	        setTimeout(()=>{
@@ -22181,45 +22085,54 @@
 	        ];
 	        return mandatory.every((field)=>Object.prototype.hasOwnProperty.call(json, field));
 	    }
-	    addAnimation(configs, fileName, triggerDownload = true) {
-	        var _this = this;
-	        return _async_to_generator(function*() {
-	            try {
-	                const oldManifest = _this._manifest || {
-	                    animations: []
-	                };
-	                let manifest = _object_spread_props(_object_spread({}, oldManifest), {
-	                    generator: pkg.name
-	                }), animations = _this._animations || [];
-	                for (const config of configs){
-	                    const { url } = config, { animations: animationsToAdd } = yield getAnimationData(url);
-	                    if (!animationsToAdd) {
-	                        throw new Error('No animation loaded');
-	                    }
-	                    if (manifest.animations.some(({ id })=>id === config.id)) {
-	                        throw new Error('Duplicate id for animation');
-	                    }
-	                    manifest = _object_spread_props(_object_spread({}, manifest), {
-	                        animations: [
-	                            ...manifest.animations,
-	                            config
-	                        ]
-	                    });
-	                    animations = [
-	                        ...animations,
-	                        ...animationsToAdd
-	                    ];
+	    /**
+	   * Creates a new dotLottie file, by combinig several animations
+	   * @param { Config } configs
+	   * @param { string } fileName
+	   * @param { boolean } triggerDownload Whether to trigger a download in the browser.
+	   * If set to false the function returns an ArrayBuffer. Defaults to true.
+	   */ async addAnimation(configs, fileName, triggerDownload = true) {
+	        try {
+	            const oldManifest = this._manifest || {
+	                animations: []
+	            };
+	            let manifest = {
+	                ...oldManifest,
+	                generator: pkg.name
+	            }, animations = this._animations || [];
+	            for (const config of configs){
+	                const { url } = config, { animations: animationsToAdd } = await getAnimationData(url);
+	                if (!animationsToAdd) {
+	                    throw new Error('No animation loaded');
 	                }
-	                return createDotLottie(animations, manifest, fileName, triggerDownload);
-	            } catch (err) {
-	                console.error(handleErrors(err).message);
+	                if (manifest.animations.some(({ id })=>id === config.id)) {
+	                    throw new Error('Duplicate id for animation');
+	                }
+	                manifest = {
+	                    ...manifest,
+	                    animations: [
+	                        ...manifest.animations,
+	                        config
+	                    ]
+	                };
+	                animations = [
+	                    ...animations,
+	                    ...animationsToAdd
+	                ];
 	            }
-	        })();
+	            return createDotLottie(animations, manifest, fileName, triggerDownload);
+	        } catch (err) {
+	            console.error(handleErrors(err).message);
+	        }
 	    }
-	    getLottie() {
+	    /**
+	   * Returns the lottie-web instance used in the component
+	   */ getLottie() {
 	        return this._lottieInstance;
 	    }
-	    play() {
+	    /**
+	   * Play
+	   */ play() {
 	        if (!this._lottieInstance) return;
 	        if (this.currentState) {
 	            this._playerState.prev = this.currentState;
@@ -22230,7 +22143,9 @@
 	        }, 0);
 	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Play));
 	    }
-	    pause() {
+	    /**
+	   * Pause
+	   */ pause() {
 	        if (!this._lottieInstance) return;
 	        if (this.currentState) {
 	            this._playerState.prev = this.currentState;
@@ -22241,7 +22156,9 @@
 	        }, 0);
 	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Pause));
 	    }
-	    stop() {
+	    /**
+	   * Stop
+	   */ stop() {
 	        if (!this._lottieInstance) return;
 	        if (this.currentState) {
 	            this._playerState.prev = this.currentState;
@@ -22253,7 +22170,9 @@
 	        }, 0);
 	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Stop));
 	    }
-	    destroy() {
+	    /**
+	   * Destroy animation and element
+	   */ destroy() {
 	        if (!this._lottieInstance) return;
 	        this.currentState = exports.PlayerState.Destroyed;
 	        this._lottieInstance.destroy();
@@ -22261,14 +22180,21 @@
 	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Destroyed));
 	        this.remove();
 	    }
-	    seek(value) {
+	    /**
+	   * Seek to a given frame
+	   * @param { number | string } value Frame to seek to
+	   */ seek(value) {
 	        if (!this._lottieInstance) return;
+	        // Extract frame number from either number or percentage value
 	        const matches = value.toString().match(/^([0-9]+)(%?)$/);
 	        if (!matches) {
 	            return;
 	        }
+	        // Calculate and set the frame number
 	        const frame = Math.floor(matches[2] === '%' ? this._lottieInstance.totalFrames * Number(matches[1]) / 100 : Number(matches[1]));
+	        // Set seeker to new frame number
 	        this._seeker = frame;
+	        // Send lottie player to the new frame
 	        if (this.currentState === exports.PlayerState.Playing || this.currentState === exports.PlayerState.Frozen && this._playerState.prev === exports.PlayerState.Playing) {
 	            this._lottieInstance.goToAndPlay(frame, true);
 	            this.currentState = exports.PlayerState.Playing;
@@ -22277,8 +22203,11 @@
 	            this._lottieInstance.pause();
 	        }
 	    }
-	    snapshot() {
+	    /**
+	   * Snapshot and download the current frame as SVG
+	   */ snapshot() {
 	        if (!this.shadowRoot) return;
+	        // Get SVG element and serialize markup
 	        const svgElement = this.shadowRoot.querySelector('.animation svg'), data = svgElement instanceof Node ? new XMLSerializer().serializeToString(svgElement) : null;
 	        if (!data) {
 	            console.error('Could not serialize data');
@@ -22290,12 +22219,19 @@
 	        });
 	        return data;
 	    }
-	    setSubframe(value) {
+	    /**
+	   * Toggles subframe, for more smooth animations
+	   * @param { boolean } value Whether animation uses subframe
+	   */ setSubframe(value) {
 	        if (!this._lottieInstance) return;
 	        this.subframe = value;
 	        this._lottieInstance.setSubframe(value);
 	    }
-	    _freeze() {
+	    /**
+	   * Freeze animation.
+	   * This internal state pauses animation and is used to differentiate between
+	   * user requested pauses and component instigated pauses.
+	   */ _freeze() {
 	        if (!this._lottieInstance) return;
 	        if (this.currentState) {
 	            this._playerState.prev = this.currentState;
@@ -22306,33 +22242,43 @@
 	        }, 0);
 	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Freeze));
 	    }
-	    reload() {
-	        var _this = this;
-	        return _async_to_generator(function*() {
-	            if (!_this._lottieInstance) return;
-	            _this._lottieInstance.destroy();
-	            if (_this.src) {
-	                yield _this.load(_this.src);
-	            }
-	        })();
+	    /**
+	   * Reload animation
+	   */ async reload() {
+	        if (!this._lottieInstance) return;
+	        this._lottieInstance.destroy();
+	        if (this.src) {
+	            await this.load(this.src);
+	        }
 	    }
-	    setSpeed(value = 1) {
+	    /**
+	   * Set animation playback speed
+	   * @param { number } value Playback speed
+	   */ setSpeed(value = 1) {
 	        if (!this._lottieInstance) return;
 	        this.speed = value;
 	        this._lottieInstance.setSpeed(value);
 	    }
-	    setDirection(value) {
+	    /**
+	   * Animation play direction
+	   * @param { AnimationDirection } value Animation direction
+	   */ setDirection(value) {
 	        if (!this._lottieInstance) return;
 	        this.direction = value;
 	        this._lottieInstance.setDirection(value);
 	    }
-	    setLooping(value) {
+	    /**
+	   * Set loop
+	   * @param { boolean } value
+	   */ setLooping(value) {
 	        if (this._lottieInstance) {
 	            this.loop = value;
 	            this._lottieInstance.setLoop(value);
 	        }
 	    }
-	    togglePlay() {
+	    /**
+	   * Toggle playing state
+	   */ togglePlay() {
 	        if (!this._lottieInstance) return;
 	        const { currentFrame, playDirection, totalFrames } = this._lottieInstance;
 	        if (this.currentState === exports.PlayerState.Playing) {
@@ -22351,123 +22297,183 @@
 	        }
 	        return this.play();
 	    }
-	    toggleLooping() {
+	    /**
+	   * Toggle loop
+	   */ toggleLooping() {
 	        this.setLooping(!this.loop);
 	    }
-	    toggleBoomerang() {
+	    /**
+	   * Toggle Boomerang
+	   */ toggleBoomerang() {
 	        if (this.mode === exports.PlayMode.Normal) {
 	            this.mode = exports.PlayMode.Bounce;
 	        } else {
 	            this.mode = exports.PlayMode.Normal;
 	        }
 	    }
-	    _toggleSettings(flag) {
+	    /**
+	   * Toggle show Settings
+	   */ _toggleSettings(flag) {
 	        if (flag === undefined) {
 	            this._isSettingsOpen = !this._isSettingsOpen;
 	        } else {
 	            this._isSettingsOpen = flag;
 	        }
 	    }
+	    /**
+	   * Handle blur
+	   */ _handleBlur() {
+	        setTimeout(()=>this._toggleSettings(false), 200);
+	    }
 	    _switchInstance() {
+	        // Clear previous animation
 	        if (this._lottieInstance) this._lottieInstance.destroy();
-	        this._lottieInstance = Lottie.loadAnimation(_object_spread_props(_object_spread({}, this._getOptions()), {
+	        // Re-initialize lottie player
+	        this._lottieInstance = Lottie.loadAnimation({
+	            ...this._getOptions(),
 	            animationData: this._animations[this._currentAnimation]
-	        }));
+	        });
+	        // Add event listeners to new Lottie instance
 	        this._addEventListeners();
 	        if (this.autoplay) {
-	            this._lottieInstance.goToAndPlay(0, true);
+	            this._lottieInstance?.goToAndPlay(0, true);
 	            this.currentState = exports.PlayerState.Playing;
 	        } else {
-	            this._lottieInstance.goToAndStop(0, true);
+	            this._lottieInstance?.goToAndStop(0, true);
 	        }
 	    }
-	    next() {
+	    /**
+	   * Skip to next animation
+	   */ next() {
 	        this._currentAnimation++;
 	        this._switchInstance();
 	    }
-	    prev() {
+	    /**
+	   * Skip to previous animation
+	   */ prev() {
 	        this._currentAnimation--;
 	        this._switchInstance();
 	    }
-	    convert(typeCheck, manifest, animations, fileName, download = true) {
+	    /**
+	   * Convert JSON Lottie to dotLottie
+	   * @param { boolean | undefined } typeCheck External type safety
+	   * @param { LottieManifest | undefined } manifest Externally added manifest
+	   * @param { LottieJSON[] | undefined } animations Externally added animations
+	   * @param { boolean } download Whether to trigger a download in the browser
+	   */ convert(typeCheck, manifest, animations, fileName, download = true) {
 	        if (typeCheck || this._isDotLottie) return;
-	        const oldManifest = manifest || this._manifest, newManifest = _object_spread_props(_object_spread({}, oldManifest), {
+	        const oldManifest = manifest || this._manifest, newManifest = {
+	            ...oldManifest,
 	            generator: pkg.name
-	        });
+	        };
 	        return createDotLottie(animations || this._animations, newManifest, `${getFilename(fileName || this.src)}.lottie`, download);
 	    }
-	    static get styles() {
+	    /**
+	   * Return the styles for the component
+	   * @returns { CSSResult }
+	   */ static get styles() {
 	        return styles;
 	    }
-	    connectedCallback() {
+	    /**
+	   * Initialize everything on component first render
+	   */ connectedCallback() {
 	        super.connectedCallback();
+	        // Add listener for Visibility API's change event.
 	        if (typeof document.hidden !== 'undefined') {
 	            document.addEventListener('visibilitychange', this._onVisibilityChange);
 	        }
 	    }
-	    firstUpdated() {
-	        var _this = this;
-	        return _async_to_generator(function*() {
-	            if ('IntersectionObserver' in window) {
-	                _this._intersectionObserver = new IntersectionObserver((entries)=>{
-	                    if (entries[0].isIntersecting) {
-	                        if (!document.hidden && _this.currentState === exports.PlayerState.Frozen) {
-	                            _this.play();
-	                        }
-	                    } else if (_this.currentState === exports.PlayerState.Playing) {
-	                        _this._freeze();
+	    async firstUpdated() {
+	        // Add intersection observer for detecting component being out-of-view.
+	        if ('IntersectionObserver' in window) {
+	            this._intersectionObserver = new IntersectionObserver((entries)=>{
+	                if (entries[0].isIntersecting) {
+	                    if (!document.hidden && this.currentState === exports.PlayerState.Frozen) {
+	                        this.play();
 	                    }
-	                });
-	                _this._intersectionObserver.observe(_this.container);
-	            }
-	            if (_this.src) {
-	                yield _this.load(_this.src);
-	            }
-	            _this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Rendered));
-	        })();
+	                } else if (this.currentState === exports.PlayerState.Playing) {
+	                    this._freeze();
+	                }
+	            });
+	            this._intersectionObserver.observe(this.container);
+	        }
+	        // Setup lottie player
+	        if (this.src) {
+	            await this.load(this.src);
+	        }
+	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Rendered));
 	    }
-	    disconnectedCallback() {
+	    /**
+	   * Cleanup on component destroy
+	   */ disconnectedCallback() {
 	        super.disconnectedCallback();
+	        // Remove intersection observer for detecting component being out-of-view
 	        if (this._intersectionObserver) {
 	            this._intersectionObserver.disconnect();
 	            this._intersectionObserver = undefined;
 	        }
+	        // Destroy the animation instance
 	        if (this._lottieInstance) this._lottieInstance.destroy();
+	        // Remove the attached Visibility API's change event listener
 	        document.removeEventListener('visibilitychange', this._onVisibilityChange);
 	    }
 	    renderControls() {
-	        var _this__animations, _this__animations1;
 	        const isPlaying = this.currentState === exports.PlayerState.Playing, isPaused = this.currentState === exports.PlayerState.Paused, isStopped = this.currentState === exports.PlayerState.Stopped, isError = this.currentState === exports.PlayerState.Error;
-	        return x$1`<div class="${`lottie-controls toolbar ${isError ? 'has-error' : ''}`}" aria-label="Lottie Animation controls"><button @click="${this.togglePlay}" data-active="${isPlaying || isPaused}" tabindex="0" aria-label="Toggle Play/Pause">${isPlaying ? x$1`<svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M14.016 5.016H18v13.969h-3.984V5.016zM6 18.984V5.015h3.984v13.969H6z"/></svg>` : x$1`<svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M8.016 5.016L18.985 12 8.016 18.984V5.015z"/></svg>`}</button> <button @click="${this.stop}" data-active="${isStopped}" tabindex="0" aria-label="Stop"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M6 6h12v12H6V6z"/></svg></button> ${((_this__animations = this._animations) === null || _this__animations === void 0 ? void 0 : _this__animations.length) > 1 ? x$1`${this._currentAnimation > 0 ? x$1`<button @click="${this.prev}" tabindex="0" aria-label="Previous animation"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M17.9 18.2 8.1 12l9.8-6.2v12.4zm-10.3 0H6.1V5.8h1.5v12.4z"/></svg></button>` : A} ${this._currentAnimation + 1 < ((_this__animations1 = this._animations) === null || _this__animations1 === void 0 ? void 0 : _this__animations1.length) ? x$1`<button @click="${this.next}" tabindex="0" aria-label="Next animation"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="m6.1 5.8 9.8 6.2-9.8 6.2V5.8zM16.4 5.8h1.5v12.4h-1.5z"/></svg></button>` : A}` : A}<form class="progress-container${this.simple ? ' simple' : ''}"><input class="seeker" type="range" min="0" max="100" step="1" value="${this._seeker}" @change="${this._handleSeekChange}" @mousedown="${this._freeze}" aria-valuemin="0" aria-valuemax="100" role="slider" aria-valuenow="${this._seeker}" tabindex="0" aria-label="Slider for search"><progress min="0" max="100" value="${this._seeker}"></progress></form>${this.simple ? A : x$1`<button @click="${this.toggleLooping}" data-active="${this.loop}" tabindex="0" aria-label="Toggle looping"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M17.016 17.016v-4.031h1.969v6h-12v3l-3.984-3.984 3.984-3.984v3h10.031zM6.984 6.984v4.031H5.015v-6h12v-3l3.984 3.984-3.984 3.984v-3H6.984z"/></svg></button> <button @click="${this.toggleBoomerang}" data-active="${this.mode === exports.PlayMode.Bounce}" aria-label="Toggle boomerang" tabindex="0"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="m11.8 13.2-.3.3c-.5.5-1.1 1.1-1.7 1.5-.5.4-1 .6-1.5.8-.5.2-1.1.3-1.6.3s-1-.1-1.5-.3c-.6-.2-1-.5-1.4-1-.5-.6-.8-1.2-.9-1.9-.2-.9-.1-1.8.3-2.6.3-.7.8-1.2 1.3-1.6.3-.2.6-.4 1-.5.2-.2.5-.2.8-.3.3 0 .7-.1 1 0 .3 0 .6.1.9.2.9.3 1.7.9 2.4 1.5.4.4.8.7 1.1 1.1l.1.1.4-.4c.6-.6 1.2-1.2 1.9-1.6.5-.3 1-.6 1.5-.7.4-.1.7-.2 1-.2h.9c1 .1 1.9.5 2.6 1.4.4.5.7 1.1.8 1.8.2.9.1 1.7-.2 2.5-.4.9-1 1.5-1.8 2-.4.2-.7.4-1.1.4-.4.1-.8.1-1.2.1-.5 0-.9-.1-1.3-.3-.8-.3-1.5-.9-2.1-1.5-.4-.4-.8-.7-1.1-1.1h-.3zm-1.1-1.1c-.1-.1-.1-.1 0 0-.3-.3-.6-.6-.8-.9-.5-.5-1-.9-1.6-1.2-.4-.3-.8-.4-1.3-.4-.4 0-.8 0-1.1.2-.5.2-.9.6-1.1 1-.2.3-.3.7-.3 1.1 0 .3 0 .6.1.9.1.5.4.9.8 1.2.5.4 1.1.5 1.7.5.5 0 1-.2 1.5-.5.6-.4 1.1-.8 1.6-1.3.1-.3.3-.5.5-.6zM13 12c.5.5 1 1 1.5 1.4.5.5 1.1.9 1.9 1 .4.1.8 0 1.2-.1.3-.1.6-.3.9-.5.4-.4.7-.9.8-1.4.1-.5 0-.9-.1-1.4-.3-.8-.8-1.2-1.7-1.4-.4-.1-.8-.1-1.2 0-.5.1-1 .4-1.4.7-.5.4-1 .8-1.4 1.2-.2.2-.4.3-.5.5z"/></svg></button> <button @click="${({ target })=>{
-            this._toggleSettings();
-            if (target instanceof HTMLElement) {
-                target.focus();
-            }
-        }}" @blur="${()=>setTimeout(()=>this._toggleSettings(false), 200)}" aria-label="Settings" aria-haspopup="true" aria-expanded="${!!this._isSettingsOpen}" aria-controls="${`${this._identifier}-settings`}"><svg width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="5.4" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="12" cy="18.6" r="2.5"/></svg></button><div id="${`${this._identifier}-settings`}" class="popover" style="display:${this._isSettingsOpen ? 'block' : 'none'}">${this._isDotLottie ? A : x$1`<button @click="${this.convert}" aria-label="Convert JSON animation to dotLottie format" tabindex="0"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M17.016 17.016v-4.031h1.969v6h-12v3l-3.984-3.984 3.984-3.984v3h10.031zM6.984 6.984v4.031H5.015v-6h12v-3l3.984 3.984-3.984 3.984v-3H6.984z"/></svg> Convert to dotLottie</button>`} <button @click="${this.snapshot}" aria-label="Download still image" tabindex="0"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M16.8 10.8 12 15.6l-4.8-4.8h3V3.6h3.6v7.2h3zM12 15.6H3v4.8h18v-4.8h-9zm7.8 2.4h-2.4v-1.2h2.4V18z"/></svg> Download still image</button></div>`}</div>`;
+	        return x$1`<div class="${`lottie-controls toolbar ${isError ? 'has-error' : ''}`}" aria-label="Lottie Animation controls"><button @click="${this.togglePlay}" data-active="${isPlaying || isPaused}" tabindex="0" aria-label="Toggle Play/Pause">${isPlaying ? x$1`<svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M14.016 5.016H18v13.969h-3.984V5.016zM6 18.984V5.015h3.984v13.969H6z"/></svg>` : x$1`<svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M8.016 5.016L18.985 12 8.016 18.984V5.015z"/></svg>`}</button> <button @click="${this.stop}" data-active="${isStopped}" tabindex="0" aria-label="Stop"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M6 6h12v12H6V6z"/></svg></button> ${this._animations?.length > 1 ? x$1`${this._currentAnimation > 0 ? x$1`<button @click="${this.prev}" tabindex="0" aria-label="Previous animation"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M17.9 18.2 8.1 12l9.8-6.2v12.4zm-10.3 0H6.1V5.8h1.5v12.4z"/></svg></button>` : A} ${this._currentAnimation + 1 < this._animations?.length ? x$1`<button @click="${this.next}" tabindex="0" aria-label="Next animation"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="m6.1 5.8 9.8 6.2-9.8 6.2V5.8zM16.4 5.8h1.5v12.4h-1.5z"/></svg></button>` : A}` : A}<form class="progress-container${this.simple ? ' simple' : ''}"><input class="seeker" type="range" min="0" max="100" step="1" value="${this._seeker}" @change="${this._handleSeekChange}" @mousedown="${this._freeze}" aria-valuemin="0" aria-valuemax="100" role="slider" aria-valuenow="${this._seeker}" tabindex="0" aria-label="Slider for search"><progress max="100" value="${this._seeker}"></progress></form>${this.simple ? A : x$1`<button @click="${this.toggleLooping}" data-active="${this.loop ?? A}" tabindex="0" aria-label="Toggle looping"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M17.016 17.016v-4.031h1.969v6h-12v3l-3.984-3.984 3.984-3.984v3h10.031zM6.984 6.984v4.031H5.015v-6h12v-3l3.984 3.984-3.984 3.984v-3H6.984z"/></svg></button> <button @click="${this.toggleBoomerang}" data-active="${this.mode === exports.PlayMode.Bounce}" aria-label="Toggle boomerang" tabindex="0"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="m11.8 13.2-.3.3c-.5.5-1.1 1.1-1.7 1.5-.5.4-1 .6-1.5.8-.5.2-1.1.3-1.6.3s-1-.1-1.5-.3c-.6-.2-1-.5-1.4-1-.5-.6-.8-1.2-.9-1.9-.2-.9-.1-1.8.3-2.6.3-.7.8-1.2 1.3-1.6.3-.2.6-.4 1-.5.2-.2.5-.2.8-.3.3 0 .7-.1 1 0 .3 0 .6.1.9.2.9.3 1.7.9 2.4 1.5.4.4.8.7 1.1 1.1l.1.1.4-.4c.6-.6 1.2-1.2 1.9-1.6.5-.3 1-.6 1.5-.7.4-.1.7-.2 1-.2h.9c1 .1 1.9.5 2.6 1.4.4.5.7 1.1.8 1.8.2.9.1 1.7-.2 2.5-.4.9-1 1.5-1.8 2-.4.2-.7.4-1.1.4-.4.1-.8.1-1.2.1-.5 0-.9-.1-1.3-.3-.8-.3-1.5-.9-2.1-1.5-.4-.4-.8-.7-1.1-1.1h-.3zm-1.1-1.1c-.1-.1-.1-.1 0 0-.3-.3-.6-.6-.8-.9-.5-.5-1-.9-1.6-1.2-.4-.3-.8-.4-1.3-.4-.4 0-.8 0-1.1.2-.5.2-.9.6-1.1 1-.2.3-.3.7-.3 1.1 0 .3 0 .6.1.9.1.5.4.9.8 1.2.5.4 1.1.5 1.7.5.5 0 1-.2 1.5-.5.6-.4 1.1-.8 1.6-1.3.1-.3.3-.5.5-.6zM13 12c.5.5 1 1 1.5 1.4.5.5 1.1.9 1.9 1 .4.1.8 0 1.2-.1.3-.1.6-.3.9-.5.4-.4.7-.9.8-1.4.1-.5 0-.9-.1-1.4-.3-.8-.8-1.2-1.7-1.4-.4-.1-.8-.1-1.2 0-.5.1-1 .4-1.4.7-.5.4-1 .8-1.4 1.2-.2.2-.4.3-.5.5z"/></svg></button> <button @click="${this._handleSettingsClick}" @blur="${this._handleBlur}" aria-label="Settings" aria-haspopup="true" aria-expanded="${!!this._isSettingsOpen}" aria-controls="${`${this._identifier}-settings`}"><svg width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="5.4" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="12" cy="18.6" r="2.5"/></svg></button><div id="${`${this._identifier}-settings`}" class="popover" style="display:${this._isSettingsOpen ? 'block' : 'none'}">${this._isDotLottie ? A : x$1`<button @click="${this.convert}" aria-label="Convert JSON animation to dotLottie format" tabindex="0"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M17.016 17.016v-4.031h1.969v6h-12v3l-3.984-3.984 3.984-3.984v3h10.031zM6.984 6.984v4.031H5.015v-6h12v-3l3.984 3.984-3.984 3.984v-3H6.984z"/></svg> Convert to dotLottie</button>`} <button @click="${this.snapshot}" aria-label="Download still image" tabindex="0"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M16.8 10.8 12 15.6l-4.8-4.8h3V3.6h3.6v7.2h3zM12 15.6H3v4.8h18v-4.8h-9zm7.8 2.4h-2.4v-1.2h2.4V18z"/></svg> Download still image</button></div>`}</div>`;
 	    }
 	    render() {
-	        var _document_documentElement, _document;
-	        var _this_description;
-	        return x$1`<figure class="${`animation-container main`}" data-controls="${this.controls}" lang="${this.description ? (_document = document) === null || _document === void 0 ? void 0 : (_document_documentElement = _document.documentElement) === null || _document_documentElement === void 0 ? void 0 : _document_documentElement.lang : 'en'}" role="img" aria-label="${(_this_description = this.description) !== null && _this_description !== void 0 ? _this_description : 'Lottie animation'}" data-loaded="${this._playerState.loaded}"><div class="animation" style="background:${this.background}">${this.currentState === exports.PlayerState.Error ? x$1`<div class="error"><svg preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="1920" height="1080" viewBox="0 0 1920 1080"><path fill="#fff" d="M0 0h1920v1080H0z"/><path fill="#3a6d8b" d="M1190.2 531 1007 212.4c-22-38.2-77.2-38-98.8.5L729.5 531.3c-21.3 37.9 6.1 84.6 49.5 84.6l361.9.3c43.7 0 71.1-47.3 49.3-85.2zM937.3 288.7c.2-7.5 3.3-23.9 23.2-23.9 16.3 0 23 16.1 23 23.5 0 55.3-10.7 197.2-12.2 214.5-.1 1-.9 1.7-1.9 1.7h-18.3c-1 0-1.8-.7-1.9-1.7-1.4-17.5-13.4-162.9-11.9-214.1zm24.2 283.8c-13.1 0-23.7-10.6-23.7-23.7s10.6-23.7 23.7-23.7 23.7 10.6 23.7 23.7-10.6 23.7-23.7 23.7zM722.1 644h112.6v34.4h-70.4V698h58.8v31.7h-58.8v22.6h72.4v36.2H722.1V644zm162 57.1h.6c8.3-12.9 18.2-17.8 31.3-17.8 3 0 5.1.4 6.3 1v32.6h-.8c-22.4-3.8-35.6 6.3-35.6 29.5v42.3h-38.2V685.5h36.4v15.6zm78.9 0h.6c8.3-12.9 18.2-17.8 31.3-17.8 3 0 5.1.4 6.3 1v32.6h-.8c-22.4-3.8-35.6 6.3-35.6 29.5v42.3h-38.2V685.5H963v15.6zm39.5 36.2c0-31.3 22.2-54.8 56.6-54.8 34.4 0 56.2 23.5 56.2 54.8s-21.8 54.6-56.2 54.6c-34.4-.1-56.6-23.3-56.6-54.6zm74 0c0-17.4-6.1-29.1-17.8-29.1-11.7 0-17.4 11.7-17.4 29.1 0 17.4 5.7 29.1 17.4 29.1s17.8-11.8 17.8-29.1zm83.1-36.2h.6c8.3-12.9 18.2-17.8 31.3-17.8 3 0 5.1.4 6.3 1v32.6h-.8c-22.4-3.8-35.6 6.3-35.6 29.5v42.3h-38.2V685.5h36.4v15.6z"/><path fill="none" d="M718.9 807.7h645v285.4h-645z"/><text fill="#3a6d8b" style="text-align:center;position:absolute;left:100%;font-size:47px;font-family:system-ui,-apple-system,BlinkMacSystemFont,'.SFNSText-Regular',sans-serif" x="50%" y="848.017" text-anchor="middle">${this._errorMessage}</text></svg></div>` : A}</div>${this.controls ? this.renderControls() : A}</figure>`;
+	        return x$1`<figure class="${'animation-container main'}" data-controls="${this.controls ?? A}" lang="${this.description ? document?.documentElement?.lang : 'en'}" role="img" aria-label="${this.description ?? 'Lottie animation'}" data-loaded="${this._playerState.loaded}"><div class="animation" style="background:${this.background}">${this.currentState === exports.PlayerState.Error ? x$1`<div class="error"><svg preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="1920" height="1080" viewBox="0 0 1920 1080"><path fill="#fff" d="M0 0h1920v1080H0z"/><path fill="#3a6d8b" d="M1190.2 531 1007 212.4c-22-38.2-77.2-38-98.8.5L729.5 531.3c-21.3 37.9 6.1 84.6 49.5 84.6l361.9.3c43.7 0 71.1-47.3 49.3-85.2zM937.3 288.7c.2-7.5 3.3-23.9 23.2-23.9 16.3 0 23 16.1 23 23.5 0 55.3-10.7 197.2-12.2 214.5-.1 1-.9 1.7-1.9 1.7h-18.3c-1 0-1.8-.7-1.9-1.7-1.4-17.5-13.4-162.9-11.9-214.1zm24.2 283.8c-13.1 0-23.7-10.6-23.7-23.7s10.6-23.7 23.7-23.7 23.7 10.6 23.7 23.7-10.6 23.7-23.7 23.7zM722.1 644h112.6v34.4h-70.4V698h58.8v31.7h-58.8v22.6h72.4v36.2H722.1V644zm162 57.1h.6c8.3-12.9 18.2-17.8 31.3-17.8 3 0 5.1.4 6.3 1v32.6h-.8c-22.4-3.8-35.6 6.3-35.6 29.5v42.3h-38.2V685.5h36.4v15.6zm78.9 0h.6c8.3-12.9 18.2-17.8 31.3-17.8 3 0 5.1.4 6.3 1v32.6h-.8c-22.4-3.8-35.6 6.3-35.6 29.5v42.3h-38.2V685.5H963v15.6zm39.5 36.2c0-31.3 22.2-54.8 56.6-54.8 34.4 0 56.2 23.5 56.2 54.8s-21.8 54.6-56.2 54.6c-34.4-.1-56.6-23.3-56.6-54.6zm74 0c0-17.4-6.1-29.1-17.8-29.1-11.7 0-17.4 11.7-17.4 29.1 0 17.4 5.7 29.1 17.4 29.1s17.8-11.8 17.8-29.1zm83.1-36.2h.6c8.3-12.9 18.2-17.8 31.3-17.8 3 0 5.1.4 6.3 1v32.6h-.8c-22.4-3.8-35.6 6.3-35.6 29.5v42.3h-38.2V685.5h36.4v15.6z"/><path fill="none" d="M718.9 807.7h645v285.4h-645z"/><text fill="#3a6d8b" style="text-align:center;position:absolute;left:100%;font-size:47px;font-family:system-ui,-apple-system,BlinkMacSystemFont,'.SFNSText-Regular',sans-serif" x="50%" y="848.017" text-anchor="middle">${this._errorMessage}</text></svg></div>` : A}</div>${this.controls ? this.renderControls() : A}</figure>`;
 	    }
 	    constructor(...args){
 	        super(...args);
-	        this.background = 'transparent';
-	        this.controls = false;
-	        this.currentState = exports.PlayerState.Loading;
-	        this.direction = 1;
-	        this.hover = false;
-	        this.intermission = 0;
-	        this.loop = false;
-	        this.mode = exports.PlayMode.Normal;
-	        this.objectfit = 'contain';
-	        this.renderer = 'svg';
-	        this.simple = false;
-	        this.speed = 1;
-	        this.subframe = true;
-	        this._isSettingsOpen = false;
-	        this._seeker = 0;
-	        this._currentAnimation = 0;
+	        /**
+	   * Background color
+	   */ this.background = 'transparent';
+	        /**
+	   * Display controls
+	   */ this.controls = false;
+	        /**
+	   * Player state
+	   */ this.currentState = exports.PlayerState.Loading;
+	        /**
+	   * Direction of animation
+	   */ this.direction = 1;
+	        /**
+	   * Whether to play on mouseover
+	   */ this.hover = false;
+	        /**
+	   * Intermission
+	   */ this.intermission = 0;
+	        /**
+	   * Whether to loop
+	   */ this.loop = false;
+	        /**
+	   * Play mode
+	   */ this.mode = exports.PlayMode.Normal;
+	        /**
+	   * Resizing to container
+	  */ this.objectfit = 'contain';
+	        /**
+	   * Renderer to use (svg, canvas or html)
+	   */ this.renderer = 'svg';
+	        /**
+	   * Hide advanced controls
+	   */ this.simple = false;
+	        /**
+	   * Speed
+	   */ this.speed = 1;
+	        /**
+	   * Subframe
+	   */ this.subframe = true;
+	        /**
+	   * Whether settings toolbar is open
+	   */ this._isSettingsOpen = false;
+	        /**
+	   * Seeker
+	   */ this._seeker = 0;
+	        /**
+	   * Which animation to show, if several
+	   */ this._currentAnimation = 0;
 	        this._lottieInstance = null;
 	        this._identifier = this.id || useId('dotlottie');
 	        this._errorMessage = 'Something went wrong';
@@ -22476,6 +22482,15 @@
 	            prev: exports.PlayerState.Loading,
 	            count: 0,
 	            loaded: false
+	        };
+	        /**
+	   * Handle settings click event
+	   */ this._handleSettingsClick = ({ target })=>{
+	            this._toggleSettings();
+	            // Because Safari does not add focus on click, we need to add it manually, so the onblur event will fire
+	            if (target instanceof HTMLElement) {
+	                target.focus();
+	            }
 	        };
 	    }
 	};
@@ -22596,6 +22611,9 @@
 	    e$1('dotlottie-player')
 	], exports.DotLottiePlayer);
 
-	globalThis.dotLottiePlayer = ()=>new exports.DotLottiePlayer();
+	/**
+	 * Expose DotLottiePlayer class as global variable
+	 * @returns { DotLottiePlayer }
+	 */ globalThis.dotLottiePlayer = ()=>new exports.DotLottiePlayer();
 
 })(this["@aarsteinmedia/dotlottie-player"] = this["@aarsteinmedia/dotlottie-player"] || {});
