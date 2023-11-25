@@ -4,8 +4,6 @@ import {
   zip
 } from 'fflate'
 
-import { CustomError } from './types'
-
 import type {
   // UnzipFileFilter,
   Unzipped,
@@ -17,6 +15,41 @@ import type {
   LottieManifest,
   ObjectFit,
 } from './types'
+
+export enum PlayerState {
+  Completed = 'completed',
+  Destroyed = 'destroyed',
+  Error = 'error',
+  Frozen = 'frozen',
+  Loading = 'loading',
+  Paused = 'paused',
+  Playing = 'playing',
+  Stopped = 'stopped',
+}
+
+export enum PlayMode {
+  Bounce = 'bounce',
+  Normal = 'normal',
+}
+
+export enum PlayerEvents {
+  Complete = 'complete',
+  Destroyed = 'destroyed',
+  Error = 'error',
+  Frame = 'frame',
+  Freeze = 'freeze',
+  Load = 'load',
+  Loop = 'loop',
+  Pause = 'pause',
+  Play = 'play',
+  Ready = 'ready',
+  Rendered = 'rendered',
+  Stop = 'stop',
+}
+
+export class CustomError extends Error {
+  status?: number
+}
 
 export const addExt = (ext: string, str?: string) => {
   if (!str) return

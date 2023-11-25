@@ -1,37 +1,7 @@
 import type { AnimationDirection } from 'lottie-web'
 import type { CSSProperties, RefObject } from 'react'
 import type { DotLottiePlayer } from '.'
-
-export enum PlayerState {
-  Completed = 'completed',
-  Destroyed = 'destroyed',
-  Error = 'error',
-  Frozen = 'frozen',
-  Loading = 'loading',
-  Paused = 'paused',
-  Playing = 'playing',
-  Stopped = 'stopped',
-}
-
-export enum PlayMode {
-  Bounce = 'bounce',
-  Normal = 'normal',
-}
-
-export enum PlayerEvents {
-  Complete = 'complete',
-  Destroyed = 'destroyed',
-  Error = 'error',
-  Frame = 'frame',
-  Freeze = 'freeze',
-  Load = 'load',
-  Loop = 'loop',
-  Pause = 'pause',
-  Play = 'play',
-  Ready = 'ready',
-  Rendered = 'rendered',
-  Stop = 'stop',
-}
+import type { PlayMode } from './utils'
 
 export interface LottieAsset {
   /** Whether the data is encoded or not */
@@ -106,10 +76,6 @@ export type Subframe = boolean | '' | null
 export type ObjectFit = 'contain' | 'cover' | 'fill' | 'scale-down' | 'none'
 
 export type PreserveAspectRatio = 'xMidYMid meet' | 'xMidYMid slice' | 'xMinYMin slice' | 'none'
-
-export class CustomError extends Error {
-  status?: number
-}
 
 type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
   class?: string

@@ -21456,7 +21456,6 @@
 	})(exports.PlayerEvents || (exports.PlayerEvents = {}));
 	class CustomError extends Error {
 	}
-
 	const addExt = (ext, str)=>{
 	    if (!str) return;
 	    if (getExt(str)) {
@@ -21718,7 +21717,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.1.8";
+	var version = "2.2.0";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -21849,13 +21848,13 @@
 	}
 	class DotLottiePlayer extends s {
 	    _getOptions() {
-	        const preserveAspectRatio = this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)), initialSegment = !this.segment || this.segment.some((val)=>val < 0) ? undefined : this.segment.every((val)=>val > 0) ? [
+	        const preserveAspectRatio = this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)), currentAnimation = this._manifest.animations[this._currentAnimation], loop = this.loop !== undefined ? !!this.loop : currentAnimation.loop !== undefined && !!currentAnimation.loop, autoplay = this.autoplay !== undefined ? !!this.autoplay : currentAnimation.autoplay !== undefined && !!currentAnimation.autoplay, initialSegment = !this.segment || this.segment.some((val)=>val < 0) ? undefined : this.segment.every((val)=>val > 0) ? [
 	            this.segment[0] - 1,
 	            this.segment[1] - 1
 	        ] : this.segment, options = {
 	            container: this.container,
-	            loop: !!this.loop,
-	            autoplay: !!this.autoplay,
+	            loop,
+	            autoplay,
 	            renderer: this.renderer,
 	            initialSegment,
 	            rendererSettings: {

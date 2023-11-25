@@ -1,11 +1,23 @@
-import { html, LitElement, nothing } from 'lit'
+import {
+  html,
+  LitElement,
+  nothing,
+  type CSSResult
+} from 'lit'
 import {
   customElement,
   property,
   query,
   state
 } from 'lit/decorators.js'
-import Lottie from 'lottie-web'
+import Lottie, {
+  type AnimationConfig,
+  type AnimationDirection,
+  type AnimationEventName,
+  type AnimationItem,
+  type AnimationSegment,
+  type RendererType
+} from 'lottie-web'
 
 import {
   aspectRatio,
@@ -15,24 +27,13 @@ import {
   getAnimationData,
   getFilename,
   handleErrors,
-  useId,
-} from './functions'
-import {
   PlayMode,
   PlayerEvents,
-  PlayerState
-} from './types'
+  PlayerState,
+  useId,
+} from './utils'
 import pkg from '../../package.json'
 
-import type { CSSResult } from 'lit'
-import type {
-  AnimationConfig,
-  AnimationDirection,
-  AnimationEventName,
-  AnimationItem,
-  AnimationSegment,
-  RendererType
-} from 'lottie-web'
 import type {
   Autoplay,
   Config,
@@ -223,6 +224,15 @@ export class DotLottiePlayer extends LitElement {
   private _getOptions() {
     const preserveAspectRatio =
       this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)),
+      currentAnimation = this._manifest.animations[this._currentAnimation],
+
+      /** Since Lottie Web does not accept string or null we need
+       * to do this little workaround
+       */
+      loop = this.loop !== undefined ? !!this.loop :
+        currentAnimation.loop !== undefined && !!currentAnimation.loop,
+      autoplay = this.autoplay !== undefined ? !!this.autoplay :
+        currentAnimation.autoplay !== undefined && !!currentAnimation.autoplay,
 
       initialSegment
         = !this.segment ||
@@ -235,8 +245,8 @@ export class DotLottiePlayer extends LitElement {
       options: AnimationConfig<'svg' | 'canvas' | 'html'> =
       {
         container: this.container,
-        loop: !!this.loop,
-        autoplay: !!this.autoplay,
+        loop,
+        autoplay,
         renderer: this.renderer,
         initialSegment,
         rendererSettings: {
