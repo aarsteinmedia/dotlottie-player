@@ -59,8 +59,10 @@ export interface Config {
   speed?: number
 }
 
+export type Animations = Omit<Config, 'url'>[]
+
 export interface LottieManifest {
-  animations: Omit<Config, 'url'>[]
+  animations: Animations
   author?: string
   description?: string
   generator?: string

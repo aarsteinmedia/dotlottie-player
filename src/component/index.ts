@@ -35,6 +35,7 @@ import {
 import pkg from '../../package.json'
 
 import type {
+  Animations,
   Autoplay,
   Config,
   Controls,
@@ -122,6 +123,13 @@ export class DotLottiePlayer extends LitElement {
    */
   @property({ type: String })
   mode?: PlayMode = PlayMode.Normal
+
+  /**
+   * Multi-animation settings
+   * If set, these will override conflicting settings
+   */
+  @property({ type: Array })
+  multiAnimationSettings?: Partial<Animations>
 
   /**
    * Resizing to container
@@ -224,15 +232,17 @@ export class DotLottiePlayer extends LitElement {
   private _getOptions() {
     const preserveAspectRatio =
       this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)),
-      currentAnimation = this._manifest.animations[this._currentAnimation],
+      
+      currentAnimationSettings = this.multiAnimationSettings?.[this._currentAnimation],
+      currentAnimationManifest = this._manifest.animations?.[this._currentAnimation],
 
-      /** Since Lottie Web does not accept string or null we need
-       * to do this little workaround
-       */
-      loop = this.loop !== undefined ? !!this.loop :
-        currentAnimation.loop !== undefined && !!currentAnimation.loop,
-      autoplay = this.autoplay !== undefined ? !!this.autoplay :
-        currentAnimation.autoplay !== undefined && !!currentAnimation.autoplay,
+      loop = currentAnimationSettings?.loop !== undefined ? !!currentAnimationSettings.loop :
+        this.loop !== undefined ? !!this.loop :
+          currentAnimationManifest.loop !== undefined && !!currentAnimationManifest.loop,
+      
+      autoplay = currentAnimationSettings?.autoplay !== undefined ? !!currentAnimationSettings.autoplay :
+        this.autoplay !== undefined ? !!this.autoplay :
+          currentAnimationManifest.autoplay !== undefined && !!currentAnimationManifest.autoplay,
 
       initialSegment
         = !this.segment ||
@@ -331,9 +341,15 @@ export class DotLottiePlayer extends LitElement {
 
     this._addEventListeners()
 
+    const speed = this.multiAnimationSettings?.[this._currentAnimation]?.speed ??
+      this.speed ?? this._manifest.animations[this._currentAnimation].speed,
+
+      direction = this.multiAnimationSettings?.[this._currentAnimation]?.direction ??
+        this.direction ?? this._manifest.animations[this._currentAnimation].direction ?? 1
+
     // Set initial playback speed and direction
-    this.setSpeed(this.speed)
-    this.setDirection(this.direction ?? 1)
+    this.setSpeed(speed)
+    this.setDirection(direction)
     this.setSubframe(!!this.subframe)
 
     // Start playing if autoplay is enabled
@@ -395,11 +411,13 @@ export class DotLottiePlayer extends LitElement {
         firstFrame,
         totalFrames,
         playDirection,
-      } = this._lottieInstance
+      } = this._lottieInstance,
+
+        isBounce = this.multiAnimationSettings?.[this._currentAnimation]?.mode === PlayMode.Bounce ?? this.mode === PlayMode.Bounce
 
       if (this.count) {
 
-        this.mode === PlayMode.Bounce ?
+        isBounce ?
           this._playerState.count += 1 : this._playerState.count += 0.5
 
         if (this._playerState.count >= this.count) {
@@ -414,7 +432,7 @@ export class DotLottiePlayer extends LitElement {
 
       this.dispatchEvent(new CustomEvent(PlayerEvents.Loop))
 
-      if (this.mode === PlayMode.Bounce) {
+      if (isBounce) {
         this._lottieInstance?.goToAndStop(
           playDirection === -1 ? firstFrame : totalFrames * 0.99, true
         )
@@ -777,6 +795,16 @@ export class DotLottiePlayer extends LitElement {
   }
 
   /**
+   * Set Multi-animation settings
+   * @param { Partial<Animations> } settings
+   */
+  public setMultiAnimationSettings(settings: Partial<Animations>) {
+    if (this._lottieInstance) {
+      this.multiAnimationSettings = settings
+    }
+  }
+
+  /**
    * Toggle playing state
    */
   public togglePlay() {
@@ -788,7 +816,7 @@ export class DotLottiePlayer extends LitElement {
     }
     if (this.currentState === PlayerState.Completed) {
       this.currentState = PlayerState.Playing
-      if (this.mode === PlayMode.Bounce) {
+      if (this.multiAnimationSettings?.[this._currentAnimation]?.mode === PlayMode.Bounce ?? this.mode === PlayMode.Bounce) {
         this.setDirection(playDirection * -1 as AnimationDirection)
         return this._lottieInstance.goToAndPlay(currentFrame, true)
       }
@@ -811,11 +839,18 @@ export class DotLottiePlayer extends LitElement {
    * Toggle Boomerang
    */
   public toggleBoomerang() {
-    if (this.mode === PlayMode.Normal) {
-      this.mode = PlayMode.Bounce
-    } else {
-      this.mode = PlayMode.Normal
-    }
+    const curr = this.multiAnimationSettings?.[this._currentAnimation]
+    if (curr?.mode !== undefined) {
+      if (curr.mode === PlayMode.Normal) {
+        curr.mode = PlayMode.Bounce
+      } else {
+        curr.mode = PlayMode.Normal
+      }
+    } else if (this.mode === PlayMode.Normal) {
+        this.mode = PlayMode.Bounce
+      } else {
+        this.mode = PlayMode.Normal
+      }
   }
 
   /**
@@ -860,7 +895,7 @@ export class DotLottiePlayer extends LitElement {
     // Add event listeners to new Lottie instance
     this._addEventListeners()
 
-    if (this.autoplay) {
+    if (this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ?? this.autoplay) {
       this._lottieInstance?.goToAndPlay(0, true)
       this.currentState = PlayerState.Playing
     } else {
@@ -1081,7 +1116,7 @@ export class DotLottiePlayer extends LitElement {
         </button>
         <button
           @click=${this.toggleBoomerang}
-          data-active=${this.mode === PlayMode.Bounce}
+          data-active=${this.multiAnimationSettings?.[this._currentAnimation]?.mode === PlayMode.Bounce ?? this.mode === PlayMode.Bounce}
           aria-label="Toggle boomerang"
           tabindex="0"
         >

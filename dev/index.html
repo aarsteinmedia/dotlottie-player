@@ -11,15 +11,10 @@
   <div style="margin: 40px auto; width: 80%; max-width: 800px;">
     <h1>DotLottie Player Demo</h1>
     <dotlottie-player
-      autoplay
-      loop
-      src="minihero.lottie"
-    ></dotlottie-player>
-    <dotlottie-player
       id="player-element"
       controls
+      multiAnimationSettings='[{"autoplay": true}, {"autoplay": true, "loop": true, "mode": "bounce"}]'
       src="/ny-test-av-kombo.lottie"
-      simple
     >
     </dotlottie-player>
     <!-- <button onclick="dl()">Kombiner animasjoner, og last ned</button>
@@ -82,5 +77,19 @@
         )
       }
     }
+  if (player) {
+    console.log(player.multiAnimationSettings)
+    // player.setSpeed(4)
+    // player.setMultiAnimationSettings(
+    //   {
+    //     autoplay: true,
+    //   },
+    //   {
+    //     autoplay: true,
+    //     loop: true,
+    //     bounce: true
+    //   }
+    // )
+  }
 </script>
 </html>
