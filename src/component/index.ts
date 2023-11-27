@@ -900,6 +900,12 @@ export class DotLottiePlayer extends LitElement {
       animationData: this._animations[this._currentAnimation],
     })
 
+    //Check play mode for current animation
+    if (this.multiAnimationSettings?.[this._currentAnimation]?.mode) {
+      this._isBounce =
+        this.multiAnimationSettings[this._currentAnimation].mode === PlayMode.Bounce
+    }
+
     // Add event listeners to new Lottie instance
     this._addEventListeners()
 

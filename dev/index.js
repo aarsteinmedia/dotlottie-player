@@ -21717,7 +21717,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.2.4";
+	var version = "2.2.5";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -22238,6 +22238,9 @@
 	            ...this._getOptions(),
 	            animationData: this._animations[this._currentAnimation]
 	        });
+	        if (this.multiAnimationSettings?.[this._currentAnimation]?.mode) {
+	            this._isBounce = this.multiAnimationSettings[this._currentAnimation].mode === exports.PlayMode.Bounce;
+	        }
 	        this._addEventListeners();
 	        if (this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ?? this.autoplay) {
 	            this._lottieInstance?.goToAndPlay(0, true);
