@@ -208,6 +208,8 @@ export class DotLottiePlayer extends LitElement {
   private _identifier = this.id || useId('dotlottie')
   private _errorMessage = 'Something went wrong'
 
+  private _isBounce = false
+
   private _isDotLottie = false
 
   private _manifest!: LottieManifest
@@ -309,6 +311,10 @@ export class DotLottiePlayer extends LitElement {
         throw new Error('Broken or corrupted file')
       }
 
+      this._isBounce = this.multiAnimationSettings?.[this._currentAnimation]?.mode !== undefined ?
+        this.multiAnimationSettings?.[this._currentAnimation]?.mode === PlayMode.Bounce :
+        this.mode === PlayMode.Bounce
+
       this._isDotLottie = !!isDotLottie
       this._animations = animations
       this._manifest = manifest ?? {
@@ -395,7 +401,7 @@ export class DotLottiePlayer extends LitElement {
       this.currentState = PlayerState.Completed
       this.dispatchEvent(new CustomEvent(PlayerEvents.Complete))
       if (this._animations?.length > 1 &&
-          !!this.multiAnimationSettings?.[this._currentAnimation + 1].autoplay &&
+          !!this.multiAnimationSettings?.[this._currentAnimation + 1]?.autoplay &&
             this._currentAnimation < (this._animations?.length - 1)) {
         this.next()
       }
@@ -411,13 +417,11 @@ export class DotLottiePlayer extends LitElement {
         firstFrame,
         totalFrames,
         playDirection,
-      } = this._lottieInstance,
-
-        isBounce = this.multiAnimationSettings?.[this._currentAnimation]?.mode === PlayMode.Bounce ?? this.mode === PlayMode.Bounce
+      } = this._lottieInstance
 
       if (this.count) {
 
-        isBounce ?
+        this._isBounce ?
           this._playerState.count += 1 : this._playerState.count += 0.5
 
         if (this._playerState.count >= this.count) {
@@ -432,7 +436,7 @@ export class DotLottiePlayer extends LitElement {
 
       this.dispatchEvent(new CustomEvent(PlayerEvents.Loop))
 
-      if (isBounce) {
+      if (this._isBounce) {
         this._lottieInstance?.goToAndStop(
           playDirection === -1 ? firstFrame : totalFrames * 0.99, true
         )
@@ -816,7 +820,7 @@ export class DotLottiePlayer extends LitElement {
     }
     if (this.currentState === PlayerState.Completed) {
       this.currentState = PlayerState.Playing
-      if (this.multiAnimationSettings?.[this._currentAnimation]?.mode === PlayMode.Bounce ?? this.mode === PlayMode.Bounce) {
+      if (this._isBounce) {
         this.setDirection(playDirection * -1 as AnimationDirection)
         return this._lottieInstance.goToAndPlay(currentFrame, true)
       }
@@ -883,6 +887,10 @@ export class DotLottiePlayer extends LitElement {
   }
 
   private _switchInstance() {
+    // Bail early if there is not animation to play
+    if (!this._animations[this._currentAnimation])
+      return
+
     // Clear previous animation
     if (this._lottieInstance) this._lottieInstance.destroy()
 
@@ -900,6 +908,7 @@ export class DotLottiePlayer extends LitElement {
       this.currentState = PlayerState.Playing
     } else {
       this._lottieInstance?.goToAndStop(0, true)
+      this.currentState = PlayerState.Stopped
     }
   }
 
@@ -1116,7 +1125,7 @@ export class DotLottiePlayer extends LitElement {
         </button>
         <button
           @click=${this.toggleBoomerang}
-          data-active=${this.multiAnimationSettings?.[this._currentAnimation]?.mode === PlayMode.Bounce ?? this.mode === PlayMode.Bounce}
+          data-active=${this._isBounce}
           aria-label="Toggle boomerang"
           tabindex="0"
         >

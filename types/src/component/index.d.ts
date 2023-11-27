@@ -31,6 +31,7 @@ export declare class DotLottiePlayer extends LitElement {
     private _lottieInstance;
     private _identifier;
     private _errorMessage;
+    private _isBounce;
     private _isDotLottie;
     private _manifest;
     private _animations;
