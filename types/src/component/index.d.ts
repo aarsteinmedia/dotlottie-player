@@ -1,7 +1,7 @@
 import { LitElement, type CSSResult } from 'lit';
 import { type AnimationDirection, type AnimationItem, type AnimationSegment, type RendererType } from 'lottie-web';
 import { PlayMode, PlayerState } from './utils';
-import type { Animations, Autoplay, Config, Controls, Loop, LottieJSON, LottieManifest, ObjectFit, PreserveAspectRatio, Subframe } from './types';
+import type { AnimationSettings, AnimationConfig, Autoplay, Controls, Loop, LottieJSON, LottieManifest, ObjectFit, PreserveAspectRatio, Subframe } from './types';
 export declare class DotLottiePlayer extends LitElement {
     autoplay?: Autoplay;
     background?: string;
@@ -14,7 +14,7 @@ export declare class DotLottiePlayer extends LitElement {
     intermission?: number | undefined;
     loop?: Loop;
     mode?: PlayMode;
-    multiAnimationSettings?: Partial<Animations>;
+    multiAnimationSettings?: AnimationSettings[];
     objectfit?: ObjectFit;
     preserveAspectRatio?: PreserveAspectRatio;
     renderer?: RendererType;
@@ -42,7 +42,7 @@ export declare class DotLottiePlayer extends LitElement {
     private _onVisibilityChange;
     private _handleSeekChange;
     private _isLottie;
-    addAnimation(configs: Config[], fileName?: string, triggerDownload?: boolean): Promise<void | ArrayBuffer>;
+    addAnimation(configs: AnimationConfig[], fileName?: string, triggerDownload?: boolean): Promise<void | ArrayBuffer>;
     getLottie(): AnimationItem | null;
     play(): void;
     pause(): void;
@@ -56,7 +56,7 @@ export declare class DotLottiePlayer extends LitElement {
     setSpeed(value?: number): void;
     setDirection(value: AnimationDirection): void;
     setLooping(value: boolean): void;
-    setMultiAnimationSettings(settings: Partial<Animations>): void;
+    setMultiAnimationSettings(settings: AnimationSettings[]): void;
     togglePlay(): void;
     toggleLooping(): void;
     toggleBoomerang(): void;

@@ -11,7 +11,7 @@ import {
   state
 } from 'lit/decorators.js'
 import Lottie, {
-  type AnimationConfig,
+  type AnimationConfig as LottieConfig,
   type AnimationDirection,
   type AnimationEventName,
   type AnimationItem,
@@ -35,9 +35,9 @@ import {
 import pkg from '../../package.json'
 
 import type {
-  Animations,
+  AnimationSettings,
+  AnimationConfig,
   Autoplay,
-  Config,
   Controls,
   Loop,
   LottieJSON,
@@ -129,7 +129,7 @@ export class DotLottiePlayer extends LitElement {
    * If set, these will override conflicting settings
    */
   @property({ type: Array })
-  multiAnimationSettings?: Partial<Animations>
+  multiAnimationSettings?: AnimationSettings[]
 
   /**
    * Resizing to container
@@ -227,7 +227,7 @@ export class DotLottiePlayer extends LitElement {
 
   /**
    * Get options from props
-   * @returns { AnimationConfig }
+   * @returns { LottieConfig }
    */
   private _getOptions() {
     const preserveAspectRatio =
@@ -252,7 +252,7 @@ export class DotLottiePlayer extends LitElement {
             ([this.segment[0] - 1, this.segment[1] - 1] as AnimationSegment) :
             this.segment,
 
-      options: AnimationConfig<'svg' | 'canvas' | 'html'> =
+      options: LottieConfig<'svg' | 'canvas' | 'html'> =
       {
         container: this.container,
         loop,
@@ -395,7 +395,7 @@ export class DotLottiePlayer extends LitElement {
       this.currentState = PlayerState.Completed
       this.dispatchEvent(new CustomEvent(PlayerEvents.Complete))
       if (this._animations?.length > 1 &&
-          this.autoplay &&
+          !!this.multiAnimationSettings?.[this._currentAnimation + 1].autoplay &&
             this._currentAnimation < (this._animations?.length - 1)) {
         this.next()
       }
@@ -532,13 +532,13 @@ export class DotLottiePlayer extends LitElement {
 
   /**
    * Creates a new dotLottie file, by combinig several animations
-   * @param { Config } configs
+   * @param { [AnimationConfig] } configs
    * @param { string } fileName
    * @param { boolean } triggerDownload Whether to trigger a download in the browser.
    * If set to false the function returns an ArrayBuffer. Defaults to true.
    */
   public async addAnimation(
-    configs: Config[],
+    configs: AnimationConfig[],
     fileName?: string,
     triggerDownload = true
   ) {
@@ -796,9 +796,9 @@ export class DotLottiePlayer extends LitElement {
 
   /**
    * Set Multi-animation settings
-   * @param { Partial<Animations> } settings
+   * @param { AnimationSettings[] } settings
    */
-  public setMultiAnimationSettings(settings: Partial<Animations>) {
+  public setMultiAnimationSettings(settings: AnimationSettings[]) {
     if (this._lottieInstance) {
       this.multiAnimationSettings = settings
     }

@@ -49,9 +49,7 @@ export interface LottieJSON {
   w: number
 }
 
-export interface Config {
-  id: string
-  url: string
+export interface AnimationSettings {
   autoplay?: Autoplay
   loop?: Loop
   direction?: AnimationDirection
@@ -59,10 +57,16 @@ export interface Config {
   speed?: number
 }
 
-export type Animations = Omit<Config, 'url'>[]
+export interface Animation extends AnimationSettings {
+  id: string
+}
+
+export interface AnimationConfig extends Animation {
+  url: string
+}
 
 export interface LottieManifest {
-  animations: Animations
+  animations: Animation[]
   author?: string
   description?: string
   generator?: string
