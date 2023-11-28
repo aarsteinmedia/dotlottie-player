@@ -25,6 +25,7 @@ export declare enum PlayerEvents {
     Next = "next",
     Pause = "pause",
     Play = "play",
+    Previous = "previous",
     Ready = "ready",
     Rendered = "rendered",
     Stop = "stop"

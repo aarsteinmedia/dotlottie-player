@@ -886,7 +886,7 @@ export class DotLottiePlayer extends LitElement {
     setTimeout(() => this._toggleSettings(false), 200)
   }
 
-  private _switchInstance() {
+  private _switchInstance(isPrevious = false) {
     // Bail early if there is not animation to play
     if (!this._animations[this._currentAnimation])
       return
@@ -909,7 +909,7 @@ export class DotLottiePlayer extends LitElement {
     // Add event listeners to new Lottie instance
     this._addEventListeners()
 
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Next))
+    this.dispatchEvent(new CustomEvent(isPrevious ? PlayerEvents.Previous : PlayerEvents.Next))
 
     if (this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ?? this.autoplay) {
       this._lottieInstance?.goToAndPlay(0, true)
@@ -933,7 +933,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public prev() {
     this._currentAnimation--
-    this._switchInstance()
+    this._switchInstance(true)
   }
 
   /**

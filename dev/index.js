@@ -21451,6 +21451,7 @@
 	    PlayerEvents["Next"] = "next";
 	    PlayerEvents["Pause"] = "pause";
 	    PlayerEvents["Play"] = "play";
+	    PlayerEvents["Previous"] = "previous";
 	    PlayerEvents["Ready"] = "ready";
 	    PlayerEvents["Rendered"] = "rendered";
 	    PlayerEvents["Stop"] = "stop";
@@ -21718,7 +21719,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.2.6";
+	var version = "2.2.7";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -22232,7 +22233,7 @@
 	    _handleBlur() {
 	        setTimeout(()=>this._toggleSettings(false), 200);
 	    }
-	    _switchInstance() {
+	    _switchInstance(isPrevious = false) {
 	        if (!this._animations[this._currentAnimation]) return;
 	        if (this._lottieInstance) this._lottieInstance.destroy();
 	        this._lottieInstance = Lottie.loadAnimation({
@@ -22243,7 +22244,7 @@
 	            this._isBounce = this.multiAnimationSettings[this._currentAnimation].mode === exports.PlayMode.Bounce;
 	        }
 	        this._addEventListeners();
-	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Next));
+	        this.dispatchEvent(new CustomEvent(isPrevious ? exports.PlayerEvents.Previous : exports.PlayerEvents.Next));
 	        if (this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ?? this.autoplay) {
 	            this._lottieInstance?.goToAndPlay(0, true);
 	            this.currentState = exports.PlayerState.Playing;
@@ -22258,7 +22259,7 @@
 	    }
 	    prev() {
 	        this._currentAnimation--;
-	        this._switchInstance();
+	        this._switchInstance(true);
 	    }
 	    convert(typeCheck, manifest, animations, fileName, download = true) {
 	        if (typeCheck || this._isDotLottie) return;
