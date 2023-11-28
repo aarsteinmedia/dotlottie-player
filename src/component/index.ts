@@ -909,6 +909,8 @@ export class DotLottiePlayer extends LitElement {
     // Add event listeners to new Lottie instance
     this._addEventListeners()
 
+    this.dispatchEvent(new CustomEvent(PlayerEvents.Next))
+
     if (this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ?? this.autoplay) {
       this._lottieInstance?.goToAndPlay(0, true)
       this.currentState = PlayerState.Playing

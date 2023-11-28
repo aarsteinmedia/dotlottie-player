@@ -40,6 +40,7 @@ export enum PlayerEvents {
   Freeze = 'freeze',
   Load = 'load',
   Loop = 'loop',
+  Next = 'next',
   Pause = 'pause',
   Play = 'play',
   Ready = 'ready',
