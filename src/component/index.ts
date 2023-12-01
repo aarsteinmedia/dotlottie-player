@@ -234,14 +234,14 @@ export class DotLottiePlayer extends LitElement {
   private _getOptions() {
     const preserveAspectRatio =
       this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)),
-      
+
       currentAnimationSettings = this.multiAnimationSettings?.[this._currentAnimation],
       currentAnimationManifest = this._manifest.animations?.[this._currentAnimation],
 
       loop = currentAnimationSettings?.loop !== undefined ? !!currentAnimationSettings.loop :
         this.loop !== undefined ? !!this.loop :
           currentAnimationManifest.loop !== undefined && !!currentAnimationManifest.loop,
-      
+
       autoplay = currentAnimationSettings?.autoplay !== undefined ? !!currentAnimationSettings.autoplay :
         this.autoplay !== undefined ? !!this.autoplay :
           currentAnimationManifest.autoplay !== undefined && !!currentAnimationManifest.autoplay,
@@ -401,8 +401,8 @@ export class DotLottiePlayer extends LitElement {
       this.currentState = PlayerState.Completed
       this.dispatchEvent(new CustomEvent(PlayerEvents.Complete))
       if (this._animations?.length > 1 &&
-          !!this.multiAnimationSettings?.[this._currentAnimation + 1]?.autoplay &&
-            this._currentAnimation < (this._animations?.length - 1)) {
+        !!this.multiAnimationSettings?.[this._currentAnimation + 1]?.autoplay &&
+        this._currentAnimation < (this._animations?.length - 1)) {
         this.next()
       }
     })
@@ -851,10 +851,10 @@ export class DotLottiePlayer extends LitElement {
         curr.mode = PlayMode.Normal
       }
     } else if (this.mode === PlayMode.Normal) {
-        this.mode = PlayMode.Bounce
-      } else {
-        this.mode = PlayMode.Normal
-      }
+      this.mode = PlayMode.Bounce
+    } else {
+      this.mode = PlayMode.Normal
+    }
   }
 
   /**
