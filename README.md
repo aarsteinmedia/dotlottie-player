@@ -289,7 +289,7 @@ The following events are exposed and can be listened to via `addEventListener` c
 ## WordPress Plugins
 <img align="left" width="110" height="110" src="/.github/wpIcon.svg" />
 
-We've made a free WordPress plugin that works with Gutenberg Blocks, Elementor, Divi Builder and Flatsome UX Builder: [AM LottiePlayer](https://wordpress.org/plugins/am-lottieplayer/). It has all the functionality of this package, with a helpful user interface.
+We've made a free WordPress plugin that works with Gutenberg Blocks, Elementor, Divi Builder and Flatsome UX Builder: [AM LottiePlayer](https://www.aarstein.media/en/am-lottieplayer). It has all the functionality of this package, with a helpful user interface.
 
 It's super lightweight – and only loads on pages where animations are used.
 
