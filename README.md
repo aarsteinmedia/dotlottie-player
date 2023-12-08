@@ -286,12 +286,14 @@ The following events are exposed and can be listened to via `addEventListener` c
 | `ready`    | Animation is loaded and player is ready                          |
 | `stop`     | Animation has stopped                                            |
 
-## WordPress Plugin
+## WordPress Plugins
 <img align="left" width="110" height="110" src="/.github/wpIcon.svg" />
 
 We've made a free WordPress plugin that works with Gutenberg Blocks, Elementor, Divi Builder and Flatsome UX Builder: [AM LottiePlayer](https://wordpress.org/plugins/am-lottieplayer/). It has all the functionality of this package, with a helpful user interface.
 
 It's super lightweight – and only loads on pages where animations are used.
+
+We've also made a premium WordPress plugin for purchase: [AM LottiePlayerPRO](https://www.aarstein.media/en/am-lottieplayer/pro). It has an easy-to-use GUI for combining and controlling multiple Lottie animations in a single file, converting JSON to dotLottie with drag-and-drop, and many more exclusive features.
 
 ## License
 
