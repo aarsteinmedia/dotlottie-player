@@ -199,9 +199,8 @@ export const addExt = (ext: string, str?: string) => {
     return res
   },
 
-  frameOutput = (frame?: number) => {
-    return ((frame ?? 0) + 1).toString().padStart(3, '0')
-  },
+  frameOutput = (frame?: number) =>
+    ((frame ?? 0) + 1).toString().padStart(3, '0'),
 
   getAnimationData = async (input: unknown): Promise<{
     animations: LottieJSON[] | null
@@ -366,17 +365,14 @@ export const addExt = (ext: string, str?: string) => {
     return (lastDotIndex ?? 0) > 1 && path && path.length - 1 > (lastDotIndex ?? 0)
   },
 
-  isAudio = (asset: LottieAsset) => {
-    return !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset
-  },
+  isAudio = (asset: LottieAsset) =>
+    !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset,
 
-  isImage = (asset: LottieAsset) =>{
-    return 'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset
-  },
+  isImage = (asset: LottieAsset) =>
+    'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset,
 
-  isServer = () => {
-    return !(typeof window !== 'undefined' && window.document)
-  },
+  isServer = () => 
+    !(typeof window !== 'undefined' && window.document),
 
   /**
    * Convert string to Uint8Array
@@ -385,7 +381,7 @@ export const addExt = (ext: string, str?: string) => {
    */
   strToU8 = (str: string) => {
     const u8 = new Uint8Array(str.length)
-    for (let i = 0; i < str.length; i++) {
+    for (const [i] of [...Array(str.length)].entries()) {
       u8[i] = str.charCodeAt(i)
     }
     return u8

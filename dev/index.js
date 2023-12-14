@@ -21556,9 +21556,7 @@
 	        }
 	    }
 	    return res;
-	}, frameOutput = (frame)=>{
-	    return ((frame ?? 0) + 1).toString().padStart(3, '0');
-	}, getAnimationData = async (input)=>{
+	}, frameOutput = (frame)=>((frame ?? 0) + 1).toString().padStart(3, '0'), getAnimationData = async (input)=>{
 	    try {
 	        if (!input || typeof input !== 'string' && typeof input !== 'object') {
 	            throw new Error('Broken file or invalid file format');
@@ -21673,15 +21671,11 @@
 	}, hasExt = (path)=>{
 	    const lastDotIndex = path?.split('/').pop()?.lastIndexOf('.');
 	    return (lastDotIndex ?? 0) > 1 && path && path.length - 1 > (lastDotIndex ?? 0);
-	}, isAudio = (asset)=>{
-	    return !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset;
-	}, isImage = (asset)=>{
-	    return 'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset;
-	}, isServer = ()=>{
-	    return !(typeof window !== 'undefined' && window.document);
-	}, strToU8 = (str)=>{
+	}, isAudio = (asset)=>!('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset, isImage = (asset)=>'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset, isServer = ()=>!(typeof window !== 'undefined' && window.document), strToU8 = (str)=>{
 	    const u8 = new Uint8Array(str.length);
-	    for(let i = 0; i < str.length; i++){
+	    for (const [i] of [
+	        ...Array(str.length)
+	    ].entries()){
 	        u8[i] = str.charCodeAt(i);
 	    }
 	    return u8;
@@ -21719,7 +21713,7 @@
 	};
 
 	var name = "@aarsteinmedia/dotlottie-player";
-	var version = "2.2.7";
+	var version = "2.2.8";
 	var description = "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player";
 	var exports$1 = {
 		".": {
@@ -21769,14 +21763,14 @@
 	var devDependencies = {
 		"@custom-elements-manifest/analyzer": "^0.6.9",
 		"@rollup/plugin-commonjs": "^25.0.7",
-		"@rollup/plugin-json": "^6.0.1",
+		"@rollup/plugin-json": "^6.1.0",
 		"@rollup/plugin-node-resolve": "^15.2.3",
 		"@rollup/plugin-replace": "^5.0.5",
-		"@swc/core": "^1.3.99",
-		"@types/node": "^20.10.0",
+		"@swc/core": "^1.3.100",
+		"@types/node": "^20.10.4",
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
 		"@typescript-eslint/parser": "^5.62.0",
-		eslint: "^8.54.0",
+		eslint: "^8.55.0",
 		"eslint-plugin-lit": "^1.10.1",
 		rollup: "^3.29.4",
 		"rollup-plugin-dts": "^6.1.0",
@@ -21785,7 +21779,7 @@
 		"rollup-plugin-swc3": "^0.9.1",
 		shx: "^0.3.4",
 		"ts-lit-plugin": "^1.2.1",
-		typescript: "^5.3.2"
+		typescript: "^5.3.3"
 	};
 	var customElements$1 = "dist/custom-elements.json";
 	var files = [

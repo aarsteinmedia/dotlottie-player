@@ -782,7 +782,8 @@ export class DotLottiePlayer extends LitElement {
    * @param { AnimationDirection } value Animation direction
    */
   public setDirection(value: AnimationDirection) {
-    if (!this._lottieInstance) return
+    if (!this._lottieInstance)
+      return
     this.direction = value
     this._lottieInstance.setDirection(value)
   }
