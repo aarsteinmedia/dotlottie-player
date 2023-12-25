@@ -479,16 +479,26 @@ export class DotLottiePlayer extends LitElement {
 
     if (this.container) {
       // Set handlers to auto play animation on hover if enabled
-      this.container.addEventListener('mouseenter', () => {
-        if (this.hover && this.currentState !== PlayerState.Playing) {
-          this.play()
-        }
-      })
-      this.container.addEventListener('mouseleave', () => {
-        if (this.hover && this.currentState === PlayerState.Playing) {
-          this.stop()
-        }
-      })
+      this.container.addEventListener('mouseenter', this._mouseEnter)
+      this.container.addEventListener('mouseleave', this._mouseLeave)
+    }
+  }
+
+  /**
+   * Handle MouseEnter
+   */
+  private _mouseEnter() {
+    if (this.hover && this.currentState !== PlayerState.Playing) {
+      this.play()
+    }
+  }
+
+  /**
+   * Handle MouseLeave
+   */
+  private _mouseLeave() {
+    if (this.hover && this.currentState === PlayerState.Playing) {
+      this.stop()
     }
   }
 
@@ -972,6 +982,13 @@ export class DotLottiePlayer extends LitElement {
    */
   static override get styles(): CSSResult {
     return styles
+  }
+
+  constructor() {
+    super()
+    this._onVisibilityChange = this._onVisibilityChange.bind(this)
+    this._mouseEnter = this._mouseEnter.bind(this)
+    this._mouseLeave = this._mouseLeave.bind(this)
   }
 
   /**
