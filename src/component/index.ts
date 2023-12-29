@@ -855,17 +855,26 @@ export class DotLottiePlayer extends LitElement {
    */
   public toggleBoomerang() {
     const curr = this.multiAnimationSettings?.[this._currentAnimation]
+
     if (curr?.mode !== undefined) {
       if (curr.mode === PlayMode.Normal) {
         curr.mode = PlayMode.Bounce
+        this._isBounce = true
       } else {
         curr.mode = PlayMode.Normal
+        this._isBounce = false
       }
-    } else if (this.mode === PlayMode.Normal) {
-      this.mode = PlayMode.Bounce
-    } else {
-      this.mode = PlayMode.Normal
+      return
     }
+
+    if (this.mode === PlayMode.Normal) {
+      this.mode = PlayMode.Bounce
+      this._isBounce = true
+      return
+    }
+
+    this.mode = PlayMode.Normal
+    this._isBounce = false
   }
 
   /**

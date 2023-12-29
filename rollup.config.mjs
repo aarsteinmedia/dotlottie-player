@@ -65,7 +65,7 @@ const isProd = process.env.NODE_ENV !== 'development',
 
 export default [
   {
-    input: './types/src/index.d.ts',
+    input: './types/index.d.ts',
     output: {
       file: pkg.types,
       format: 'esm',

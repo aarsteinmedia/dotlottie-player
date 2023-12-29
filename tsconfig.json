@@ -3,7 +3,6 @@
     "swc": true
   },
   "compilerOptions": {
-    "allowJs": true,
     "declaration": true,
     "declarationDir": "./types",
     "emitDeclarationOnly": true,
@@ -34,24 +33,9 @@
     "removeComments": true,
     "resolveJsonModule": true,
     "rootDir": "./src",
-    // "baseUrl": "./src",
     "strict": true,
     "target": "ES2021",
-    "useDefineForClassFields": false,
-    // "paths": {
-    //   "@component": [
-    //     "./component"
-    //   ],
-    //   "@component/*": [
-    //     "./component/*"
-    //   ],
-    //   "@types": [
-    //     "./component/types"
-    //   ],
-    //   "@utils": [
-    //     "./component/utils"
-    //   ]
-    // }
+    "useDefineForClassFields": false
   },
   "include": [
     "./src/**/*",
