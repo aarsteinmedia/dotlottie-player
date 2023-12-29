@@ -33,13 +33,29 @@
     ],
     "removeComments": true,
     "resolveJsonModule": true,
-    "rootDir": "./",
+    "rootDir": "./src",
+    // "baseUrl": "./src",
     "strict": true,
-    "target": "es2021",
-    "useDefineForClassFields": false
+    "target": "ES2021",
+    "useDefineForClassFields": false,
+    // "paths": {
+    //   "@component": [
+    //     "./component"
+    //   ],
+    //   "@component/*": [
+    //     "./component/*"
+    //   ],
+    //   "@types": [
+    //     "./component/types"
+    //   ],
+    //   "@utils": [
+    //     "./component/utils"
+    //   ]
+    // }
   },
   "include": [
-    "./src/**/*"
+    "./src/**/*",
+    "./global.d.ts"
   ],
   "exclude": [
     "node_modules",

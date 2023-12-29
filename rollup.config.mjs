@@ -1,8 +1,12 @@
+import autoprefixer from 'autoprefixer'
 import commonjs from '@rollup/plugin-commonjs'
 import dts from 'rollup-plugin-dts'
+import flexbugs from 'postcss-flexbugs-fixes'
 import json from '@rollup/plugin-json'
 import livereload from 'rollup-plugin-livereload'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
+import postcss from 'rollup-plugin-postcss'
+import postcssLit from 'rollup-plugin-postcss-lit'
 import replace from '@rollup/plugin-replace'
 import serve from 'rollup-plugin-serve'
 import summary from 'rollup-plugin-summary'
@@ -15,6 +19,18 @@ import pkg from './package.json' assert { type: 'json' }
 const isProd = process.env.NODE_ENV !== 'development',
   input = './src/index.ts',
   plugins = (preferBuiltins = false) => [
+    postcss({
+      inject: false,
+      plugins: [
+        flexbugs(),
+        autoprefixer({
+          flexbox: 'no-2009',
+        }),
+      ],
+    }),
+    postcssLit({
+      importPackage: 'lit',
+    }),
     template(),
     replace({
       preventAssignment: false,
@@ -36,14 +52,11 @@ const isProd = process.env.NODE_ENV !== 'development',
     isProd && summary(),
     !isProd &&
       serve({
-        open: true
+        open: true,
       }),
-    !isProd && livereload()
+    !isProd && livereload(),
   ],
-  modulePlugins = () => [
-    ...plugins(true),
-    isProd && summary()
-  ];
+  modulePlugins = () => [...plugins(true), isProd && summary()];
 
 export default [
   {

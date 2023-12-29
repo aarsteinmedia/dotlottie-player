@@ -47,7 +47,7 @@ import type {
   Subframe
 } from './types'
 
-import styles from './styles'
+import styles from './styles.scss'
 
 /**
  * dotLottie Player Web Component
