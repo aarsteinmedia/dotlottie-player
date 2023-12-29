@@ -40,6 +40,8 @@ export declare class DotLottiePlayer extends LitElement {
     load(src: string | LottieJSON): Promise<void>;
     getManifest(): LottieManifest;
     private _addEventListeners;
+    private _mouseEnter;
+    private _mouseLeave;
     private _onVisibilityChange;
     private _handleSeekChange;
     private _isLottie;
@@ -69,6 +71,7 @@ export declare class DotLottiePlayer extends LitElement {
     prev(): void;
     convert(typeCheck?: boolean, manifest?: LottieManifest, animations?: LottieJSON[], fileName?: string, download?: boolean): Promise<void | ArrayBuffer> | undefined;
     static get styles(): CSSResult;
+    constructor();
     connectedCallback(): void;
     protected firstUpdated(): Promise<void>;
     disconnectedCallback(): void;

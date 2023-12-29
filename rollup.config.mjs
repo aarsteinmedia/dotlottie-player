@@ -1,60 +1,58 @@
 import commonjs from '@rollup/plugin-commonjs'
 import dts from 'rollup-plugin-dts'
-import { nodeResolve } from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
+import livereload from 'rollup-plugin-livereload'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
+import serve from 'rollup-plugin-serve'
 import summary from 'rollup-plugin-summary'
-import { swc, minify as swcMinify } from 'rollup-plugin-swc3'
+import { minify, swc } from 'rollup-plugin-swc3'
 
 import template from 'rollup-plugin-html-literals'
 
 import pkg from './package.json' assert { type: 'json' }
 
-const input = './src/index.ts',
-  dev = './dev/index.js',
-  extensions = ['.js', '.ts'],
-  external = [
-    'lit',
-    'lit/decorators.js',
-    'lottie-web',
-    'fflate'
-  ],
-  plugins = (preferBuiltins = false) => ([
+const isProd = process.env.NODE_ENV !== 'development',
+  input = './src/index.ts',
+  plugins = (preferBuiltins = false) => [
     template(),
     replace({
       preventAssignment: false,
-      'Reflect.decorate': 'undefined'
+      'Reflect.decorate': 'undefined',
     }),
     json(),
     nodeResolve({
-      extensions,
+      extensions: ['.ts'],
       jsnext: true,
       module: true,
-      preferBuiltins
+      preferBuiltins,
     }),
     commonjs(),
     swc(),
-  ]),
-  unpkgPlugins = (minify = false) => ([
+  ],
+  unpkgPlugins = () => [
     ...plugins(),
-    minify && swcMinify(),
-    minify && summary()
-  ]),
-  modulePlugins = () => ([
+    isProd && minify(),
+    isProd && summary(),
+    !isProd &&
+      serve({
+        open: true
+      }),
+    !isProd && livereload()
+  ],
+  modulePlugins = () => [
     ...plugins(true),
-    summary(),
-  ])
+    isProd && summary()
+  ];
 
 export default [
   {
     input: './types/src/index.d.ts',
     output: {
       file: pkg.types,
-      format: 'esm'
+      format: 'esm',
     },
-    plugins: [
-      dts(),
-    ]
+    plugins: [dts()],
   },
   {
     input,
@@ -65,28 +63,14 @@ export default [
       name: pkg.name,
     },
     onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED') return
-      warn(warning)
+      if (warning.code === 'THIS_IS_UNDEFINED') return;
+      warn(warning);
     },
     plugins: unpkgPlugins(true),
   },
   {
     input,
-    output: {
-      extend: true,
-      file: dev,
-      format: 'iife',
-      name: pkg.name,
-    },
-    onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED') return
-      warn(warning)
-    },
-    plugins: unpkgPlugins(),
-  },
-  {
-    input,
-    external,
+    external: ['lit', 'lit/decorators.js', 'lottie-web', 'fflate'],
     output: [
       {
         file: pkg.module,
@@ -94,13 +78,13 @@ export default [
       },
       {
         file: pkg.exports['.'].require,
-        format: 'cjs'
-      }
+        format: 'cjs',
+      },
     ],
     onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED') return
-      warn(warning)
+      if (warning.code === 'THIS_IS_UNDEFINED') return;
+      warn(warning);
     },
     plugins: modulePlugins(),
-  }
-]
+  },
+];
