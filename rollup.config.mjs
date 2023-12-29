@@ -36,7 +36,9 @@ const isProd = process.env.NODE_ENV !== 'development',
       preventAssignment: false,
       'Reflect.decorate': 'undefined',
     }),
-    json(),
+    json({
+      compact: true,
+    }),
     nodeResolve({
       extensions: ['.ts'],
       jsnext: true,
@@ -56,7 +58,10 @@ const isProd = process.env.NODE_ENV !== 'development',
       }),
     !isProd && livereload(),
   ],
-  modulePlugins = () => [...plugins(true), isProd && summary()];
+  modulePlugins = () => [
+    ...plugins(true),
+    isProd && summary()
+  ]
 
 export default [
   {
@@ -76,8 +81,9 @@ export default [
       name: pkg.name,
     },
     onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED') return;
-      warn(warning);
+      if (warning.code === 'THIS_IS_UNDEFINED')
+        return
+      warn(warning)
     },
     plugins: unpkgPlugins(true),
   },
@@ -95,9 +101,10 @@ export default [
       },
     ],
     onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED') return;
-      warn(warning);
+      if (warning.code === 'THIS_IS_UNDEFINED')
+        return
+      warn(warning)
     },
     plugins: modulePlugins(),
   },
-];
+]

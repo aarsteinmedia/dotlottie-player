@@ -477,7 +477,7 @@ export class DotLottiePlayer extends LitElement {
       this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
     })
 
-    if (this.container) {
+    if (this.container && this.hover) {
       // Set handlers to auto play animation on hover if enabled
       this.container.addEventListener('mouseenter', this._mouseEnter)
       this.container.addEventListener('mouseleave', this._mouseLeave)
