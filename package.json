@@ -92,10 +92,11 @@
     "player"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   },
   "engines": {
-    "node": ">= 7.6.0"
+    "node": ">= 8.17.0"
   },
   "funding": {
     "type": "paypal",
