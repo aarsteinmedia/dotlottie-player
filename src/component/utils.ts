@@ -381,7 +381,7 @@ export const addExt = (ext: string, str?: string) => {
    */
   strToU8 = (str: string) => {
     const u8 = new Uint8Array(str.length)
-    for (const [i] of [...Array(str.length)].entries()) {
+    for (let i = 0; i < str.length; i++) {
       u8[i] = str.charCodeAt(i)
     }
     return u8
