@@ -15,7 +15,7 @@ interface Shape {
 
 interface ShapeData {
   /** Whether shape is animated or not */
-  a: 0 | 1
+  a: BoolInt
 
   /** Array of Keyframes */
   k: number | number[]
