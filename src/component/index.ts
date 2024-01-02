@@ -550,21 +550,24 @@ export class DotLottiePlayer extends LitElement {
    * @param { string } fileName
    * @param { boolean } triggerDownload Whether to trigger a download in the browser.
    * If set to false the function returns an ArrayBuffer. Defaults to true.
+   * 
+   * TODO: Rewrite this function so we don't create so many redundant copies of complex objects
    */
   public async addAnimation(
     configs: AnimationConfig[],
     fileName?: string,
     triggerDownload = true
   ) {
+    const { animations: _animations, manifest: _manifest } = await getAnimationData(this.src)
     try {
-      const oldManifest = this._manifest || {
+      const oldManifest = _manifest || {
         animations: []
       }
       let manifest: LottieManifest = {
         ...oldManifest,
         generator: pkg.name,
       },
-        animations = this._animations || []
+        animations = _animations || []
       for (const config of configs) {
         const { url } = config,
           { animations: animationsToAdd } = await getAnimationData(url)
@@ -956,20 +959,27 @@ export class DotLottiePlayer extends LitElement {
     this._switchInstance(true)
   }
 
-  /**
-   * Convert JSON Lottie to dotLottie
-   * @param { boolean | undefined } typeCheck External type safety
-   * @param { LottieManifest | undefined } manifest Externally added manifest
-   * @param { LottieJSON[] | undefined } animations Externally added animations
-   * @param { boolean } download Whether to trigger a download in the browser
-   */
-  public convert(
-    typeCheck?: boolean,
-    manifest?: LottieManifest,
-    animations?: LottieJSON[],
-    fileName?: string,
+  public async convert({
+    typeCheck,
+    manifest,
+    animations,
+    fileName,
     download = true
-  ) {
+  }: {
+    /** External type safety */
+    typeCheck?: boolean,
+
+    /** Externally added manifest */
+    manifest?: LottieManifest,
+
+    /** Externally added animations */
+    animations?: LottieJSON[],
+
+    fileName?: string,
+
+    /** Whether to trigger a download in the browser. Defaults to true */
+    download?: boolean
+  }) {
     if (typeCheck || this._isDotLottie)
       return
     const oldManifest = manifest || this._manifest,
@@ -977,8 +987,9 @@ export class DotLottiePlayer extends LitElement {
         ...oldManifest,
         generator: pkg.name
       }
+
     return createDotLottie(
-      animations || this._animations,
+      animations || (await getAnimationData(this.src)).animations,
       newManifest,
       `${getFilename(fileName || this.src)}.lottie`,
       download
@@ -998,6 +1009,7 @@ export class DotLottiePlayer extends LitElement {
     this._onVisibilityChange = this._onVisibilityChange.bind(this)
     this._mouseEnter = this._mouseEnter.bind(this)
     this._mouseLeave = this._mouseLeave.bind(this)
+    this.convert = this.convert.bind(this)
   }
 
   /**

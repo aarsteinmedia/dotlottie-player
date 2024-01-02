@@ -1,14 +1,12 @@
 import {
   strFromU8,
+  strToU8,
   unzip as unzipOrg,
-  zip
+  zip,
+  type Unzipped,
+  type Zippable
 } from 'fflate'
 
-import type {
-  // UnzipFileFilter,
-  Unzipped,
-  Zippable
-} from 'fflate'
 import type {
   LottieAsset,
   LottieJSON,
@@ -82,14 +80,12 @@ export const addExt = (ext: string, str?: string) => {
   /**
    * Convert Base64 encoded string to Uint8Array
    * @param { string } str Base64 encoded string
-   * @returns { Uint8Array} UTF-8/Latin-1 binary
+   * @returns { Uint8Array } UTF-8/Latin-1 binary
    */
-  base64ToU8 = (str: string) => {
-    const parsedStr = str.substring(str.indexOf(',') + 1)
-    return strToU8(isServer() ?
-      Buffer.from(parsedStr, 'base64').toString('binary') :
-        atob(parsedStr))
-  },
+  base64ToU8 = (str: string) =>
+    strToU8(isServer() ?
+      Buffer.from(parseBase64(str), 'base64').toString('binary') :
+      atob(parseBase64(str)), true),
 
   /**
    * Convert a JSON Lottie to dotLottie or combine several animations and download new dotLottie file in your browser.
@@ -99,7 +95,7 @@ export const addExt = (ext: string, str?: string) => {
    * @param { boolean } triggerDownload Whether to trigger a download in the browser. Defaults to true.
    */
   createDotLottie = async (
-    animations: LottieJSON[],
+    animations: LottieJSON[] | null,
     manifest: LottieManifest,
     filename?: string,
     triggerDownload = true
@@ -117,27 +113,43 @@ export const addExt = (ext: string, str?: string) => {
 
         dotlottie: Zippable = {
           'manifest.json': [
-            strToU8(JSON.stringify(manifest)),
-            { level: 0 }
+            strToU8(JSON.stringify(manifest), true),
+            { level: 0 } // <- Level of compression (no compression)
           ]
         }
 
       for (const [i, animation] of animations.entries()) {
-        if (animation.assets?.length) {
-          for (const asset of animation.assets) {
-            const { id, p } = asset
-            if (id && p) {
-              const ext = getExtFromB64(p)
-              asset.p = `${id}.${ext}`
-              asset.e = 0
-              dotlottie[`images/${id}.${ext}`]
-                = [base64ToU8(p), { level: 9 }]
-            }
+        for (const asset of animation.assets ?? []) {
+          if (!asset.p || (!isImage(asset) && !isAudio(asset))) {
+            continue
           }
+
+          const { p: file, u: path } = asset,
+            assetId = asset.id || useId(),
+            isEncoded = file.startsWith('data:'),
+            ext = isEncoded ? getExtFromB64(file) : getExt(file),
+            // Check if the asset is already base64-encoded. If not, get path, fetch it, and encode it
+            dataURL = isEncoded ? file : await fileToBase64(path ? ((path.endsWith('/') && `${path}${file}`) || `${path}/${file}`) : file)
+
+          asset.p = `${assetId}.${ext}`
+          // File is embedded, so path is ''
+          asset.u = ''
+          // File is encoded
+          asset.e = 1
+
+          dotlottie[`${isAudio(asset) ? 'audio' : 'images'}/${assetId}.${ext}`] =
+          [
+            base64ToU8(dataURL),
+            { level: 9 } // <- Level of compression
+          ]
+
         }
 
         dotlottie[`animations/${manifest.animations[i].id}.json`] =
-          [strToU8(JSON.stringify(animation)), { level: 9 }]
+        [
+          strToU8(JSON.stringify(animation), true),
+          { level: 9 } // <- Level of compression
+        ]
       }
 
       const buffer = await getArrayBuffer(dotlottie)
@@ -183,20 +195,24 @@ export const addExt = (ext: string, str?: string) => {
     }, 1000)
   },
 
-  handleErrors = (err: unknown) => {
-    const res = {
-      message: 'Unknown error',
-      status: isServer() ? 500 : 400
-    }
-    if (err && typeof err === 'object') {
-      if ('message' in err && typeof err.message === 'string') {
-        res.message = err.message
+  fileToBase64 = async (url: string): Promise<string> => {
+    const response = await fetch(url),
+      blob = await response.blob()
+    return new Promise((resolve, reject) => {
+      try {
+        const reader = new FileReader()
+        reader.onload = () => {
+          if (typeof reader.result === 'string') {
+            resolve(reader.result)
+            return
+          }
+          reject()
+        }
+        reader.readAsDataURL(blob)
+      } catch (e) {
+        reject(e)
       }
-      if ('status' in err) {
-        res.status = Number(err.status)
-      }
-    }
-    return res
+    })
   },
 
   frameOutput = (frame?: number) =>
@@ -205,7 +221,7 @@ export const addExt = (ext: string, str?: string) => {
   getAnimationData = async (input: unknown): Promise<{
     animations: LottieJSON[] | null
     manifest: LottieManifest | null
-    isDotLottie?: boolean
+    isDotLottie: boolean
   }> => {
     try {
       if (!input || (typeof input !== 'string' && typeof input !== 'object')) {
@@ -213,11 +229,11 @@ export const addExt = (ext: string, str?: string) => {
       }
 
       if (typeof input !== 'string') {
-        const animations =
-          Array.isArray(input) ? input : [input]
+        const animations = Array.isArray(input) ? input : [input]
         return {
           animations,
           manifest: null,
+          isDotLottie: false
         }
       }
 
@@ -241,6 +257,7 @@ export const addExt = (ext: string, str?: string) => {
           return {
             animations: [lottie],
             manifest: null,
+            isDotLottie: false
           }
         }
         const text = await result.clone().text()
@@ -249,8 +266,11 @@ export const addExt = (ext: string, str?: string) => {
           return {
             animations: [lottie],
             manifest: null,
+            isDotLottie: false
           }
-        } catch { /* Empty */ }
+        } catch(e) { 
+          console.warn(e)
+        }
       }
 
       const { data, manifest } = await getLottieJSON(result)
@@ -266,6 +286,7 @@ export const addExt = (ext: string, str?: string) => {
       return {
         animations: null,
         manifest: null,
+        isDotLottie: false
       }
     }
   },
@@ -307,19 +328,23 @@ export const addExt = (ext: string, str?: string) => {
   getFilename = (src: string, keepExt?: boolean) => {
     // Because the regex strips all special characters, we need to extract the file extension, so we can add it later if we need it
     const ext = getExt(src)
-    return `${src.replace(/\.[^.]*$/, '').replace(/\W+/g, '')}${keepExt && ext ? `.${ext}` : ''}`.toLowerCase()
+    return `${src.split('/').pop()?.replace(/\.[^.]*$/, '').replace(/\W+/g, '')}${keepExt && ext ? `.${ext}` : ''}` //.toLowerCase()
   },
 
   getLottieJSON = async (resp: Response) => {
     const unzipped = await unzip(resp),
       manifest = getManifest(unzipped),
-      data = []
+      data = [],
+      toResolve: Promise<void>[] = []
     for (const { id } of manifest.animations) {
       const str = strFromU8(unzipped[`animations/${id}.json`]),
         lottie: LottieJSON = JSON.parse(str)
-      await resolveAssets(unzipped, lottie.assets)
+      
+      toResolve.push(resolveAssets(unzipped, lottie.assets))
       data.push(lottie)
     }
+
+    await Promise.all(toResolve)
 
     return {
       data,
@@ -360,6 +385,22 @@ export const addExt = (ext: string, str?: string) => {
     }
   },
 
+  handleErrors = (err: unknown) => {
+    const res = {
+      message: 'Unknown error',
+      status: isServer() ? 500 : 400
+    }
+    if (err && typeof err === 'object') {
+      if ('message' in err && typeof err.message === 'string') {
+        res.message = err.message
+      }
+      if ('status' in err) {
+        res.status = Number(err.status)
+      }
+    }
+    return res
+  },
+
   hasExt = (path?: string) => {
     const lastDotIndex = path?.split('/').pop()?.lastIndexOf('.')
     return (lastDotIndex ?? 0) > 1 && path && path.length - 1 > (lastDotIndex ?? 0)
@@ -368,24 +409,21 @@ export const addExt = (ext: string, str?: string) => {
   isAudio = (asset: LottieAsset) =>
     !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset,
 
+  isBase64 = (str?: string) => {
+    if (!str)
+      return false
+    const regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
+    return regex.test(parseBase64(str))
+  },
+
   isImage = (asset: LottieAsset) =>
     'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset,
 
   isServer = () => 
     !(typeof window !== 'undefined' && window.document),
 
-  /**
-   * Convert string to Uint8Array
-   * @param { string } str Base64 encoded string
-   * @returns { Uint8Array} UTF-8/Latin-1 binary
-   */
-  strToU8 = (str: string) => {
-    const u8 = new Uint8Array(str.length)
-    for (let i = 0; i < str.length; i++) {
-      u8[i] = str.charCodeAt(i)
-    }
-    return u8
-  },
+  parseBase64 = (str: string) =>
+    str.substring(str.indexOf(',') + 1),
 
   resolveAssets = async (unzipped: Unzipped, assets?: LottieAsset[]) => {
     if (!Array.isArray(assets))
@@ -407,10 +445,11 @@ export const addExt = (ext: string, str?: string) => {
         new Promise<void>(resolveAsset => {
           const assetB64 = isServer() ? Buffer.from(u8).toString('base64') :
             btoa(u8.reduce((dat, byte) => (
-              dat + String.fromCharCode(byte)
+              `${dat}${String.fromCharCode(byte)}`
             ), ''))
 
-          asset.p = `data:${getMimeFromExt(getExt(asset.p))};base64,${assetB64}`
+          asset.p = (asset.p?.startsWith('data:') || isBase64(asset.p)) ? asset.p :
+            `data:${getMimeFromExt(getExt(asset.p))};base64,${assetB64}`
           asset.e = 1
           asset.u = ''
 

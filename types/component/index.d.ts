@@ -69,7 +69,13 @@ export declare class DotLottiePlayer extends LitElement {
     private _switchInstance;
     next(): void;
     prev(): void;
-    convert(typeCheck?: boolean, manifest?: LottieManifest, animations?: LottieJSON[], fileName?: string, download?: boolean): Promise<void | ArrayBuffer> | undefined;
+    convert({ typeCheck, manifest, animations, fileName, download }: {
+        typeCheck?: boolean;
+        manifest?: LottieManifest;
+        animations?: LottieJSON[];
+        fileName?: string;
+        download?: boolean;
+    }): Promise<void | ArrayBuffer>;
     static get styles(): CSSResult;
     constructor();
     connectedCallback(): void;
