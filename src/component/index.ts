@@ -263,6 +263,7 @@ export class DotLottiePlayer extends LitElement {
         initialSegment,
         rendererSettings: {
           imagePreserveAspectRatio: preserveAspectRatio,
+          // runExpressions: false <-- TODO: Security measure, not tested
         }
       }
 
