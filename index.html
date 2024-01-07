@@ -12,45 +12,45 @@
     <h1>DotLottie Player Demo</h1>
     <dotlottie-player
       controls
-      src="./assets/hero-web.lottie"
+      src="./assets/mongo-fra-bongo.lottie"
     ></dotlottie-player>
-    <!-- <button onclick="dl()">Kombiner animasjoner, og last ned</button>
-    <button onclick="cl()">Konverter animasjoner, og last ned</button> -->
+    <!-- <button onclick="dl()">Kombiner animasjoner, og last ned</button> -->
+    <!-- <button onclick="cl()">Konverter animasjoner, og last ned</button> -->
   </div>
   <script defer src="./dist/index.js"></script>
   <script defer>
-    const player = document.getElementById('player-element'),
+    const player = document.getElementsByTagName('dotlottie-player')[0],
       dl = async () => {
-        // if (player) {
-        //   await player.addAnimation([
-        //     {
-        //       id: 'bulb',
-        //       url: '/bulb.lottie'
-        //     },
-        //     {
-        //       id: 'dev',
-        //       url: '/dev.lottie'
-        //     }
-        //   ],
-        //   'ny-test-av-kombo')
-        // }
-        if (dotLottiePlayer) {
-          await dotLottiePlayer().addAnimation([
-            {
-              id: 'am',
-              url: './assets/am.lottie'
-            },
+        if (player) {
+          await player.addAnimation([
             {
               id: 'bulb',
-              url: './assets/bulb.lottie'
+              url: '/assets/bulb.lottie'
             },
             {
               id: 'dev',
-              url: './assets/dev.lottie'
+              url: '/assets/dev.lottie'
             }
           ],
-            'test-av-standalone')
+          'ny-test-av-kombo')
         }
+        // if (dotLottiePlayer) {
+        //   await dotLottiePlayer().addAnimation([
+        //     {
+        //       id: 'am',
+        //       url: './assets/am.lottie'
+        //     },
+        //     {
+        //       id: 'bulb',
+        //       url: './assets/bulb.lottie'
+        //     },
+        //     {
+        //       id: 'dev',
+        //       url: './assets/dev.lottie'
+        //     }
+        //   ],
+        //     'test-av-standalone')
+        // }
       },
       cl = async () => {
         if (dotLottiePlayer) {

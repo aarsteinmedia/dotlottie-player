@@ -89,17 +89,18 @@ export const addExt = (ext: string, str?: string) => {
 
   /**
    * Convert a JSON Lottie to dotLottie or combine several animations and download new dotLottie file in your browser.
-   * @param { LottieJSON[] } animations The animations to combine.
-   * @param { LottieManifest } manifest Manifest of meta information.
-   * @param { string } filename Name of file to download. If not specified a random string will be generated.
-   * @param { boolean } triggerDownload Whether to trigger a download in the browser. Defaults to true.
    */
-  createDotLottie = async (
-    animations: LottieJSON[] | null,
-    manifest: LottieManifest,
-    filename?: string,
-    triggerDownload = true
-  ) => {
+  createDotLottie = async ({
+    animations,
+    manifest,
+    fileName,
+    shouldDownload = true
+  }: {
+    animations?: LottieJSON[]
+    manifest: LottieManifest
+    fileName?: string
+    shouldDownload?: boolean
+  }) => {
     try {
       if (!animations?.length || !manifest) {
         throw new Error(
@@ -109,7 +110,7 @@ export const addExt = (ext: string, str?: string) => {
         )
       }
 
-      const name = addExt('lottie', filename) || `${useId()}.lottie`,
+      const name = addExt('lottie', fileName) || `${useId()}.lottie`,
 
         dotlottie: Zippable = {
           'manifest.json': [
@@ -154,7 +155,7 @@ export const addExt = (ext: string, str?: string) => {
 
       const buffer = await getArrayBuffer(dotlottie)
 
-      return triggerDownload ?
+      return shouldDownload ?
         download(buffer, {
           name,
           mimeType: 'application/zip'
@@ -219,8 +220,8 @@ export const addExt = (ext: string, str?: string) => {
     ((frame ?? 0) + 1).toString().padStart(3, '0'),
 
   getAnimationData = async (input: unknown): Promise<{
-    animations: LottieJSON[] | null
-    manifest: LottieManifest | null
+    animations?: LottieJSON[]
+    manifest?: LottieManifest
     isDotLottie: boolean
   }> => {
     try {
@@ -232,7 +233,7 @@ export const addExt = (ext: string, str?: string) => {
         const animations = Array.isArray(input) ? input : [input]
         return {
           animations,
-          manifest: null,
+          manifest: undefined,
           isDotLottie: false
         }
       }
@@ -256,7 +257,7 @@ export const addExt = (ext: string, str?: string) => {
           const lottie = await result.json()
           return {
             animations: [lottie],
-            manifest: null,
+            manifest: undefined,
             isDotLottie: false
           }
         }
@@ -265,7 +266,7 @@ export const addExt = (ext: string, str?: string) => {
           const lottie = JSON.parse(text)
           return {
             animations: [lottie],
-            manifest: null,
+            manifest: undefined,
             isDotLottie: false
           }
         } catch(e) { 
@@ -284,8 +285,8 @@ export const addExt = (ext: string, str?: string) => {
     } catch (err) {
       console.error(`❌ ${handleErrors(err).message}`)
       return {
-        animations: null,
-        manifest: null,
+        animations: undefined,
+        manifest: undefined,
         isDotLottie: false
       }
     }

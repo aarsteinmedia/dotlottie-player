@@ -11,7 +11,7 @@ interface Shape {
     s: ShapeData;
 }
 interface ShapeData {
-    a: 0 | 1;
+    a: BoolInt;
     k: number | number[];
     ix: number;
 }

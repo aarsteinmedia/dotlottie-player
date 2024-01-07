@@ -24,6 +24,18 @@
     "dev/**/*"
   ],
   "rules": {
+    "lit/no-legacy-template-syntax": "error",
+    "lit/no-template-arrow": "warn",
+    // Best practices
+    "@typescript-eslint/no-unused-vars": "error",
+    "dot-notation": "error",
+    "no-else-return": "error",
+    "no-floating-decimal": "error",
+    "no-sequences": "error",
+    "max-depth": [
+      "error",
+      4
+    ],
     "camelcase": "warn",
     "no-console": [
       "warn",
@@ -34,17 +46,6 @@
           "info"
         ]
       }
-    ],
-    "lit/no-legacy-template-syntax": "error",
-    "lit/no-template-arrow": "warn",
-    // Best practices
-    "dot-notation": "error",
-    "no-else-return": "error",
-    "no-floating-decimal": "error",
-    "no-sequences": "error",
-    "max-depth": [
-      "error",
-      4
     ],
     // Stylistic
     "array-bracket-spacing": "error",

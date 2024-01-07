@@ -33,12 +33,17 @@ export declare enum PlayerEvents {
 export declare class CustomError extends Error {
     status?: number;
 }
-export declare const addExt: (ext: string, str?: string) => string | undefined, aspectRatio: (objectFit: ObjectFit) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", base64ToU8: (str: string) => Uint8Array, createDotLottie: (animations: LottieJSON[] | null, manifest: LottieManifest, filename?: string, triggerDownload?: boolean) => Promise<void | ArrayBuffer>, download: (data: string | ArrayBuffer, options?: {
+export declare const addExt: (ext: string, str?: string) => string | undefined, aspectRatio: (objectFit: ObjectFit) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", base64ToU8: (str: string) => Uint8Array, createDotLottie: ({ animations, manifest, fileName, shouldDownload }: {
+    animations?: LottieJSON[] | undefined;
+    manifest: LottieManifest;
+    fileName?: string | undefined;
+    shouldDownload?: boolean | undefined;
+}) => Promise<void | ArrayBuffer>, download: (data: string | ArrayBuffer, options?: {
     name: string;
     mimeType: string;
 }) => void, fileToBase64: (url: string) => Promise<string>, frameOutput: (frame?: number) => string, getAnimationData: (input: unknown) => Promise<{
-    animations: LottieJSON[] | null;
-    manifest: LottieManifest | null;
+    animations?: LottieJSON[];
+    manifest?: LottieManifest;
     isDotLottie: boolean;
 }>, getArrayBuffer: (zippable: Zippable) => Promise<ArrayBuffer>, getExt: (str?: string) => string | undefined, getExtFromB64: (str: string) => string, getFilename: (src: string, keepExt?: boolean) => string, getLottieJSON: (resp: Response) => Promise<{
     data: LottieJSON[];

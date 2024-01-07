@@ -549,26 +549,21 @@ export class DotLottiePlayer extends LitElement {
    * Creates a new dotLottie file, by combinig several animations
    * @param { [AnimationConfig] } configs
    * @param { string } fileName
-   * @param { boolean } triggerDownload Whether to trigger a download in the browser.
+   * @param { boolean } shouldDownload Whether to trigger a download in the browser.
    * If set to false the function returns an ArrayBuffer. Defaults to true.
    * 
-   * TODO: Rewrite this function so we don't create so many redundant copies of complex objects
    */
   public async addAnimation(
     configs: AnimationConfig[],
     fileName?: string,
-    triggerDownload = true
+    shouldDownload = true
   ) {
-    const { animations: _animations, manifest: _manifest } = await getAnimationData(this.src)
+    const {
+      animations = [],
+      manifest = { animations: []}
+    } = await getAnimationData(this.src)
     try {
-      const oldManifest = _manifest || {
-        animations: []
-      }
-      let manifest: LottieManifest = {
-        ...oldManifest,
-        generator: pkg.name,
-      },
-        animations = _animations || []
+      manifest.generator = pkg.name
       for (const config of configs) {
         const { url } = config,
           { animations: animationsToAdd } = await getAnimationData(url)
@@ -579,26 +574,21 @@ export class DotLottiePlayer extends LitElement {
           throw new Error('Duplicate id for animation')
         }
 
-        manifest = {
-          ...manifest,
-          animations: [
-            ...manifest.animations,
-            config
-          ]
-        }
-
-        animations = [
-          ...animations,
-          ...animationsToAdd
+        manifest.animations = [
+          ...manifest.animations,
+          config
         ]
+
+        animations?.push(...animationsToAdd)
+
       }
 
-      return createDotLottie(
+      return createDotLottie({
         animations,
         manifest,
         fileName,
-        triggerDownload
-      )
+        shouldDownload
+      })
     } catch (err) {
       console.error(handleErrors(err).message)
     }
@@ -965,7 +955,7 @@ export class DotLottiePlayer extends LitElement {
     manifest,
     animations,
     fileName,
-    download = true
+    shouldDownload = true
   }: {
     /** External type safety */
     typeCheck?: boolean,
@@ -979,7 +969,7 @@ export class DotLottiePlayer extends LitElement {
     fileName?: string,
 
     /** Whether to trigger a download in the browser. Defaults to true */
-    download?: boolean
+    shouldDownload?: boolean
   }) {
     if (typeCheck || this._isDotLottie)
       return
@@ -989,12 +979,12 @@ export class DotLottiePlayer extends LitElement {
         generator: pkg.name
       }
 
-    return createDotLottie(
-      animations || (await getAnimationData(this.src)).animations,
-      newManifest,
-      `${getFilename(fileName || this.src)}.lottie`,
-      download
-    )
+    return createDotLottie({
+      animations: animations || (await getAnimationData(this.src)).animations,
+      manifest: newManifest,
+      fileName: `${getFilename(fileName || this.src)}.lottie`,
+      shouldDownload
+    })
   }
 
   /**

@@ -81,7 +81,8 @@ export default [
       name: pkg.name,
     },
     onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED')
+      /** In order to use expressions from After Effects this codebase uses eval */
+      if (warning.code === 'THIS_IS_UNDEFINED' || warning.code === 'EVAL')
         return
       warn(warning)
     },

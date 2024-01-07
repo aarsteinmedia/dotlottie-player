@@ -45,7 +45,7 @@ export declare class DotLottiePlayer extends LitElement {
     private _onVisibilityChange;
     private _handleSeekChange;
     private _isLottie;
-    addAnimation(configs: AnimationConfig[], fileName?: string, triggerDownload?: boolean): Promise<void | ArrayBuffer>;
+    addAnimation(configs: AnimationConfig[], fileName?: string, shouldDownload?: boolean): Promise<void | ArrayBuffer>;
     getLottie(): AnimationItem | null;
     play(): void;
     pause(): void;
@@ -69,12 +69,12 @@ export declare class DotLottiePlayer extends LitElement {
     private _switchInstance;
     next(): void;
     prev(): void;
-    convert({ typeCheck, manifest, animations, fileName, download }: {
+    convert({ typeCheck, manifest, animations, fileName, shouldDownload }: {
         typeCheck?: boolean;
         manifest?: LottieManifest;
         animations?: LottieJSON[];
         fileName?: string;
-        download?: boolean;
+        shouldDownload?: boolean;
     }): Promise<void | ArrayBuffer>;
     static get styles(): CSSResult;
     constructor();
