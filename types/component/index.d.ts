@@ -40,6 +40,13 @@ export declare class DotLottiePlayer extends LitElement {
     load(src: string | LottieJSON): Promise<void>;
     getManifest(): LottieManifest;
     private _addEventListeners;
+    private _removeEventListeners;
+    private _loopComplete;
+    private _enterFrame;
+    private _complete;
+    private _DOMLoaded;
+    private _dataReady;
+    private _dataFailed;
     private _mouseEnter;
     private _mouseLeave;
     private _onVisibilityChange;

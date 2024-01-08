@@ -12,7 +12,7 @@
     <h1>DotLottie Player Demo</h1>
     <dotlottie-player
       controls
-      src="./assets/mongo-fra-bongo.lottie"
+      src="./assets/menuAnimation-intro.lottie"
     ></dotlottie-player>
     <!-- <button onclick="dl()">Kombiner animasjoner, og last ned</button> -->
     <!-- <button onclick="cl()">Konverter animasjoner, og last ned</button> -->
@@ -25,14 +25,10 @@
           await player.addAnimation([
             {
               id: 'bulb',
-              url: '/assets/bulb.lottie'
-            },
-            {
-              id: 'dev',
-              url: '/assets/dev.lottie'
+              url: '/assets/intro.json'
             }
           ],
-          'ny-test-av-kombo')
+          'menuAnimation-intro.lottie')
         }
         // if (dotLottiePlayer) {
         //   await dotLottiePlayer().addAnimation([

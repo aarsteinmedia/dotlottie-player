@@ -381,102 +381,21 @@ export class DotLottiePlayer extends LitElement {
       return
 
     // Calculate and save the current progress of the animation
-    this._lottieInstance.addEventListener<AnimationEventName>('enterFrame', () => {
-      if (this._lottieInstance) {
-        const { currentFrame, totalFrames } = this._lottieInstance
-        this._seeker = Math.floor((currentFrame / totalFrames) * 100)
-
-        this.dispatchEvent(
-          new CustomEvent(PlayerEvents.Frame, {
-            detail: {
-              frame: currentFrame,
-              seeker: this._seeker,
-            },
-          }),
-        )
-      }
-    })
+    this._lottieInstance.addEventListener<AnimationEventName>('enterFrame', this._enterFrame)
 
     // Handle animation play complete
-    this._lottieInstance.addEventListener<AnimationEventName>('complete', () => {
-      this.currentState = PlayerState.Completed
-      this.dispatchEvent(new CustomEvent(PlayerEvents.Complete))
-      if (this._animations?.length > 1 &&
-        !!this.multiAnimationSettings?.[this._currentAnimation + 1]?.autoplay &&
-        this._currentAnimation < (this._animations?.length - 1)) {
-        this.next()
-      }
-    })
+    this._lottieInstance.addEventListener<AnimationEventName>('complete', this._complete)
 
-    //Handle complete loop
-    const loopComplete = () => {
-      if (!this._lottieInstance) {
-        return
-      }
-
-      const {
-        firstFrame,
-        totalFrames,
-        playDirection,
-      } = this._lottieInstance
-
-      if (this.count) {
-
-        this._isBounce ?
-          this._playerState.count += 1 : this._playerState.count += 0.5
-
-        if (this._playerState.count >= this.count) {
-          this.setLooping(false)
-
-          this.currentState = PlayerState.Completed
-          this.dispatchEvent(new CustomEvent(PlayerEvents.Complete))
-
-          return
-        }
-      }
-
-      this.dispatchEvent(new CustomEvent(PlayerEvents.Loop))
-
-      if (this._isBounce) {
-        this._lottieInstance?.goToAndStop(
-          playDirection === -1 ? firstFrame : totalFrames * 0.99, true
-        )
-
-        this._lottieInstance?.setDirection(playDirection * -1 as AnimationDirection)
-
-        return setTimeout(() => {
-          this._lottieInstance?.play()
-        }, this.intermission)
-      }
-
-      this._lottieInstance?.goToAndStop(
-        playDirection === -1 ? totalFrames * 0.99 : firstFrame, true
-      )
-
-      return setTimeout(() => {
-        this._lottieInstance?.play()
-      }, this.intermission)
-    }
-
-    this._lottieInstance.addEventListener<AnimationEventName>('loopComplete', loopComplete)
+    this._lottieInstance.addEventListener<AnimationEventName>('loopComplete', this._loopComplete)
 
     // Handle lottie-web ready event
-    this._lottieInstance.addEventListener<AnimationEventName>('DOMLoaded', () => {
-      this._playerState.loaded = true
-      this.dispatchEvent(new CustomEvent(PlayerEvents.Ready))
-    })
+    this._lottieInstance.addEventListener<AnimationEventName>('DOMLoaded', this._DOMLoaded)
 
     // Handle animation data load complete
-    this._lottieInstance.addEventListener<AnimationEventName>('data_ready', () => {
-      this.dispatchEvent(new CustomEvent(PlayerEvents.Load))
-    })
+    this._lottieInstance.addEventListener<AnimationEventName>('data_ready', this._dataReady)
 
     // Set error state when animation load fail event triggers
-    this._lottieInstance.addEventListener<AnimationEventName>('data_failed', () => {
-
-      this.currentState = PlayerState.Error
-      this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
-    })
+    this._lottieInstance.addEventListener<AnimationEventName>('data_failed', this._dataFailed)
 
     if (this.container && this.hover) {
       // Set handlers to auto play animation on hover if enabled
@@ -484,6 +403,120 @@ export class DotLottiePlayer extends LitElement {
       this.container.addEventListener('mouseleave', this._mouseLeave)
     }
   }
+
+  /**
+   * Remove event listeners
+   */
+  private _removeEventListeners() {
+    if (!this._lottieInstance || !this.container)
+      return
+
+    this._lottieInstance.removeEventListener<AnimationEventName>('enterFrame', this._enterFrame)
+    this._lottieInstance.removeEventListener<AnimationEventName>('complete', this._complete)
+    this._lottieInstance.removeEventListener<AnimationEventName>('loopComplete', this._loopComplete)
+    this._lottieInstance.removeEventListener<AnimationEventName>('DOMLoaded', this._DOMLoaded)
+    this._lottieInstance.removeEventListener<AnimationEventName>('data_ready', this._dataReady)
+    this._lottieInstance.removeEventListener<AnimationEventName>('data_failed', this._dataFailed)
+
+    this.container.removeEventListener('mouseenter', this._mouseEnter)
+    this.container.removeEventListener('mouseleave', this._mouseLeave)
+  }
+
+  private _loopComplete() {
+    if (!this._lottieInstance) {
+      return
+    }
+
+    const {
+      firstFrame,
+      totalFrames,
+      playDirection,
+    } = this._lottieInstance
+
+    if (this.count) {
+
+      this._isBounce ?
+        this._playerState.count += 1 : this._playerState.count += 0.5
+
+      if (this._playerState.count >= this.count) {
+        this.setLooping(false)
+
+        this.currentState = PlayerState.Completed
+        this.dispatchEvent(new CustomEvent(PlayerEvents.Complete))
+
+        return
+      }
+    }
+
+    this.dispatchEvent(new CustomEvent(PlayerEvents.Loop))
+
+    if (this._isBounce) {
+      this._lottieInstance?.goToAndStop(
+        playDirection === -1 ? firstFrame : totalFrames * 0.99, true
+      )
+
+      this._lottieInstance?.setDirection(playDirection * -1 as AnimationDirection)
+
+      return setTimeout(() => {
+        this._lottieInstance?.play()
+      }, this.intermission)
+    }
+
+    this._lottieInstance?.goToAndStop(
+      playDirection === -1 ? totalFrames * 0.99 : firstFrame, true
+    )
+
+    return setTimeout(() => {
+      this._lottieInstance?.play()
+    }, this.intermission)
+  }
+
+  private _enterFrame() {
+    if (this._lottieInstance) {
+      const { currentFrame, totalFrames } = this._lottieInstance
+      this._seeker = Math.floor((currentFrame / totalFrames) * 100)
+
+      this.dispatchEvent(
+        new CustomEvent(PlayerEvents.Frame, {
+          detail: {
+            frame: currentFrame,
+            seeker: this._seeker,
+          },
+        }),
+      )
+    }
+  }
+
+  private _complete() {
+    if (this._lottieInstance) {
+      const { currentFrame, totalFrames } = this._lottieInstance
+      this._seeker = Math.floor((currentFrame / totalFrames) * 100)
+
+      this.dispatchEvent(
+        new CustomEvent(PlayerEvents.Frame, {
+          detail: {
+            frame: currentFrame,
+            seeker: this._seeker,
+          },
+        }),
+      )
+    }
+  }
+
+  private _DOMLoaded() {
+    this._playerState.loaded = true
+    this.dispatchEvent(new CustomEvent(PlayerEvents.Ready))
+  }
+
+  private _dataReady() {
+    this.dispatchEvent(new CustomEvent(PlayerEvents.Load))
+  }
+
+  private _dataFailed() {
+    this.currentState = PlayerState.Error
+    this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
+  }
+
 
   /**
    * Handle MouseEnter
@@ -547,7 +580,7 @@ export class DotLottiePlayer extends LitElement {
 
   /**
    * Creates a new dotLottie file, by combinig several animations
-   * @param { [AnimationConfig] } configs
+   * @param { [ AnimationConfig ] } configs
    * @param { string } fileName
    * @param { boolean } shouldDownload Whether to trigger a download in the browser.
    * If set to false the function returns an ArrayBuffer. Defaults to true.
@@ -560,7 +593,9 @@ export class DotLottiePlayer extends LitElement {
   ) {
     const {
       animations = [],
-      manifest = { animations: []}
+      manifest = { animations: [{
+        id: this._identifier,
+      }]}
     } = await getAnimationData(this.src)
     try {
       manifest.generator = pkg.name
@@ -576,7 +611,7 @@ export class DotLottiePlayer extends LitElement {
 
         manifest.animations = [
           ...manifest.animations,
-          config
+          { id: config.id }
         ]
 
         animations?.push(...animationsToAdd)
@@ -663,6 +698,8 @@ export class DotLottiePlayer extends LitElement {
     this._lottieInstance = null
     this.dispatchEvent(new CustomEvent(PlayerEvents.Destroyed))
     this.remove()
+
+    document.removeEventListener('visibilitychange', this._onVisibilityChange)
   }
 
   /**
@@ -905,8 +942,11 @@ export class DotLottiePlayer extends LitElement {
     if (!this._animations[this._currentAnimation])
       return
 
+    this._removeEventListeners()
+
     // Clear previous animation
-    if (this._lottieInstance) this._lottieInstance.destroy()
+    if (this._lottieInstance)
+      this._lottieInstance.destroy()
 
     // Re-initialize lottie player
     this._lottieInstance = Lottie.loadAnimation({
@@ -928,10 +968,11 @@ export class DotLottiePlayer extends LitElement {
     if (this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ?? this.autoplay) {
       this._lottieInstance?.goToAndPlay(0, true)
       this.currentState = PlayerState.Playing
-    } else {
-      this._lottieInstance?.goToAndStop(0, true)
-      this.currentState = PlayerState.Stopped
+      return
     }
+
+    this._lottieInstance?.goToAndStop(0, true)
+    this.currentState = PlayerState.Stopped
   }
 
   /**
@@ -997,10 +1038,19 @@ export class DotLottiePlayer extends LitElement {
 
   constructor() {
     super()
+    this._complete = this._complete.bind(this)
+    this._dataReady = this._dataReady.bind(this)
+    this._dataFailed = this._dataFailed.bind(this)
+    this._DOMLoaded = this._DOMLoaded.bind(this)
+    this._enterFrame = this._enterFrame.bind(this)
+    this._handleSeekChange = this._handleSeekChange.bind(this)
     this._onVisibilityChange = this._onVisibilityChange.bind(this)
     this._mouseEnter = this._mouseEnter.bind(this)
     this._mouseLeave = this._mouseLeave.bind(this)
+    this._switchInstance = this._switchInstance.bind(this)
+
     this.convert = this.convert.bind(this)
+    this.destroy = this.destroy.bind(this)
   }
 
   /**
