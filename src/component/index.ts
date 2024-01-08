@@ -1054,9 +1054,10 @@ export class DotLottiePlayer extends LitElement {
     this._DOMLoaded = this._DOMLoaded.bind(this)
     this._enterFrame = this._enterFrame.bind(this)
     this._handleSeekChange = this._handleSeekChange.bind(this)
-    this._onVisibilityChange = this._onVisibilityChange.bind(this)
+    this._loopComplete = this._loopComplete.bind(this)
     this._mouseEnter = this._mouseEnter.bind(this)
     this._mouseLeave = this._mouseLeave.bind(this)
+    this._onVisibilityChange = this._onVisibilityChange.bind(this)
     this._switchInstance = this._switchInstance.bind(this)
 
     this.convert = this.convert.bind(this)
