@@ -942,8 +942,6 @@ export class DotLottiePlayer extends LitElement {
     if (!this._animations[this._currentAnimation])
       return
 
-    this._removeEventListeners()
-
     // Clear previous animation
     if (this._lottieInstance)
       this._lottieInstance.destroy()
@@ -960,7 +958,8 @@ export class DotLottiePlayer extends LitElement {
         this.multiAnimationSettings[this._currentAnimation].mode === PlayMode.Bounce
     }
 
-    // Add event listeners to new Lottie instance
+    // Remove event listeners to new Lottie instance, and add new
+    this._removeEventListeners()
     this._addEventListeners()
 
     this.dispatchEvent(new CustomEvent(isPrevious ? PlayerEvents.Previous : PlayerEvents.Next))
