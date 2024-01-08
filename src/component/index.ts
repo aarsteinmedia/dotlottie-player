@@ -330,7 +330,8 @@ export class DotLottiePlayer extends LitElement {
       }
 
       // Clear previous animation, if any
-      if (this._lottieInstance) this._lottieInstance.destroy()
+      if (this._lottieInstance)
+        this._lottieInstance.destroy()
 
       // Initialize lottie player and load animation
       this._lottieInstance = Lottie.loadAnimation({
@@ -451,18 +452,18 @@ export class DotLottiePlayer extends LitElement {
     this.dispatchEvent(new CustomEvent(PlayerEvents.Loop))
 
     if (this._isBounce) {
-      this._lottieInstance?.goToAndStop(
+      this._lottieInstance.goToAndStop(
         playDirection === -1 ? firstFrame : totalFrames * 0.99, true
       )
 
-      this._lottieInstance?.setDirection(playDirection * -1 as AnimationDirection)
+      this._lottieInstance.setDirection(playDirection * -1 as AnimationDirection)
 
       return setTimeout(() => {
         this._lottieInstance?.play()
       }, this.intermission)
     }
 
-    this._lottieInstance?.goToAndStop(
+    this._lottieInstance.goToAndStop(
       playDirection === -1 ? totalFrames * 0.99 : firstFrame, true
     )
 
@@ -472,35 +473,37 @@ export class DotLottiePlayer extends LitElement {
   }
 
   private _enterFrame() {
-    if (this._lottieInstance) {
-      const { currentFrame, totalFrames } = this._lottieInstance
-      this._seeker = Math.floor((currentFrame / totalFrames) * 100)
-
-      this.dispatchEvent(
-        new CustomEvent(PlayerEvents.Frame, {
-          detail: {
-            frame: currentFrame,
-            seeker: this._seeker,
-          },
-        }),
-      )
+    if (!this._lottieInstance) {
+      return
     }
+    const { currentFrame, totalFrames } = this._lottieInstance
+    this._seeker = Math.floor((currentFrame / totalFrames) * 100)
+
+    this.dispatchEvent(
+      new CustomEvent(PlayerEvents.Frame, {
+        detail: {
+          frame: currentFrame,
+          seeker: this._seeker,
+        },
+      }),
+    )
   }
 
   private _complete() {
-    if (this._lottieInstance) {
-      const { currentFrame, totalFrames } = this._lottieInstance
-      this._seeker = Math.floor((currentFrame / totalFrames) * 100)
-
-      this.dispatchEvent(
-        new CustomEvent(PlayerEvents.Frame, {
-          detail: {
-            frame: currentFrame,
-            seeker: this._seeker,
-          },
-        }),
-      )
+    if (!this._lottieInstance) {
+      return
     }
+    const { currentFrame, totalFrames } = this._lottieInstance
+    this._seeker = Math.floor((currentFrame / totalFrames) * 100)
+
+    this.dispatchEvent(
+      new CustomEvent(PlayerEvents.Frame, {
+        detail: {
+          frame: currentFrame,
+          seeker: this._seeker,
+        },
+      }),
+    )
   }
 
   private _DOMLoaded() {
@@ -834,10 +837,11 @@ export class DotLottiePlayer extends LitElement {
    * @param { boolean } value
    */
   public setLooping(value: boolean) {
-    if (this._lottieInstance) {
-      this.loop = value
-      this._lottieInstance.setLoop(value)
+    if (!this._lottieInstance) {
+      return
     }
+    this.loop = value
+    this._lottieInstance.setLoop(value)
   }
 
   /**
@@ -845,9 +849,10 @@ export class DotLottiePlayer extends LitElement {
    * @param { AnimationSettings[] } settings
    */
   public setMultiAnimationSettings(settings: AnimationSettings[]) {
-    if (this._lottieInstance) {
-      this.multiAnimationSettings = settings
+    if (!this._lottieInstance) {
+      return
     }
+    this.multiAnimationSettings = settings
   }
 
   /**
@@ -942,36 +947,44 @@ export class DotLottiePlayer extends LitElement {
     if (!this._animations[this._currentAnimation])
       return
 
-    // Clear previous animation
-    if (this._lottieInstance)
-      this._lottieInstance.destroy()
+    try {
+      // Clear previous animation
+      if (this._lottieInstance)
+        this._lottieInstance.destroy()
 
-    // Re-initialize lottie player
-    this._lottieInstance = Lottie.loadAnimation({
-      ...this._getOptions(),
-      animationData: this._animations[this._currentAnimation],
-    })
+      // Re-initialize lottie player
+      this._lottieInstance = Lottie.loadAnimation({
+        ...this._getOptions(),
+        animationData: this._animations[this._currentAnimation],
+      })
 
-    //Check play mode for current animation
-    if (this.multiAnimationSettings?.[this._currentAnimation]?.mode) {
-      this._isBounce =
-        this.multiAnimationSettings[this._currentAnimation].mode === PlayMode.Bounce
+      //Check play mode for current animation
+      if (this.multiAnimationSettings?.[this._currentAnimation]?.mode) {
+        this._isBounce =
+          this.multiAnimationSettings[this._currentAnimation].mode === PlayMode.Bounce
+      }
+
+      // Remove event listeners to new Lottie instance, and add new
+      this._removeEventListeners()
+      this._addEventListeners()
+
+      this.dispatchEvent(new CustomEvent(isPrevious ? PlayerEvents.Previous : PlayerEvents.Next))
+
+      if (this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ?? this.autoplay) {
+        this._lottieInstance?.goToAndPlay(0, true)
+        this.currentState = PlayerState.Playing
+        return
+      }
+
+      this._lottieInstance?.goToAndStop(0, true)
+      this.currentState = PlayerState.Stopped
+    } catch (err) {
+      this._errorMessage = handleErrors(err).message
+
+      this.currentState = PlayerState.Error
+
+      this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
     }
-
-    // Remove event listeners to new Lottie instance, and add new
-    this._removeEventListeners()
-    this._addEventListeners()
-
-    this.dispatchEvent(new CustomEvent(isPrevious ? PlayerEvents.Previous : PlayerEvents.Next))
-
-    if (this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ?? this.autoplay) {
-      this._lottieInstance?.goToAndPlay(0, true)
-      this.currentState = PlayerState.Playing
-      return
-    }
-
-    this._lottieInstance?.goToAndStop(0, true)
-    this.currentState = PlayerState.Stopped
   }
 
   /**
@@ -1013,15 +1026,13 @@ export class DotLottiePlayer extends LitElement {
   }) {
     if (typeCheck || this._isDotLottie)
       return
-    const oldManifest = manifest || this._manifest,
-      newManifest = {
-        ...oldManifest,
-        generator: pkg.name
-      }
 
     return createDotLottie({
       animations: animations || (await getAnimationData(this.src)).animations,
-      manifest: newManifest,
+      manifest: {
+        ...(manifest || this._manifest),
+        generator: pkg.name
+      },
       fileName: `${getFilename(fileName || this.src)}.lottie`,
       shouldDownload
     })
@@ -1101,8 +1112,10 @@ export class DotLottiePlayer extends LitElement {
     }
 
     // Destroy the animation instance
-    if (this._lottieInstance) this._lottieInstance.destroy()
+    if (this._lottieInstance)
+      this._lottieInstance.destroy()
 
+    this._removeEventListeners()
     // Remove the attached Visibility API's change event listener
     document.removeEventListener('visibilitychange', this._onVisibilityChange)
   }
@@ -1276,7 +1289,7 @@ export class DotLottiePlayer extends LitElement {
     return html`
       <figure
         class=${'animation-container main'}
-        data-controls=${this.controls ?? nothing}
+        data-controls=${this.controls ?? false}
         lang=${this.description ? document?.documentElement?.lang : 'en'}
         role="img"
         aria-label=${this.description ?? 'Lottie animation'}

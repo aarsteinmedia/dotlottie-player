@@ -61,10 +61,8 @@ const isProd = process.env.NODE_ENV !== 'development',
   modulePlugins = () => [
     ...plugins(true),
     isProd && summary()
-  ]
-
-export default [
-  {
+  ],
+  types = {
     input: './types/index.d.ts',
     output: {
       file: pkg.types,
@@ -72,7 +70,7 @@ export default [
     },
     plugins: [dts()],
   },
-  {
+  unpkg = {
     input,
     output: {
       extend: true,
@@ -81,14 +79,16 @@ export default [
       name: pkg.name,
     },
     onwarn(warning, warn) {
-      /** In order to use expressions from After Effects this codebase uses eval */
+      /** In order to use expressions from After Effects this codebase uses eval,
+       * so we supress the warning this produces
+       */
       if (warning.code === 'THIS_IS_UNDEFINED' || warning.code === 'EVAL')
         return
       warn(warning)
     },
     plugins: unpkgPlugins(true),
   },
-  {
+  module = {
     input,
     external: ['lit', 'lit/decorators.js', 'lottie-web', 'fflate'],
     output: [
@@ -107,5 +107,10 @@ export default [
       warn(warning)
     },
     plugins: modulePlugins(),
-  },
-]
+  }
+
+export default isProd ? [
+  types,
+  unpkg,
+  module,
+] : unpkg
