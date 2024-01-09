@@ -104,13 +104,13 @@ export class DotLottiePlayer extends LitElement {
    * Whether to play on mouseover
    */
   @property({ type: Boolean })
-  hover?= false
+  hover? = false
 
   /**
    * Intermission
    */
   @property({ type: Number })
-  intermission?= 0
+  intermission? = 0
 
   /**
    * Whether to loop
@@ -596,9 +596,11 @@ export class DotLottiePlayer extends LitElement {
   ) {
     const {
       animations = [],
-      manifest = { animations: [{
-        id: this._identifier,
-      }]}
+      manifest = {
+        animations: [{
+          id: this._identifier,
+        }]
+      }
     } = await getAnimationData(this.src)
     try {
       manifest.generator = pkg.name
