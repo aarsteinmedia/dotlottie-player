@@ -420,13 +420,6 @@ export const addExt = (ext: string, str?: string) => {
   isImage = (asset: LottieAsset) =>
     'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset,
 
-  isInView = (el: Element) => {
-    const { top, left, bottom, right } = el.getBoundingClientRect()
-    return ((top > 0 && top < innerHeight) ||
-      (bottom > 0 && bottom < innerHeight)) &&
-      ((left > 0 && left < innerWidth) || (right > 0 && right < innerWidth))
-  },
-
   isServer = () => 
     !(typeof window !== 'undefined' && window.document),
 
