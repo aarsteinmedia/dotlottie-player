@@ -27,6 +27,7 @@ import {
   getAnimationData,
   getFilename,
   handleErrors,
+  isInView,
   PlayMode,
   PlayerEvents,
   PlayerState,
@@ -362,8 +363,10 @@ export class DotLottiePlayer extends LitElement {
 
     // Start playing if autoplay is enabled
     if (this.autoplay) {
-      if (this.direction === -1) this.seek('99%')
-      this.play()
+      if (this.direction === -1)
+        this.seek('99%')
+      
+      isInView(this) ? this.play() : this._freeze()
     }
   }
 
@@ -545,7 +548,10 @@ export class DotLottiePlayer extends LitElement {
   private _onVisibilityChange() {
     if (document.hidden && this.currentState === PlayerState.Playing) {
       this._freeze()
-    } else if (this.currentState === PlayerState.Frozen) {
+      return
+    }
+
+    if (this.currentState === PlayerState.Frozen) {
       this.play()
     }
   }
@@ -737,17 +743,18 @@ export class DotLottiePlayer extends LitElement {
     ) {
       this._lottieInstance.goToAndPlay(frame, true)
       this.currentState = PlayerState.Playing
-    } else {
-      this._lottieInstance.goToAndStop(frame, true)
-      this._lottieInstance.pause()
+      return
     }
+    this._lottieInstance.goToAndStop(frame, true)
+    this._lottieInstance.pause()
   }
 
   /**
    * Snapshot and download the current frame as SVG
    */
   public snapshot() {
-    if (!this.shadowRoot) return
+    if (!this.shadowRoot)
+      return
 
     // Get SVG element and serialize markup
     const svgElement = this.shadowRoot.querySelector('.animation svg'),
@@ -861,24 +868,25 @@ export class DotLottiePlayer extends LitElement {
    * Toggle playing state
    */
   public togglePlay() {
-    if (!this._lottieInstance) return
+    if (!this._lottieInstance)
+      return
 
     const { currentFrame, playDirection, totalFrames } = this._lottieInstance
     if (this.currentState === PlayerState.Playing) {
       return this.pause()
     }
-    if (this.currentState === PlayerState.Completed) {
-      this.currentState = PlayerState.Playing
-      if (this._isBounce) {
-        this.setDirection(playDirection * -1 as AnimationDirection)
-        return this._lottieInstance.goToAndPlay(currentFrame, true)
-      }
-      if (playDirection === -1) {
-        return this._lottieInstance.goToAndPlay(totalFrames, true)
-      }
-      return this._lottieInstance.goToAndPlay(0, true)
+    if (this.currentState !== PlayerState.Completed) {
+      return this.play()
     }
-    return this.play()
+    this.currentState = PlayerState.Playing
+    if (this._isBounce) {
+      this.setDirection(playDirection * -1 as AnimationDirection)
+      return this._lottieInstance.goToAndPlay(currentFrame, true)
+    }
+    if (playDirection === -1) {
+      return this._lottieInstance.goToAndPlay(totalFrames, true)
+    }
+    return this._lottieInstance.goToAndPlay(0, true)
   }
 
   /**
@@ -898,10 +906,10 @@ export class DotLottiePlayer extends LitElement {
       if (curr.mode === PlayMode.Normal) {
         curr.mode = PlayMode.Bounce
         this._isBounce = true
-      } else {
-        curr.mode = PlayMode.Normal
-        this._isBounce = false
+        return
       }
+      curr.mode = PlayMode.Normal
+      this._isBounce = false
       return
     }
 
@@ -921,9 +929,9 @@ export class DotLottiePlayer extends LitElement {
   private _toggleSettings(flag?: boolean) {
     if (flag === undefined) {
       this._isSettingsOpen = !this._isSettingsOpen
-    } else {
-      this._isSettingsOpen = flag
+      return
     }
+    this._isSettingsOpen = flag
   }
 
   /**
@@ -1083,16 +1091,19 @@ export class DotLottiePlayer extends LitElement {
     if ('IntersectionObserver' in window) {
       this._intersectionObserver =
         new IntersectionObserver(entries => {
-          if (entries[0].isIntersecting) {
-            if (!document.hidden && this.currentState === PlayerState.Frozen) {
+          for (const entry of entries) {
+            if (entry.isIntersecting && !document.hidden && this.currentState === PlayerState.Frozen) {
               this.play()
+              continue
             }
-          } else if (this.currentState === PlayerState.Playing) {
-            this._freeze()
+
+            if (this.currentState === PlayerState.Playing) {
+              this._freeze()
+            }
           }
         })
 
-      this._intersectionObserver.observe(this.container)
+      this._intersectionObserver?.observe(this.container)
     }
 
     // Setup lottie player
