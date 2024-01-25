@@ -11,10 +11,11 @@
   <div style="margin: 40px auto; width: 80%; max-width: 800px;">
     <h1>DotLottie Player Demo</h1>
     <dotlottie-player
+      autoplay
       controls
-      src="./assets/bulb.lottie"
+      src="./assets/thinking.lottie"
     ></dotlottie-player>
-    <!-- <button onclick="dl()">Kombiner animasjoner, og last ned</button> -->
+    <button onclick="dl()">Kombiner animasjoner, og last ned</button>
     <!-- <button onclick="cl()">Konverter animasjoner, og last ned</button> -->
   </div>
   <script defer src="./dist/index.js"></script>
@@ -24,11 +25,11 @@
         if (player) {
           await player.addAnimation([
             {
-              id: 'bulb',
-              url: '/assets/intro.json'
+              id: 'waving',
+              url: './assets/waving.lottie'
             }
           ],
-          'menuAnimation-intro.lottie')
+          'waving-thinking.lottie')
         }
         // if (dotLottiePlayer) {
         //   await dotLottiePlayer().addAnimation([

@@ -61,6 +61,7 @@ export declare class DotLottiePlayer extends LitElement {
     seek(value: number | string): void;
     snapshot(): string | undefined;
     setSubframe(value: boolean): void;
+    setCount(value: number): void;
     private _freeze;
     reload(): Promise<void>;
     setSpeed(value?: number): void;
