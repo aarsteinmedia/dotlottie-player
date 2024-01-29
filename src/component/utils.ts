@@ -165,6 +165,34 @@ export const addExt = (ext: string, str?: string) => {
     }
   },
 
+  createJSON = ({
+    animation,
+    fileName,
+    shouldDownload
+  }: {
+    animation?: LottieJSON
+    fileName?: string
+    shouldDownload?: boolean
+  }) => {
+    try {
+      if (!animation) {
+        throw new Error(
+          'Missing or malformed required parameter(s):\n - animation\n\''
+        )
+      }
+
+      const name = addExt('json', fileName) || `${useId()}.json`,
+        jsonString = JSON.stringify(animation)
+      return shouldDownload ?
+        download(jsonString, {
+          name,
+          mimeType: 'application/json'
+        }) : jsonString
+    } catch(err) {
+      console.error(`❌ ${handleErrors(err).message}`)
+    }
+  },
+
   /**
    * Download file, either SVG or dotLottie.
    * @param { string } data The data to be downloaded

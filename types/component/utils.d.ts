@@ -38,7 +38,11 @@ export declare const addExt: (ext: string, str?: string) => string | undefined, 
     manifest: LottieManifest;
     fileName?: string | undefined;
     shouldDownload?: boolean | undefined;
-}) => Promise<void | ArrayBuffer>, download: (data: string | ArrayBuffer, options?: {
+}) => Promise<void | ArrayBuffer>, createJSON: ({ animation, fileName, shouldDownload }: {
+    animation?: LottieJSON | undefined;
+    fileName?: string | undefined;
+    shouldDownload?: boolean | undefined;
+}) => string | void, download: (data: string | ArrayBuffer, options?: {
     name: string;
     mimeType: string;
 }) => void, fileToBase64: (url: string) => Promise<string>, frameOutput: (frame?: number) => string, getAnimationData: (input: unknown) => Promise<{

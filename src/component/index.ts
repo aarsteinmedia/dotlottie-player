@@ -22,6 +22,7 @@ import Lottie, {
 import {
   aspectRatio,
   createDotLottie,
+  createJSON,
   download,
   frameOutput,
   getAnimationData,
@@ -511,6 +512,11 @@ export class DotLottiePlayer extends LitElement {
     if (!this._lottieInstance) {
       return
     }
+
+    if (this._animations.length > 1 && this.multiAnimationSettings?.[this._currentAnimation + 1]?.autoplay) {
+      return this.next()
+    }
+
     const { currentFrame, totalFrames } = this._lottieInstance
     this._seeker = Math.floor((currentFrame / totalFrames) * 100)
 
@@ -1046,28 +1052,36 @@ export class DotLottiePlayer extends LitElement {
     typeCheck,
     manifest,
     animations,
+    src,
     fileName,
     shouldDownload = true
   }: {
     /** External type safety */
-    typeCheck?: boolean,
+    typeCheck?: boolean
 
     /** Externally added manifest */
-    manifest?: LottieManifest,
+    manifest?: LottieManifest
 
     /** Externally added animations */
-    animations?: LottieJSON[],
+    animations?: LottieJSON[]
 
-    fileName?: string,
+    src?: string
+
+    fileName?: string
 
     /** Whether to trigger a download in the browser. Defaults to true */
     shouldDownload?: boolean
   }) {
-    if (typeCheck || this._isDotLottie)
-      return
+    if (typeCheck || this._isDotLottie) {
+      return createJSON({
+        animation: (await getAnimationData(src || this.src))?.animations?.[0],
+        fileName: `${getFilename(fileName || this.src)}.json`,
+        shouldDownload
+      })
+    }
 
     return createDotLottie({
-      animations: animations || (await getAnimationData(this.src)).animations,
+      animations: animations || (await getAnimationData(this.src))?.animations,
       manifest: {
         ...(manifest || this._manifest),
         generator: pkg.name
