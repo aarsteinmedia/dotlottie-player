@@ -71,15 +71,37 @@ If you want to combine multiple animations in one single dotLottie file you can 
 
 ```javascript
 const lottiePlayer = document.querySelector('dotlottie-player')
-const combineAnimations = async () => {
-  lottiePlayer?.addAnimation([
+(async () => {
+  await lottiePlayer?.addAnimation([
     { id: 'animation_1', url: '/url/to/animation_1.lottie' },
     { id: 'animation_2', url: '/url/to/animation_2.json', direction: -1, speed: 2 }
   ])
-} 
+}()) 
+```
+
+You can also use this method independent of any Lottie player on the page, as long as the script is loaded, of course.
+
+```javascript
+(async () => {
+  await dotLottiePlayer().addAnimation([
+    { id: 'animation_1', url: '/path/to/animation_1.lottie' },
+    { id: 'animation_2', url: '/path/to/animation_2.json', direction: -1, speed: 2 }
+  ])
+}())
 ```
 
 The new file wil automatically load the first animation when initialized. You can toggle between animations with the `next()` and `prev()` methods, or you can use the navigation buttons in the controls.
+
+If you add `multiAnimationSettings` to the markup you can control the playback of multiple animations. In the example below the first animation will play once, and then the next animation will loop:
+
+```xml
+<dotlottie-player
+  subframe=""
+  src="/path/to/combined-animations.lottie"
+  multiAnimationSettings='[{"autplay": true}, {"autoplay": true, "loop": true}]'
+>
+</dotlottie-player>  
+```
 
 ### Angular
 
