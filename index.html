@@ -13,7 +13,7 @@
     <dotlottie-player
       autoplay
       controls
-      src="./assets/thinking.lottie"
+      src="./assets/am.lottie"
     ></dotlottie-player>
     <button onclick="dl()">Kombiner animasjoner, og last ned</button>
     <!-- <button onclick="cl()">Konverter animasjoner, og last ned</button> -->
@@ -22,15 +22,17 @@
   <script defer>
     const player = document.getElementsByTagName('dotlottie-player')[0],
       dl = async () => {
-        if (player) {
-          await player.addAnimation([
-            {
-              id: 'waving',
-              url: './assets/waving.lottie'
-            }
-          ],
-          'waving-thinking.lottie')
-        }
+        await dotLottiePlayer().addAnimation([
+          {
+            id: 'bulb',
+            url: './assets/bulb.lottie'
+          },
+          {
+            id: 'menuAnimation',
+            url: './assets/menuAnimation.lottie'
+          }
+        ],
+        'bulb-menuAnimation.lottie')
         // if (dotLottiePlayer) {
         //   await dotLottiePlayer().addAnimation([
         //     {

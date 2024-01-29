@@ -617,14 +617,16 @@ export class DotLottiePlayer extends LitElement {
     fileName?: string,
     shouldDownload = true
   ) {
+    // Initialize meta object for animation, with fallbacks for
+    // when the method is called indepenently
     const {
       animations = [],
       manifest = {
-        animations: [{
+        animations: this.src ? [{
           id: this._identifier,
-        }]
+        }] : []
       }
-    } = await getAnimationData(this.src)
+    } = this.src ? await getAnimationData(this.src) : {}
     try {
       manifest.generator = pkg.name
       for (const config of configs) {
