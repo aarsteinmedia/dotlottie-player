@@ -129,12 +129,15 @@ export const addExt = (ext: string, str?: string) => {
             assetId = asset.id || useId(),
             isEncoded = file.startsWith('data:'),
             ext = isEncoded ? getExtFromB64(file) : getExt(file),
+            
             // Check if the asset is already base64-encoded. If not, get path, fetch it, and encode it
             dataURL = isEncoded ? file : await fileToBase64(path ? ((path.endsWith('/') && `${path}${file}`) || `${path}/${file}`) : file)
 
           asset.p = `${assetId}.${ext}`
+          
           // File is embedded, so path is ''
           asset.u = ''
+          
           // File is encoded
           asset.e = 1
 
