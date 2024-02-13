@@ -13,15 +13,15 @@
     <dotlottie-player
       autoplay
       controls
-      src="./assets/404_bulb.lottie"
-      multiAnimationSettings='[{"autoplay": true}, {"autoplay": true, "loop": true}]'
+      src="./assets/404.lottie"
     ></dotlottie-player>
+    <!-- multiAnimationSettings='[{"autoplay": true}, {"autoplay": true, "loop": true}]' -->
     <!-- <button onclick="dl()">Kombiner animasjoner, og last ned</button> -->
     <button onclick="cl()">Konverter animasjoner, og last ned</button>
   </div>
   <script defer src="./dist/index.js"></script>
   <script defer>
-    const //player = document.getElementsByTagName('dotlottie-player')[0],
+    const player = document.getElementsByTagName('dotlottie-player')[0],
       dl = async () => {
         await dotLottiePlayer().addAnimation([
           {
@@ -68,7 +68,13 @@
           })
         }
       }
-    // if (player) {
+    if (player) {
+      player.addEventListener('mouseover', () => {
+        player.pause()
+      })
+      player.addEventListener('mouseout', () => {
+        player.play()
+      })
     //   console.log(player.multiAnimationSettings)
     //   // player.setSpeed(4)
     //   // player.setMultiAnimationSettings(
@@ -81,7 +87,7 @@
     //   //     bounce: true
     //   //   }
     //   // )
-    // }
+    }
   </script>
 </body>
 </html>
