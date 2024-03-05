@@ -523,7 +523,7 @@ export class DotLottiePlayer extends LitElement {
     this.currentState = PlayerState.Completed
 
     this.dispatchEvent(
-      new CustomEvent(PlayerEvents.Frame, {
+      new CustomEvent(PlayerEvents.Complete, {
         detail: {
           frame: currentFrame,
           seeker: this._seeker,
