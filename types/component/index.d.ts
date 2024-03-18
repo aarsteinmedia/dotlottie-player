@@ -3,6 +3,7 @@ import { type AnimationDirection, type AnimationItem, type AnimationSegment, typ
 import { PlayMode, PlayerState } from './utils';
 import type { AnimationSettings, AnimationConfig, Autoplay, Controls, Loop, LottieJSON, LottieManifest, ObjectFit, PreserveAspectRatio, Subframe } from './types';
 export declare class DotLottiePlayer extends LitElement {
+    animateOnScroll?: boolean;
     autoplay?: Autoplay;
     background?: string;
     controls?: Controls;
@@ -37,6 +38,7 @@ export declare class DotLottiePlayer extends LitElement {
     private _animations;
     private _playerState;
     private _getOptions;
+    private _addIntersectionObserver;
     load(src: string | LottieJSON): Promise<void>;
     getManifest(): LottieManifest;
     private _addEventListeners;
@@ -47,9 +49,11 @@ export declare class DotLottiePlayer extends LitElement {
     private _DOMLoaded;
     private _dataReady;
     private _dataFailed;
+    private _handleWindowBlur;
     private _mouseEnter;
     private _mouseLeave;
     private _onVisibilityChange;
+    private _handleScroll;
     private _handleSeekChange;
     private _isLottie;
     addAnimation(configs: AnimationConfig[], fileName?: string, shouldDownload?: boolean): Promise<void | ArrayBuffer>;
