@@ -646,10 +646,11 @@ export class DotLottiePlayer extends LitElement {
     }
     if (this._playerState.visible) {
       const adjustedScroll = this._playerState.scrollY > innerHeight ?
-        scrollY - this._playerState.scrollY : scrollY,
+        scrollY - (this._playerState.scrollY - (innerHeight - 80)) : scrollY,
         clampedScroll = Math.min(Math.max(adjustedScroll / 2, 1), this._lottieInstance.totalFrames * 2),
         roundedScroll =
           Math.round(clampedScroll / 2)
+
       requestAnimationFrame(() => {
         if (roundedScroll < (this._lottieInstance?.totalFrames ?? 0)) {
           this.currentState = PlayerState.Playing
@@ -1232,7 +1233,7 @@ export class DotLottiePlayer extends LitElement {
     // Get vertical position of element
     if (this.container) {
       this._playerState.scrollY =
-        Math.round(this.container.getBoundingClientRect().top) // - document.documentElement.scrollTop
+        Math.round(this.container.getBoundingClientRect().top)
     }
 
     // Setup lottie player
