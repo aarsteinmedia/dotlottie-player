@@ -37,6 +37,7 @@ import pkg from '../../package.json'
 
 import type {
   AnimationSettings,
+  AnimateOnScroll,
   AnimationConfig,
   Autoplay,
   Controls,
@@ -63,7 +64,7 @@ export class DotLottiePlayer extends LitElement {
    * Whether to trigger next frame with scroll
    */
   @property({ type: Boolean })
-  animateOnScroll?: boolean = false
+  animateOnScroll?: AnimateOnScroll = false
 
   /**
    * Autoplay
