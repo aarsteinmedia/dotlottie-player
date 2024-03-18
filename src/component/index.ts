@@ -1232,7 +1232,7 @@ export class DotLottiePlayer extends LitElement {
     // Get vertical position of element
     if (this.container) {
       this._playerState.scrollY =
-        Math.round(this.container.getBoundingClientRect().top + document.documentElement.scrollTop)
+        Math.round(this.container.getBoundingClientRect().top) // - document.documentElement.scrollTop
     }
 
     // Setup lottie player
