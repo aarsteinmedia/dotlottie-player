@@ -28,6 +28,7 @@ import {
   getAnimationData,
   getFilename,
   handleErrors,
+  isServer,
   PlayMode,
   PlayerEvents,
   PlayerState,
@@ -331,6 +332,9 @@ export class DotLottiePlayer extends LitElement {
           }
           if (!this.animateOnScroll && this.currentState === PlayerState.Frozen) {
             this.play()
+          }
+          if (!this._playerState.scrollY) {
+            this._playerState.scrollY = scrollY
           }
           this._playerState.visible = true
         }
@@ -644,12 +648,15 @@ export class DotLottiePlayer extends LitElement {
     if (!this.animateOnScroll || !this._lottieInstance) {
       return
     }
+    if (isServer()) {
+      console.warn('DotLottie: Scroll animations might not work properly in a Server Side Rendering context. Try to wrap this in a client component.')
+    }
     if (this._playerState.visible) {
-      const adjustedScroll = this._playerState.scrollY > innerHeight ?
-        scrollY - (this._playerState.scrollY - (innerHeight - 80)) : scrollY,
-        clampedScroll = Math.min(Math.max(adjustedScroll / 2, 1), this._lottieInstance.totalFrames * 2),
-        roundedScroll =
-          Math.round(clampedScroll / 2)
+      const adjustedScroll =
+        scrollY > this._playerState.scrollY ? scrollY - this._playerState.scrollY :
+          this._playerState.scrollY - scrollY,
+        clampedScroll = Math.min(Math.max(adjustedScroll / 3, 1), this._lottieInstance.totalFrames * 3),
+        roundedScroll = (clampedScroll / 3)
 
       requestAnimationFrame(() => {
         if (roundedScroll < (this._lottieInstance?.totalFrames ?? 0)) {
@@ -1229,12 +1236,6 @@ export class DotLottiePlayer extends LitElement {
   protected override async firstUpdated() {
     // Add intersection observer for detecting component being out-of-view.
     this._addIntersectionObserver()
-
-    // Get vertical position of element
-    if (this.container) {
-      this._playerState.scrollY =
-        Math.round(this.container.getBoundingClientRect().top)
-    }
 
     // Setup lottie player
     if (this.src) {
