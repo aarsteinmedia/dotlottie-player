@@ -31,7 +31,7 @@
   "scripts": {
     "build": "rimraf ./dist && rollup -c",
     "build:types": "rimraf ./types && tsc",
-    "build:cem": "npx cem analyze --config 'cem.config.mjs'",
+    "build:cem": "npx cem analyze --config cem.config.mjs",
     "prod": "pnpm build:types && pnpm build && pnpm build:cem",
     "dev": "rollup -c -w --environment NODE_ENV:development",
     "lint": "tsc && eslint . --ext .ts",
@@ -46,7 +46,7 @@
     "@types/react": ">= 16.0.0"
   },
   "devDependencies": {
-    "@custom-elements-manifest/analyzer": "^0.6.9",
+    "@custom-elements-manifest/analyzer": "^0.9.4",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
