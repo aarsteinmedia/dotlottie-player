@@ -238,13 +238,13 @@ export class DotLottiePlayer extends LitElement {
     scrollY: number
     scrollTimeout: NodeJS.Timeout | null
   } = {
-    prev: PlayerState.Loading,
-    count: 0,
-    loaded: false,
-    visible: false,
-    scrollY: 0,
-    scrollTimeout: null
-  }
+      prev: PlayerState.Loading,
+      count: 0,
+      loaded: false,
+      visible: false,
+      scrollY: 0,
+      scrollTimeout: null
+    }
 
   /**
    * Get options from props
@@ -1337,7 +1337,7 @@ export class DotLottiePlayer extends LitElement {
             min="0"
             max="100"
             step="1"
-            value=${this._seeker}
+            .value=${this._seeker}
             @change=${this._handleSeekChange}
             @mousedown=${this._freeze}
             aria-valuemin="0"
@@ -1349,7 +1349,7 @@ export class DotLottiePlayer extends LitElement {
           />
           <progress
             max="100"
-            value=${this._seeker}
+            .value=${this._seeker}
           >
           </progress>
         </form>

@@ -1,6 +1,6 @@
 {
-  "name": "@aarsteinmedia/dotlottie-player",
-  "version": "2.5.4",
+  "name": "dotlottie-player",
+  "version": "2.5.6",
   "description": "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player",
   "exports": {
     ".": {
@@ -31,7 +31,7 @@
   "scripts": {
     "build": "rimraf ./dist && rollup -c",
     "build:types": "rimraf ./types && tsc",
-    "build:cem": "npx cem analyze --config 'cem.config.mjs'",
+    "build:cem": "npx cem analyze --config cem.config.mjs",
     "prod": "pnpm build:types && pnpm build && pnpm build:cem",
     "dev": "rollup -c -w --environment NODE_ENV:development",
     "lint": "tsc && eslint . --ext .ts",
@@ -39,29 +39,29 @@
   },
   "dependencies": {
     "fflate": "^0.8.2",
-    "lit": "^2.8.0",
+    "lit": "^3.1.2",
     "lottie-web": "^5.12.2"
   },
   "peerDependencies": {
     "@types/react": ">= 16.0.0"
   },
   "devDependencies": {
-    "@custom-elements-manifest/analyzer": "^0.6.9",
+    "@custom-elements-manifest/analyzer": "^0.9.4",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.5",
     "@swc/core": "^1.4.8",
     "@types/node": "^20.11.30",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
     "autoprefixer": "^10.4.18",
-    "esbuild-sass-plugin": "^2.16.1",
+    "esbuild-sass-plugin": "^3.2.0",
     "eslint": "^8.57.0",
     "eslint-plugin-lit": "^1.11.0",
     "postcss-flexbugs-fixes": "^5.0.2",
     "rimraf": "^5.0.5",
-    "rollup": "^3.29.4",
+    "rollup": "^4.13.0",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-html-literals": "^1.1.8",
     "rollup-plugin-livereload": "^2.0.5",
@@ -69,9 +69,9 @@
     "rollup-plugin-postcss-lit": "^2.1.0",
     "rollup-plugin-serve": "^1.1.1",
     "rollup-plugin-summary": "^2.0.0",
-    "rollup-plugin-swc3": "^0.9.1",
+    "rollup-plugin-swc3": "^0.11.0",
     "sass": "^1.72.0",
-    "ts-lit-plugin": "^1.2.1",
+    "ts-lit-plugin": "^2.0.2",
     "typescript": "^5.4.2"
   },
   "customElements": "dist/custom-elements.json",
