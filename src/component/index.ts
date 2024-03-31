@@ -501,15 +501,17 @@ export class DotLottiePlayer extends LitElement {
     }
 
     const {
-      firstFrame,
+      // firstFrame,
       totalFrames,
       playDirection,
-    } = this._lottieInstance
+    } = this._lottieInstance,
+      inPoint = this.segment ? this.segment[0] : 0,
+      outPoint = this.segment ? this.segment[0] : totalFrames
 
     if (this.count) {
 
       this._isBounce ?
-        this._playerState.count += 1 : this._playerState.count += 0.5
+        this._playerState.count += 0.5 : this._playerState.count += 1
 
       if (this._playerState.count >= this.count) {
         this.setLooping(false)
@@ -525,7 +527,7 @@ export class DotLottiePlayer extends LitElement {
 
     if (this._isBounce) {
       this._lottieInstance.goToAndStop(
-        playDirection === -1 ? firstFrame : totalFrames * 0.99, true
+        playDirection === -1 ? inPoint : outPoint * 0.99, true
       )
 
       this._lottieInstance.setDirection(playDirection * -1 as AnimationDirection)
@@ -536,7 +538,7 @@ export class DotLottiePlayer extends LitElement {
     }
 
     this._lottieInstance.goToAndStop(
-      playDirection === -1 ? totalFrames * 0.99 : firstFrame, true
+      playDirection === -1 ? outPoint * 0.99 : inPoint, true
     )
 
     return setTimeout(() => {
