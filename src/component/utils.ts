@@ -360,7 +360,7 @@ export const addExt = (ext: string, str?: string) => {
   getFilename = (src: string, keepExt?: boolean) => {
     // Because the regex strips all special characters, we need to extract the file extension, so we can add it later if we need it
     const ext = getExt(src)
-    return `${src.split('/').pop()?.replace(/\.[^.]*$/, '').replace(/\W+/g, '')}${keepExt && ext ? `.${ext}` : ''}` //.toLowerCase()
+    return `${src.split('/').pop()?.replace(/\.[^.]*$/, '').replace(/\W+/g, '-')}${keepExt && ext ? `.${ext}` : ''}` //.toLowerCase()
   },
 
   getLottieJSON = async (resp: Response) => {

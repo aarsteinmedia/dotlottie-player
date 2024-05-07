@@ -357,7 +357,7 @@ export class DotLottiePlayer extends LitElement {
     try {
       const { animations, manifest, isDotLottie } =
         await getAnimationData(src)
-
+      
       if (!animations || animations.some(animation => !this._isLottie(animation))) {
         throw new Error('Broken or corrupted file')
       }
