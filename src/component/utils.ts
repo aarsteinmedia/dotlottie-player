@@ -469,7 +469,7 @@ export const addExt = (ext: string, str?: string) => {
 
   prepareString = (str: string) => {
     return str.replace(new RegExp(/"""/, 'g'), '""').replace(/(["'])(.*?)\1/g, (_match, quote: string, content: string) => {
-      const replacedContent = content.replace(/[^\w\s\d.]/g, '')
+      const replacedContent = content.replace(/[^\w\s\d.#]/g, '')
       return `${quote}${replacedContent}${quote}`
     })
   },
