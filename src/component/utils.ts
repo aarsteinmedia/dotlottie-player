@@ -1,3 +1,5 @@
+// import { StringDecoder } from 'string_decoder'
+
 import {
   strFromU8,
   strToU8,
@@ -135,10 +137,10 @@ export const addExt = (ext: string, str?: string) => {
 
           asset.p = `${assetId}.${ext}`
           
-          // File is embedded, so path is ''
+          // Asset is embedded, so path empty string
           asset.u = ''
           
-          // File is encoded
+          // Asset is encoded
           asset.e = 1
 
           dotlottie[`${isAudio(asset) ? 'audio' : 'images'}/${assetId}.${ext}`] =
@@ -343,12 +345,20 @@ export const addExt = (ext: string, str?: string) => {
   getExt = (str?: string) => {
     if (!str || !hasExt(str))
       return
-    return str.split('.').pop()?.toLowerCase()
+    const ext = str.split('.').pop()?.toLowerCase()
+    if (ext === 'jpeg') {
+      return 'jpg'
+    }
+    return ext
   },
 
   getExtFromB64 = (str: string) => {
-    const mime = str.split(':')[1].split(';')[0]
-    return mime.split('/')[1].split('+')[0]
+    const mime = str.split(':')[1].split(';')[0],
+      ext = mime.split('/')[1].split('+')[0]
+    if (ext === 'jpeg') {
+      return 'jpg'
+    }
+    return ext
   },
 
   /**
@@ -370,7 +380,7 @@ export const addExt = (ext: string, str?: string) => {
       toResolve: Promise<void>[] = []
     for (const { id } of manifest.animations) {
       const str = strFromU8(unzipped[`animations/${id}.json`]),
-        lottie: LottieJSON = JSON.parse(str)
+        lottie: LottieJSON = JSON.parse(prepareString(str))
       
       toResolve.push(resolveAssets(unzipped, lottie.assets))
       data.push(lottie)
@@ -456,6 +466,13 @@ export const addExt = (ext: string, str?: string) => {
 
   parseBase64 = (str: string) =>
     str.substring(str.indexOf(',') + 1),
+
+  prepareString = (str: string) => {
+    return str.replace(new RegExp(/"""/, 'g'), '""').replace(/(["'])(.*?)\1/g, (_match, quote: string, content: string) => {
+      const replacedContent = content.replace(/[^\w\s\d.]/g, '')
+      return `${quote}${replacedContent}${quote}`
+    })
+  },
 
   resolveAssets = async (unzipped: Unzipped, assets?: LottieAsset[]) => {
     if (!Array.isArray(assets))

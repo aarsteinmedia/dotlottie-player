@@ -34,14 +34,14 @@ export declare class CustomError extends Error {
     status?: number;
 }
 export declare const addExt: (ext: string, str?: string) => string | undefined, aspectRatio: (objectFit: ObjectFit) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", base64ToU8: (str: string) => Uint8Array, createDotLottie: ({ animations, manifest, fileName, shouldDownload }: {
-    animations?: LottieJSON[] | undefined;
+    animations?: LottieJSON[];
     manifest: LottieManifest;
-    fileName?: string | undefined;
-    shouldDownload?: boolean | undefined;
+    fileName?: string;
+    shouldDownload?: boolean;
 }) => Promise<void | ArrayBuffer>, createJSON: ({ animation, fileName, shouldDownload }: {
-    animation?: LottieJSON | undefined;
-    fileName?: string | undefined;
-    shouldDownload?: boolean | undefined;
+    animation?: LottieJSON;
+    fileName?: string;
+    shouldDownload?: boolean;
 }) => string | void, download: (data: string | ArrayBuffer, options?: {
     name: string;
     mimeType: string;
@@ -55,4 +55,4 @@ export declare const addExt: (ext: string, str?: string) => string | undefined, 
 }>, getManifest: (unzipped: Unzipped) => LottieManifest, getMimeFromExt: (ext?: string) => string, handleErrors: (err: unknown) => {
     message: string;
     status: number;
-}, hasExt: (path?: string) => boolean | "" | undefined, isAudio: (asset: LottieAsset) => boolean, isBase64: (str?: string) => boolean, isImage: (asset: LottieAsset) => boolean, isServer: () => boolean, parseBase64: (str: string) => string, resolveAssets: (unzipped: Unzipped, assets?: LottieAsset[]) => Promise<void>, unzip: (resp: Response) => Promise<Unzipped>, useId: (prefix?: string) => string;
+}, hasExt: (path?: string) => boolean | "" | undefined, isAudio: (asset: LottieAsset) => boolean, isBase64: (str?: string) => boolean, isImage: (asset: LottieAsset) => boolean, isServer: () => boolean, parseBase64: (str: string) => string, prepareString: (str: string) => string, resolveAssets: (unzipped: Unzipped, assets?: LottieAsset[]) => Promise<void>, unzip: (resp: Response) => Promise<Unzipped>, useId: (prefix?: string) => string;

@@ -749,7 +749,6 @@ export class DotLottiePlayer extends LitElement {
         ]
 
         animations?.push(...animationsToAdd)
-
       }
 
       return createDotLottie({
