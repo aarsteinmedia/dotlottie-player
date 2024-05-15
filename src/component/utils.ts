@@ -271,7 +271,11 @@ export const addExt = (ext: string, str?: string) => {
         }
       }
 
-      const result = await fetch(input)
+      const result = await fetch(input, {
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+      })
 
       if (!result.ok) {
         const error = new CustomError(result.statusText)

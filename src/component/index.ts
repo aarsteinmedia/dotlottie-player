@@ -384,7 +384,7 @@ export class DotLottiePlayer extends LitElement {
         this._lottieInstance.destroy()
 
       this.currentState =
-        this.autoplay && !this.animateOnScroll ? PlayerState.Playing : PlayerState.Stopped
+        (this.autoplay || this.multiAnimationSettings?.[this._currentAnimation].autoplay) && !this.animateOnScroll ? PlayerState.Playing : PlayerState.Stopped
 
       // Initialize lottie player and load animation
       this._lottieInstance = Lottie.loadAnimation({
@@ -568,8 +568,14 @@ export class DotLottiePlayer extends LitElement {
       return
     }
 
-    if (this._animations.length > 1 && this.multiAnimationSettings?.[this._currentAnimation + 1]?.autoplay) {
-      return this.next()
+    if (this._animations.length > 1) {
+      if (this.multiAnimationSettings?.[this._currentAnimation + 1]?.autoplay) {
+        return this.next()
+      }
+      if (this.loop && this._currentAnimation === this._animations.length - 1) {
+        this._currentAnimation = 0
+        return this._switchInstance()
+      }
     }
 
     const { currentFrame, totalFrames } = this._lottieInstance
