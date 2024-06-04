@@ -1,5 +1,3 @@
-// import { StringDecoder } from 'string_decoder'
-
 import {
   strFromU8,
   strToU8,
@@ -8,7 +6,6 @@ import {
   type Unzipped,
   type Zippable
 } from 'fflate'
-
 import type {
   LottieAsset,
   LottieJSON,
@@ -54,29 +51,29 @@ export class CustomError extends Error {
 }
 
 export const addExt = (ext: string, str?: string) => {
-  if (!str) return
-  if (getExt(str)) {
-    if (getExt(str) === ext)
-      return str
+    if (!str) {return}
+    if (getExt(str)) {
+      if (getExt(str) === ext)
+      {return str}
 
-    return `${getFilename(str)}.${ext}`
-  }
-  return `${str}.${ext}`
-},
+      return `${getFilename(str)}.${ext}`
+    }
+    return `${str}.${ext}`
+  },
 
   aspectRatio = (objectFit: ObjectFit) => {
     switch (objectFit) {
-      case 'contain':
-      case 'scale-down':
-        return 'xMidYMid meet';
-      case 'cover':
-        return 'xMidYMid slice';
-      case 'fill':
-        return 'none';
-      case 'none':
-        return 'xMinYMin slice';
-      default:
-        return 'xMidYMid meet';
+    case 'contain':
+    case 'scale-down':
+      return 'xMidYMid meet'
+    case 'cover':
+      return 'xMidYMid slice'
+    case 'fill':
+      return 'none'
+    case 'none':
+      return 'xMinYMin slice'
+    default:
+      return 'xMidYMid meet'
     }
   },
   /**
@@ -107,8 +104,8 @@ export const addExt = (ext: string, str?: string) => {
       if (!animations?.length || !manifest) {
         throw new Error(
           `Missing or malformed required parameter(s):\n ${
-            !animations?.length ? '- animations\n' : ''} ${
-              !manifest ? '- manifest \n' : ''}`
+            animations?.length ? '- manifest\n' : ''} ${
+            manifest ? '- animations\n' : ''}`
         )
       }
 
@@ -131,15 +128,15 @@ export const addExt = (ext: string, str?: string) => {
             assetId = asset.id || useId(),
             isEncoded = file.startsWith('data:'),
             ext = isEncoded ? getExtFromB64(file) : getExt(file),
-            
+
             // Check if the asset is already base64-encoded. If not, get path, fetch it, and encode it
             dataURL = isEncoded ? file : await fileToBase64(path ? ((path.endsWith('/') && `${path}${file}`) || `${path}/${file}`) : file)
 
           asset.p = `${assetId}.${ext}`
-          
+
           // Asset is embedded, so path empty string
           asset.u = ''
-          
+
           // Asset is encoded
           asset.e = 1
 
@@ -211,7 +208,7 @@ export const addExt = (ext: string, str?: string) => {
     }
   ) => {
     const blob = new Blob([data], { type: options?.mimeType }),
-    
+
       fileName = options?.name || useId(),
       dataURL = URL.createObjectURL(blob),
       link = document.createElement('a')
@@ -306,7 +303,7 @@ export const addExt = (ext: string, str?: string) => {
             manifest: undefined,
             isDotLottie: false
           }
-        } catch(e) { 
+        } catch(e) {
           console.warn(e)
         }
       }
@@ -348,7 +345,7 @@ export const addExt = (ext: string, str?: string) => {
    */
   getExt = (str?: string) => {
     if (!str || !hasExt(str))
-      return
+    {return}
     const ext = str.split('.').pop()?.toLowerCase()
     if (ext === 'jpeg') {
       return 'jpg'
@@ -374,7 +371,7 @@ export const addExt = (ext: string, str?: string) => {
   getFilename = (src: string, keepExt?: boolean) => {
     // Because the regex strips all special characters, we need to extract the file extension, so we can add it later if we need it
     const ext = getExt(src)
-    return `${src.split('/').pop()?.replace(/\.[^.]*$/, '').replace(/\W+/g, '-')}${keepExt && ext ? `.${ext}` : ''}` //.toLowerCase()
+    return `${src.split('/').pop()?.replace(/\.[^.]*$/, '').replace(/\W+/g, '-')}${keepExt && ext ? `.${ext}` : ''}` // .toLowerCase()
   },
 
   getLottieJSON = async (resp: Response) => {
@@ -385,7 +382,7 @@ export const addExt = (ext: string, str?: string) => {
     for (const { id } of manifest.animations) {
       const str = strFromU8(unzipped[`animations/${id}.json`]),
         lottie: LottieJSON = JSON.parse(prepareString(str))
-      
+
       toResolve.push(resolveAssets(unzipped, lottie.assets))
       data.push(lottie)
     }
@@ -403,31 +400,31 @@ export const addExt = (ext: string, str?: string) => {
       manifest: LottieManifest = JSON.parse(file)
 
     if (!('animations' in manifest))
-      throw new Error('Manifest not found')
+    {throw new Error('Manifest not found')}
     if (!manifest.animations.length)
-      throw new Error('No animations listed in manifest')
+    {throw new Error('No animations listed in manifest')}
 
     return manifest
   },
 
   getMimeFromExt = (ext?: string) => {
     switch (ext) {
-      case 'svg':
-      case 'svg+xml':
-        return 'image/svg+xml'
-      case 'jpg':
-      case 'jpeg':
-        return 'image/jpeg'
-      case 'png':
-      case 'gif':
-      case 'webp':
-        return `image/${ext}`
-      case 'mp3':
-      case 'mpeg':
-      case 'wav':
-        return `audio/${ext}`
-      default:
-        return ''
+    case 'svg':
+    case 'svg+xml':
+      return 'image/svg+xml'
+    case 'jpg':
+    case 'jpeg':
+      return 'image/jpeg'
+    case 'png':
+    case 'gif':
+    case 'webp':
+      return `image/${ext}`
+    case 'mp3':
+    case 'mpeg':
+    case 'wav':
+      return `audio/${ext}`
+    default:
+      return ''
     }
   },
 
@@ -457,7 +454,7 @@ export const addExt = (ext: string, str?: string) => {
 
   isBase64 = (str?: string) => {
     if (!str)
-      return false
+    {return false}
     const regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
     return regex.test(parseBase64(str))
   },
@@ -465,34 +462,32 @@ export const addExt = (ext: string, str?: string) => {
   isImage = (asset: LottieAsset) =>
     'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset,
 
-  isServer = () => 
+  isServer = () =>
     !(typeof window !== 'undefined' && window.document),
 
   parseBase64 = (str: string) =>
     str.substring(str.indexOf(',') + 1),
 
-  prepareString = (str: string) => {
-    return str.replace(new RegExp(/"""/, 'g'), '""').replace(/(["'])(.*?)\1/g, (_match, quote: string, content: string) => {
-      const replacedContent = content.replace(/[^\w\s\d.#]/g, '')
-      return `${quote}${replacedContent}${quote}`
-    })
-  },
+  prepareString = (str: string) => str.replace(new RegExp(/"""/, 'g'), '""').replace(/(["'])(.*?)\1/g, (_match, quote: string, content: string) => {
+    const replacedContent = content.replace(/[^\w\s\d.#]/g, '')
+    return `${quote}${replacedContent}${quote}`
+  }),
 
   resolveAssets = async (unzipped: Unzipped, assets?: LottieAsset[]) => {
     if (!Array.isArray(assets))
-      return
+    {return}
 
     const toResolve: Promise<void>[] = []
 
     for (const asset of assets) {
       if (!isAudio(asset) && !isImage(asset))
-        continue
+      {continue}
 
       const type = isImage(asset) ? 'images' : 'audio',
         u8 = unzipped?.[`${type}/${asset.p}`]
 
       if (!u8)
-        continue
+      {continue}
 
       toResolve.push(
         new Promise<void>(resolveAsset => {
@@ -520,7 +515,7 @@ export const addExt = (ext: string, str?: string) => {
   ): Promise<Unzipped> => {
     const u8 = new Uint8Array(await resp.arrayBuffer()),
       unzipped = await new Promise<Unzipped>((resolve, reject) => {
-        unzipOrg(u8, /*{ filter },*/ (err, file) => {
+        unzipOrg(u8, /* { filter }, */ (err, file) => {
           if (err) {
             reject(err)
           }
@@ -531,8 +526,6 @@ export const addExt = (ext: string, str?: string) => {
   },
 
   useId = (prefix?: string) => {
-    const s4 = () => {
-      return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-    }
+    const s4 = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
     return (`${prefix ?? `:${s4()}`}-${s4()}`)
   }

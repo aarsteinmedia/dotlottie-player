@@ -11,9 +11,7 @@ import replace from '@rollup/plugin-replace'
 import serve from 'rollup-plugin-serve'
 import summary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
-
 import template from 'rollup-plugin-html-literals'
-
 import pkg from './package.json' assert { type: 'json' }
 
 const isProd = process.env.NODE_ENV !== 'development',
@@ -83,7 +81,7 @@ const isProd = process.env.NODE_ENV !== 'development',
        * so we supress the warning this produces
        */
       if (warning.code === 'THIS_IS_UNDEFINED' || warning.code === 'EVAL')
-        return
+      {return}
       warn(warning)
     },
     plugins: unpkgPlugins(true),
@@ -103,7 +101,7 @@ const isProd = process.env.NODE_ENV !== 'development',
     ],
     onwarn(warning, warn) {
       if (warning.code === 'THIS_IS_UNDEFINED')
-        return
+      {return}
       warn(warning)
     },
     plugins: modulePlugins(),

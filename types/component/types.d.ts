@@ -1,7 +1,7 @@
 import type { AnimationDirection } from 'lottie-web';
 import type { CSSProperties, RefObject } from 'react';
-import type { DotLottiePlayer } from '.';
 import type { PlayMode } from './utils';
+import type { DotLottiePlayer } from '.';
 type BoolInt = 0 | 1;
 interface Shape {
     a: ShapeData;
