@@ -11,24 +11,42 @@
   <div style="margin: 40px auto; width: 80%; max-width: 800px;">
     <h1>DotLottie Player Demo</h1>
     <dotlottie-player
-      class="lottie-element"
-      autoplay=""
-      controls=""
-      description=""
-      direction="1" 
-      ata-direction="1"
-      data-mouseover="false"
-      data-mouseout="stop"
-      data-click="false"
-      data-scroll="false"
-      data-selector="{&quot;id&quot;:null,&quot;exclude&quot;:false}"
-      data-once="false" mode="normal"
-      objectfit="contain"
-      renderer="svg"
-      speed="1"
       subframe=""
-      src="assets/wp-banner-pro.lottie"
-    ></dotlottie-player>
+      direction="1"
+      data-direction="1"
+      data-mouseover="1"
+      data-mouseout="stop"
+      data-click=""
+      data-scroll=""
+      data-delay=""
+      data-once=""
+      objectfit="cover"
+      speed="1"
+      src="assets/Zen_WC_full-1.lottie"
+      description="AM LottiePlayer animation">
+    </dotlottie-player>
+
+    <dotlottie-player
+      subframe=""
+      mode="normal"
+      multianimationsettings="[]"
+      renderer="svg"
+      direction="1"
+      data-direction="1"
+      data-mouseover="1"
+      data-mouseout="stop"
+      data-click=""
+      data-selector="{&quot;id&quot;:&quot;&quot;,&quot;exclude&quot;:false}"
+      data-scroll=""
+      data-delay=""
+      data-once=""
+      objectfit="contain"
+      speed="1"
+      src="assets/Zen_WC_full-1.lottie"
+      description="AM LottiePlayer animation"
+      segment=""
+      simple="">
+    </dotlottie-player>
     <!-- multiAnimationSettings='[{"autoplay": true}, {"autoplay": true, "loop": true}]' -->
     <!-- <button onclick="dl()">Kombiner animasjoner, og last ned</button> -->
     <!-- <button onclick="cl()">Konverter animasjoner, og last ned</button> -->
@@ -53,6 +71,7 @@
     ></dotlottie-player> -->
   </div>
   <script defer src="./dist/index.js"></script>
+  <script defer src="am-frontend.min.js"></script>
   <script defer>
     const player = document.getElementsByTagName('dotlottie-player')[0],
       dl = async () => {

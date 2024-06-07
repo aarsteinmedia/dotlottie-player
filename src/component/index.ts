@@ -490,8 +490,8 @@ export class DotLottiePlayer extends LitElement {
       this.container.addEventListener('mouseleave', this._mouseLeave)
     }
 
-    addEventListener('focus', this._handleWindowBlur, { passive: true, capture: true })
-    addEventListener('blur', this._handleWindowBlur, { passive: true, capture: true })
+    addEventListener('focus', this._handleWindowBlur, { passive: true, capture: false })
+    addEventListener('blur', this._handleWindowBlur, { passive: true, capture: false })
 
     if (this.animateOnScroll) {
       addEventListener('scroll', this._handleScroll, { passive: true, capture: true })

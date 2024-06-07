@@ -9,7 +9,7 @@ import postcss from 'rollup-plugin-postcss'
 import postcssLit from 'rollup-plugin-postcss-lit'
 import replace from '@rollup/plugin-replace'
 import serve from 'rollup-plugin-serve'
-import summary from 'rollup-plugin-summary'
+import * as rollupPluginSummary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
 import template from 'rollup-plugin-html-literals'
 import pkg from './package.json' assert { type: 'json' }
@@ -39,8 +39,6 @@ const isProd = process.env.NODE_ENV !== 'development',
     }),
     nodeResolve({
       extensions: ['.ts'],
-      jsnext: true,
-      module: true,
       preferBuiltins,
     }),
     commonjs(),
@@ -49,7 +47,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   unpkgPlugins = () => [
     ...plugins(),
     isProd && minify(),
-    isProd && summary(),
+    isProd && rollupPluginSummary.default(),
     !isProd &&
       serve({
         open: true,
@@ -58,7 +56,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   ],
   modulePlugins = () => [
     ...plugins(true),
-    isProd && summary()
+    isProd && rollupPluginSummary.default(),
   ],
   types = {
     input: './types/index.d.ts',
@@ -80,11 +78,12 @@ const isProd = process.env.NODE_ENV !== 'development',
       /** In order to use expressions from After Effects this codebase uses eval,
        * so we supress the warning this produces
        */
-      if (warning.code === 'THIS_IS_UNDEFINED' || warning.code === 'EVAL')
-      {return}
+      if (warning.code === 'THIS_IS_UNDEFINED' || warning.code === 'EVAL') {
+        return
+      }
       warn(warning)
     },
-    plugins: unpkgPlugins(true),
+    plugins: unpkgPlugins(),
   },
   module = {
     input,
@@ -100,8 +99,9 @@ const isProd = process.env.NODE_ENV !== 'development',
       },
     ],
     onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED')
-      {return}
+      if (warning.code === 'THIS_IS_UNDEFINED') {
+        return
+      }
       warn(warning)
     },
     plugins: modulePlugins(),
