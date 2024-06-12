@@ -1,7 +1,7 @@
 import { DotLottiePlayer } from './component'
 
 export { DotLottiePlayer }
-export { PlayMode, PlayerEvents, PlayerState } from './component/utils'
+export { PlayMode, PlayerEvents, PlayerState } from './utils'
 
 /**
  * Expose DotLottiePlayer class as global variable

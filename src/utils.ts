@@ -145,7 +145,6 @@ export const addExt = (ext: string, str?: string) => {
             base64ToU8(dataURL),
             { level: 9 } // <- Level of compression
           ]
-
         }
 
         dotlottie[`animations/${manifest.animations[i].id}.json`] =
@@ -347,18 +346,12 @@ export const addExt = (ext: string, str?: string) => {
     if (!str || !hasExt(str))
     {return}
     const ext = str.split('.').pop()?.toLowerCase()
-    if (ext === 'jpeg') {
-      return 'jpg'
-    }
     return ext
   },
 
   getExtFromB64 = (str: string) => {
     const mime = str.split(':')[1].split(';')[0],
       ext = mime.split('/')[1].split('+')[0]
-    if (ext === 'jpeg') {
-      return 'jpg'
-    }
     return ext
   },
 
@@ -474,20 +467,23 @@ export const addExt = (ext: string, str?: string) => {
   }),
 
   resolveAssets = async (unzipped: Unzipped, assets?: LottieAsset[]) => {
-    if (!Array.isArray(assets))
-    {return}
+    if (!Array.isArray(assets)) {
+      return
+    }
 
     const toResolve: Promise<void>[] = []
 
     for (const asset of assets) {
-      if (!isAudio(asset) && !isImage(asset))
-      {continue}
+      if (!isAudio(asset) && !isImage(asset)) {
+        continue
+      }
 
       const type = isImage(asset) ? 'images' : 'audio',
         u8 = unzipped?.[`${type}/${asset.p}`]
 
-      if (!u8)
-      {continue}
+      if (!u8) {
+        continue
+      }
 
       toResolve.push(
         new Promise<void>(resolveAsset => {

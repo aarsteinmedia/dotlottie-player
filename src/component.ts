@@ -18,7 +18,6 @@ import Lottie, {
   type AnimationSegment,
   type RendererType
 } from 'lottie-web'
-import pkg from '../../package.json'
 import {
   aspectRatio,
   createDotLottie,
@@ -48,6 +47,7 @@ import type {
   Subframe
 } from './types'
 import styles from './styles.scss'
+import pkg from '../package.json'
 
 /**
  * dotLottie Player Web Component
