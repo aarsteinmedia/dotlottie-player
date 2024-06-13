@@ -125,7 +125,8 @@ export const addExt = (ext: string, str?: string) => {
           }
 
           const { p: file, u: path } = asset,
-            assetId = asset.id || useId(),
+            // asset.id caused issues with multianimations
+            assetId = /* asset.id || */ useId('asset'),
             isEncoded = file.startsWith('data:'),
             ext = isEncoded ? getExtFromB64(file) : getExt(file),
 
@@ -523,5 +524,5 @@ export const addExt = (ext: string, str?: string) => {
 
   useId = (prefix?: string) => {
     const s4 = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-    return (`${prefix ?? `:${s4()}`}-${s4()}`)
+    return (`${prefix ?? `:${s4()}`}_${s4()}`)
   }

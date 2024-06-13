@@ -18,6 +18,7 @@ import Lottie, {
   type AnimationSegment,
   type RendererType
 } from 'lottie-web'
+import pkg from '../package.json'
 import {
   aspectRatio,
   createDotLottie,
@@ -47,7 +48,6 @@ import type {
   Subframe
 } from './types'
 import styles from './styles.scss'
-import pkg from '../package.json'
 
 /**
  * dotLottie Player Web Component
@@ -397,8 +397,9 @@ export class DotLottiePlayer extends LitElement {
       }
 
       // Clear previous animation, if any
-      if (this._lottieInstance)
-      {this._lottieInstance.destroy()}
+      if (this._lottieInstance) {
+        this._lottieInstance.destroy()
+      }
 
       this.currentState = PlayerState.Stopped
       if (!this.animateOnScroll
@@ -437,8 +438,9 @@ export class DotLottiePlayer extends LitElement {
 
     // Start playing if autoplay is enabled
     if (this.autoplay || this.animateOnScroll) {
-      if (this.direction === -1)
-      {this.seek('99%')}
+      if (this.direction === -1) {
+        this.seek('99%')
+      }
 
       if (!('IntersectionObserver' in window)) {
         if (!this.animateOnScroll) {
@@ -584,7 +586,7 @@ export class DotLottiePlayer extends LitElement {
       return
     }
     const { currentFrame, totalFrames } = this._lottieInstance
-    this._seeker = Math.floor((currentFrame / totalFrames) * 100)
+    this._seeker = Math.round((currentFrame / totalFrames) * 100)
 
     this.dispatchEvent(
       new CustomEvent(PlayerEvents.Frame, {
@@ -612,7 +614,7 @@ export class DotLottiePlayer extends LitElement {
     }
 
     const { currentFrame, totalFrames } = this._lottieInstance
-    this._seeker = Math.floor((currentFrame / totalFrames) * 100)
+    this._seeker = Math.round((currentFrame / totalFrames) * 100)
 
     this.currentState = PlayerState.Completed
 
@@ -730,7 +732,7 @@ export class DotLottiePlayer extends LitElement {
     }
 
     this.seek(
-      Math.floor((Number(target.value) / 100) * this._lottieInstance.totalFrames)
+      Math.round((Number(target.value) / 100) * this._lottieInstance.totalFrames)
     )
 
     setTimeout(() => {
@@ -813,7 +815,9 @@ export class DotLottiePlayer extends LitElement {
    * Play
    */
   public play() {
-    if (!this._lottieInstance) {return}
+    if (!this._lottieInstance) {
+      return
+    }
     if (this.currentState) {
       this._playerState.prev = this.currentState
     }
@@ -830,7 +834,9 @@ export class DotLottiePlayer extends LitElement {
    * Pause
    */
   public pause() {
-    if (!this._lottieInstance) {return}
+    if (!this._lottieInstance) {
+      return
+    }
     if (this.currentState) {
       this._playerState.prev = this.currentState
     }
@@ -846,7 +852,9 @@ export class DotLottiePlayer extends LitElement {
    * Stop
    */
   public stop() {
-    if (!this._lottieInstance) {return}
+    if (!this._lottieInstance) {
+      return
+    }
     if (this.currentState) {
       this._playerState.prev = this.currentState
     }
@@ -863,7 +871,9 @@ export class DotLottiePlayer extends LitElement {
    * Destroy animation and element
    */
   public destroy() {
-    if (!this._lottieInstance) {return}
+    if (!this._lottieInstance) {
+      return
+    }
 
     this.currentState = PlayerState.Destroyed
 
@@ -880,7 +890,9 @@ export class DotLottiePlayer extends LitElement {
    * @param { number | string } value Frame to seek to
    */
   public seek(value: number | string) {
-    if (!this._lottieInstance) {return}
+    if (!this._lottieInstance) {
+      return
+    }
 
     // Extract frame number from either number or percentage value
     const matches = value.toString().match(/^([0-9]+)(%?)$/)
@@ -890,7 +902,7 @@ export class DotLottiePlayer extends LitElement {
 
     // Calculate and set the frame number
     const frame =
-      Math.floor(matches[2] === '%' ?
+      Math.round(matches[2] === '%' ?
         (this._lottieInstance.totalFrames * Number(matches[1])) / 100 :
         Number(matches[1]))
 
@@ -915,8 +927,9 @@ export class DotLottiePlayer extends LitElement {
    * Snapshot and download the current frame as SVG
    */
   public snapshot() {
-    if (!this.shadowRoot)
-    {return}
+    if (!this.shadowRoot) {
+      return
+    }
 
     // Get SVG element and serialize markup
     const svgElement = this.shadowRoot.querySelector('.animation svg'),
@@ -945,8 +958,9 @@ export class DotLottiePlayer extends LitElement {
    * @param { boolean } value Whether animation uses subframe
    */
   public setSubframe(value: boolean) {
-    if (!this._lottieInstance)
-    {return}
+    if (!this._lottieInstance) {
+      return
+    }
     this.subframe = value
     this._lottieInstance.setSubframe(value)
   }
@@ -955,8 +969,9 @@ export class DotLottiePlayer extends LitElement {
    * Dynamically set count for loops
    */
   public setCount(value: number) {
-    if (!this._lottieInstance)
-    {return}
+    if (!this._lottieInstance) {
+      return
+    }
     this.count = value
   }
 
@@ -966,7 +981,9 @@ export class DotLottiePlayer extends LitElement {
    * user requested pauses and component instigated pauses.
    */
   private _freeze() {
-    if (!this._lottieInstance) {return}
+    if (!this._lottieInstance) {
+      return
+    }
 
     if (this.currentState) {
       this._playerState.prev = this.currentState
@@ -983,7 +1000,9 @@ export class DotLottiePlayer extends LitElement {
    * Reload animation
    */
   public async reload() {
-    if (!this._lottieInstance) {return}
+    if (!this._lottieInstance) {
+      return
+    }
 
     this._lottieInstance.destroy()
 
@@ -997,7 +1016,9 @@ export class DotLottiePlayer extends LitElement {
    * @param { number } value Playback speed
    */
   public setSpeed(value = 1) {
-    if (!this._lottieInstance) {return}
+    if (!this._lottieInstance) {
+      return
+    }
     this.speed = value
     this._lottieInstance.setSpeed(value)
   }
@@ -1007,8 +1028,9 @@ export class DotLottiePlayer extends LitElement {
    * @param { AnimationDirection } value Animation direction
    */
   public setDirection(value: AnimationDirection) {
-    if (!this._lottieInstance)
-    {return}
+    if (!this._lottieInstance) {
+      return
+    }
     this.direction = value
     this._lottieInstance.setDirection(value)
   }
@@ -1040,8 +1062,9 @@ export class DotLottiePlayer extends LitElement {
    * Toggle playing state
    */
   public togglePlay() {
-    if (!this._lottieInstance)
-    {return}
+    if (!this._lottieInstance) {
+      return
+    }
 
     const { currentFrame, playDirection, totalFrames } = this._lottieInstance
     if (this.currentState === PlayerState.Playing) {
@@ -1126,13 +1149,15 @@ export class DotLottiePlayer extends LitElement {
 
   private _switchInstance(isPrevious = false) {
     // Bail early if there is not animation to play
-    if (!this._animations[this._currentAnimation])
-    {return}
+    if (!this._animations[this._currentAnimation]) {
+      return
+    }
 
     try {
       // Clear previous animation
-      if (this._lottieInstance)
-      {this._lottieInstance.destroy()}
+      if (this._lottieInstance) {
+        this._lottieInstance.destroy()
+      }
 
       // Re-initialize lottie player
       this._lottieInstance = Lottie.loadAnimation({
@@ -1298,8 +1323,9 @@ export class DotLottiePlayer extends LitElement {
     }
 
     // Destroy the animation instance
-    if (this._lottieInstance)
-    {this._lottieInstance.destroy()}
+    if (this._lottieInstance) {
+      this._lottieInstance.destroy()
+    }
 
     // Remove the attached Visibility API's change event listener
     document.removeEventListener('visibilitychange', this._onVisibilityChange)
