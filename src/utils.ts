@@ -10,8 +10,15 @@ import type {
   LottieAsset,
   LottieJSON,
   LottieManifest,
-  ObjectFit,
 } from './types'
+
+export enum ObjectFit {
+  Contain = 'contain',
+  Cover = 'cover',
+  Fill = 'fill',
+  ScaleDown = 'scale-down',
+  None = 'none'
+}
 
 export enum PlayerState {
   Completed = 'completed',
@@ -44,6 +51,13 @@ export enum PlayerEvents {
   Ready = 'ready',
   Rendered = 'rendered',
   Stop = 'stop',
+}
+
+export enum PreserveAspectRatio {
+  Contain = 'xMidYMid meet',
+  Cover = 'xMidYMid slice',
+  None = 'xMinYMin slice',
+  Initial = 'none'
 }
 
 export class CustomError extends Error {

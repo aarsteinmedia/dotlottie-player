@@ -1,5 +1,4 @@
 declare module '*.scss' {
-  import type { CSSResult } from 'lit'
-  const content: CSSResult
+  const content: CSSStyleSheet
   export default content
 }

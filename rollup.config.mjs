@@ -6,7 +6,6 @@ import json from '@rollup/plugin-json'
 import livereload from 'rollup-plugin-livereload'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import postcss from 'rollup-plugin-postcss'
-import postcssLit from 'rollup-plugin-postcss-lit'
 import replace from '@rollup/plugin-replace'
 import serve from 'rollup-plugin-serve'
 import * as rollupPluginSummary from 'rollup-plugin-summary'
@@ -25,9 +24,6 @@ const isProd = process.env.NODE_ENV !== 'development',
           flexbox: 'no-2009',
         }),
       ],
-    }),
-    postcssLit({
-      importPackage: 'lit',
     }),
     template(),
     replace({
@@ -87,7 +83,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   },
   module = {
     input,
-    external: ['lit', 'lit/decorators.js', 'lottie-web', 'fflate'],
+    external: ['lottie-web', 'fflate'],
     output: [
       {
         file: pkg.module,

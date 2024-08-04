@@ -1,7 +1,7 @@
 import type { AnimationDirection } from 'lottie-web'
 import type { CSSProperties, RefObject } from 'react'
 import type { PlayMode } from './utils'
-import type { DotLottiePlayer } from '.'
+import type { DotLottiePlayer } from './index'
 
 type BoolInt = 0 | 1
 
@@ -159,10 +159,6 @@ export type Autoplay = boolean | '' | 'autoplay' | null
 export type Controls = boolean | '' | 'controls' | null
 export type Loop = boolean | '' | 'loop' | null
 export type Subframe = boolean | '' | null
-
-export type ObjectFit = 'contain' | 'cover' | 'fill' | 'scale-down' | 'none'
-
-export type PreserveAspectRatio = 'xMidYMid meet' | 'xMidYMid slice' | 'xMinYMin slice' | 'none'
 
 type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
   class?: string
