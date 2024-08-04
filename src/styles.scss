@@ -144,7 +144,7 @@
   }
 }
 
-.seeker {
+#seeker {
   -webkit-appearance: none;
   appearance: none;
   outline: none;
@@ -163,7 +163,7 @@ progress {
   outline: none;
 }
 
-.seeker {
+#seeker {
   width: 100%;
   height: 20px;
   border-radius: 3px;
@@ -210,7 +210,7 @@ progress {
   background-color: var(--lottie-player-seeker-thumb-color);
 }
 
-.seeker {
+#seeker {
   &::-webkit-slider-thumb {
     height: 15px;
     width: 15px;

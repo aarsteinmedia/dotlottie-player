@@ -43,7 +43,7 @@ import styles from './styles.scss'
  * @class DotLottiePlayer
  * @extends { HTMLVideoElement }
  */
-export class DotLottiePlayer extends HTMLVideoElement {
+export class DotLottiePlayer extends HTMLElement {
   shadow: ShadowRoot
 
   constructor() {
@@ -74,6 +74,8 @@ export class DotLottiePlayer extends HTMLVideoElement {
   async connectedCallback() {
     this.render()
 
+    this.container = this.shadow.querySelector('.animation')
+
     // Add listener for Visibility API's change event.
     if (typeof document.hidden !== 'undefined') {
       document.addEventListener('visibilitychange', this._onVisibilityChange)
@@ -83,7 +85,7 @@ export class DotLottiePlayer extends HTMLVideoElement {
     this._addIntersectionObserver()
 
     // Setup lottie player
-    await this.load()
+    await this.load(this.src)
     this.dispatchEvent(new CustomEvent(PlayerEvents.Rendered))
   }
 
@@ -136,7 +138,26 @@ export class DotLottiePlayer extends HTMLVideoElement {
   }
 
   get animateOnScroll() {
-    return JSON.parse(this.getAttribute('animateOnScroll') || 'false')
+    const val = this.getAttribute('animateOnScroll')
+    if (val === 'true' || val === '' || val === '1') {
+      return true
+    }
+    return false
+  }
+
+  /**
+   * Autoplay
+   */
+  set autoplay(value: boolean) {
+    this.setAttribute('autoplay', value.toString())
+  }
+
+  get autoplay() {
+    const val = this.getAttribute('autoplay')
+    if (val === 'true' || val === '' || val === '1') {
+      return true
+    }
+    return false
   }
 
   /**
@@ -148,6 +169,21 @@ export class DotLottiePlayer extends HTMLVideoElement {
 
   get background() {
     return this.getAttribute('background') || 'transparent'
+  }
+
+  /**
+   * Show controls
+   */
+  set controls(value: boolean) {
+    this.setAttribute('controls', value.toString())
+  }
+
+  get controls() {
+    const val = this.getAttribute('controls')
+    if (val === 'true' || val === '' || val === '1') {
+      return true
+    }
+    return false
   }
 
   /**
@@ -199,7 +235,11 @@ export class DotLottiePlayer extends HTMLVideoElement {
   }
 
   get hover() {
-    return JSON.parse(this.getAttribute('hover') || 'false')
+    const val = this.getAttribute('hover')
+    if (val === 'true' || val === '' || val === '1') {
+      return true
+    }
+    return false
   }
 
   /**
@@ -215,6 +255,21 @@ export class DotLottiePlayer extends HTMLVideoElement {
       return val
     }
     return 0
+  }
+
+  /**
+   * Loop animation
+   */
+  set loop(value: boolean) {
+    this.setAttribute('loop', value.toString())
+  }
+
+  get loop() {
+    const val = this.getAttribute('loop')
+    if (val === 'true' || val === '' || val === '1') {
+      return true
+    }
+    return false
   }
 
   /**
@@ -317,7 +372,11 @@ export class DotLottiePlayer extends HTMLVideoElement {
   }
 
   get simple() {
-    return JSON.parse(this.getAttribute('simple') || 'false')
+    const val = this.getAttribute('simple')
+    if (val === 'true' || val === '' || val === '1') {
+      return true
+    }
+    return false
   }
 
   /**
@@ -333,6 +392,17 @@ export class DotLottiePlayer extends HTMLVideoElement {
       return val
     }
     return 1
+  }
+
+  /**
+   * Source, either path or JSON string
+   */
+  set src(value: string | null) {
+    this.setAttribute('src', value || '')
+  }
+
+  get src() {
+    return this.getAttribute('src')
   }
 
   /**
@@ -353,12 +423,12 @@ export class DotLottiePlayer extends HTMLVideoElement {
   public currentState?: PlayerState = PlayerState.Loading
 
   /**
-   * Animaiton Container
+   * Animation Container
    */
-  // protected container!: HTMLElement
-  get container() {
-    return this.getElementsByClassName('animation')[0]
-  }
+  protected container!: Element | null
+  // get container() {
+  //   return this.getElementsByClassName('animation')[0]
+  // }
 
   /**
    * @state
@@ -417,6 +487,9 @@ export class DotLottiePlayer extends HTMLVideoElement {
    * @returns { LottieConfig }
    */
   private _getOptions() {
+    if (!this.container) {
+      throw new Error('Container not rendered')
+    }
     const preserveAspectRatio =
       this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)),
 
@@ -497,7 +570,11 @@ export class DotLottiePlayer extends HTMLVideoElement {
    * Add IntersectionObserver
    */
   private _addIntersectionObserver() {
-    if (this._intersectionObserver || !('IntersectionObserver' in window)) {
+    if (
+      !this.container
+      || this._intersectionObserver
+      || !('IntersectionObserver' in window)
+    ) {
       return
     }
 
@@ -527,15 +604,15 @@ export class DotLottiePlayer extends HTMLVideoElement {
   /**
    * Initialize Lottie Web player
    */
-  public override async load() {
-    if (!this.shadowRoot || !this.src) {
+  public async load(src: string | null) {
+    if (!this.shadowRoot || !src) {
       return
     }
 
     // Load the resource
     try {
       const { animations, manifest, isDotLottie } =
-        await getAnimationData(this.src)
+        await getAnimationData(src)
 
       if (!animations || animations.some(animation => !this._isLottie(animation))) {
         throw new Error('Broken or corrupted file')
@@ -634,6 +711,23 @@ export class DotLottiePlayer extends HTMLVideoElement {
       return
     }
 
+    this.shadow.querySelector('#togglePlay')?.addEventListener('click', this.togglePlay)
+    this.shadow.querySelector('#stop')?.addEventListener('click', this.stop)
+    this.shadow.querySelector('#prev')?.addEventListener('click', this.prev)
+    this.shadow.querySelector('#next')?.addEventListener('click', this.next)
+    this.shadow.querySelector('#toggleLoop')?.addEventListener('click', this.toggleLoop)
+    this.shadow.querySelector('#toggleBoomerang')?.addEventListener('click', this.toggleBoomerang)
+    // this.shadow.querySelector('#convert')?.addEventListener('click', this.convert)
+    this.shadow.querySelector('#snapshot')?.addEventListener('click', this.snapshot)
+
+    const seeker = this.shadow.querySelector('#seeker')
+    seeker?.addEventListener('change', this._handleSeekChange)
+    seeker?.addEventListener('mousedown', this._freeze)
+
+    const settings = this.shadow.querySelector('#settings')
+    settings?.addEventListener('click', this._handleSettingsClick)
+    settings?.addEventListener('blur', this._handleBlur)
+
     // Calculate and save the current progress of the animation
     this._lottieInstance.addEventListener<AnimationEventName>('enterFrame', this._enterFrame)
 
@@ -672,6 +766,23 @@ export class DotLottiePlayer extends HTMLVideoElement {
     if (!this._lottieInstance || !this.container) {
       return
     }
+
+    this.shadow.querySelector('#togglePlay')?.removeEventListener('click', this.togglePlay)
+    this.shadow.querySelector('#stop')?.removeEventListener('click', this.stop)
+    this.shadow.querySelector('#prev')?.removeEventListener('click', this.prev)
+    this.shadow.querySelector('#next')?.removeEventListener('click', this.next)
+    this.shadow.querySelector('#toggleLoop')?.removeEventListener('click', this.toggleLoop)
+    this.shadow.querySelector('#toggleBoomerang')?.removeEventListener('click', this.toggleBoomerang)
+    // this.shadow.querySelector('#convert')?.removeEventListener('click', this.convert)
+    this.shadow.querySelector('#snapshot')?.removeEventListener('click', this.snapshot)
+
+    const seeker = this.shadow.querySelector('#seeker')
+    seeker?.removeEventListener('change', this._handleSeekChange)
+    seeker?.removeEventListener('mousedown', this._freeze)
+
+    const settings = this.shadow.querySelector('#settings')
+    settings?.removeEventListener('click', this._handleSettingsClick)
+    settings?.removeEventListener('blur', this._handleBlur)
 
     this._lottieInstance.removeEventListener<AnimationEventName>('enterFrame', this._enterFrame)
     this._lottieInstance.removeEventListener<AnimationEventName>('complete', this._complete)
@@ -979,7 +1090,7 @@ export class DotLottiePlayer extends HTMLVideoElement {
   /**
    * Play
    */
-  public override async play() {
+  public async play() {
     if (!this._lottieInstance) {
       return
     }
@@ -987,30 +1098,31 @@ export class DotLottiePlayer extends HTMLVideoElement {
       this._playerState.prev = this.currentState
     }
 
-    this._lottieInstance.play()
-    setTimeout(() => {
+    try {
+      this._lottieInstance.play()
+      this.dispatchEvent(new CustomEvent(PlayerEvents.Play))
+    } finally {
       this.currentState = PlayerState.Playing
-    }, 0)
-
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Play))
+    }
   }
 
   /**
    * Pause
    */
-  public override pause() {
+  public pause() {
     if (!this._lottieInstance) {
       return
     }
     if (this.currentState) {
       this._playerState.prev = this.currentState
     }
-    this._lottieInstance.pause()
-    setTimeout(() => {
-      this.currentState = PlayerState.Paused
-    }, 0)
 
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Pause))
+    try {
+      this._lottieInstance.pause()
+      this.dispatchEvent(new CustomEvent(PlayerEvents.Pause))
+    } finally {
+      this.currentState = PlayerState.Paused
+    }
   }
 
   /**
@@ -1024,12 +1136,13 @@ export class DotLottiePlayer extends HTMLVideoElement {
       this._playerState.prev = this.currentState
     }
     this._playerState.count = 0
-    this._lottieInstance.stop()
-    setTimeout(() => {
-      this.currentState = PlayerState.Stopped
-    }, 0)
 
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Stop))
+    try {
+      this._lottieInstance.stop()
+      this.dispatchEvent(new CustomEvent(PlayerEvents.Stop))
+    } finally {
+      this.currentState = PlayerState.Stopped
+    }
   }
 
   /**
@@ -1092,7 +1205,7 @@ export class DotLottiePlayer extends HTMLVideoElement {
    * Snapshot and download the current frame as SVG
    */
   public snapshot() {
-    if (!this.shadowRoot) {
+    if (!this.shadowRoot || !this.src) {
       return
     }
 
@@ -1153,25 +1266,26 @@ export class DotLottiePlayer extends HTMLVideoElement {
     if (this.currentState) {
       this._playerState.prev = this.currentState
     }
-    this._lottieInstance.pause()
-    setTimeout(() => {
-      this.currentState = PlayerState.Frozen
-    }, 0)
 
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Freeze))
+    try {
+      this._lottieInstance.pause()
+      this.dispatchEvent(new CustomEvent(PlayerEvents.Freeze))
+    } finally {
+      this.currentState = PlayerState.Frozen
+    }
   }
 
   /**
    * Reload animation
    */
   public async reload() {
-    if (!this._lottieInstance) {
+    if (!this._lottieInstance || !this.src) {
       return
     }
 
     this._lottieInstance.destroy()
 
-    await this.load()
+    await this.load(this.src)
   }
 
   /**
@@ -1250,7 +1364,7 @@ export class DotLottiePlayer extends HTMLVideoElement {
   /**
    * Toggle loop
    */
-  public toggleLooping() {
+  public toggleLoop() {
     this.setLooping(!this.loop)
   }
 
@@ -1403,10 +1517,11 @@ export class DotLottiePlayer extends HTMLVideoElement {
     /** Whether to trigger a download in the browser. Defaults to true */
     shouldDownload?: boolean
   }) {
+
     if (typeCheck || this._isDotLottie) {
       return createJSON({
         animation: (await getAnimationData(src || this.src))?.animations?.[0],
-        fileName: `${getFilename(fileName || this.src)}.json`,
+        fileName: `${getFilename(fileName || this.src || 'converted')}.json`,
         shouldDownload
       })
     }
@@ -1417,7 +1532,7 @@ export class DotLottiePlayer extends HTMLVideoElement {
         ...(manifest || this._manifest),
         generator: pkg.name
       },
-      fileName: `${getFilename(fileName || this.src)}.lottie`,
+      fileName: `${getFilename(fileName || this.src || 'converted')}.lottie`,
       shouldDownload
     })
   }
@@ -1436,18 +1551,18 @@ export class DotLottiePlayer extends HTMLVideoElement {
       isStopped = this.currentState === PlayerState.Stopped,
       isError = this.currentState === PlayerState.Error
 
-    this.shadow.innerHTML = `
+    return `
       <div
-        class=${`lottie-controls toolbar ${isError ? 'has-error' : ''}`}
+        class="lottie-controls toolbar ${isError ? 'has-error' : ''}"
         aria-label="Lottie Animation controls"
       >
         <button
-          onclick=${this.togglePlay}
-          data-active=${isPlaying || isPaused}
+          id="togglePlay"
+          data-active="${isPlaying || isPaused}"
           tabindex="0"
           aria-label="Toggle Play/Pause"
         >
-        ${isPlaying ?
+          ${isPlaying ?
     `
         <svg width="24" height="24" aria-hidden="true" focusable="false">
           <path d="M14.016 5.016H18v13.969h-3.984V5.016zM6 18.984V5.015h3.984v13.969H6z" />
@@ -1459,9 +1574,10 @@ export class DotLottiePlayer extends HTMLVideoElement {
         </svg>
       `}
         </button>
-        <button
-          onclick=${this.stop}
-          data-active=${isStopped}
+
+         <button
+          id="stop"
+          data-active="${isStopped}"
           tabindex="0"
           aria-label="Stop"
         >
@@ -1474,7 +1590,7 @@ export class DotLottiePlayer extends HTMLVideoElement {
           ${this._currentAnimation > 0 ?
     `
             <button
-              onclick=${this.prev}
+              id="prev"
               tabindex="0"
               aria-label="Previous animation"
             >
@@ -1482,11 +1598,11 @@ export class DotLottiePlayer extends HTMLVideoElement {
                 <path d="M17.9 18.2 8.1 12l9.8-6.2v12.4zm-10.3 0H6.1V5.8h1.5v12.4z"/>
               </svg>
             </button>
-          ` : null}
+          ` : ''}
           ${(this._currentAnimation + 1) < this._animations?.length ?
     `
             <button
-              onclick=${this.next}
+              id="next"
               tabindex="0"
               aria-label="Next animation"
             >
@@ -1494,38 +1610,36 @@ export class DotLottiePlayer extends HTMLVideoElement {
                 <path d="m6.1 5.8 9.8 6.2-9.8 6.2V5.8zM16.4 5.8h1.5v12.4h-1.5z"/>
               </svg>
             </button>
-          ` : null}
-        ` : null}
+          ` : ''}
+        ` : ''}
         <form class="progress-container${this.simple ? ' simple' : ''}">
           <input
-            class="seeker"
+            id="seeker"
             type="range"
             min="0"
             max="100"
             step="1"
-            .value=${this._seeker.toString()}
-            onchange=${this._handleSeekChange}
-            onmousedown=${this._freeze}
+            value="${this._seeker.toString()}"
             aria-valuemin="0"
             aria-valuemax="100"
             role="slider"
-            aria-valuenow=${this._seeker}
+            aria-valuenow="${this._seeker}"
             tabindex="0"
             aria-label="Slider for search"
           />
           <progress
             max="100"
-            .value=${this._seeker}
+            value="${this._seeker}"
           >
           </progress>
         </form>
-        ${this.simple ? null :
+        ${this.simple ? '' :
     `
         <button
-          onclick=${this.toggleLooping}
-          data-active=${this.loop ?? null}
+          id="toggleLoop"
+          data-active="${this.loop ?? null}"
           tabindex="0"
-          aria-label="Toggle looping"
+          aria-label="Toggle loop"
         >
           <svg width="24" height="24" aria-hidden="true" focusable="false">
             <path
@@ -1534,8 +1648,8 @@ export class DotLottiePlayer extends HTMLVideoElement {
           </svg>
         </button>
         <button
-          onclick=${this.toggleBoomerang}
-          data-active=${this._isBounce}
+          id="toggleBoomerang"
+          data-active="${this._isBounce}"
           aria-label="Toggle boomerang"
           tabindex="0"
         >
@@ -1546,12 +1660,11 @@ export class DotLottiePlayer extends HTMLVideoElement {
           </svg>
         </button>
         <button
-          onclick=${this._handleSettingsClick}
-          onblur=${this._handleBlur}
+          id="toggleSettings"
           aria-label="Settings"
           aria-haspopup="true"
-          aria-expanded=${!!this._isSettingsOpen}
-          aria-controls=${`${this._identifier}-settings`}
+          aria-expanded="${!!this._isSettingsOpen}"
+          aria-controls="${this._identifier}-settings"
         >
           <svg width="24" height="24" aria-hidden="true" focusable="false">
             <circle cx="12" cy="5.4" r="2.5"/>
@@ -1560,14 +1673,14 @@ export class DotLottiePlayer extends HTMLVideoElement {
           </svg>
         </button>
         <div
-          id=${`${this._identifier}-settings`}
+          id="${this._identifier}-settings"
           class="popover"
           style="display:${this._isSettingsOpen ? 'block' : 'none'}"
         >
-          ${this._isDotLottie ? null :
+          ${this._isDotLottie ? '' :
     `
             <button
-              @click=${this.convert}
+              id="convert
               aria-label="Convert JSON animation to dotLottie format"
               tabindex="0"
             >
@@ -1579,7 +1692,7 @@ export class DotLottiePlayer extends HTMLVideoElement {
             </button>
           `}
           <button
-            onclick=${this.snapshot}
+            id="snapshot"
             aria-label="Download still image"
             tabindex="0"
           >
@@ -1591,6 +1704,7 @@ export class DotLottiePlayer extends HTMLVideoElement {
           </button>
         </div>`
 }
+
       </div>
     `
   }
@@ -1598,12 +1712,12 @@ export class DotLottiePlayer extends HTMLVideoElement {
   protected render() {
     this.shadow.innerHTML = `
       <figure
-        class=${'animation-container main'}
-        data-controls=${this.controls ?? false}
-        lang=${this.description ? document?.documentElement?.lang : 'en'}
+        class="animation-container main"
+        data-controls="${this.controls ?? false}"
+        lang="${this.description ? document?.documentElement?.lang : 'en'}"
         role="img"
-        aria-label=${this.description ?? 'Lottie animation'}
-        data-loaded=${this._playerState.loaded}
+        aria-label="${this.description ?? 'Lottie animation'}"
+        data-loaded="${this._playerState.loaded}"
       >
         <div
           class="animation"
@@ -1631,10 +1745,10 @@ export class DotLottiePlayer extends HTMLVideoElement {
             text-anchor="middle"
           >${this._errorMessage}</text>
         </svg>
-      </div>` : null}
+      </div>` : ''}
 
       </div>
-      ${this.controls ? this.renderControls() : null}
+      ${this.controls ? this.renderControls() : ''}
     </figure>
     `
   }
