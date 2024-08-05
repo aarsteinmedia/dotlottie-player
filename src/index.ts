@@ -1704,7 +1704,7 @@ export class DotLottiePlayer extends EnhancedElement {
       return
     }
 
-    const html = `
+    slot.innerHTML = `
       <div
         class="lottie-controls toolbar ${this.playerState === PlayerState.Error ? 'has-error' : ''}"
         aria-label="Lottie Animation controls"
@@ -1843,8 +1843,6 @@ export class DotLottiePlayer extends EnhancedElement {
 
       </div>
     `
-
-    slot.innerHTML = html
   }
 
   protected render() {
