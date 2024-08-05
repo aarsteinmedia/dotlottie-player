@@ -6,7 +6,6 @@ import json from '@rollup/plugin-json'
 import livereload from 'rollup-plugin-livereload'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import postcss from 'rollup-plugin-postcss'
-// import replace from '@rollup/plugin-replace'
 import serve from 'rollup-plugin-serve'
 import * as rollupPluginSummary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
@@ -25,11 +24,20 @@ const isProd = process.env.NODE_ENV !== 'development',
         }),
       ],
     }),
-    template(),
-    // replace({
-    //   preventAssignment: false,
-    //   'Reflect.decorate': 'undefined',
-    // }),
+    template({
+      include: './src/index.ts',
+      options: {
+        shouldMinify(template) {
+          return template.parts.some(
+            (part) =>
+              // Matches Polymer templates that are not tagged
+              part.text.includes('<figure') ||
+              part.text.includes('<div') ||
+              part.text.includes('<svg')
+          )
+        },
+      },
+    }),
     json({
       compact: true,
     }),
