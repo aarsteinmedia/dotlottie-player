@@ -1787,7 +1787,7 @@ export class DotLottiePlayer extends EnhancedElement {
         </button>
         <button
           id="toggleBoomerang"
-          data-active="${this._isBounce}"
+          data-active="${this.mode === PlayMode.Bounce}"
           aria-label="Toggle boomerang"
           tabindex="0"
         >
