@@ -1,5 +1,12 @@
 import { type Unzipped, type Zippable } from 'fflate';
-import type { LottieAsset, LottieJSON, LottieManifest, ObjectFit } from './types';
+import type { LottieAsset, LottieJSON, LottieManifest } from './types';
+export declare enum ObjectFit {
+    Contain = "contain",
+    Cover = "cover",
+    Fill = "fill",
+    ScaleDown = "scale-down",
+    None = "none"
+}
 export declare enum PlayerState {
     Completed = "completed",
     Destroyed = "destroyed",
@@ -29,6 +36,12 @@ export declare enum PlayerEvents {
     Ready = "ready",
     Rendered = "rendered",
     Stop = "stop"
+}
+export declare enum PreserveAspectRatio {
+    Contain = "xMidYMid meet",
+    Cover = "xMidYMid slice",
+    None = "xMinYMin slice",
+    Initial = "none"
 }
 export declare class CustomError extends Error {
     status?: number;

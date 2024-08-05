@@ -93,7 +93,6 @@
     cursor: pointer;
     fill: var(--lottie-player-toolbar-icon-color);
     color: var(--lottie-player-toolbar-icon-color);
-    display: flex;
     background: none;
     border: 0;
     padding: 0;
@@ -103,6 +102,9 @@
     align-items: center;
     gap: 5px;
     opacity: .9;
+    &:not([hidden]) {
+      display: flex;
+    }
 
     &:hover {
       opacity: 1;
