@@ -1,6 +1,6 @@
 import { type AnimationDirection, type AnimationItem, type AnimationSegment, type RendererType } from 'lottie-web';
 import EnhancedElement from './observeProperties';
-import { ObjectFit, PlayMode, PlayerState, PreserveAspectRatio } from './utils';
+import { PlayMode, PlayerState, PreserveAspectRatio } from './utils';
 import { AnimationSettings, AnimateOnScroll, AnimationConfig, Autoplay, Controls, Loop, LottieJSON, LottieManifest, Subframe } from './types';
 export declare class DotLottiePlayer extends EnhancedElement {
     shadow: ShadowRoot;
@@ -36,10 +36,10 @@ export declare class DotLottiePlayer extends EnhancedElement {
     get mode(): PlayMode;
     set multiAnimationSettings(value: AnimationSettings[]);
     get multiAnimationSettings(): AnimationSettings[];
-    set objectfit(value: ObjectFit);
-    get objectfit(): ObjectFit;
-    set preserveAspectRatio(value: PreserveAspectRatio);
-    get preserveAspectRatio(): PreserveAspectRatio;
+    set objectfit(value: string);
+    get objectfit(): string;
+    set preserveAspectRatio(value: PreserveAspectRatio | null);
+    get preserveAspectRatio(): PreserveAspectRatio | null;
     set renderer(value: RendererType);
     get renderer(): RendererType;
     set segment(value: AnimationSegment | undefined);

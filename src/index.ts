@@ -470,8 +470,8 @@ export class DotLottiePlayer extends EnhancedElement {
   /**
    * Resizing to container (Deprecated)
   */
-  set preserveAspectRatio(value: PreserveAspectRatio) {
-    this.setAttribute('preserveAspectRatio', value)
+  set preserveAspectRatio(value: PreserveAspectRatio | null) {
+    this.setAttribute('preserveAspectRatio', value || PreserveAspectRatio.Contain)
   }
 
   get preserveAspectRatio() {
@@ -479,7 +479,7 @@ export class DotLottiePlayer extends EnhancedElement {
     if (val && Object.values(PreserveAspectRatio).includes(val as PreserveAspectRatio)) {
       return val as PreserveAspectRatio
     }
-    return PreserveAspectRatio.Contain
+    return null
   }
 
   /**

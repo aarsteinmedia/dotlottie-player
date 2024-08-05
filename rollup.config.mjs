@@ -6,7 +6,7 @@ import json from '@rollup/plugin-json'
 import livereload from 'rollup-plugin-livereload'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import postcss from 'rollup-plugin-postcss'
-import replace from '@rollup/plugin-replace'
+// import replace from '@rollup/plugin-replace'
 import serve from 'rollup-plugin-serve'
 import * as rollupPluginSummary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
@@ -26,10 +26,10 @@ const isProd = process.env.NODE_ENV !== 'development',
       ],
     }),
     template(),
-    replace({
-      preventAssignment: false,
-      'Reflect.decorate': 'undefined',
-    }),
+    // replace({
+    //   preventAssignment: false,
+    //   'Reflect.decorate': 'undefined',
+    // }),
     json({
       compact: true,
     }),
