@@ -75,16 +75,16 @@ export const addExt = (ext: string, str?: string) => {
     return `${str}.${ext}`
   },
 
-  aspectRatio = (objectFit: ObjectFit) => {
+  aspectRatio = (objectFit: string) => {
     switch (objectFit) {
-    case 'contain':
-    case 'scale-down':
+    case ObjectFit.Contain:
+    case ObjectFit.ScaleDown:
       return 'xMidYMid meet'
-    case 'cover':
+    case ObjectFit.Cover:
       return 'xMidYMid slice'
-    case 'fill':
+    case ObjectFit.Fill:
       return 'none'
-    case 'none':
+    case ObjectFit.None:
       return 'xMinYMin slice'
     default:
       return 'xMidYMid meet'

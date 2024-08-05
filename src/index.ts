@@ -455,7 +455,7 @@ export class DotLottiePlayer extends EnhancedElement {
   /**
    * Resizing to container
   */
-  set objectfit(value: ObjectFit) {
+  set objectfit(value: string) {
     this.setAttribute('objectfit', value)
   }
 
@@ -1903,4 +1903,7 @@ export { PlayMode, PlayerEvents, PlayerState } from './utils'
 globalThis.dotLottiePlayer = (): DotLottiePlayer => new DotLottiePlayer()
 
 export const tagName = 'dotlottie-player'
-customElements.define('dotlottie-player', DotLottiePlayer)
+
+if (!isServer()) {
+  customElements.define('dotlottie-player', DotLottiePlayer)
+}
