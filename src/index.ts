@@ -27,9 +27,14 @@ import {
 } from './utils'
 import {
   AnimationSettings,
+  AnimateOnScroll,
   AnimationConfig,
+  Autoplay,
+  Controls,
+  Loop,
   LottieJSON,
   LottieManifest,
+  Subframe
 } from './types'
 import styles from './styles.scss'
 
@@ -277,8 +282,8 @@ export class DotLottiePlayer extends EnhancedElement {
   /**
    * Whether to trigger next frame with scroll
    */
-  set animateOnScroll(value: boolean) {
-    this.setAttribute('animateOnScroll', value.toString())
+  set animateOnScroll(value: AnimateOnScroll) {
+    this.setAttribute('animateOnScroll', (!!value).toString())
   }
 
   get animateOnScroll() {
@@ -292,8 +297,8 @@ export class DotLottiePlayer extends EnhancedElement {
   /**
    * Autoplay
    */
-  set autoplay(value: boolean) {
-    this.setAttribute('autoplay', value.toString())
+  set autoplay(value: Autoplay) {
+    this.setAttribute('autoplay', (!!value).toString())
   }
 
   get autoplay() {
@@ -318,8 +323,8 @@ export class DotLottiePlayer extends EnhancedElement {
   /**
    * Show controls
    */
-  set controls(value: boolean) {
-    this.setAttribute('controls', value.toString())
+  set controls(value: Controls) {
+    this.setAttribute('controls', (!!value).toString())
   }
 
   get controls() {
@@ -404,8 +409,8 @@ export class DotLottiePlayer extends EnhancedElement {
   /**
    * Loop animation
    */
-  set loop(value: boolean) {
-    this.setAttribute('loop', value.toString())
+  set loop(value: Loop) {
+    this.setAttribute('loop', (!!value).toString())
   }
 
   get loop() {
@@ -552,12 +557,16 @@ export class DotLottiePlayer extends EnhancedElement {
   /**
    * Subframe
    */
-  set subframe(value: boolean) {
-    this.setAttribute('subframe', value.toString())
+  set subframe(value: Subframe) {
+    this.setAttribute('subframe', (!!value).toString())
   }
 
   get subframe() {
-    return JSON.parse(this.getAttribute('subframe') || 'false')
+    const val = this.getAttribute('subframe')
+    if (val === 'true' || val === '' || val === '1') {
+      return true
+    }
+    return false
   }
 
   /**
@@ -1893,4 +1902,5 @@ export { PlayMode, PlayerEvents, PlayerState } from './utils'
  */
 globalThis.dotLottiePlayer = (): DotLottiePlayer => new DotLottiePlayer()
 
+export const tagName = 'dotlottie-player'
 customElements.define('dotlottie-player', DotLottiePlayer)

@@ -1,7 +1,7 @@
 import { type AnimationDirection, type AnimationItem, type AnimationSegment, type RendererType } from 'lottie-web';
 import EnhancedElement from './observeProperties';
 import { ObjectFit, PlayMode, PlayerState, PreserveAspectRatio } from './utils';
-import { AnimationSettings, AnimationConfig, LottieJSON, LottieManifest } from './types';
+import { AnimationSettings, AnimateOnScroll, AnimationConfig, Autoplay, Controls, Loop, LottieJSON, LottieManifest, Subframe } from './types';
 export declare class DotLottiePlayer extends EnhancedElement {
     shadow: ShadowRoot;
     template: HTMLTemplateElement;
@@ -12,14 +12,14 @@ export declare class DotLottiePlayer extends EnhancedElement {
     attributeChangedCallback(name: string, _oldValue: unknown, value: string): void;
     static get observedProperties(): string[];
     propertyChangedCallback(name: string, _oldValue: unknown, value: unknown): void;
-    set animateOnScroll(value: boolean);
-    get animateOnScroll(): boolean;
-    set autoplay(value: boolean);
-    get autoplay(): boolean;
+    set animateOnScroll(value: AnimateOnScroll);
+    get animateOnScroll(): AnimateOnScroll;
+    set autoplay(value: Autoplay);
+    get autoplay(): Autoplay;
     set background(value: string);
     get background(): string;
-    set controls(value: boolean);
-    get controls(): boolean;
+    set controls(value: Controls);
+    get controls(): Controls;
     set count(value: number);
     get count(): number;
     set description(value: string);
@@ -30,8 +30,8 @@ export declare class DotLottiePlayer extends EnhancedElement {
     get hover(): boolean;
     set intermission(value: number);
     get intermission(): number;
-    set loop(value: boolean);
-    get loop(): boolean;
+    set loop(value: Loop);
+    get loop(): Loop;
     set mode(value: PlayMode);
     get mode(): PlayMode;
     set multiAnimationSettings(value: AnimationSettings[]);
@@ -50,8 +50,8 @@ export declare class DotLottiePlayer extends EnhancedElement {
     get speed(): number;
     set src(value: string | null);
     get src(): string | null;
-    set subframe(value: boolean);
-    get subframe(): boolean;
+    set subframe(value: Subframe);
+    get subframe(): Subframe;
     protected _container: Element | null;
     playerState?: PlayerState;
     private _isSettingsOpen;
@@ -123,3 +123,4 @@ export declare class DotLottiePlayer extends EnhancedElement {
     protected render(): void;
 }
 export { PlayMode, PlayerEvents, PlayerState } from './utils';
+export declare const tagName = "dotlottie-player";

@@ -82,8 +82,11 @@ export interface LottieManifest {
     keywords?: string;
     version?: string;
 }
+export type AnimateOnScroll = boolean | '' | null;
 export type Autoplay = boolean | '' | 'autoplay' | null;
+export type Controls = boolean | '' | 'controls' | null;
 export type Loop = boolean | '' | 'loop' | null;
+export type Subframe = boolean | '' | null;
 type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
     class?: string;
     ref?: RefObject<unknown>;

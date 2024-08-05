@@ -1,3 +1,5 @@
+import { isServer } from './utils'
+
 /**
  * Credit to:
  * @author Leonardo Favre <https://github.com/leofavre/observed-properties>
@@ -5,6 +7,11 @@
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 const UPDATE_ON_CONNECTED = Symbol('UPDATE_ON_CONNECTED')
+
+if (isServer()) {
+  // @ts-ignore
+  global.HTMLElement = class EmptyHTMLElement {}
+}
 
 /**
  * HTMLElement enhanced to track property changes
