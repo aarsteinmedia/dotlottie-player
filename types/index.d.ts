@@ -3,11 +3,11 @@ import EnhancedElement from './observeProperties';
 import { PlayMode, PlayerState, PreserveAspectRatio } from './utils';
 import { AnimationSettings, AnimateOnScroll, AnimationConfig, Autoplay, Controls, Loop, LottieJSON, LottieManifest, Subframe } from './types';
 export declare class DotLottiePlayer extends EnhancedElement {
-    shadow: ShadowRoot;
-    template: HTMLTemplateElement;
     constructor();
     connectedCallback(): Promise<void>;
     disconnectedCallback(): void;
+    shadow: ShadowRoot;
+    template: HTMLTemplateElement;
     static get observedAttributes(): string[];
     attributeChangedCallback(name: string, _oldValue: unknown, value: string): void;
     static get observedProperties(): string[];
@@ -57,6 +57,7 @@ export declare class DotLottiePlayer extends EnhancedElement {
     private _isSettingsOpen;
     private _seeker;
     private _currentAnimation;
+    private _animations;
     private _intersectionObserver?;
     private _lottieInstance;
     private _identifier;
@@ -64,7 +65,6 @@ export declare class DotLottiePlayer extends EnhancedElement {
     private _isBounce;
     private _isDotLottie;
     private _manifest;
-    private _animations;
     private _playerState;
     private _getOptions;
     private _addIntersectionObserver;
@@ -99,7 +99,7 @@ export declare class DotLottiePlayer extends EnhancedElement {
     reload(): Promise<void>;
     setSpeed(value?: number): void;
     setDirection(value: AnimationDirection): void;
-    setLooping(value: boolean): void;
+    setLoop(value: boolean): void;
     setMultiAnimationSettings(settings: AnimationSettings[]): void;
     togglePlay(): void | Promise<void>;
     toggleLoop(): void;
