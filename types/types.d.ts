@@ -71,7 +71,7 @@ export interface AnimationSettings {
 export interface Animation extends AnimationSettings {
     id: string;
 }
-export interface AnimationConfig extends Animation {
+export interface AnimationAttributes extends Animation {
     url: string;
 }
 export interface LottieManifest {

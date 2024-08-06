@@ -1,5 +1,5 @@
 import Lottie, {
-  type AnimationConfig as LottieConfig,
+  type AnimationConfig,
   type AnimationDirection,
   type AnimationEventName,
   type AnimationItem,
@@ -26,9 +26,9 @@ import {
   useId,
 } from './utils'
 import {
+  AnimationAttributes,
   AnimationSettings,
   AnimateOnScroll,
-  AnimationConfig,
   Autoplay,
   Controls,
   Loop,
@@ -48,8 +48,8 @@ export class DotLottiePlayer extends EnhancedElement {
   constructor() {
     super()
     this._complete = this._complete.bind(this)
-    this._dataReady = this._dataReady.bind(this)
     this._dataFailed = this._dataFailed.bind(this)
+    this._dataReady = this._dataReady.bind(this)
     this._DOMLoaded = this._DOMLoaded.bind(this)
     this._enterFrame = this._enterFrame.bind(this)
     this._freeze = this._freeze.bind(this)
@@ -149,16 +149,6 @@ export class DotLottiePlayer extends EnhancedElement {
       return
     }
 
-    const toggleLoop = this.shadow.querySelector('.toggleLoop'),
-      toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
-
-    if (
-      !(toggleLoop instanceof HTMLButtonElement) ||
-      !(toggleBoomerang instanceof HTMLButtonElement)
-    ) {
-      return
-    }
-
     if (name === 'animateOnScroll') {
       if (value === '' || Boolean(value)) {
         this._lottieInstance.autoplay = false
@@ -204,10 +194,18 @@ export class DotLottiePlayer extends EnhancedElement {
     }
 
     if (name === 'loop') {
+      const toggleLoop = this.shadow.querySelector('.toggleLoop')
+      if (!(toggleLoop instanceof HTMLButtonElement)) {
+        return
+      }
       toggleLoop.dataset.active = value
     }
 
     if (name === 'mode') {
+      const toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
+      if (!(toggleBoomerang instanceof HTMLButtonElement)) {
+        return
+      }
       toggleBoomerang.dataset.active = (value === PlayMode.Bounce).toString()
     }
 
@@ -680,7 +678,7 @@ export class DotLottiePlayer extends EnhancedElement {
 
   /**
    * Get options from props
-   * @returns { LottieConfig }
+   * @returns { AnimationConfig }
    */
   private _getOptions() {
     if (!this._container) {
@@ -731,7 +729,7 @@ export class DotLottiePlayer extends EnhancedElement {
       initialSegment = undefined
     }
 
-    const options: LottieConfig<'svg' | 'canvas' | 'html'> = {
+    const options: AnimationConfig<'svg' | 'canvas' | 'html'> = {
       container: this._container,
       loop,
       autoplay,
@@ -1324,7 +1322,7 @@ export class DotLottiePlayer extends EnhancedElement {
    *
    */
   public async addAnimation(
-    configs: AnimationConfig[],
+    configs: AnimationAttributes[],
     fileName?: string,
     shouldDownload = true
   ) {

@@ -4,20 +4,16 @@ import {
   unzip as unzipOrg,
   zip,
   type Unzipped,
-  type Zippable
+  type Zippable,
 } from 'fflate'
-import type {
-  LottieAsset,
-  LottieJSON,
-  LottieManifest,
-} from './types'
+import type { LottieAsset, LottieJSON, LottieManifest } from './types'
 
 export enum ObjectFit {
   Contain = 'contain',
   Cover = 'cover',
   Fill = 'fill',
   ScaleDown = 'scale-down',
-  None = 'none'
+  None = 'none',
 }
 
 export enum PlayerState {
@@ -57,7 +53,7 @@ export enum PreserveAspectRatio {
   Contain = 'xMidYMid meet',
   Cover = 'xMidYMid slice',
   None = 'xMinYMin slice',
-  Initial = 'none'
+  Initial = 'none',
 }
 
 export class CustomError extends Error {
@@ -65,29 +61,31 @@ export class CustomError extends Error {
 }
 
 export const addExt = (ext: string, str?: string) => {
-    if (!str) {return}
+    if (!str) {
+      return
+    }
     if (getExt(str)) {
-      if (getExt(str) === ext)
-      {return str}
+      if (getExt(str) === ext) {
+        return str
+      }
 
       return `${getFilename(str)}.${ext}`
     }
     return `${str}.${ext}`
   },
-
   aspectRatio = (objectFit: string) => {
     switch (objectFit) {
-    case ObjectFit.Contain:
-    case ObjectFit.ScaleDown:
-      return 'xMidYMid meet'
-    case ObjectFit.Cover:
-      return 'xMidYMid slice'
-    case ObjectFit.Fill:
-      return 'none'
-    case ObjectFit.None:
-      return 'xMinYMin slice'
-    default:
-      return 'xMidYMid meet'
+      case ObjectFit.Contain:
+      case ObjectFit.ScaleDown:
+        return 'xMidYMid meet'
+      case ObjectFit.Cover:
+        return 'xMidYMid slice'
+      case ObjectFit.Fill:
+        return 'none'
+      case ObjectFit.None:
+        return 'xMinYMin slice'
+      default:
+        return 'xMidYMid meet'
     }
   },
   /**
@@ -96,10 +94,12 @@ export const addExt = (ext: string, str?: string) => {
    * @returns { Uint8Array } UTF-8/Latin-1 binary
    */
   base64ToU8 = (str: string) =>
-    strToU8(isServer() ?
-      Buffer.from(parseBase64(str), 'base64').toString('binary') :
-      atob(parseBase64(str)), true),
-
+    strToU8(
+      isServer()
+        ? Buffer.from(parseBase64(str), 'base64').toString('binary')
+        : atob(parseBase64(str)),
+      true
+    ),
   /**
    * Convert a JSON Lottie to dotLottie or combine several animations and download new dotLottie file in your browser.
    */
@@ -107,7 +107,7 @@ export const addExt = (ext: string, str?: string) => {
     animations,
     manifest,
     fileName,
-    shouldDownload = true
+    shouldDownload = true,
   }: {
     animations?: LottieJSON[]
     manifest: LottieManifest
@@ -118,18 +118,17 @@ export const addExt = (ext: string, str?: string) => {
       if (!animations?.length || !manifest) {
         throw new Error(
           `Missing or malformed required parameter(s):\n ${
-            animations?.length ? '- manifest\n' : ''} ${
-            manifest ? '- animations\n' : ''}`
+            animations?.length ? '- manifest\n' : ''
+          } ${manifest ? '- animations\n' : ''}`
         )
       }
 
       const name = addExt('lottie', fileName) || `${useId()}.lottie`,
-
         dotlottie: Zippable = {
           'manifest.json': [
             strToU8(JSON.stringify(manifest), true),
-            { level: 0 } // <- Level of compression (no compression)
-          ]
+            { level: 0 }, // <- Level of compression (no compression)
+          ],
         }
 
       for (const [i, animation] of animations.entries()) {
@@ -143,9 +142,15 @@ export const addExt = (ext: string, str?: string) => {
             assetId = /* asset.id || */ useId('asset'),
             isEncoded = file.startsWith('data:'),
             ext = isEncoded ? getExtFromB64(file) : getExt(file),
-
             // Check if the asset is already base64-encoded. If not, get path, fetch it, and encode it
-            dataURL = isEncoded ? file : await fileToBase64(path ? ((path.endsWith('/') && `${path}${file}`) || `${path}/${file}`) : file)
+            dataURL = isEncoded
+              ? file
+              : await fileToBase64(
+                  path
+                    ? (path.endsWith('/') && `${path}${file}`) ||
+                        `${path}/${file}`
+                    : file
+                )
 
           asset.p = `${assetId}.${ext}`
 
@@ -155,36 +160,36 @@ export const addExt = (ext: string, str?: string) => {
           // Asset is encoded
           asset.e = 1
 
-          dotlottie[`${isAudio(asset) ? 'audio' : 'images'}/${assetId}.${ext}`] =
-          [
+          dotlottie[
+            `${isAudio(asset) ? 'audio' : 'images'}/${assetId}.${ext}`
+          ] = [
             base64ToU8(dataURL),
-            { level: 9 } // <- Level of compression
+            { level: 9 }, // <- Level of compression
           ]
         }
 
-        dotlottie[`animations/${manifest.animations[i].id}.json`] =
-        [
+        dotlottie[`animations/${manifest.animations[i].id}.json`] = [
           strToU8(JSON.stringify(animation), true),
-          { level: 9 } // <- Level of compression
+          { level: 9 }, // <- Level of compression
         ]
       }
 
       const buffer = await getArrayBuffer(dotlottie)
 
-      return shouldDownload ?
-        download(buffer, {
-          name,
-          mimeType: 'application/zip'
-        }) : buffer
+      return shouldDownload
+        ? download(buffer, {
+            name,
+            mimeType: 'application/zip',
+          })
+        : buffer
     } catch (err) {
       console.error(`❌ ${handleErrors(err).message}`)
     }
   },
-
   createJSON = ({
     animation,
     fileName,
-    shouldDownload
+    shouldDownload,
   }: {
     animation?: LottieJSON
     fileName?: string
@@ -193,22 +198,22 @@ export const addExt = (ext: string, str?: string) => {
     try {
       if (!animation) {
         throw new Error(
-          'Missing or malformed required parameter(s):\n - animation\n\''
+          "Missing or malformed required parameter(s):\n - animation\n'"
         )
       }
 
       const name = addExt('json', fileName) || `${useId()}.json`,
         jsonString = JSON.stringify(animation)
-      return shouldDownload ?
-        download(jsonString, {
-          name,
-          mimeType: 'application/json'
-        }) : jsonString
-    } catch(err) {
+      return shouldDownload
+        ? download(jsonString, {
+            name,
+            mimeType: 'application/json',
+          })
+        : jsonString
+    } catch (err) {
       console.error(`❌ ${handleErrors(err).message}`)
     }
   },
-
   /**
    * Download file, either SVG or dotLottie.
    * @param { string } data The data to be downloaded
@@ -217,12 +222,11 @@ export const addExt = (ext: string, str?: string) => {
   download = (
     data: string | ArrayBuffer,
     options?: {
-      name: string,
+      name: string
       mimeType: string
     }
   ) => {
     const blob = new Blob([data], { type: options?.mimeType }),
-
       fileName = options?.name || useId(),
       dataURL = URL.createObjectURL(blob),
       link = document.createElement('a')
@@ -239,7 +243,6 @@ export const addExt = (ext: string, str?: string) => {
       URL.revokeObjectURL(dataURL)
     }, 1000)
   },
-
   fileToBase64 = async (url: string): Promise<string> => {
     const response = await fetch(url),
       blob = await response.blob()
@@ -259,11 +262,11 @@ export const addExt = (ext: string, str?: string) => {
       }
     })
   },
-
   frameOutput = (frame?: number) =>
     ((frame ?? 0) + 1).toString().padStart(3, '0'),
-
-  getAnimationData = async (input: unknown): Promise<{
+  getAnimationData = async (
+    input: unknown
+  ): Promise<{
     animations?: LottieJSON[]
     manifest?: LottieManifest
     isDotLottie: boolean
@@ -278,14 +281,14 @@ export const addExt = (ext: string, str?: string) => {
         return {
           animations,
           manifest: undefined,
-          isDotLottie: false
+          isDotLottie: false,
         }
       }
 
       const result = await fetch(input, {
         headers: {
-          'Content-Type': 'application/json; charset=UTF-8'
-        }
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
       })
 
       if (!result.ok) {
@@ -306,7 +309,7 @@ export const addExt = (ext: string, str?: string) => {
           return {
             animations: [lottie],
             manifest: undefined,
-            isDotLottie: false
+            isDotLottie: false,
           }
         }
         const text = await result.clone().text()
@@ -315,9 +318,9 @@ export const addExt = (ext: string, str?: string) => {
           return {
             animations: [lottie],
             manifest: undefined,
-            isDotLottie: false
+            isDotLottie: false,
           }
-        } catch(e) {
+        } catch (e) {
           console.warn(e)
         }
       }
@@ -327,19 +330,17 @@ export const addExt = (ext: string, str?: string) => {
       return {
         animations: data,
         manifest,
-        isDotLottie: true
+        isDotLottie: true,
       }
-
     } catch (err) {
       console.error(`❌ ${handleErrors(err).message}`)
       return {
         animations: undefined,
         manifest: undefined,
-        isDotLottie: false
+        isDotLottie: false,
       }
     }
   },
-
   getArrayBuffer = async (zippable: Zippable) => {
     const arrayBuffer = await new Promise<ArrayBuffer>((resolve, reject) => {
       zip(zippable, { level: 9 }, (err, data) => {
@@ -352,24 +353,22 @@ export const addExt = (ext: string, str?: string) => {
     })
     return arrayBuffer
   },
-
   /**
    * Get extension from filename, URL or path
    * @param { string } str Filename, URL or path
    */
   getExt = (str?: string) => {
-    if (!str || !hasExt(str))
-    {return}
+    if (!str || !hasExt(str)) {
+      return
+    }
     const ext = str.split('.').pop()?.toLowerCase()
     return ext
   },
-
   getExtFromB64 = (str: string) => {
     const mime = str.split(':')[1].split(';')[0],
       ext = mime.split('/')[1].split('+')[0]
     return ext
   },
-
   /**
    * Parse URL to get filename
    * @param { string } src The url string
@@ -379,9 +378,12 @@ export const addExt = (ext: string, str?: string) => {
   getFilename = (src: string, keepExt?: boolean) => {
     // Because the regex strips all special characters, we need to extract the file extension, so we can add it later if we need it
     const ext = getExt(src)
-    return `${src.split('/').pop()?.replace(/\.[^.]*$/, '').replace(/\W+/g, '-')}${keepExt && ext ? `.${ext}` : ''}` // .toLowerCase()
+    return `${src
+      .split('/')
+      .pop()
+      ?.replace(/\.[^.]*$/, '')
+      .replace(/\W+/g, '-')}${keepExt && ext ? `.${ext}` : ''}` // .toLowerCase()
   },
-
   getLottieJSON = async (resp: Response) => {
     const unzipped = await unzip(resp),
       manifest = getManifest(unzipped),
@@ -399,47 +401,46 @@ export const addExt = (ext: string, str?: string) => {
 
     return {
       data,
-      manifest
+      manifest,
     }
   },
-
   getManifest = (unzipped: Unzipped) => {
     const file = strFromU8(unzipped['manifest.json'], false),
       manifest: LottieManifest = JSON.parse(file)
 
-    if (!('animations' in manifest))
-    {throw new Error('Manifest not found')}
-    if (!manifest.animations.length)
-    {throw new Error('No animations listed in manifest')}
+    if (!('animations' in manifest)) {
+      throw new Error('Manifest not found')
+    }
+    if (!manifest.animations.length) {
+      throw new Error('No animations listed in manifest')
+    }
 
     return manifest
   },
-
   getMimeFromExt = (ext?: string) => {
     switch (ext) {
-    case 'svg':
-    case 'svg+xml':
-      return 'image/svg+xml'
-    case 'jpg':
-    case 'jpeg':
-      return 'image/jpeg'
-    case 'png':
-    case 'gif':
-    case 'webp':
-      return `image/${ext}`
-    case 'mp3':
-    case 'mpeg':
-    case 'wav':
-      return `audio/${ext}`
-    default:
-      return ''
+      case 'svg':
+      case 'svg+xml':
+        return 'image/svg+xml'
+      case 'jpg':
+      case 'jpeg':
+        return 'image/jpeg'
+      case 'png':
+      case 'gif':
+      case 'webp':
+        return `image/${ext}`
+      case 'mp3':
+      case 'mpeg':
+      case 'wav':
+        return `audio/${ext}`
+      default:
+        return ''
     }
   },
-
   handleErrors = (err: unknown) => {
     const res = {
       message: 'Unknown error',
-      status: isServer() ? 500 : 400
+      status: isServer() ? 500 : 400,
     }
     if (err && typeof err === 'object') {
       if ('message' in err && typeof err.message === 'string') {
@@ -451,36 +452,38 @@ export const addExt = (ext: string, str?: string) => {
     }
     return res
   },
-
   hasExt = (path?: string) => {
     const lastDotIndex = path?.split('/').pop()?.lastIndexOf('.')
-    return (lastDotIndex ?? 0) > 1 && path && path.length - 1 > (lastDotIndex ?? 0)
+    return (
+      (lastDotIndex ?? 0) > 1 && path && path.length - 1 > (lastDotIndex ?? 0)
+    )
   },
-
   isAudio = (asset: LottieAsset) =>
-    !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset,
-
+    !('h' in asset) &&
+    !('w' in asset) &&
+    'p' in asset &&
+    'e' in asset &&
+    'u' in asset &&
+    'id' in asset,
   isBase64 = (str?: string) => {
-    if (!str)
-    {return false}
-    const regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
+    if (!str) {
+      return false
+    }
+    const regex =
+      /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
     return regex.test(parseBase64(str))
   },
-
   isImage = (asset: LottieAsset) =>
     'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset,
-
-  isServer = () =>
-    !(typeof window !== 'undefined' && window.document),
-
-  parseBase64 = (str: string) =>
-    str.substring(str.indexOf(',') + 1),
-
-  prepareString = (str: string) => str.replace(new RegExp(/"""/, 'g'), '""').replace(/(["'])(.*?)\1/g, (_match, quote: string, content: string) => {
-    const replacedContent = content.replace(/[^\w\s\d.#]/g, '')
-    return `${quote}${replacedContent}${quote}`
-  }),
-
+  isServer = () => !(typeof window !== 'undefined' && window.document),
+  parseBase64 = (str: string) => str.substring(str.indexOf(',') + 1),
+  prepareString = (str: string) =>
+    str
+      .replace(new RegExp(/"""/, 'g'), '""')
+      .replace(/(["'])(.*?)\1/g, (_match, quote: string, content: string) => {
+        const replacedContent = content.replace(/[^\w\s\d.#]/g, '')
+        return `${quote}${replacedContent}${quote}`
+      }),
   resolveAssets = async (unzipped: Unzipped, assets?: LottieAsset[]) => {
     if (!Array.isArray(assets)) {
       return
@@ -501,14 +504,20 @@ export const addExt = (ext: string, str?: string) => {
       }
 
       toResolve.push(
-        new Promise<void>(resolveAsset => {
-          const assetB64 = isServer() ? Buffer.from(u8).toString('base64') :
-            btoa(u8.reduce((dat, byte) => (
-              `${dat}${String.fromCharCode(byte)}`
-            ), ''))
+        new Promise<void>((resolveAsset) => {
+          const assetB64 = isServer()
+            ? Buffer.from(u8).toString('base64')
+            : btoa(
+                u8.reduce(
+                  (dat, byte) => `${dat}${String.fromCharCode(byte)}`,
+                  ''
+                )
+              )
 
-          asset.p = (asset.p?.startsWith('data:') || isBase64(asset.p)) ? asset.p :
-            `data:${getMimeFromExt(getExt(asset.p))};base64,${assetB64}`
+          asset.p =
+            asset.p?.startsWith('data:') || isBase64(asset.p)
+              ? asset.p
+              : `data:${getMimeFromExt(getExt(asset.p))};base64,${assetB64}`
           asset.e = 1
           asset.u = ''
 
@@ -519,24 +528,26 @@ export const addExt = (ext: string, str?: string) => {
 
     await Promise.all(toResolve)
   },
-
   unzip = async (
-    resp: Response,
+    resp: Response
     // filter: UnzipFileFilter = () => true
   ): Promise<Unzipped> => {
     const u8 = new Uint8Array(await resp.arrayBuffer()),
       unzipped = await new Promise<Unzipped>((resolve, reject) => {
-        unzipOrg(u8, /* { filter }, */ (err, file) => {
-          if (err) {
-            reject(err)
+        unzipOrg(
+          u8,
+          /* { filter }, */ (err, file) => {
+            if (err) {
+              reject(err)
+            }
+            resolve(file)
           }
-          resolve(file)
-        })
+        )
       })
     return unzipped
   },
-
   useId = (prefix?: string) => {
-    const s4 = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-    return (`${prefix ?? `:${s4()}`}_${s4()}`)
+    const s4 = () =>
+      (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+    return `${prefix ?? `:${s4()}`}_${s4()}`
   }

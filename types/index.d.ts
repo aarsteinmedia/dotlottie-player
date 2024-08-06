@@ -1,7 +1,7 @@
 import { type AnimationDirection, type AnimationItem, type AnimationSegment, type RendererType } from 'lottie-web';
 import EnhancedElement from './observeProperties';
 import { PlayMode, PlayerState, PreserveAspectRatio } from './utils';
-import { AnimationSettings, AnimateOnScroll, AnimationConfig, Autoplay, Controls, Loop, LottieJSON, LottieManifest, Subframe } from './types';
+import { AnimationAttributes, AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieJSON, LottieManifest, Subframe } from './types';
 export declare class DotLottiePlayer extends EnhancedElement {
     constructor();
     connectedCallback(): Promise<void>;
@@ -85,7 +85,7 @@ export declare class DotLottiePlayer extends EnhancedElement {
     private _handleScroll;
     private _handleSeekChange;
     private _isLottie;
-    addAnimation(configs: AnimationConfig[], fileName?: string, shouldDownload?: boolean): Promise<void | ArrayBuffer>;
+    addAnimation(configs: AnimationAttributes[], fileName?: string, shouldDownload?: boolean): Promise<void | ArrayBuffer>;
     getLottie(): AnimationItem | null;
     play(): Promise<void>;
     pause(): void;

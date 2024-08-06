@@ -26,8 +26,8 @@ export default class EnhancedElement extends HTMLElement {
     }
 
     if (
-      'propertyChangedCallback' in this
-      && typeof this.propertyChangedCallback === 'function'
+      'propertyChangedCallback' in this &&
+      typeof this.propertyChangedCallback === 'function'
     ) {
       for (const propName of observedProperties as (keyof this)[]) {
         const initialValue = this[propName],
@@ -44,7 +44,7 @@ export default class EnhancedElement extends HTMLElement {
             const oldValue = this[CACHED_VALUE]
             this[CACHED_VALUE] = value
             this.propertyChangedCallback(propName, oldValue, value)
-          }
+          },
         })
 
         if (typeof initialValue !== 'undefined') {
@@ -58,15 +58,15 @@ export default class EnhancedElement extends HTMLElement {
   connectedCallback() {
     let arr = []
     if (
-      UPDATE_ON_CONNECTED in this
-      && Array.isArray(this[UPDATE_ON_CONNECTED])
+      UPDATE_ON_CONNECTED in this &&
+      Array.isArray(this[UPDATE_ON_CONNECTED])
     ) {
       arr = this[UPDATE_ON_CONNECTED]
     }
     for (const propName of arr) {
       if (
-        !('propertyChangedCallback' in this)
-        || typeof this.propertyChangedCallback !== 'function'
+        !('propertyChangedCallback' in this) ||
+        typeof this.propertyChangedCallback !== 'function'
       ) {
         continue
       }
@@ -74,5 +74,4 @@ export default class EnhancedElement extends HTMLElement {
       this.propertyChangedCallback(propName, undefined, this[propName])
     }
   }
-
 }

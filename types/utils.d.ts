@@ -46,12 +46,12 @@ export declare enum PreserveAspectRatio {
 export declare class CustomError extends Error {
     status?: number;
 }
-export declare const addExt: (ext: string, str?: string) => string | undefined, aspectRatio: (objectFit: string) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", base64ToU8: (str: string) => Uint8Array, createDotLottie: ({ animations, manifest, fileName, shouldDownload }: {
+export declare const addExt: (ext: string, str?: string) => string | undefined, aspectRatio: (objectFit: string) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", base64ToU8: (str: string) => Uint8Array, createDotLottie: ({ animations, manifest, fileName, shouldDownload, }: {
     animations?: LottieJSON[];
     manifest: LottieManifest;
     fileName?: string;
     shouldDownload?: boolean;
-}) => Promise<void | ArrayBuffer>, createJSON: ({ animation, fileName, shouldDownload }: {
+}) => Promise<void | ArrayBuffer>, createJSON: ({ animation, fileName, shouldDownload, }: {
     animation?: LottieJSON;
     fileName?: string;
     shouldDownload?: boolean;
