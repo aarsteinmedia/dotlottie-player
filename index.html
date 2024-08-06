@@ -7,7 +7,7 @@
   <title>DotLottie Player Demo</title>
 </head>
 
-<body style="font-family: sans-serif; color: white; background-color: darkblue;">
+<body style="font-family: sans-serif; color: white; background-color: #0b1a29;">
   <div style="width: 100vw;height:100vh;position:fixed;top:0;left:0;pointer-events:none;z-index:-1;">
     <dotlottie-player subframe autoplay loop objectfit="fill" src="/assets/menuanimation.lottie"></dotlottie-player>
   </div>
@@ -20,7 +20,7 @@
       <dotlottie-player controls subframe="" src="/assets/care-education-2.lottie">
       </dotlottie-player> -->
       <div style="max-width: 500px; margin: 20px auto">
-        <dotlottie-player controls subframe="" src="/assets/am.lottie">
+        <dotlottie-player controls simple subframe="" src="/assets/am.lottie">
         </dotlottie-player>
       </div>
     </div>
@@ -50,7 +50,7 @@
   </div>
   <script defer src="./dist/index.js"></script>
   <script defer>
-    const player = document.getElementsByTagName('dotlottie-player')[0],
+    const player = document.getElementsByTagName('dotlottie-player')[1],
       dl = async () => {
         await dotLottiePlayer().addAnimation([
           {

@@ -203,10 +203,9 @@ export class DotLottiePlayer extends EnhancedElement {
 
     if (name === 'mode') {
       const toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
-      if (!(toggleBoomerang instanceof HTMLButtonElement)) {
-        return
+      if (toggleBoomerang instanceof HTMLButtonElement) {
+        toggleBoomerang.dataset.active = (value === PlayMode.Bounce).toString()
       }
-      toggleBoomerang.dataset.active = (value === PlayMode.Bounce).toString()
       this._isBounce = value === PlayMode.Bounce
     }
 
