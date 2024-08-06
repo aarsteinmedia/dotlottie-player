@@ -824,9 +824,9 @@ export class DotLottiePlayer extends EnhancedElement {
         this.direction ?? this._manifest.animations[this._currentAnimation].direction ?? 1
 
     // Set initial playback speed and direction
-    this.setSpeed(speed)
-    this.setDirection(direction)
-    this.setSubframe(!!this.subframe)
+    this._lottieInstance.setSpeed(speed)
+    this._lottieInstance.setDirection(direction)
+    this._lottieInstance.setSubframe(!!this.subframe)
 
     // Start playing if autoplay is enabled
     if (this.autoplay || this.animateOnScroll) {
