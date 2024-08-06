@@ -87,9 +87,7 @@ export class DotLottiePlayer extends EnhancedElement {
     this.render()
 
     this._container = this.shadow.querySelector('.animation')
-    if (this.controls) {
-      this.renderControls()
-    }
+    this.renderControls()
 
     // Add listener for Visibility API's change event.
     if (typeof document.hidden !== 'undefined') {
@@ -1848,7 +1846,8 @@ export class DotLottiePlayer extends EnhancedElement {
       return
     }
 
-    slot.innerHTML = `
+    slot.innerHTML = this.controls
+      ? `
       <div
         class="lottie-controls toolbar ${this.playerState === PlayerState.Error ? 'has-error' : ''}"
         aria-label="Lottie Animation controls"
@@ -1989,6 +1988,7 @@ export class DotLottiePlayer extends EnhancedElement {
 
       </div>
     `
+      : ''
   }
 
   protected render() {
