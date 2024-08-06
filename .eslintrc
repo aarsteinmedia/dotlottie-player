@@ -13,7 +13,6 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
     "plugin:prettier/recommended"
   ],
   "parserOptions": {
@@ -99,10 +98,10 @@
       "error",
       "never"
     ],
-    "indent": [
-      "warn",
-      2
-    ],
+    // "indent": [
+    //   "warn",
+    //   2
+    // ],
     "func-style": [
       "error",
       "declaration",
