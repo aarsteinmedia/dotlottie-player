@@ -195,10 +195,10 @@ export class DotLottiePlayer extends EnhancedElement {
 
     if (name === 'loop') {
       const toggleLoop = this.shadow.querySelector('.toggleLoop')
-      if (!(toggleLoop instanceof HTMLButtonElement)) {
-        return
+      if (toggleLoop instanceof HTMLButtonElement) {
+        toggleLoop.dataset.active = value
       }
-      toggleLoop.dataset.active = value
+      this._lottieInstance.setLoop(value === '' || Boolean(value))
     }
 
     if (name === 'mode') {
@@ -207,6 +207,7 @@ export class DotLottiePlayer extends EnhancedElement {
         return
       }
       toggleBoomerang.dataset.active = (value === PlayMode.Bounce).toString()
+      this._isBounce = value === PlayMode.Bounce
     }
 
     if (name === 'speed') {
