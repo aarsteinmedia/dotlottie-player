@@ -45,9 +45,6 @@ import styles from './styles.scss'
  * @extends { EnhancedElement }
  */
 export class DotLottiePlayer extends EnhancedElement {
-  shadow: ShadowRoot
-
-  template: HTMLTemplateElement
 
   constructor() {
     super()
@@ -128,6 +125,9 @@ export class DotLottiePlayer extends EnhancedElement {
     document.removeEventListener('visibilitychange', this._onVisibilityChange)
   }
 
+  public shadow: ShadowRoot
+  public template: HTMLTemplateElement
+
   /**
    * Attributes to observe
    */
@@ -158,8 +158,8 @@ export class DotLottiePlayer extends EnhancedElement {
    * Runs when the value of an attribute is changed on the component
    */
   attributeChangedCallback(name: string, _oldValue: unknown, value: string) {
-    const toggleLoop = this.shadow.querySelector('#toggleLoop'),
-      toggleBoomerang = this.shadow.querySelector('#toggleBoomerang')
+    const toggleLoop = this.shadow.querySelector('.toggleLoop'),
+      toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
 
     if (
       !(toggleLoop instanceof HTMLButtonElement)
@@ -193,14 +193,14 @@ export class DotLottiePlayer extends EnhancedElement {
       return
     }
 
-    const togglePlay = this.shadow.querySelector('#togglePlay'),
-      stop = this.shadow.querySelector('#stop'),
-      prev = this.shadow.querySelector('#prev'),
-      next = this.shadow.querySelector('#next'),
-      seeker = this.shadow.querySelector('#seeker'),
+    const togglePlay = this.shadow.querySelector('.togglePlay'),
+      stop = this.shadow.querySelector('.stop'),
+      prev = this.shadow.querySelector('.prev'),
+      next = this.shadow.querySelector('.next'),
+      seeker = this.shadow.querySelector('.seeker'),
       progress = this.shadow.querySelector('progress'),
       popover = this.shadow.querySelector('.popover'),
-      convert = this.shadow.querySelector('#convert')
+      convert = this.shadow.querySelector('.convert')
 
     if (
       !(togglePlay instanceof HTMLButtonElement)
@@ -515,7 +515,6 @@ export class DotLottiePlayer extends EnhancedElement {
   /**
    * Hide advanced controls
    */
-  // public simple?: boolean = false
   set simple(value: boolean) {
     this.setAttribute('simple', value.toString())
   }
@@ -598,6 +597,14 @@ export class DotLottiePlayer extends EnhancedElement {
    */
   private _currentAnimation = 0
 
+  /**
+   * @state
+   * This is included in watched properties,
+   * so that next-button will show up
+   * on load, if controls are visible
+   */
+  private _animations!: LottieJSON[]
+
   private _intersectionObserver?: IntersectionObserver
   private _lottieInstance: AnimationItem | null = null
   private _identifier = this.id || useId('dotlottie')
@@ -608,13 +615,6 @@ export class DotLottiePlayer extends EnhancedElement {
   private _isDotLottie = false
 
   private _manifest!: LottieManifest
-
-  /**
-   * @state
-   * This is set to state, so that next-button will show up
-   * on load, if controls are visible
-   */
-  private _animations!: LottieJSON[]
 
   private _playerState: {
     prev: PlayerState
@@ -861,21 +861,21 @@ export class DotLottiePlayer extends EnhancedElement {
       return
     }
 
-    this.shadow.querySelector('#togglePlay')?.addEventListener('click', this.togglePlay)
-    this.shadow.querySelector('#stop')?.addEventListener('click', this.stop)
-    this.shadow.querySelector('#prev')?.addEventListener('click', this.prev)
-    this.shadow.querySelector('#next')?.addEventListener('click', this.next)
-    this.shadow.querySelector('#toggleLoop')?.addEventListener('click', this.toggleLoop)
-    this.shadow.querySelector('#toggleBoomerang')?.addEventListener('click', this.toggleBoomerang)
+    this.shadow.querySelector('.togglePlay')?.addEventListener('click', this.togglePlay)
+    this.shadow.querySelector('.stop')?.addEventListener('click', this.stop)
+    this.shadow.querySelector('.prev')?.addEventListener('click', this.prev)
+    this.shadow.querySelector('.next')?.addEventListener('click', this.next)
+    this.shadow.querySelector('.toggleLoop')?.addEventListener('click', this.toggleLoop)
+    this.shadow.querySelector('.toggleBoomerang')?.addEventListener('click', this.toggleBoomerang)
     // The convert function has an object parameter with optional values, and is therefor safe to cast in this way
-    this.shadow.querySelector('#convert')?.addEventListener('click', this.convert as unknown as () => void)
-    this.shadow.querySelector('#snapshot')?.addEventListener('click', this.snapshot)
+    this.shadow.querySelector('.convert')?.addEventListener('click', this.convert as unknown as () => void)
+    this.shadow.querySelector('.snapshot')?.addEventListener('click', this.snapshot)
 
-    const toggleSettings = this.shadow.querySelector('#seeker')
+    const toggleSettings = this.shadow.querySelector('.seeker')
     toggleSettings?.addEventListener('change', this._handleSeekChange)
     toggleSettings?.addEventListener('mousedown', this._freeze)
 
-    const settings = this.shadow.querySelector('#toggleSettings')
+    const settings = this.shadow.querySelector('.toggleSettings')
     settings?.addEventListener('click', this._handleSettingsClick)
     settings?.addEventListener('blur', this._handleBlur)
 
@@ -918,21 +918,21 @@ export class DotLottiePlayer extends EnhancedElement {
       return
     }
 
-    this.shadow.querySelector('#togglePlay')?.removeEventListener('click', this.togglePlay)
-    this.shadow.querySelector('#stop')?.removeEventListener('click', this.stop)
-    this.shadow.querySelector('#prev')?.removeEventListener('click', this.prev)
-    this.shadow.querySelector('#next')?.removeEventListener('click', this.next)
-    this.shadow.querySelector('#toggleLoop')?.removeEventListener('click', this.toggleLoop)
-    this.shadow.querySelector('#toggleBoomerang')?.removeEventListener('click', this.toggleBoomerang)
+    this.shadow.querySelector('.togglePlay')?.removeEventListener('click', this.togglePlay)
+    this.shadow.querySelector('.stop')?.removeEventListener('click', this.stop)
+    this.shadow.querySelector('.prev')?.removeEventListener('click', this.prev)
+    this.shadow.querySelector('.next')?.removeEventListener('click', this.next)
+    this.shadow.querySelector('.toggleLoop')?.removeEventListener('click', this.toggleLoop)
+    this.shadow.querySelector('.toggleBoomerang')?.removeEventListener('click', this.toggleBoomerang)
     // The convert function has an object parameter with optional values, and is therefor safe to cast in this way
-    this.shadow.querySelector('#convert')?.removeEventListener('click', this.convert as unknown as () => void)
-    this.shadow.querySelector('#snapshot')?.removeEventListener('click', this.snapshot)
+    this.shadow.querySelector('.convert')?.removeEventListener('click', this.convert as unknown as () => void)
+    this.shadow.querySelector('.snapshot')?.removeEventListener('click', this.snapshot)
 
-    const seeker = this.shadow.querySelector('#seeker')
+    const seeker = this.shadow.querySelector('.seeker')
     seeker?.removeEventListener('change', this._handleSeekChange)
     seeker?.removeEventListener('mousedown', this._freeze)
 
-    const toggleSettings = this.shadow.querySelector('#toggleSettings')
+    const toggleSettings = this.shadow.querySelector('.toggleSettings')
     toggleSettings?.removeEventListener('click', this._handleSettingsClick)
     toggleSettings?.removeEventListener('blur', this._handleBlur)
 
@@ -973,7 +973,7 @@ export class DotLottiePlayer extends EnhancedElement {
       }
 
       if (this._playerState.count >= this.count) {
-        this.setLooping(false)
+        this.setLoop(false)
 
         this.playerState = PlayerState.Completed
         this.dispatchEvent(new CustomEvent(PlayerEvents.Complete))
@@ -1468,7 +1468,7 @@ export class DotLottiePlayer extends EnhancedElement {
    * Set loop
    * @param { boolean } value
    */
-  public setLooping(value: boolean) {
+  public setLoop(value: boolean) {
     if (!this._lottieInstance) {
       return
     }
@@ -1517,7 +1517,7 @@ export class DotLottiePlayer extends EnhancedElement {
    * Toggle loop
    */
   public toggleLoop() {
-    this.setLooping(!this.loop)
+    this.setLoop(!this.loop)
   }
 
   /**
@@ -1710,7 +1710,7 @@ export class DotLottiePlayer extends EnhancedElement {
         aria-label="Lottie Animation controls"
       >
         <button
-          id="togglePlay"
+          class="togglePlay"
           data-active="false"
           tabindex="0"
           aria-label="Toggle Play/Pause"
@@ -1721,7 +1721,7 @@ export class DotLottiePlayer extends EnhancedElement {
         </button>
 
          <button
-          id="stop"
+          class="stop"
           data-active="true"
           tabindex="0"
           aria-label="Stop"
@@ -1731,7 +1731,7 @@ export class DotLottiePlayer extends EnhancedElement {
           </svg>
         </button>
         <button
-          id="prev"
+          class="prev"
           tabindex="0"
           aria-label="Previous animation"
           hidden
@@ -1741,7 +1741,7 @@ export class DotLottiePlayer extends EnhancedElement {
           </svg>
         </button>
         <button
-          id="next"
+          class="next"
           tabindex="0"
           aria-label="Next animation"
           hidden
@@ -1752,7 +1752,7 @@ export class DotLottiePlayer extends EnhancedElement {
         </button>
         <form class="progress-container${this.simple ? ' simple' : ''}">
           <input
-            id="seeker"
+            class="seeker"
             type="range"
             min="0"
             max="100"
@@ -1774,7 +1774,7 @@ export class DotLottiePlayer extends EnhancedElement {
         ${this.simple ? '' :
     `
         <button
-          id="toggleLoop"
+          class="toggleLoop"
           data-active="${this.loop}"
           tabindex="0"
           aria-label="Toggle loop"
@@ -1786,7 +1786,7 @@ export class DotLottiePlayer extends EnhancedElement {
           </svg>
         </button>
         <button
-          id="toggleBoomerang"
+          class="toggleBoomerang"
           data-active="${this.mode === PlayMode.Bounce}"
           aria-label="Toggle boomerang"
           tabindex="0"
@@ -1798,7 +1798,7 @@ export class DotLottiePlayer extends EnhancedElement {
           </svg>
         </button>
         <button
-          id="toggleSettings"
+          class="toggleSettings"
           aria-label="Settings"
           aria-haspopup="true"
           aria-expanded="${!!this._isSettingsOpen}"
@@ -1816,7 +1816,7 @@ export class DotLottiePlayer extends EnhancedElement {
           hidden
         >
           <button
-            id="convert"
+            class="convert"
             aria-label="Convert JSON animation to dotLottie format"
             tabindex="0"
             hidden
@@ -1828,7 +1828,7 @@ export class DotLottiePlayer extends EnhancedElement {
             </svg> Convert to dotLottie
           </button>
           <button
-            id="snapshot"
+            class="snapshot"
             aria-label="Download still image"
             tabindex="0"
           >

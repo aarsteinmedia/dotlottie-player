@@ -67,8 +67,6 @@ export default class EnhancedElement extends HTMLElement {
       if (
         !('propertyChangedCallback' in this)
         || typeof this.propertyChangedCallback !== 'function'
-        // || typeof propName !== 'string'
-        // || !(propName in this)
       ) {
         continue
       }
