@@ -27,6 +27,13 @@
     "url": "https://www.aarstein.media",
     "organization": "Aarstein Media"
   },
+  "contributors": [
+    {
+      "name": "Anthony Colpron",
+      "email": "anthonycolpron@gmail.com",
+      "url": "https://github.com/anthony-colpron"
+    }
+  ],
   "license": "GPL-2.0-or-later",
   "scripts": {
     "build": "rimraf ./dist && rollup -c",
