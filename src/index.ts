@@ -133,21 +133,11 @@ export class DotLottiePlayer extends EnhancedElement {
     return [
       'animateOnScroll',
       'autoplay',
-      'background',
       'controls',
-      'count',
-      'description',
       'direction',
       'hover',
-      'intermission',
       'loop',
       'mode',
-      'multiAnimationSettings',
-      'objectfit',
-      'preserveAspectRatio',
-      'renderer',
-      'segment',
-      'simple',
       'speed',
       'subframe',
     ]
@@ -157,6 +147,10 @@ export class DotLottiePlayer extends EnhancedElement {
    * Runs when the value of an attribute is changed on the component
    */
   attributeChangedCallback(name: string, _oldValue: unknown, value: string) {
+    if (!this._lottieInstance) {
+      return
+    }
+
     const toggleLoop = this.shadow.querySelector('.toggleLoop'),
       toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
 
@@ -167,12 +161,67 @@ export class DotLottiePlayer extends EnhancedElement {
       return
     }
 
+    if (name === 'animateOnScroll') {
+      if (value === '' || Boolean(value)) {
+        this._lottieInstance.autoplay = false
+        addEventListener('scroll', this._handleScroll, {
+          passive: true,
+          capture: true,
+        })
+        return
+      }
+      removeEventListener('scroll', this._handleScroll, true)
+    }
+
+    if (name === 'autoplay') {
+      if (this.animateOnScroll) {
+        return
+      }
+      if (value === '' || Boolean(value)) {
+        this.play()
+        return
+      }
+      this.stop()
+    }
+
+    if (name === 'controls') {
+      this.renderControls()
+    }
+
+    if (name === 'direction') {
+      if (Number(value) === -1) {
+        return this.setDirection(-1)
+      }
+      this.setDirection(1)
+    }
+
+    if (name === 'hover' && this._container) {
+      if (value === '' || Boolean(value)) {
+        this._container.addEventListener('mouseenter', this._mouseEnter)
+        this._container.addEventListener('mouseleave', this._mouseLeave)
+        return
+      }
+      this._container.removeEventListener('mouseenter', this._mouseEnter)
+      this._container.removeEventListener('mouseleave', this._mouseLeave)
+    }
+
     if (name === 'loop') {
       toggleLoop.dataset.active = value
     }
 
     if (name === 'mode') {
       toggleBoomerang.dataset.active = (value === PlayMode.Bounce).toString()
+    }
+
+    if (name === 'speed') {
+      const val = Number(value)
+      if (val && !isNaN(val)) {
+        this._lottieInstance.setSpeed(val)
+      }
+    }
+
+    if (name === 'subframe') {
+      this._lottieInstance.setSubframe(value === '' || Boolean(value))
     }
   }
 
