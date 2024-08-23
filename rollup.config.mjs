@@ -111,8 +111,4 @@ const isProd = process.env.NODE_ENV !== 'development',
     plugins: modulePlugins(),
   }
 
-export default isProd ? [
-  types,
-  unpkg,
-  module,
-] : unpkg
+export default isProd ? [types, unpkg, module] : unpkg
