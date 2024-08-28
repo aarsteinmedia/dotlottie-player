@@ -1595,7 +1595,7 @@ export class DotLottiePlayer extends EnhancedElement {
     if (!this._lottieInstance) {
       return
     }
-    this.direction = value
+    // this.direction = value
     this._lottieInstance.setDirection(value)
   }
 
