@@ -1159,6 +1159,7 @@ export class DotLottiePlayer extends EnhancedElement {
       console.warn(
         'DotLottie: Scroll animations might not work properly in a Server Side Rendering context. Try to wrap this in a client component.'
       )
+      return
     }
     if (this._playerState.visible) {
       if (this._playerState.scrollTimeout) {
