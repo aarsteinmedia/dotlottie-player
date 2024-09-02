@@ -115,6 +115,7 @@ export const addExt = (ext: string, str?: string) => {
     shouldDownload?: boolean
   }) => {
     try {
+      // Input validation
       if (!animations?.length || !manifest) {
         throw new Error(
           `Missing or malformed required parameter(s):\n ${
@@ -123,14 +124,18 @@ export const addExt = (ext: string, str?: string) => {
         )
       }
 
-      const name = addExt('lottie', fileName) || `${useId()}.lottie`,
+      const manifestCompressionLevel = 0,
+        animationCompressionLevel = 9,
+        // Prepare the dotLottie file
+        name = addExt('lottie', fileName) || `${useId()}.lottie`,
         dotlottie: Zippable = {
           'manifest.json': [
             strToU8(JSON.stringify(manifest), true),
-            { level: 0 }, // <- Level of compression (no compression)
+            { level: manifestCompressionLevel },
           ],
         }
 
+      // Add animations and assets to the dotLottie file
       for (const [i, animation] of animations.entries()) {
         for (const asset of animation.assets ?? []) {
           if (!asset.p || (!isImage(asset) && !isAudio(asset))) {
@@ -138,8 +143,8 @@ export const addExt = (ext: string, str?: string) => {
           }
 
           const { p: file, u: path } = asset,
-            // asset.id caused issues with multianimations
-            assetId = /* asset.id || */ useId('asset'),
+            // Original asset.id caused issues with multianimations
+            assetId = useId('asset'),
             isEncoded = file.startsWith('data:'),
             ext = isEncoded ? getExtFromB64(file) : getExt(file),
             // Check if the asset is already base64-encoded. If not, get path, fetch it, and encode it
@@ -162,15 +167,12 @@ export const addExt = (ext: string, str?: string) => {
 
           dotlottie[
             `${isAudio(asset) ? 'audio' : 'images'}/${assetId}.${ext}`
-          ] = [
-            base64ToU8(dataURL),
-            { level: 9 }, // <- Level of compression
-          ]
+          ] = [base64ToU8(dataURL), { level: animationCompressionLevel }]
         }
 
         dotlottie[`animations/${manifest.animations[i].id}.json`] = [
           strToU8(JSON.stringify(animation), true),
-          { level: 9 }, // <- Level of compression
+          { level: animationCompressionLevel },
         ]
       }
 
@@ -428,6 +430,7 @@ export const addExt = (ext: string, str?: string) => {
       case 'png':
       case 'gif':
       case 'webp':
+      case 'avif':
         return `image/${ext}`
       case 'mp3':
       case 'mpeg':

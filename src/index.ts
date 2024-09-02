@@ -1262,14 +1262,20 @@ export class DotLottiePlayer extends EnhancedElement {
         animations?.push(...animationsToAdd)
       }
 
-      return createDotLottie({
-        animations,
-        manifest,
-        fileName,
-        shouldDownload,
-      })
+      return {
+        success: true,
+        result: await createDotLottie({
+          animations,
+          manifest,
+          fileName,
+          shouldDownload,
+        }),
+      }
     } catch (err) {
-      console.error(handleErrors(err).message)
+      return {
+        success: false,
+        error: handleErrors(err).message,
+      }
     }
   }
 

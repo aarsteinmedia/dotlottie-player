@@ -86,7 +86,15 @@ export declare class DotLottiePlayer extends EnhancedElement {
     private _handleScroll;
     private _handleSeekChange;
     private _isLottie;
-    addAnimation(configs: AnimationAttributes[], fileName?: string, shouldDownload?: boolean): Promise<void | ArrayBuffer>;
+    addAnimation(configs: AnimationAttributes[], fileName?: string, shouldDownload?: boolean): Promise<{
+        success: boolean;
+        result: void | ArrayBuffer;
+        error?: undefined;
+    } | {
+        success: boolean;
+        error: string;
+        result?: undefined;
+    }>;
     getLottie(): AnimationItem | null;
     play(): Promise<void>;
     pause(): void;
