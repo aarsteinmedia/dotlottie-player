@@ -9,23 +9,21 @@ import { isServer } from './utils'
 const UPDATE_ON_CONNECTED = Symbol('UPDATE_ON_CONNECTED')
 
 if (isServer()) {
-  // Mock HTMLElement on server-side
-  global.HTMLElement = class EmptyHTMLElement extends HTMLElement {}
+  // Mock HTMLElement for server-side rendering
+  // @ts-ignore
+  global.HTMLElement = class EmptyHTMLElement {}
 }
 
 /**
  * HTMLElement enhanced to track property changes
  */
 export default class EnhancedElement extends HTMLElement {
-  [key: symbol]: unknown
-
   constructor() {
     super()
-    const { observedProperties = [] } = this
-      .constructor as typeof EnhancedElement
-
+    // @ts-ignore
+    const { observedProperties = [] } = this.constructor
     if (UPDATE_ON_CONNECTED in this) {
-      this[UPDATE_ON_CONNECTED] = [] as (keyof this)[]
+      this[UPDATE_ON_CONNECTED] = []
     }
 
     if (
@@ -49,18 +47,20 @@ export default class EnhancedElement extends HTMLElement {
             this.propertyChangedCallback(propName, oldValue, value)
           },
         })
-
         if (typeof initialValue !== 'undefined') {
-          ;(this[UPDATE_ON_CONNECTED] as (keyof this)[])?.push(propName)
+          if (
+            UPDATE_ON_CONNECTED in this &&
+            Array.isArray(this[UPDATE_ON_CONNECTED])
+          ) {
+            ;(this[UPDATE_ON_CONNECTED] as (keyof this)[]).push(propName)
+          }
         }
       }
     }
   }
 
-  static observedProperties: (keyof EnhancedElement)[] = []
-
   connectedCallback() {
-    let arr: (keyof this)[] = []
+    let arr = []
     if (
       UPDATE_ON_CONNECTED in this &&
       Array.isArray(this[UPDATE_ON_CONNECTED])
@@ -74,7 +74,14 @@ export default class EnhancedElement extends HTMLElement {
       ) {
         continue
       }
-      this.propertyChangedCallback(propName, undefined, this[propName])
+
+      if (propName in this) {
+        this.propertyChangedCallback(
+          propName,
+          undefined,
+          this[propName as keyof this]
+        )
+      }
     }
   }
 }

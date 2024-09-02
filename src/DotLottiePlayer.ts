@@ -1,7 +1,6 @@
 import Lottie, {
   type AnimationConfig,
   type AnimationDirection,
-  // type AnimationEventName,
   type AnimationItem,
   type AnimationSegment,
   type RendererType,
@@ -221,14 +220,14 @@ export class DotLottiePlayer extends EnhancedElement {
     }
   }
 
-  static override get observedProperties() {
+  static get observedProperties() {
     return [
       'playerState',
       '_isSettingsOpen',
       '_seeker',
       '_currentAnimation',
       '_animations',
-    ] as unknown as (keyof EnhancedElement)[]
+    ]
   }
 
   // name: string, oldValue: string, newValue: string

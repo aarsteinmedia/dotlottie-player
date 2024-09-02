@@ -10,7 +10,7 @@ export declare class DotLottiePlayer extends EnhancedElement {
     template: HTMLTemplateElement;
     static get observedAttributes(): string[];
     attributeChangedCallback(name: string, _oldValue: unknown, value: string): void;
-    static get observedProperties(): (keyof EnhancedElement)[];
+    static get observedProperties(): string[];
     propertyChangedCallback(name: string, _oldValue: unknown, value: unknown): void;
     set animateOnScroll(value: AnimateOnScroll);
     get animateOnScroll(): AnimateOnScroll;
