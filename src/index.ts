@@ -1,7 +1,7 @@
 import Lottie, {
   type AnimationConfig,
   type AnimationDirection,
-  type AnimationEventName,
+  // type AnimationEventName,
   type AnimationItem,
   type AnimationSegment,
   type RendererType,
@@ -221,14 +221,14 @@ export class DotLottiePlayer extends EnhancedElement {
     }
   }
 
-  static get observedProperties() {
+  static override get observedProperties() {
     return [
       'playerState',
       '_isSettingsOpen',
       '_seeker',
       '_currentAnimation',
       '_animations',
-    ]
+    ] as unknown as (keyof EnhancedElement)[]
   }
 
   // name: string, oldValue: string, newValue: string
@@ -914,93 +914,57 @@ export class DotLottiePlayer extends EnhancedElement {
   }
 
   /**
-   * Add event listeners
+   * Toggle event listeners
    */
-  private _addEventListeners() {
-    if (!this._lottieInstance) {
-      return
-    }
+  private _toggleEventListeners(action: 'add' | 'remove') {
+    const method = action === 'add' ? 'addEventListener' : 'removeEventListener'
 
-    this.shadow
-      .querySelector('.togglePlay')
-      ?.addEventListener('click', this.togglePlay)
-    this.shadow.querySelector('.stop')?.addEventListener('click', this.stop)
-    this.shadow.querySelector('.prev')?.addEventListener('click', this.prev)
-    this.shadow.querySelector('.next')?.addEventListener('click', this.next)
-    this.shadow
-      .querySelector('.toggleLoop')
-      ?.addEventListener('click', this.toggleLoop)
+    this.shadow.querySelector('.togglePlay')?.[method]('click', this.togglePlay)
+    this.shadow.querySelector('.stop')?.[method]('click', this.stop)
+    this.shadow.querySelector('.prev')?.[method]('click', this.prev)
+    this.shadow.querySelector('.next')?.[method]('click', this.next)
+    this.shadow.querySelector('.toggleLoop')?.[method]('click', this.toggleLoop)
     this.shadow
       .querySelector('.toggleBoomerang')
-      ?.addEventListener('click', this.toggleBoomerang)
-    // The convert function has an object parameter with optional values, and is therefor safe to cast in this way
+      ?.[method]('click', this.toggleBoomerang)
     this.shadow
       .querySelector('.convert')
-      ?.addEventListener('click', this.convert as unknown as () => void)
-    this.shadow
-      .querySelector('.snapshot')
-      ?.addEventListener('click', this.snapshot)
+      ?.[method]('click', this.convert as unknown as () => void)
+    this.shadow.querySelector('.snapshot')?.[method]('click', this.snapshot)
 
-    const toggleSettings = this.shadow.querySelector('.seeker')
-    toggleSettings?.addEventListener('change', this._handleSeekChange)
-    toggleSettings?.addEventListener('mousedown', this._freeze)
+    const seeker = this.shadow.querySelector('.seeker')
+    seeker?.[method]('change', this._handleSeekChange)
+    seeker?.[method]('mousedown', this._freeze)
 
-    const settings = this.shadow.querySelector('.toggleSettings')
-    settings?.addEventListener('click', this._handleSettingsClick)
-    settings?.addEventListener('blur', this._handleBlur)
+    const toggleSettings = this.shadow.querySelector('.toggleSettings')
+    toggleSettings?.[method]('click', this._handleSettingsClick)
+    toggleSettings?.[method]('blur', this._handleBlur)
 
-    // Calculate and save the current progress of the animation
-    this._lottieInstance.addEventListener<AnimationEventName>(
-      'enterFrame',
-      this._enterFrame
-    )
-
-    // Handle animation play complete
-    this._lottieInstance.addEventListener<AnimationEventName>(
-      'complete',
-      this._complete
-    )
-
-    this._lottieInstance.addEventListener<AnimationEventName>(
-      'loopComplete',
-      this._loopComplete
-    )
-
-    // Handle lottie-web ready event
-    this._lottieInstance.addEventListener<AnimationEventName>(
-      'DOMLoaded',
-      this._DOMLoaded
-    )
-
-    // Handle animation data load complete
-    this._lottieInstance.addEventListener<AnimationEventName>(
-      'data_ready',
-      this._dataReady
-    )
-
-    // Set error state when animation load fail event triggers
-    this._lottieInstance.addEventListener<AnimationEventName>(
-      'data_failed',
-      this._dataFailed
-    )
-
-    if (this._container && this.hover) {
-      // Set handlers to auto play animation on hover if enabled
-      this._container.addEventListener('mouseenter', this._mouseEnter)
-      this._container.addEventListener('mouseleave', this._mouseLeave)
+    if (this._lottieInstance) {
+      this._lottieInstance[method]('enterFrame', this._enterFrame)
+      this._lottieInstance[method]('complete', this._complete)
+      this._lottieInstance[method]('loopComplete', this._loopComplete)
+      this._lottieInstance[method]('DOMLoaded', this._DOMLoaded)
+      this._lottieInstance[method]('data_ready', this._dataReady)
+      this._lottieInstance[method]('data_failed', this._dataFailed)
     }
 
-    addEventListener('focus', this._handleWindowBlur, {
+    if (this._container && this.hover) {
+      this._container[method]('mouseenter', this._mouseEnter)
+      this._container[method]('mouseleave', this._mouseLeave)
+    }
+
+    window[method]('focus', this._handleWindowBlur as EventListener, {
       passive: true,
       capture: false,
     })
-    addEventListener('blur', this._handleWindowBlur, {
+    window[method]('blur', this._handleWindowBlur as EventListener, {
       passive: true,
       capture: false,
     })
 
     if (this.animateOnScroll) {
-      addEventListener('scroll', this._handleScroll, {
+      window[method]('scroll', this._handleScroll, {
         passive: true,
         capture: true,
       })
@@ -1008,72 +972,17 @@ export class DotLottiePlayer extends EnhancedElement {
   }
 
   /**
+   * Add event listeners
+   */
+  private _addEventListeners() {
+    this._toggleEventListeners('add')
+  }
+
+  /**
    * Remove event listeners
    */
   private _removeEventListeners() {
-    if (!this._lottieInstance || !this._container) {
-      return
-    }
-
-    this.shadow
-      .querySelector('.togglePlay')
-      ?.removeEventListener('click', this.togglePlay)
-    this.shadow.querySelector('.stop')?.removeEventListener('click', this.stop)
-    this.shadow.querySelector('.prev')?.removeEventListener('click', this.prev)
-    this.shadow.querySelector('.next')?.removeEventListener('click', this.next)
-    this.shadow
-      .querySelector('.toggleLoop')
-      ?.removeEventListener('click', this.toggleLoop)
-    this.shadow
-      .querySelector('.toggleBoomerang')
-      ?.removeEventListener('click', this.toggleBoomerang)
-    // The convert function has an object parameter with optional values, and is therefor safe to cast in this way
-    this.shadow
-      .querySelector('.convert')
-      ?.removeEventListener('click', this.convert as unknown as () => void)
-    this.shadow
-      .querySelector('.snapshot')
-      ?.removeEventListener('click', this.snapshot)
-
-    const seeker = this.shadow.querySelector('.seeker')
-    seeker?.removeEventListener('change', this._handleSeekChange)
-    seeker?.removeEventListener('mousedown', this._freeze)
-
-    const toggleSettings = this.shadow.querySelector('.toggleSettings')
-    toggleSettings?.removeEventListener('click', this._handleSettingsClick)
-    toggleSettings?.removeEventListener('blur', this._handleBlur)
-
-    this._lottieInstance.removeEventListener<AnimationEventName>(
-      'enterFrame',
-      this._enterFrame
-    )
-    this._lottieInstance.removeEventListener<AnimationEventName>(
-      'complete',
-      this._complete
-    )
-    this._lottieInstance.removeEventListener<AnimationEventName>(
-      'loopComplete',
-      this._loopComplete
-    )
-    this._lottieInstance.removeEventListener<AnimationEventName>(
-      'DOMLoaded',
-      this._DOMLoaded
-    )
-    this._lottieInstance.removeEventListener<AnimationEventName>(
-      'data_ready',
-      this._dataReady
-    )
-    this._lottieInstance.removeEventListener<AnimationEventName>(
-      'data_failed',
-      this._dataFailed
-    )
-
-    this._container.removeEventListener('mouseenter', this._mouseEnter)
-    this._container.removeEventListener('mouseleave', this._mouseLeave)
-
-    removeEventListener('focus', this._handleWindowBlur, true)
-    removeEventListener('blur', this._handleWindowBlur, true)
-    removeEventListener('scroll', this._handleScroll, true)
+    this._toggleEventListeners('remove')
   }
 
   private _loopComplete() {
@@ -1252,6 +1161,13 @@ export class DotLottiePlayer extends EnhancedElement {
       )
     }
     if (this._playerState.visible) {
+      if (this._playerState.scrollTimeout) {
+        clearTimeout(this._playerState.scrollTimeout)
+      }
+      this._playerState.scrollTimeout = setTimeout(() => {
+        this.playerState = PlayerState.Paused
+      }, 400)
+
       const adjustedScroll =
           scrollY > this._playerState.scrollY
             ? scrollY - this._playerState.scrollY
@@ -1271,12 +1187,6 @@ export class DotLottiePlayer extends EnhancedElement {
         }
       })
     }
-    if (this._playerState.scrollTimeout) {
-      clearTimeout(this._playerState.scrollTimeout)
-    }
-    this._playerState.scrollTimeout = setTimeout(() => {
-      this.playerState = PlayerState.Paused
-    }, 400)
   }
 
   /**
@@ -1297,12 +1207,6 @@ export class DotLottiePlayer extends EnhancedElement {
         (Number(target.value) / 100) * this._lottieInstance.totalFrames
       )
     )
-
-    // setTimeout(() => {
-    //   if (target.parentElement instanceof HTMLFormElement) {
-    //     target.parentElement.reset()
-    //   }
-    // }, 100)
   }
 
   private _isLottie(json: LottieJSON) {

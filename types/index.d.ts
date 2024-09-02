@@ -10,7 +10,7 @@ export declare class DotLottiePlayer extends EnhancedElement {
     template: HTMLTemplateElement;
     static get observedAttributes(): string[];
     attributeChangedCallback(name: string, _oldValue: unknown, value: string): void;
-    static get observedProperties(): string[];
+    static get observedProperties(): (keyof EnhancedElement)[];
     propertyChangedCallback(name: string, _oldValue: unknown, value: unknown): void;
     set animateOnScroll(value: AnimateOnScroll);
     get animateOnScroll(): AnimateOnScroll;
@@ -70,6 +70,7 @@ export declare class DotLottiePlayer extends EnhancedElement {
     private _addIntersectionObserver;
     load(src: string | null): Promise<void>;
     getManifest(): LottieManifest;
+    private _toggleEventListeners;
     private _addEventListeners;
     private _removeEventListeners;
     private _loopComplete;
