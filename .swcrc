@@ -2,9 +2,7 @@
   "$schema": "https://json.schemastore.org/swcrc",
   "jsc": {
     "baseUrl": "./src",
-    "assumptions": {
-      "setPublicClassFields": true
-    },
+    "loose": true,
     "keepClassNames": true,
     "parser": {
       "syntax": "typescript",

@@ -1,6 +1,6 @@
 import autoprefixer from 'autoprefixer'
 import commonjs from '@rollup/plugin-commonjs'
-import dts from 'rollup-plugin-dts'
+import { dts } from 'rollup-plugin-dts'
 import flexbugs from 'postcss-flexbugs-fixes'
 import json from '@rollup/plugin-json'
 import livereload from 'rollup-plugin-livereload'
@@ -72,13 +72,6 @@ const isProd = process.env.NODE_ENV !== 'development',
   },
   unpkg = {
     input,
-    output: {
-      exports: 'named',
-      extend: true,
-      file: pkg.unpkg,
-      format: 'iife',
-      name: pkg.name,
-    },
     onwarn(warning, warn) {
       /** In order to use expressions from After Effects this codebase uses eval,
        * so we supress the warning this produces
@@ -88,11 +81,24 @@ const isProd = process.env.NODE_ENV !== 'development',
       }
       warn(warning)
     },
+    output: {
+      exports: 'named',
+      extend: true,
+      file: pkg.unpkg,
+      format: 'iife',
+      name: pkg.name,
+    },
     plugins: unpkgPlugins(),
   },
   module = {
-    input,
     external: ['lottie-web', 'fflate'],
+    input,
+    onwarn(warning, warn) {
+      if (warning.code === 'THIS_IS_UNDEFINED') {
+        return
+      }
+      warn(warning)
+    },
     output: [
       {
         exports: 'named',
@@ -105,12 +111,6 @@ const isProd = process.env.NODE_ENV !== 'development',
         format: 'cjs',
       },
     ],
-    onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED') {
-        return
-      }
-      warn(warning)
-    },
     plugins: modulePlugins(),
   }
 

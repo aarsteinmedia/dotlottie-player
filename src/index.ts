@@ -1,9 +1,9 @@
 import { isServer } from './utils'
-import { DotLottiePlayer } from './DotLottiePlayer'
+import { DotLottiePlayer } from './elements/DotLottiePlayer'
 
 export default DotLottiePlayer
 
-export { PlayMode, PlayerEvents, PlayerState } from './utils'
+export { PlayMode, PlayerEvents, PlayerState } from './enums'
 
 /**
  * Expose DotLottiePlayer class as global variable

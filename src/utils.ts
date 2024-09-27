@@ -6,55 +6,8 @@ import {
   type Unzipped,
   type Zippable,
 } from 'fflate'
+import { ObjectFit } from './enums'
 import type { LottieAsset, LottieJSON, LottieManifest } from './types'
-
-export enum ObjectFit {
-  Contain = 'contain',
-  Cover = 'cover',
-  Fill = 'fill',
-  ScaleDown = 'scale-down',
-  None = 'none',
-}
-
-export enum PlayerState {
-  Completed = 'completed',
-  Destroyed = 'destroyed',
-  Error = 'error',
-  Frozen = 'frozen',
-  Loading = 'loading',
-  Paused = 'paused',
-  Playing = 'playing',
-  Stopped = 'stopped',
-}
-
-export enum PlayMode {
-  Bounce = 'bounce',
-  Normal = 'normal',
-}
-
-export enum PlayerEvents {
-  Complete = 'complete',
-  Destroyed = 'destroyed',
-  Error = 'error',
-  Frame = 'frame',
-  Freeze = 'freeze',
-  Load = 'load',
-  Loop = 'loop',
-  Next = 'next',
-  Pause = 'pause',
-  Play = 'play',
-  Previous = 'previous',
-  Ready = 'ready',
-  Rendered = 'rendered',
-  Stop = 'stop',
-}
-
-export enum PreserveAspectRatio {
-  Contain = 'xMidYMid meet',
-  Cover = 'xMidYMid slice',
-  None = 'xMinYMin slice',
-  Initial = 'none',
-}
 
 export class CustomError extends Error {
   status?: number
@@ -105,8 +58,8 @@ export const addExt = (ext: string, str?: string) => {
    */
   createDotLottie = async ({
     animations,
-    manifest,
     fileName,
+    manifest,
     shouldDownload = true,
   }: {
     animations?: LottieJSON[]
@@ -180,8 +133,8 @@ export const addExt = (ext: string, str?: string) => {
 
       return shouldDownload
         ? download(buffer, {
-            name,
             mimeType: 'application/zip',
+            name,
           })
         : buffer
     } catch (err) {
@@ -208,8 +161,8 @@ export const addExt = (ext: string, str?: string) => {
         jsonString = JSON.stringify(animation)
       return shouldDownload
         ? download(jsonString, {
-            name,
             mimeType: 'application/json',
+            name,
           })
         : jsonString
     } catch (err) {
@@ -282,8 +235,8 @@ export const addExt = (ext: string, str?: string) => {
         const animations = Array.isArray(input) ? input : [input]
         return {
           animations,
-          manifest: undefined,
           isDotLottie: false,
+          manifest: undefined,
         }
       }
 
@@ -310,8 +263,8 @@ export const addExt = (ext: string, str?: string) => {
           const lottie = await result.json()
           return {
             animations: [lottie],
-            manifest: undefined,
             isDotLottie: false,
+            manifest: undefined,
           }
         }
         const text = await result.clone().text()
@@ -319,8 +272,8 @@ export const addExt = (ext: string, str?: string) => {
           const lottie = JSON.parse(text)
           return {
             animations: [lottie],
-            manifest: undefined,
             isDotLottie: false,
+            manifest: undefined,
           }
         } catch (e) {
           console.warn(e)
@@ -331,15 +284,15 @@ export const addExt = (ext: string, str?: string) => {
 
       return {
         animations: data,
-        manifest,
         isDotLottie: true,
+        manifest,
       }
     } catch (err) {
       console.error(`❌ ${handleErrors(err).message}`)
       return {
         animations: undefined,
-        manifest: undefined,
         isDotLottie: false,
+        manifest: undefined,
       }
     }
   },

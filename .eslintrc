@@ -8,7 +8,8 @@
   "plugins": [
     "@typescript-eslint",
     "import",
-    "jsdoc"
+    "jsdoc",
+    "perfectionist"
   ],
   "extends": [
     "eslint:recommended",
@@ -152,6 +153,7 @@
       "error",
       "always"
     ],
+    "perfectionist/sort-objects": "warn",
     "prefer-object-spread": "warn",
     "quotes": [
       "error",
@@ -209,6 +211,7 @@
     "import/default": "error",
     "import/namespace": "error",
     "import/export": "error",
+    "import/no-cycle": "error",
     "import/no-named-as-default": "warn",
     "import/no-named-as-default-member": "warn",
     "import/no-duplicates": "warn",
