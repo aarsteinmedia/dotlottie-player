@@ -62,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Refactored imports
   - BREAKING CHANGE:
-    ```log
+    ```diff
     - import type { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player'
     + import type DotLottiePlayer from '@aarsteinmedia/dotlottie-player'
     ```
