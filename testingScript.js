@@ -36,8 +36,6 @@ const player = document.querySelector('dotlottie-player'),
   cl = async () => {
     if (dotLottiePlayer) {
       await dotLottiePlayer().convert({
-        typeCheck: true,
-        src: '/assets/thinking.lottie',
         // manifest: {
         //   animations: [
         //     { id: 'thinking' }
@@ -46,6 +44,8 @@ const player = document.querySelector('dotlottie-player'),
         // animations: [lottieJSON],
         fileName: 'thinking',
         shouldDownload: true,
+        src: '/assets/thinking.lottie',
+        typeCheck: true,
       })
     }
   }
