@@ -1217,7 +1217,11 @@ export class DotLottiePlayer extends EnhancedElement {
     configs: AnimationAttributes[],
     fileName?: string,
     shouldDownload = true
-  ) {
+  ): Promise<{
+    result?: void | ArrayBuffer
+    success: boolean
+    error?: string
+  }> {
     // Initialize meta object for animation, with fallbacks for
     // when the method is called indepenently
     const {
