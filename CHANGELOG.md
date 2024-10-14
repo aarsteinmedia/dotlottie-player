@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
-## [3.2.3] - 2024-10-14
+## [3.2.3] 14-10-2014
 
 ### Added
 
@@ -17,26 +17,26 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 
 - Migrated from eslint@8 to eslint@9
 
-## [3.2.2] - 2024-09-27
+## [3.2.2] 27-09-2024
 
 ### Changed
 
 - Minor stylistic changes
 
-## [3.2.1] - 2024-09-03
+## [3.2.1] 03-09-2024
 
 ### Changed
 
 - Minor stylistic changes
 
-## [3.2.0] - 2024-09-02
+## [3.2.0] 02-09-2024
 
 ### Changed
 
 - Refactored code
   - Code splitting for maintainability, with no intended changes for how the component is consumed
 
-## [3.1.0] - 2024-09-02
+## [3.1.0] - 02-09-2024
 
 ### Added
 
@@ -58,7 +58,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
   }>
   ```
 
-## [3.0.0] - 2024-09-06
+## [3.0.0] - 06-09-2024
 
 ### Changed
 
