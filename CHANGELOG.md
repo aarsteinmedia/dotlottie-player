@@ -43,7 +43,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Refactored return types
-  - `addAnimation` now returns object ```typescript { result?: Promise<void | ArrayBuffer>; success:boolean; error?: string; }`
+  - `addAnimation` now returns object
+  ```typescript
+  {
+    result?: Promise<void | ArrayBuffer>
+    success: boolean
+    error?: string
+  }
+  ```
 
 ## [3.0.0] - 2024-9-6
 
@@ -51,10 +58,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Refactored imports
   - BREAKING CHANGE:
-    ````
-- import type { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player'
-+ import type DotLottiePlayer from '@aarsteinmedia/dotlottie-player'
-```
+    ```
+    - import type { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player'
+    + import type DotLottiePlayer from '@aarsteinmedia/dotlottie-player'
+    ```
 
 ### Removed
 
