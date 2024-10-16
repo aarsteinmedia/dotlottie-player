@@ -6,8 +6,8 @@ import {
   type Unzipped,
   type Zippable,
 } from 'fflate'
-import { ObjectFit } from './enums'
-import type { LottieAsset, LottieJSON, LottieManifest } from './types'
+import { ObjectFit } from '@/enums'
+import type { LottieAsset, LottieJSON, LottieManifest } from '@/types'
 
 export class CustomError extends Error {
   status?: number

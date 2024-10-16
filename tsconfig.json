@@ -25,6 +25,7 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "outDir": "dist",
     "plugins": [
       {
         "strict": true
@@ -35,7 +36,12 @@
     "rootDir": "src",
     "strict": true,
     "target": "ES2021",
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
   },
   "include": [
     "./src/**/*",

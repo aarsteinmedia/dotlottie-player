@@ -10,11 +10,13 @@ import serve from 'rollup-plugin-serve'
 import * as rollupPluginSummary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
 import template from 'rollup-plugin-html-literals'
+import { typescriptPaths } from 'rollup-plugin-typescript-paths'
 import pkg from './package.json' assert { type: 'json' }
 
 const isProd = process.env.NODE_ENV !== 'development',
   input = './src/index.ts',
   plugins = (preferBuiltins = false) => [
+    typescriptPaths(),
     postcss({
       inject: false,
       plugins: [

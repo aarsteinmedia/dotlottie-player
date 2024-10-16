@@ -1,4 +1,4 @@
-import { isServer } from '../utils'
+import { isServer } from '@/utils'
 
 /**
  * Credit to:

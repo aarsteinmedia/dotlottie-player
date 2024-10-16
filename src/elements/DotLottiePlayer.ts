@@ -7,7 +7,6 @@ import Lottie, {
 } from 'lottie-web'
 import renderPlayer from 'src/templates/player'
 import renderControls from 'src/templates/controls'
-import pkg from '../../package.json'
 import {
   aspectRatio,
   createDotLottie,
@@ -19,14 +18,15 @@ import {
   handleErrors,
   isServer,
   useId,
-} from '../utils'
+} from '@/utils'
 import {
   ObjectFit,
   PlayMode,
   PlayerEvents,
   PlayerState,
   PreserveAspectRatio,
-} from '../enums'
+} from '@/enums'
+import pkg from '@/../package.json'
 import {
   AnimationAttributes,
   AnimationSettings,
@@ -37,9 +37,9 @@ import {
   LottieJSON,
   LottieManifest,
   Subframe,
-} from '../types'
-import styles from '../styles.scss'
-import EnhancedElement from './EnhancedElement'
+} from '@/types'
+import styles from '@/styles.scss'
+import EnhancedElement from '@/elements/EnhancedElement'
 
 /**
  * dotLottie Player Web Component

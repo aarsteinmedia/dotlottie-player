@@ -1,7 +1,7 @@
 import type { AnimationDirection } from 'lottie-web'
 import type { CSSProperties, RefObject } from 'react'
-import type { PlayMode } from './enums'
-import type { DotLottiePlayer } from './elements/DotLottiePlayer'
+import type { PlayMode } from '@/enums'
+import type { DotLottiePlayer } from '@/elements/DotLottiePlayer'
 
 type BoolInt = 0 | 1
 

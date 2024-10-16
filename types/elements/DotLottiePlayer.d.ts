@@ -3,7 +3,7 @@ import renderPlayer from 'src/templates/player';
 import renderControls from 'src/templates/controls';
 import { PlayMode, PlayerState, PreserveAspectRatio } from '../enums';
 import { AnimationAttributes, AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieJSON, LottieManifest, Subframe } from '../types';
-import EnhancedElement from './EnhancedElement';
+import EnhancedElement from '../elements/EnhancedElement';
 export declare class DotLottiePlayer extends EnhancedElement {
     constructor();
     connectedCallback(): Promise<void>;
