@@ -84,7 +84,7 @@
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-serve": "^1.1.1",
     "rollup-plugin-summary": "^2.0.1",
-    "rollup-plugin-swc3": "^0.11.2",
+    "rollup-plugin-swc3": "^0.12.1",
     "rollup-plugin-typescript-paths": "^1.5.0",
     "sass": "^1.79.5",
     "tsc-alias": "^1.8.10",
