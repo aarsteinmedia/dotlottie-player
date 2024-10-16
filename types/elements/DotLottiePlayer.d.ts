@@ -98,13 +98,9 @@ export declare class DotLottiePlayer extends EnhancedElement {
     protected _handleSeekChange({ target }: Event): void;
     private _isLottie;
     addAnimation(configs: AnimationAttributes[], fileName?: string, shouldDownload?: boolean): Promise<{
-        result: void | ArrayBuffer;
+        result?: void | ArrayBuffer;
         success: boolean;
-        error?: undefined;
-    } | {
-        error: string;
-        success: boolean;
-        result?: undefined;
+        error?: string;
     }>;
     getLottie(): AnimationItem | null;
     play(): Promise<void>;
