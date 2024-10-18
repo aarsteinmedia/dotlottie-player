@@ -8,9 +8,10 @@
   --lottie-player-toolbar-icon-color: #000;
   --lottie-player-toolbar-icon-hover-color: #000;
   --lottie-player-toolbar-icon-active-color: #4285f4;
-  --lottie-player-seeker-track-color: rgba(0, 0, 0, 0.2);
+  --lottie-player-seeker-track-color: rgb(0 0 0 / 20%);
   --lottie-player-seeker-thumb-color: #4285f4;
   --lottie-player-seeker-display: block;
+
   display: block;
   width: 100%;
   height: 100%;
@@ -46,13 +47,12 @@
     border-radius: 5px;
     padding: 10px 15px;
     border: solid 2px var(--lottie-player-toolbar-icon-color);
-    animation: fadeIn .2s ease-in-out;
+    animation: fade-in .2s ease-in-out;
 
     &::before {
       content: "";
       right: 10px;
       border: 7px solid transparent;
-      border-top-color: transparent;
       margin-right: -7px;
       height: 0;
       width: 0;
@@ -63,10 +63,22 @@
     }
   }
 
+  .error {
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+
+    svg {
+      width: 100%;
+      height: auto;
+    }
+  }
+
   .toolbar {
     display: flex;
-    align-items: center;
-    justify-items: center;
+    place-items: center center;
     background: var(--lottie-player-toolbar-background-color);
     margin: 0;
     height: 35px;
@@ -138,7 +150,6 @@
   }
 
   .seeker {
-    -webkit-appearance: none;
     appearance: none;
     outline: none;
     width: 100%;
@@ -158,7 +169,6 @@
 
     &::-webkit-slider-runnable-track,
     &::-webkit-slider-thumb {
-      -webkit-appearance: none;
       appearance: none;
       outline: none;
     }
@@ -248,12 +258,8 @@
   }
 
   progress {
-    -webkit-appearance: none;
     appearance: none;
     outline: none;
-  }
-
-  progress {
     position: absolute;
     width: 100%;
     height: 5px;
@@ -283,22 +289,9 @@
     background-color: var(--lottie-player-seeker-thumb-color);
   }
 
-  .error {
-    display: flex;
-    margin: auto;
-    justify-content: center;
-    height: 100%;
-    align-items: center;
-
-    svg {
-      width: 100%;
-      height: auto;
-    }
-  }
-
 }
 
-@keyframes fadeIn {
+@keyframes fade-in {
   0% {
     opacity: 0;
   }
@@ -313,6 +306,6 @@
     --lottie-player-toolbar-background-color: #000;
     --lottie-player-toolbar-icon-color: #FFF;
     --lottie-player-toolbar-icon-hover-color: #FFF;
-    --lottie-player-seeker-track-color: rgba(255, 255, 255, 0.6);
+    --lottie-player-seeker-track-color: rgb(255 255 255 / 60%);
   }
 }
