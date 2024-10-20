@@ -1,6 +1,7 @@
 {
+  "$schema": "https://json.schemastore.org/package",
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "3.2.3",
+  "version": "3.2.4",
   "description": "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player",
   "exports": {
     ".": {
@@ -44,7 +45,9 @@
     "lint": "tsc && eslint",
     "lint:fix": "eslint",
     "lint:css": "npx stylelint **/*.scss",
-    "lint:css:fix": "npx stylelint **/*.scss --fix"
+    "lint:css:fix": "npx stylelint **/*.scss --fix",
+    "lint:pkg": "npmPkgJsonLint .",
+    "lint:pkg:fix": "npmPkgJsonLint . --fix"
   },
   "dependencies": {
     "fflate": "^0.8.2",
@@ -55,20 +58,21 @@
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.10.3",
-    "@eslint/compat": "^1.2.0",
+    "@eslint/compat": "^1.2.1",
     "@eslint/eslintrc": "^3.1.0",
-    "@eslint/js": "^9.12.0",
+    "@eslint/js": "^9.13.0",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-typescript": "^11.1.6",
     "@swc/core": "^1.7.36",
-    "@types/node": "^22.7.6",
+    "@types/node": "^22.7.7",
     "@typescript-eslint/eslint-plugin": "^8.10.0",
     "@typescript-eslint/parser": "^8.10.0",
     "autoprefixer": "^10.4.20",
+    "esbuild": "^0.24.0",
     "esbuild-sass-plugin": "^3.3.1",
-    "eslint": "^9.12.0",
+    "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.31.0",
@@ -76,6 +80,8 @@
     "eslint-plugin-perfectionist": "^3.9.1",
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.11.0",
+    "npm-package-json-lint": "^8.0.0",
+    "npm-package-json-lint-config-default": "^7.0.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "prettier": "^3.3.3",
     "rimraf": "^6.0.1",
@@ -88,12 +94,24 @@
     "rollup-plugin-summary": "^2.0.1",
     "rollup-plugin-swc3": "^0.12.1",
     "rollup-plugin-typescript-paths": "^1.5.0",
-    "sass": "^1.80.2",
+    "sass": "^1.80.3",
     "stylelint": "^16.10.0",
     "stylelint-config-standard-scss": "^13.1.0",
     "tsc-alias": "^1.8.10",
     "tslib": "^2.8.0",
     "typescript": "^5.6.3"
+  },
+  "browserslist": {
+    "production": [
+      ">0.3%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "customElements": "dist/custom-elements.json",
   "files": [
