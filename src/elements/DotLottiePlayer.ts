@@ -5,8 +5,8 @@ import Lottie, {
   type AnimationSegment,
   type RendererType,
 } from 'lottie-web'
-import renderPlayer from 'src/templates/player'
-import renderControls from 'src/templates/controls'
+import renderPlayer from '@/templates/player'
+import renderControls from '@/templates/controls'
 import {
   aspectRatio,
   createDotLottie,

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [3.2.5] - 21-10-2014
+
+### Changed
+
+- Fixed typo, causing some types not to be resolved
+
 ## [3.2.4] - 20-10-2014
 
 ### Changed
@@ -80,6 +86,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[3.2.5]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/3.2.5
 [3.2.4]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/3.2.4
 [3.2.3]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/3.2.3
 [3.2.2]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/3.2.2

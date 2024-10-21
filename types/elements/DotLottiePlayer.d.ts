@@ -1,6 +1,6 @@
 import { type AnimationDirection, type AnimationItem, type AnimationSegment, type RendererType } from 'lottie-web';
-import renderPlayer from 'src/templates/player';
-import renderControls from 'src/templates/controls';
+import renderPlayer from '../templates/player';
+import renderControls from '../templates/controls';
 import { PlayMode, PlayerState, PreserveAspectRatio } from '../enums';
 import { AnimationAttributes, AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieJSON, LottieManifest, Subframe } from '../types';
 import EnhancedElement from '../elements/EnhancedElement';
