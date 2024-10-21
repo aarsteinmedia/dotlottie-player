@@ -41,7 +41,7 @@ const isProd = process.env.NODE_ENV !== 'development',
     }),
     template({
       include: [
-        path.resolve(__dirname, 'src', 'index.ts'),
+        path.resolve(__dirname, 'src', 'elements', 'DotLottiePlayer.ts'),
         path.resolve(__dirname, 'src', 'templates', '*'),
       ],
       options: {
