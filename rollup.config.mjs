@@ -10,7 +10,7 @@ import livereload from 'rollup-plugin-livereload'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import postcss from 'rollup-plugin-postcss'
 import serve from 'rollup-plugin-serve'
-import * as summary from 'rollup-plugin-summary'
+import { summary } from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
 import template from 'rollup-plugin-html-literals'
 import { typescriptPaths } from 'rollup-plugin-typescript-paths'
@@ -69,14 +69,14 @@ const isProd = process.env.NODE_ENV !== 'development',
   unpkgPlugins = () => [
     ...plugins(),
     isProd && minify(),
-    isProd && summary.default(),
+    isProd && summary(),
     !isProd &&
       serve({
         open: true,
       }),
     !isProd && livereload(),
   ],
-  modulePlugins = () => [...plugins(true), summary.default()],
+  modulePlugins = () => [...plugins(true), summary()],
   types = {
     input: path.resolve(__dirname, 'types', 'index.d.ts'),
     output: {
