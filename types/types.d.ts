@@ -1,7 +1,8 @@
 import type { AnimationDirection } from 'lottie-web';
 import type { CSSProperties, RefObject } from 'react';
+import type { Plugin } from '@custom-elements-manifest/analyzer';
 import type { PlayMode } from './enums';
-import type { DotLottiePlayer } from './elements/DotLottiePlayer';
+import type DotLottiePlayer from './elements/DotLottiePlayer';
 type BoolInt = 0 | 1;
 interface Shape {
     a: ShapeData;
@@ -93,6 +94,24 @@ type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
     style?: CSSProperties;
     src: string;
 };
+export interface CEMConfig {
+    catalyst: boolean;
+    dependencies: boolean;
+    dev: boolean;
+    exclude: string[];
+    fast: boolean;
+    globs: ['src/**/*.ts'];
+    litelement: boolean;
+    outdir: string;
+    packagejson: boolean;
+    stencil: boolean;
+    watch: boolean;
+    plugins: Array<() => Plugin>;
+    overrideModuleCreation({ globs, ts, }: {
+        ts: unknown;
+        globs: string[];
+    }): unknown[];
+}
 declare global {
     interface HTMLElementTagNameMap {
         'dotlottie-player': DotLottiePlayer;

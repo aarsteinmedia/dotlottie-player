@@ -313,11 +313,10 @@ export const addExt = (ext: string, str?: string) => {
    * @param { string } str Filename, URL or path
    */
   getExt = (str?: string) => {
-    if (!str || !hasExt(str)) {
+    if (typeof str !== 'string' || !str || !hasExt(str)) {
       return
     }
-    const ext = str.split('.').pop()?.toLowerCase()
-    return ext
+    return str.split('.').pop()?.toLowerCase()
   },
   getExtFromB64 = (str: string) => {
     const mime = str.split(':')[1].split(';')[0],

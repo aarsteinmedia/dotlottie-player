@@ -1,5 +1,5 @@
 import { isServer } from '@/utils'
-import { DotLottiePlayer } from '@/elements/DotLottiePlayer'
+import DotLottiePlayer from '@/elements/DotLottiePlayer'
 
 export default DotLottiePlayer
 

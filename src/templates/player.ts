@@ -1,5 +1,5 @@
 import { PlayerState } from '@/enums'
-import { DotLottiePlayer } from '@/elements/DotLottiePlayer'
+import DotLottiePlayer from '@/elements/DotLottiePlayer'
 
 /**
  * Render Player
@@ -16,7 +16,7 @@ export default function renderPlayer(this: DotLottiePlayer) {
     >
       <div class="animation" style="background:${this.background}">
         ${this.playerState === PlayerState.Error
-          ? /* HTML */ ` <div class="error">
+          ? /* HTML */ `<div class="error">
               <svg
                 preserveAspectRatio="xMidYMid slice"
                 xmlns="http://www.w3.org/2000/svg"

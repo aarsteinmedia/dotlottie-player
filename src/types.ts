@@ -1,7 +1,9 @@
 import type { AnimationDirection } from 'lottie-web'
 import type { CSSProperties, RefObject } from 'react'
+import type { Plugin } from '@custom-elements-manifest/analyzer'
 import type { PlayMode } from '@/enums'
-import type { DotLottiePlayer } from '@/elements/DotLottiePlayer'
+import type DotLottiePlayer from '@/elements/DotLottiePlayer'
+// import pkg from '@/../package.json'
 
 type BoolInt = 0 | 1
 
@@ -165,6 +167,43 @@ type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
   ref?: RefObject<unknown>
   style?: CSSProperties
   src: string
+}
+
+// export type PackageJSON = typeof pkg
+
+export interface CEMConfig {
+  /** Enable special handling for catalyst */
+  catalyst: boolean
+  /** Include third party custom elements manifests */
+  dependencies: boolean
+  /** Run in dev mode, provides extra logging */
+  dev: boolean
+  /** Globs to exclude */
+  exclude: string[]
+  /** Enable special handling for fast */
+  fast: boolean
+  /** Globs to analyze */
+  globs: ['src/**/*.ts']
+  /** Enable special handling for litelement */
+  litelement: boolean
+  /** Directory to output CEM to */
+  outdir: string
+  /** Output CEM path to `package.json`, defaults to true */
+  packagejson: boolean
+  /** Enable special handling for stencil */
+  stencil: boolean
+  /** Run in watch mode, runs on file changes */
+  watch: boolean
+  /** Provide custom plugins */
+  plugins: Array<() => Plugin>
+  /** Overrides default module creation: */
+  overrideModuleCreation({
+    globs,
+    ts,
+  }: {
+    ts: unknown // TypeScrip
+    globs: string[]
+  }): unknown[] // SourceFile[]
 }
 
 declare global {

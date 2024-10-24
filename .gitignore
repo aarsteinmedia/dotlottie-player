@@ -11,3 +11,6 @@ assets/*
 *.pem
 
 packages/functional-tests/app/dotlottie-player.js
+
+TestElement.*
+teststyle.*

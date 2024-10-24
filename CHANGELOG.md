@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [4.0.0] - 24-10-2014
+
+### Changed
+
+- Refactored type import
+  - BREAKING CHANGE:
+    ```diff
+    - import type { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player'
+    + import type DotLottiePlayer from '@aarsteinmedia/dotlottie-player'
+    ```
+- Rich data moved from attributes to properties
+  - BREAKING CHANGE:
+  ```diff
+  <dotlottie-player
+    - multianimationsettings="[{ autoplay: true, loop: false }]"
+    - segment="[0, 1]"
+  ></dotlottie-player>
+
+  + dotLottiePlayer.setMultianimationsettings([{ autoplay: true, loop: false }])
+  + dotLottiePlayer.setSegment([0, 1])
+  ```
+
+- Moved `./dist/custom-elements.json` to `./custom-elements.json`
+
+### Added
+
+  - Added unit tests
+
 ## [3.2.5] - 21-10-2014
 
 ### Changed
@@ -77,8 +105,8 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 - Refactored imports
   - BREAKING CHANGE:
     ```diff
-    - import type { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player'
-    + import type DotLottiePlayer from '@aarsteinmedia/dotlottie-player'
+    - import type DotLottiePlayer from '@aarsteinmedia/dotlottie-player'
+    + import type { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player'
     ```
 
 ### Removed
@@ -86,6 +114,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[4.0.0]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/4.0.0
 [3.2.5]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/3.2.5
 [3.2.4]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/3.2.4
 [3.2.3]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/3.2.3

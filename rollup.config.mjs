@@ -77,6 +77,9 @@ const isProd = process.env.NODE_ENV !== 'development',
     !isProd && livereload(),
   ],
   modulePlugins = () => [...plugins(true), summary()],
+  /**
+   * @type {import('rollup').RollupOptions}
+   * */
   types = {
     input: path.resolve(__dirname, 'types', 'index.d.ts'),
     output: {
@@ -85,6 +88,9 @@ const isProd = process.env.NODE_ENV !== 'development',
     },
     plugins: [dts()],
   },
+  /**
+   * @type {import('rollup').RollupOptions}
+   * */
   unpkg = {
     input,
     onwarn(warning, warn) {
@@ -106,12 +112,16 @@ const isProd = process.env.NODE_ENV !== 'development',
     },
     plugins: unpkgPlugins(),
   },
+  /**
+   * @type {import('rollup').RollupOptions}
+   * */
   module = {
     external: ['lottie-web', 'fflate'],
     input,
     onwarn(warning, warn) {
       if (
         warning.code === 'THIS_IS_UNDEFINED' ||
+        warning.code === 'EVAL' ||
         warning.code === 'CIRCULAR_DEPENDENCY'
       ) {
         return

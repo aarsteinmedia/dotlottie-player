@@ -1,5 +1,5 @@
 import { PlayerState, PlayMode } from '@/enums'
-import type { DotLottiePlayer } from '@/elements/DotLottiePlayer'
+import type DotLottiePlayer from '@/elements/DotLottiePlayer'
 
 /**
  * Render Controls
@@ -24,7 +24,6 @@ export default function renderControls(this: DotLottiePlayer) {
       <button
         class="togglePlay"
         data-active="false"
-        tabindex="0"
         aria-label="Toggle Play/Pause"
       >
         <svg width="24" height="24" aria-hidden="true" focusable="false">
@@ -32,17 +31,17 @@ export default function renderControls(this: DotLottiePlayer) {
         </svg>
       </button>
 
-      <button class="stop" data-active="true" tabindex="0" aria-label="Stop">
+      <button class="stop" data-active="true" aria-label="Stop">
         <svg width="24" height="24" aria-hidden="true" focusable="false">
           <path d="M6 6h12v12H6V6z" />
         </svg>
       </button>
-      <button class="prev" tabindex="0" aria-label="Previous animation" hidden>
+      <button class="prev" aria-label="Previous animation" hidden>
         <svg width="24" height="24" aria-hidden="true" focusable="false">
           <path d="M17.9 18.2 8.1 12l9.8-6.2v12.4zm-10.3 0H6.1V5.8h1.5v12.4z" />
         </svg>
       </button>
-      <button class="next" tabindex="0" aria-label="Next animation" hidden>
+      <button class="next" aria-label="Next animation" hidden>
         <svg width="24" height="24" aria-hidden="true" focusable="false">
           <path d="m6.1 5.8 9.8 6.2-9.8 6.2V5.8zM16.4 5.8h1.5v12.4h-1.5z" />
         </svg>
@@ -107,7 +106,6 @@ export default function renderControls(this: DotLottiePlayer) {
               <button
                 class="convert"
                 aria-label="Convert JSON animation to dotLottie format"
-                tabindex="0"
                 hidden
               >
                 <svg
@@ -122,11 +120,7 @@ export default function renderControls(this: DotLottiePlayer) {
                 </svg>
                 Convert to dotLottie
               </button>
-              <button
-                class="snapshot"
-                aria-label="Download still image"
-                tabindex="0"
-              >
+              <button class="snapshot" aria-label="Download still image">
                 <svg
                   width="24"
                   height="24"

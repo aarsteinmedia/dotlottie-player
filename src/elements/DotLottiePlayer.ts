@@ -1,9 +1,10 @@
-import Lottie, {
-  type AnimationConfig,
-  type AnimationDirection,
-  type AnimationItem,
-  type AnimationSegment,
-  type RendererType,
+import * as Lottie from 'lottie-web/build/player/lottie.js'
+import type {
+  AnimationConfig,
+  AnimationDirection,
+  AnimationItem,
+  AnimationSegment,
+  RendererType,
 } from 'lottie-web'
 import renderPlayer from '@/templates/player'
 import renderControls from '@/templates/controls'
@@ -26,7 +27,6 @@ import {
   PlayerState,
   PreserveAspectRatio,
 } from '@/enums'
-import pkg from '@/../package.json'
 import {
   AnimationAttributes,
   AnimationSettings,
@@ -38,16 +38,18 @@ import {
   LottieManifest,
   Subframe,
 } from '@/types'
-import styles from '@/styles.scss'
 import EnhancedElement from '@/elements/EnhancedElement'
+import pkg from '@/../package.json'
+import styles from '@/styles.scss'
 
 /**
  * dotLottie Player Web Component
  * @export
  * @class DotLottiePlayer
  * @extends { EnhancedElement }
+ * @description Web Component for playing Lottie animations in your web app.
  */
-export class DotLottiePlayer extends EnhancedElement {
+export default class DotLottiePlayer extends EnhancedElement {
   constructor() {
     super()
     this._complete = this._complete.bind(this)
@@ -481,24 +483,6 @@ export class DotLottiePlayer extends EnhancedElement {
   }
 
   /**
-   * Multi-animation settings
-   * If set, these will override conflicting settings
-   */
-  set multiAnimationSettings(value: AnimationSettings[]) {
-    this.setAttribute('multiAnimationSettings', JSON.stringify(value))
-  }
-
-  get multiAnimationSettings() {
-    const val = JSON.parse(
-      this.getAttribute('multiAnimationSettings') || 'null'
-    )
-    if (Array.isArray(val)) {
-      return val
-    }
-    return []
-  }
-
-  /**
    * Resizing to container
    */
   set objectfit(value: string) {
@@ -547,21 +531,6 @@ export class DotLottiePlayer extends EnhancedElement {
       return val
     }
     return 'svg'
-  }
-
-  /**
-   * Segment
-   */
-  set segment(value: AnimationSegment | undefined) {
-    this.setAttribute('segment', JSON.stringify(value))
-  }
-
-  get segment() {
-    const val = JSON.parse(this.getAttribute('segment') || 'null')
-    if (Array.isArray(val)) {
-      return val as AnimationSegment
-    }
-    return undefined
   }
 
   /**
@@ -618,6 +587,38 @@ export class DotLottiePlayer extends EnhancedElement {
       return true
     }
     return false
+  }
+
+  /**
+   * Multi-animation settings
+   */
+  private _multiAnimationSettings: AnimationSettings[] = []
+
+  /**
+   * Set Multi-animation settings
+   * @param { AnimationSettings[] } settings
+   */
+  public setMultiAnimationSettings(settings: AnimationSettings[]) {
+    if (!this._lottieInstance) {
+      return
+    }
+    this._multiAnimationSettings = settings
+  }
+
+  /**
+   * Segment
+   */
+  private _segment?: AnimationSegment
+
+  /**
+   * Set Multi-animation settings
+   * @param { AnimationSegment } settings
+   */
+  public setSegment(segment: AnimationSegment) {
+    if (!this._lottieInstance) {
+      return
+    }
+    this._segment = segment
   }
 
   /**
@@ -695,8 +696,8 @@ export class DotLottiePlayer extends EnhancedElement {
     const preserveAspectRatio =
         this.preserveAspectRatio ??
         (this.objectfit && aspectRatio(this.objectfit)),
-      currentAnimationSettings = this.multiAnimationSettings?.length
-        ? this.multiAnimationSettings?.[this._currentAnimation]
+      currentAnimationSettings = this._multiAnimationSettings?.length
+        ? this._multiAnimationSettings?.[this._currentAnimation]
         : undefined,
       currentAnimationManifest =
         this._manifest.animations?.[this._currentAnimation]
@@ -729,11 +730,11 @@ export class DotLottiePlayer extends EnhancedElement {
     }
 
     // Segment
-    let initialSegment = this.segment
-    if (this.segment?.every((val) => val > 0)) {
-      initialSegment = [this.segment[0] - 1, this.segment[1] - 1]
+    let initialSegment = this._segment
+    if (this._segment?.every((val) => val > 0)) {
+      initialSegment = [this._segment[0] - 1, this._segment[1] - 1]
     }
-    if (this.segment?.some((val) => val < 0)) {
+    if (this._segment?.some((val) => val < 0)) {
       initialSegment = undefined
     }
 
@@ -829,10 +830,10 @@ export class DotLottiePlayer extends EnhancedElement {
       }
 
       this._isBounce = this.mode === PlayMode.Bounce
-      if (this.multiAnimationSettings?.length) {
-        if (this.multiAnimationSettings[this._currentAnimation]?.mode) {
+      if (this._multiAnimationSettings?.length) {
+        if (this._multiAnimationSettings[this._currentAnimation]?.mode) {
           this._isBounce =
-            this.multiAnimationSettings[this._currentAnimation].mode ===
+            this._multiAnimationSettings[this._currentAnimation].mode ===
             PlayMode.Bounce
         }
       }
@@ -861,13 +862,13 @@ export class DotLottiePlayer extends EnhancedElement {
       if (
         !this.animateOnScroll &&
         (this.autoplay ||
-          this.multiAnimationSettings?.[this._currentAnimation]?.autoplay)
+          this._multiAnimationSettings?.[this._currentAnimation]?.autoplay)
       ) {
         this.playerState = PlayerState.Playing
       }
 
       // Initialize lottie player and load animation
-      this._lottieInstance = Lottie.loadAnimation({
+      this._lottieInstance = Lottie.default.loadAnimation({
         ...this._getOptions(),
         animationData: animations[this._currentAnimation],
       })
@@ -883,11 +884,11 @@ export class DotLottiePlayer extends EnhancedElement {
     this._addEventListeners()
 
     const speed =
-        this.multiAnimationSettings?.[this._currentAnimation]?.speed ??
+        this._multiAnimationSettings?.[this._currentAnimation]?.speed ??
         this.speed ??
         this._manifest.animations[this._currentAnimation].speed,
       direction =
-        this.multiAnimationSettings?.[this._currentAnimation]?.direction ??
+        this._multiAnimationSettings?.[this._currentAnimation]?.direction ??
         this.direction ??
         this._manifest.animations[this._currentAnimation].direction ??
         1
@@ -982,8 +983,8 @@ export class DotLottiePlayer extends EnhancedElement {
         // firstFrame,
         totalFrames,
       } = this._lottieInstance,
-      inPoint = this.segment ? this.segment[0] : 0,
-      outPoint = this.segment ? this.segment[0] : totalFrames
+      inPoint = this._segment ? this._segment[0] : 0,
+      outPoint = this._segment ? this._segment[0] : totalFrames
 
     if (this.count) {
       if (this._isBounce) {
@@ -1056,7 +1057,9 @@ export class DotLottiePlayer extends EnhancedElement {
     }
 
     if (this._animations.length > 1) {
-      if (this.multiAnimationSettings?.[this._currentAnimation + 1]?.autoplay) {
+      if (
+        this._multiAnimationSettings?.[this._currentAnimation + 1]?.autoplay
+      ) {
         return this.next()
       }
       if (this.loop && this._currentAnimation === this._animations.length - 1) {
@@ -1510,17 +1513,6 @@ export class DotLottiePlayer extends EnhancedElement {
   }
 
   /**
-   * Set Multi-animation settings
-   * @param { AnimationSettings[] } settings
-   */
-  public setMultiAnimationSettings(settings: AnimationSettings[]) {
-    if (!this._lottieInstance) {
-      return
-    }
-    this.multiAnimationSettings = settings
-  }
-
-  /**
    * Toggle playing state
    */
   public togglePlay() {
@@ -1559,7 +1551,7 @@ export class DotLottiePlayer extends EnhancedElement {
    * Toggle Boomerang
    */
   public toggleBoomerang() {
-    const curr = this.multiAnimationSettings?.[this._currentAnimation]
+    const curr = this._multiAnimationSettings?.[this._currentAnimation]
 
     if (curr?.mode !== undefined) {
       if (curr.mode === PlayMode.Normal) {
@@ -1624,15 +1616,15 @@ export class DotLottiePlayer extends EnhancedElement {
       }
 
       // Re-initialize lottie player
-      this._lottieInstance = Lottie.loadAnimation({
+      this._lottieInstance = Lottie.default.loadAnimation({
         ...this._getOptions(),
         animationData: this._animations[this._currentAnimation],
       })
 
       // Check play mode for current animation
-      if (this.multiAnimationSettings?.[this._currentAnimation]?.mode) {
+      if (this._multiAnimationSettings?.[this._currentAnimation]?.mode) {
         this._isBounce =
-          this.multiAnimationSettings[this._currentAnimation].mode ===
+          this._multiAnimationSettings[this._currentAnimation].mode ===
           PlayMode.Bounce
       }
 
@@ -1645,7 +1637,7 @@ export class DotLottiePlayer extends EnhancedElement {
       )
 
       if (
-        this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ??
+        this._multiAnimationSettings?.[this._currentAnimation]?.autoplay ??
         this.autoplay
       ) {
         if (this.animateOnScroll) {

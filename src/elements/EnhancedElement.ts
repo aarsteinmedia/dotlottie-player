@@ -3,6 +3,7 @@ import { isServer } from '@/utils'
 /**
  * Credit to:
  * @author Leonardo Favre <https://github.com/leofavre/observed-properties>
+ * @description Enhanced HTML element with reactive state handlers
  */
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
