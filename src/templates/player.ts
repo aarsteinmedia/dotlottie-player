@@ -6,7 +6,7 @@ import DotLottiePlayer from '@/elements/DotLottiePlayer'
  */
 export default function renderPlayer(this: DotLottiePlayer) {
   this.template.innerHTML = /* HTML */ `
-    <figure
+    <div
       class="animation-container main"
       data-controls="${this.controls ?? false}"
       lang="${this.description ? document?.documentElement?.lang : 'en'}"
@@ -14,7 +14,7 @@ export default function renderPlayer(this: DotLottiePlayer) {
       aria-label="${this.description ?? 'Lottie animation'}"
       data-loaded="${this._playerState.loaded}"
     >
-      <div class="animation" style="background:${this.background}">
+      <figure class="animation" style="background:${this.background}">
         ${this.playerState === PlayerState.Error
           ? /* HTML */ `<div class="error">
               <svg
@@ -43,9 +43,9 @@ export default function renderPlayer(this: DotLottiePlayer) {
               </svg>
             </div>`
           : ''}
-      </div>
+      </figure>
       <slot name="controls"></slot>
-    </figure>
+    </div>
   `
 
   this.shadow.adoptedStyleSheets = [DotLottiePlayer.styles]

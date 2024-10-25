@@ -21,12 +21,14 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
   - BREAKING CHANGE:
   ```diff
   <dotlottie-player
+    id="find-me"
     - multianimationsettings="[{ autoplay: true, loop: false }]"
     - segment="[0, 1]"
   ></dotlottie-player>
 
-  + dotLottiePlayer.setMultianimationsettings([{ autoplay: true, loop: false }])
-  + dotLottiePlayer.setSegment([0, 1])
+  + const player = document.querySelector('#find-me')
+  + player?.setMultianimationsettings([{ autoplay: true, loop: false }])
+  + player?.setSegment([0, 1])
   ```
 
 - Moved `./dist/custom-elements.json` to `./custom-elements.json`
