@@ -595,6 +595,14 @@ export default class DotLottiePlayer extends EnhancedElement {
   private _multiAnimationSettings: AnimationSettings[] = []
 
   /**
+   * Get Multi-animation settings
+   * @returns { AnimationSettings[] }
+   */
+  public getMultiAnimationSettings() {
+    return this._multiAnimationSettings
+  }
+
+  /**
    * Set Multi-animation settings
    * @param { AnimationSettings[] } settings
    */
@@ -611,7 +619,7 @@ export default class DotLottiePlayer extends EnhancedElement {
   private _segment?: AnimationSegment
 
   /**
-   * Set Multi-animation settings
+   * Set playback segment
    * @param { AnimationSegment } settings
    */
   public setSegment(segment: AnimationSegment) {
@@ -619,6 +627,14 @@ export default class DotLottiePlayer extends EnhancedElement {
       return
     }
     this._segment = segment
+  }
+
+  /**
+   * Get playback segment
+   * @returns { AnimationSegment }
+   */
+  public getSegment() {
+    return this._segment
   }
 
   /**
