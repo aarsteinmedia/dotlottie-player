@@ -14,7 +14,7 @@ export default class DotLottiePlayer extends EnhancedElement {
     protected _renderControls: typeof renderControls;
     protected _render: typeof renderPlayer;
     static get observedAttributes(): string[];
-    attributeChangedCallback(name: string, _oldValue: unknown, value: string): void;
+    attributeChangedCallback(name: string, _oldValue: unknown, value: string): Promise<void>;
     static get observedProperties(): string[];
     propertyChangedCallback(name: string, _oldValue: unknown, value: unknown): void;
     set animateOnScroll(value: AnimateOnScroll);
@@ -54,9 +54,11 @@ export default class DotLottiePlayer extends EnhancedElement {
     set subframe(value: Subframe);
     get subframe(): Subframe;
     private _multiAnimationSettings;
+    getMultiAnimationSettings(): AnimationSettings[];
     setMultiAnimationSettings(settings: AnimationSettings[]): void;
     private _segment?;
     setSegment(segment: AnimationSegment): void;
+    getSegment(): Lottie.AnimationSegment | undefined;
     protected _container: Element | null;
     playerState?: PlayerState;
     protected _isSettingsOpen: boolean;

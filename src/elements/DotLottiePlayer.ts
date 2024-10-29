@@ -145,6 +145,7 @@ export default class DotLottiePlayer extends EnhancedElement {
       'loop',
       'mode',
       'speed',
+      'src',
       'subframe',
     ]
   }
@@ -152,7 +153,11 @@ export default class DotLottiePlayer extends EnhancedElement {
   /**
    * Runs when the value of an attribute is changed on the component
    */
-  attributeChangedCallback(name: string, _oldValue: unknown, value: string) {
+  async attributeChangedCallback(
+    name: string,
+    _oldValue: unknown,
+    value: string
+  ) {
     if (!this._lottieInstance) {
       return
     }
@@ -222,6 +227,10 @@ export default class DotLottiePlayer extends EnhancedElement {
       if (val && !isNaN(val)) {
         this.setSpeed(val)
       }
+    }
+
+    if (name === 'src') {
+      await this.load(value)
     }
 
     if (name === 'subframe') {

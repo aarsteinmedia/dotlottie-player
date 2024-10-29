@@ -18,6 +18,9 @@ import { typescriptPaths } from 'rollup-plugin-typescript-paths'
 const isProd = process.env.NODE_ENV !== 'development',
   __filename = fileURLToPath(import.meta.url),
   __dirname = path.dirname(__filename),
+  /**
+   * @type {typeof import('./package.json')}
+   * */
   pkg = JSON.parse(
     (
       await readFile(
@@ -26,6 +29,9 @@ const isProd = process.env.NODE_ENV !== 'development',
     ).toString()
   ),
   input = path.resolve(__dirname, 'src', 'index.ts'),
+  /**
+   * @type {import('rollup').RollupOptions.InputPluginOption}
+   * */
   plugins = (preferBuiltins = false) => [
     typescriptPaths(),
     postcss({
@@ -66,6 +72,9 @@ const isProd = process.env.NODE_ENV !== 'development',
     commonjs(),
     swc(),
   ],
+  /**
+   * @type {import('rollup').RollupOptions.InputPluginOption}
+   * */
   unpkgPlugins = () => [
     ...plugins(),
     isProd && minify(),
@@ -76,6 +85,9 @@ const isProd = process.env.NODE_ENV !== 'development',
       }),
     !isProd && livereload(),
   ],
+  /**
+   * @type {import('rollup').RollupOptions.InputPluginOption}
+   * */
   modulePlugins = () => [...plugins(true), summary()],
   /**
    * @type {import('rollup').RollupOptions}
