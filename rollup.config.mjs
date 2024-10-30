@@ -128,7 +128,7 @@ const isProd = process.env.NODE_ENV !== 'development',
    * @type {import('rollup').RollupOptions}
    * */
   module = {
-    external: ['lottie-web', 'fflate'],
+    external: ['lottie-web/build/player/lottie.js', 'fflate'],
     input,
     onwarn(warning, warn) {
       if (
