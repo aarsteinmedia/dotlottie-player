@@ -22,7 +22,7 @@ const __filename = fileURLToPath(import.meta.url),
    * */
   config = [
     {
-      ignores: ['types/**/*', 'dist/**/*', 'dev/**/*'],
+      ignores: ['**/node_modules', 'types/**/*', 'dist/**/*', 'dev/**/*'],
     },
     ...compat.extends(
       'eslint:recommended',
