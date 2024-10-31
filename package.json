@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package",
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "description": "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player",
   "exports": {
     ".": {
@@ -70,9 +70,9 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-typescript": "^11.1.6",
-    "@swc/core": "^1.7.40",
+    "@swc/core": "^1.7.42",
     "@types/mocha": "^10.0.9",
-    "@types/node": "^22.8.4",
+    "@types/node": "^22.8.5",
     "@typescript-eslint/eslint-plugin": "^8.12.2",
     "@typescript-eslint/parser": "^8.12.2",
     "@web/dev-server-esbuild": "^1.0.2",
@@ -126,6 +126,7 @@
   },
   "customElements": "custom-elements.json",
   "files": [
+    "CHANGELOG.md",
     "custom-elements.json",
     "dist",
     "README.md"
