@@ -1423,9 +1423,9 @@ export default class DotLottiePlayer extends EnhancedElement {
   /**
    * Snapshot and download the current frame as SVG
    */
-  public snapshot(shouldDownload = true) {
+  public snapshot(shouldDownload = true, name = 'AM Lottie') {
     try {
-      if (!this.shadowRoot || !this.src) {
+      if (!this.shadowRoot) {
         throw new Error('Unknown error')
       }
 
@@ -1443,7 +1443,7 @@ export default class DotLottiePlayer extends EnhancedElement {
       if (shouldDownload) {
         download(data, {
           mimeType: 'image/svg+xml',
-          name: `${getFilename(this.src)}-${frameOutput(this._seeker)}.svg`,
+          name: `${getFilename(this.src || name)}-${frameOutput(this._seeker)}.svg`,
         })
       }
 

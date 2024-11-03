@@ -111,7 +111,7 @@ export default class DotLottiePlayer extends EnhancedElement {
     stop(): void;
     destroy(): void;
     seek(value: number | string): void;
-    snapshot(shouldDownload?: boolean): string | null;
+    snapshot(shouldDownload?: boolean, name?: string): string | null;
     setSubframe(value: boolean): void;
     setCount(value: number): void;
     protected _freeze(): void;
