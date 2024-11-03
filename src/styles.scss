@@ -12,9 +12,12 @@
   --lottie-player-seeker-thumb-color: #4285f4;
   --lottie-player-seeker-display: block;
 
-  display: block;
   width: 100%;
   height: 100%;
+
+  &:not([hidden]) {
+    display: block;
+  }
 
   .main {
     display: flex;
