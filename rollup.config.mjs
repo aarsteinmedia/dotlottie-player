@@ -106,11 +106,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   unpkg = {
     input,
     onwarn(warning, warn) {
-      if (
-        warning.code === 'THIS_IS_UNDEFINED' ||
-        warning.code === 'EVAL' ||
-        warning.code === 'CIRCULAR_DEPENDENCY'
-      ) {
+      if (warning.code === 'EVAL' || warning.code === 'CIRCULAR_DEPENDENCY') {
         return
       }
       warn(warning)

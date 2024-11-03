@@ -182,7 +182,7 @@ export default function renderControls(this: DotLottiePlayer) {
 
     const snapshot = this.shadow.querySelector('.snapshot')
     if (snapshot instanceof HTMLButtonElement) {
-      snapshot.onclick = this.snapshot
+      snapshot.onclick = () => this.snapshot(true)
     }
 
     const toggleSettings = this.shadow.querySelector('.toggleSettings')

@@ -275,8 +275,8 @@ export const addExt = (ext: string, str?: string) => {
             isDotLottie: false,
             manifest: undefined,
           }
-        } catch (e) {
-          console.warn(e)
+        } catch (_e) {
+          /* empty */
         }
       }
 

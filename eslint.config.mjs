@@ -50,7 +50,14 @@ const __filename = fileURLToPath(import.meta.url),
       },
 
       rules: {
-        '@typescript-eslint/no-unused-vars': 'error',
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            argsIgnorePattern: '^_',
+            caughtErrorsIgnorePattern: '^_',
+            varsIgnorePattern: '^_',
+          },
+        ],
         'array-bracket-spacing': 'error',
         'arrow-body-style': ['error', 'as-needed'],
 

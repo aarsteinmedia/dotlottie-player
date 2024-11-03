@@ -1423,29 +1423,35 @@ export default class DotLottiePlayer extends EnhancedElement {
   /**
    * Snapshot and download the current frame as SVG
    */
-  public snapshot() {
-    if (!this.shadowRoot || !this.src) {
-      return
+  public snapshot(shouldDownload = true) {
+    try {
+      if (!this.shadowRoot || !this.src) {
+        throw new Error('Unknown error')
+      }
+
+      // Get SVG element and serialize markup
+      const svgElement = this.shadowRoot.querySelector('.animation svg'),
+        data =
+          svgElement instanceof Node
+            ? new XMLSerializer().serializeToString(svgElement)
+            : null
+
+      if (!data) {
+        throw new Error('Could not serialize data')
+      }
+
+      if (shouldDownload) {
+        download(data, {
+          mimeType: 'image/svg+xml',
+          name: `${getFilename(this.src)}-${frameOutput(this._seeker)}.svg`,
+        })
+      }
+
+      return data
+    } catch (err) {
+      console.error(err)
+      return null
     }
-
-    // Get SVG element and serialize markup
-    const svgElement = this.shadowRoot.querySelector('.animation svg'),
-      data =
-        svgElement instanceof Node
-          ? new XMLSerializer().serializeToString(svgElement)
-          : null
-
-    if (!data) {
-      console.error('Could not serialize data')
-      return
-    }
-
-    download(data, {
-      mimeType: 'image/svg+xml',
-      name: `${getFilename(this.src)}-${frameOutput(this._seeker)}.svg`,
-    })
-
-    return data
   }
 
   /**
