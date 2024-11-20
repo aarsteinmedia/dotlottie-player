@@ -408,12 +408,14 @@ export default class DotLottiePlayer extends EnhancedElement {
   /**
    * Description for screen readers
    */
-  set description(value: string) {
-    this.setAttribute('description', value)
+  set description(value: string | null) {
+    if (value) {
+      this.setAttribute('description', value)
+    }
   }
 
   get description() {
-    return this.getAttribute('description') || ''
+    return this.getAttribute('description')
   }
 
   /**
@@ -643,7 +645,7 @@ export default class DotLottiePlayer extends EnhancedElement {
   /**
    * Animation Container
    */
-  protected _container!: Element | null
+  protected _container: Element | null = null
 
   /**
    * @state
@@ -1424,14 +1426,18 @@ export default class DotLottiePlayer extends EnhancedElement {
       }
 
       // Get SVG element and serialize markup
-      const svgElement = this.shadowRoot.querySelector('.animation svg'),
-        data =
-          svgElement instanceof Node
-            ? new XMLSerializer().serializeToString(svgElement)
-            : null
+      const svgElement = this.shadowRoot.querySelector('.animation svg')
+      if (!svgElement) {
+        throw new Error('Could not retrieve animation from DOM')
+      }
+
+      const data =
+        svgElement instanceof Node
+          ? new XMLSerializer().serializeToString(svgElement)
+          : null
 
       if (!data) {
-        throw new Error('Could not serialize data')
+        throw new Error('Could not serialize SVG element')
       }
 
       if (shouldDownload) {

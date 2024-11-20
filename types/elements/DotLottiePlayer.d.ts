@@ -27,8 +27,8 @@ export default class DotLottiePlayer extends EnhancedElement {
     get controls(): Controls;
     set count(value: number);
     get count(): number;
-    set description(value: string);
-    get description(): string;
+    set description(value: string | null);
+    get description(): string | null;
     set direction(value: AnimationDirection);
     get direction(): AnimationDirection;
     set hover(value: boolean);

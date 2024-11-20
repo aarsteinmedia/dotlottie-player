@@ -10,7 +10,6 @@ export default function renderPlayer(this: DotLottiePlayer) {
       class="animation-container main"
       data-controls="${this.controls ?? false}"
       lang="${this.description ? document?.documentElement?.lang : 'en'}"
-      role="img"
       aria-label="${this.description ?? 'Lottie animation'}"
       data-loaded="${this._playerState.loaded}"
     >
