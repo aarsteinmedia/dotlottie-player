@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [4.0.11] - 02-12-2024
+
+### Changed
+
+- Improved type safety and error handling
+
 ## [4.0.10] - 20-11-2024
 
 ### Changed

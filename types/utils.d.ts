@@ -3,7 +3,7 @@ import type { LottieAsset, LottieJSON, LottieManifest } from './types';
 export declare class CustomError extends Error {
     status?: number;
 }
-export declare const addExt: (ext: string, str?: string) => string | undefined, aspectRatio: (objectFit: string) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", base64ToU8: (str: string) => Uint8Array, createDotLottie: ({ animations, fileName, manifest, shouldDownload, }: {
+export declare const addExt: (ext: string, str?: string) => string | undefined, aspectRatio: (objectFit: string) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", base64ToU8: (str: string) => Uint8Array<ArrayBufferLike>, createDotLottie: ({ animations, fileName, manifest, shouldDownload, }: {
     animations?: LottieJSON[];
     manifest: LottieManifest;
     fileName?: string;

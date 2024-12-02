@@ -303,6 +303,10 @@ export const addExt = (ext: string, str?: string) => {
           reject(err)
           return
         }
+        if (!(data.buffer instanceof ArrayBuffer)) {
+          reject('Data is not transferable')
+          return
+        }
         resolve(data.buffer)
       })
     })
