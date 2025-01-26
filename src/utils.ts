@@ -268,6 +268,7 @@ export const addExt = (ext: string, str?: string) => {
           }
         }
         const text = await result.clone().text()
+
         try {
           const lottie = JSON.parse(text)
           return {

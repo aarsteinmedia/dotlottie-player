@@ -75,7 +75,7 @@
     height: 100%;
     align-items: center;
 
-    svg {
+    & svg {
       width: 100%;
       height: auto;
     }
@@ -96,7 +96,7 @@
       opacity: .5;
     }
 
-    button {
+    & button {
       cursor: pointer;
       fill: var(--lottie-player-toolbar-icon-color);
       color: var(--lottie-player-toolbar-icon-color);
@@ -131,7 +131,7 @@
         outline: 0;
       }
 
-      svg {
+      & svg {
         pointer-events: none;
 
         >* {
@@ -164,7 +164,6 @@
     cursor: pointer;
     background-color: transparent;
 
-    /* background-color: var(--lottie-player-seeker-track-color); */
     display: var(--lottie-player-seeker-display);
     color: var(--lottie-player-seeker-thumb-color);
     margin: 0;
@@ -262,7 +261,7 @@
     }
   }
 
-  progress {
+  & progress {
     appearance: none;
     outline: none;
     position: absolute;
@@ -275,22 +274,22 @@
     margin: 7.5px 0;
     background-color: var(--lottie-player-seeker-track-color);
     pointer-events: none;
+
+    &::-webkit-progress-inner-element {
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    &::-webkit-slider-runnable-track {
+      background-color: transparent;
+    }
+
+    &::-webkit-progress-value {
+      background-color: var(--lottie-player-seeker-thumb-color);
+    }
   }
 
   ::-moz-progress-bar {
-    background-color: var(--lottie-player-seeker-thumb-color);
-  }
-
-  ::-webkit-progress-inner-element {
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  ::-webkit-slider-runnable-track {
-    background-color: transparent;
-  }
-
-  ::-webkit-progress-value {
     background-color: var(--lottie-player-seeker-thumb-color);
   }
 

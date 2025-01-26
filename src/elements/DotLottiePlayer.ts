@@ -40,7 +40,7 @@ import {
 } from '@/types'
 import EnhancedElement from '@/elements/EnhancedElement'
 import pkg from '@/../package.json'
-import styles from '@/styles.scss'
+import styles from '@/styles.css'
 
 /**
  * dotLottie Player Web Component

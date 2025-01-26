@@ -1,8 +1,8 @@
-import standard from 'stylelint-config-standard-scss'
+import recommended from 'stylelint-config-recommended'
 
 /**
  * @type {import('stylelint').Config}
  * */
-const stylelintConfig = standard
+const stylelintConfig = recommended
 
 export default stylelintConfig
