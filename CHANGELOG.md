@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [4.0.13] - 05-02-2025
+
+### Changed
+
+- Changed from ES2021 to ES2022
+
 ## [4.0.12] - 26-01-2025
 
 ### Changed
@@ -183,6 +189,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[4.0.13]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/4.0.13
 [4.0.12]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/4.0.12
 [4.0.11]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/4.0.11
 [4.0.10]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/4.0.10

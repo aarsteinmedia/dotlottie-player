@@ -21,7 +21,7 @@ export default TSESlint.config(
       globals: {
         ...globals.browser,
         ...globals.node,
-        ...globals.es2021,
+        ...globals.es2022,
       },
       // parser: tsParser,
       sourceType: 'module',

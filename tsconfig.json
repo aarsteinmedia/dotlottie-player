@@ -35,7 +35,7 @@
     "resolveJsonModule": true,
     "rootDir": "./src",
     "strict": true,
-    "target": "ES2021",
+    "target": "ES2022",
     "useDefineForClassFields": false,
     "paths": {
       "@/*": [
