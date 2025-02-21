@@ -16,8 +16,7 @@ import template from 'rollup-plugin-html-literals'
 import { typescriptPaths } from 'rollup-plugin-typescript-paths'
 
 const isProd = process.env.NODE_ENV !== 'development',
-  __filename = fileURLToPath(import.meta.url),
-  __dirname = path.dirname(__filename),
+  __dirname = path.dirname(fileURLToPath(import.meta.url)),
   /**
    * @type {typeof import('./package.json')}
    * */

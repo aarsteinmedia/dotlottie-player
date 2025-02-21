@@ -196,6 +196,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[4.0.14]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/4.0.14
 [4.0.13]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/4.0.13
 [4.0.12]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/4.0.12
 [4.0.11]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/4.0.11
