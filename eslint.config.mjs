@@ -1,4 +1,4 @@
-import TSESlint from 'typescript-eslint'
+import TSESLint from 'typescript-eslint'
 import _import from 'eslint-plugin-import'
 import jsdoc from 'eslint-plugin-jsdoc'
 import perfectionist from 'eslint-plugin-perfectionist'
@@ -8,12 +8,12 @@ import ESLint from '@eslint/js'
 import ESLintConfigPrettier from 'eslint-config-prettier'
 import ESLintPluginPrettier from 'eslint-plugin-prettier'
 
-export default TSESlint.config(
+export default TSESLint.config(
   {
     ignores: ['**/node_modules', 'types/**/*', 'dist/**/*', 'dev/**/*'],
   },
   ESLint.configs.recommended,
-  ...TSESlint.configs.recommended,
+  ...TSESLint.configs.recommended,
   ESLintConfigPrettier,
   {
     files: ['**/*.{ts,mjs}'],

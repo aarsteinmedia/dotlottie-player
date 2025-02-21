@@ -4,7 +4,7 @@
 
 :host {
   --lottie-player-toolbar-height: 35px;
-  --lottie-player-toolbar-background-color: #FFF;
+  --lottie-player-toolbar-background-color: #fff;
   --lottie-player-toolbar-icon-color: #000;
   --lottie-player-toolbar-icon-hover-color: #000;
   --lottie-player-toolbar-icon-active-color: #4285f4;
@@ -36,7 +36,7 @@
     padding: 0;
   }
 
-  [data-controls="true"] .animation {
+  [data-controls='true'] .animation {
     height: calc(100% - 35px);
   }
 
@@ -52,10 +52,10 @@
     border-radius: 5px;
     padding: 10px 15px;
     border: solid 2px var(--lottie-player-toolbar-icon-color);
-    animation: fade-in .2s ease-in-out;
+    animation: fade-in 0.2s ease-in-out;
 
     &::before {
-      content: "";
+      content: '';
       right: 10px;
       border: 7px solid transparent;
       margin-right: -7px;
@@ -93,7 +93,7 @@
 
     &.has-error {
       pointer-events: none;
-      opacity: .5;
+      opacity: 0.5;
     }
 
     & button {
@@ -108,7 +108,7 @@
       margin: 0;
       align-items: center;
       gap: 5px;
-      opacity: .9;
+      opacity: 0.9;
 
       &:not([hidden]) {
         display: flex;
@@ -118,13 +118,13 @@
         opacity: 1;
       }
 
-      &[data-active="true"] {
+      &[data-active='true'] {
         opacity: 1;
         fill: var(--lottie-player-toolbar-icon-active-color);
       }
 
       &:disabled {
-        opacity: .5;
+        opacity: 0.5;
       }
 
       &:focus {
@@ -134,7 +134,7 @@
       & svg {
         pointer-events: none;
 
-        >* {
+        & > * {
           fill: inherit;
         }
       }
@@ -184,7 +184,7 @@
       border: 0;
       background-color: var(--lottie-player-seeker-thumb-color);
       cursor: pointer;
-      transition: transform .2s ease-in-out;
+      transition: transform 0.2s ease-in-out;
       transform: scale(0);
     }
 
@@ -206,7 +206,7 @@
       background-color: var(--lottie-player-seeker-thumb-color);
       border: 0;
       cursor: pointer;
-      transition: transform .2s ease-in-out;
+      transition: transform 0.2s ease-in-out;
       transform: scale(0);
     }
 
@@ -241,7 +241,7 @@
       border-radius: 50%;
       background: var(--lottie-player-seeker-thumb-color);
       cursor: pointer;
-      transition: transform .2s ease-in-out;
+      transition: transform 0.2s ease-in-out;
       transform: scale(0);
     }
 
@@ -289,10 +289,9 @@
     }
   }
 
-  ::-moz-progress-bar {
+  & *::-moz-progress-bar {
     background-color: var(--lottie-player-seeker-thumb-color);
   }
-
 }
 
 @keyframes fade-in {
@@ -308,8 +307,8 @@
 @media (prefers-color-scheme: dark) {
   :host {
     --lottie-player-toolbar-background-color: #000;
-    --lottie-player-toolbar-icon-color: #FFF;
-    --lottie-player-toolbar-icon-hover-color: #FFF;
+    --lottie-player-toolbar-icon-color: #fff;
+    --lottie-player-toolbar-icon-hover-color: #fff;
     --lottie-player-seeker-track-color: rgb(255 255 255 / 60%);
   }
 }

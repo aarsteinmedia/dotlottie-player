@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [4.0.14] - 21-02-2025
+
+### Changed
+
+- Fixed CSS bug
+- Updated backend script
+
 ## [4.0.13] - 05-02-2025
 
 ### Changed
