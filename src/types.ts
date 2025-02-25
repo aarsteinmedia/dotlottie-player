@@ -1,5 +1,6 @@
+import 'react/jsx-runtime'
+import 'react/jsx-dev-runtime'
 import type { AnimationDirection } from 'lottie-web'
-import type { CSSProperties, RefObject } from 'react'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 import type { PlayMode } from '@/enums'
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
@@ -162,13 +163,6 @@ export type Controls = boolean | '' | 'controls' | null
 export type Loop = boolean | '' | 'loop' | null
 export type Subframe = boolean | '' | null
 
-type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
-  class?: string
-  ref?: RefObject<unknown>
-  style?: CSSProperties
-  src: string
-}
-
 // export type PackageJSON = typeof pkg
 
 export interface CEMConfig {
@@ -211,7 +205,32 @@ declare global {
     'dotlottie-player': DotLottiePlayer
   }
   function dotLottiePlayer(): DotLottiePlayer
-  // eslint-disable-next-line @typescript-eslint/no-namespace
+}
+
+type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
+  class?: string
+  ref?: React.RefObject<unknown>
+  style?: React.CSSProperties
+  src: string
+}
+
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      'dotlottie-player': JSXLottiePlayer
+    }
+  }
+}
+
+declare module 'react/jsx-runtime' {
+  namespace JSX {
+    interface IntrinsicElements {
+      'dotlottie-player': JSXLottiePlayer
+    }
+  }
+}
+
+declare module 'react/jsx-dev-runtime' {
   namespace JSX {
     interface IntrinsicElements {
       'dotlottie-player': JSXLottiePlayer

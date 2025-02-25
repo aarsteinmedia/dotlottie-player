@@ -16,7 +16,7 @@ export default TSESLint.config(
   ...TSESLint.configs.recommended,
   ESLintConfigPrettier,
   {
-    files: ['**/*.{ts,mjs}'],
+    files: ['**/*.{ts,js}'],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -37,6 +37,7 @@ export default TSESLint.config(
     rules: {
       ...ESLintPluginPrettier.configs?.recommended.rules,
       ...ESLintConfigPrettier.rules,
+      '@typescript-eslint/no-namespace': 'warn',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
