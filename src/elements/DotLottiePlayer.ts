@@ -1710,7 +1710,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
   }
 
   public async convert({
-    animations = [],
+    animations,
     fileName,
     manifest,
     shouldDownload = true,
@@ -1742,8 +1742,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     return createDotLottie({
-      animations:
-        animations || (await getAnimationData(this.src)).animations || [],
+      animations: animations || (await getAnimationData(this.src)).animations,
       fileName: `${getFilename(fileName || this.src || 'converted')}.lottie`,
       manifest: {
         ...(manifest || this._manifest),
