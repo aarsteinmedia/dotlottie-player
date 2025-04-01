@@ -162,12 +162,9 @@
               "name": "setSegment",
               "parameters": [
                 {
-                  "name": "segment"
-                },
-                {
-                  "name": "settings",
+                  "name": "segment",
                   "type": {
-                    "text": "AnimationSegment"
+                    "text": "Vector2"
                   }
                 }
               ],
@@ -179,7 +176,7 @@
               "description": "Get playback segment",
               "return": {
                 "type": {
-                  "text": "AnimationSegment"
+                  "text": "Vector2"
                 }
               }
             },
@@ -523,7 +520,7 @@
               "name": "convert",
               "parameters": [
                 {
-                  "name": "{ animations, fileName, manifest, shouldDownload = true, src, typeCheck }"
+                  "name": "{ animations = [], fileName, manifest, shouldDownload = true, src, typeCheck }"
                 }
               ]
             },
@@ -587,6 +584,14 @@
                 "text": "number"
               },
               "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "_animations",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
             },
             {
               "kind": "field",
@@ -685,7 +690,7 @@
             }
           ],
           "superclass": {
-            "name": "EnhancedElement",
+            "name": "PropertyCallbackElement",
             "module": "dist/index.js"
           },
           "tagName": "dotlottie-player",
@@ -1207,7 +1212,7 @@
         {
           "kind": "class",
           "description": "",
-          "name": "DotLottiePlayer",
+          "name": "r9",
           "members": [
             {
               "kind": "field",
@@ -1226,7 +1231,7 @@
                   "name": "e"
                 },
                 {
-                  "name": "i"
+                  "name": "s"
                 }
               ]
             },
@@ -1444,7 +1449,7 @@
                   "name": "e"
                 },
                 {
-                  "name": "i",
+                  "name": "s",
                   "default": "!0"
                 }
               ]
@@ -1594,7 +1599,7 @@
               "name": "convert",
               "parameters": [
                 {
-                  "name": "{animations:t,fileName:e,manifest:i,shouldDownload:s=!0,src:r,typeCheck:n}"
+                  "name": "{animations:t=[],fileName:e,manifest:s,shouldDownload:i=!0,src:r,typeCheck:a}"
                 }
               ]
             },
@@ -1607,12 +1612,12 @@
             {
               "kind": "field",
               "name": "_renderControls",
-              "default": "renderControls"
+              "default": "r5"
             },
             {
               "kind": "field",
               "name": "_render",
-              "default": "renderPlayer"
+              "default": "r3"
             },
             {
               "kind": "field",
@@ -1660,6 +1665,14 @@
             },
             {
               "kind": "field",
+              "name": "_animations",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
               "name": "_lottieInstance",
               "type": {
                 "text": "null"
@@ -1700,7 +1713,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{count:0,loaded:!1,prev:PlayerState.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
+              "default": "{count:0,loaded:!1,prev:tz.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
             },
             {
               "kind": "field",
@@ -1851,7 +1864,7 @@
             }
           ],
           "superclass": {
-            "name": "EnhancedElement",
+            "name": "r6",
             "module": "dist/unpkg/index.js"
           },
           "tagName": "dotlottie-player",
@@ -1863,7 +1876,7 @@
           "kind": "custom-element-definition",
           "name": "dotlottie-player",
           "declaration": {
-            "name": "DotLottiePlayer",
+            "name": "r9",
             "module": "dist/unpkg/index.js"
           }
         }
@@ -2065,7 +2078,7 @@
               "kind": "field",
               "name": "_segment",
               "type": {
-                "text": "AnimationSegment | undefined"
+                "text": "Vector2 | undefined"
               },
               "privacy": "private",
               "description": "Segment"
@@ -2078,13 +2091,7 @@
                 {
                   "name": "segment",
                   "type": {
-                    "text": "AnimationSegment"
-                  }
-                },
-                {
-                  "name": "settings",
-                  "type": {
-                    "text": "AnimationSegment"
+                    "text": "Vector2"
                   }
                 }
               ],
@@ -2097,7 +2104,7 @@
               "description": "Get playback segment",
               "return": {
                 "type": {
-                  "text": "AnimationSegment"
+                  "text": "Vector2"
                 }
               }
             },
@@ -2105,7 +2112,7 @@
               "kind": "field",
               "name": "_container",
               "type": {
-                "text": "Element | null"
+                "text": "HTMLElement | null"
               },
               "privacy": "protected",
               "default": "null",
@@ -2115,7 +2122,7 @@
               "kind": "field",
               "name": "playerState",
               "type": {
-                "text": "PlayerState | undefined"
+                "text": "PlayerState"
               },
               "privacy": "public"
             },
@@ -2150,9 +2157,10 @@
               "kind": "field",
               "name": "_animations",
               "type": {
-                "text": "LottieJSON[]"
+                "text": "AnimationData[]"
               },
-              "privacy": "private"
+              "privacy": "private",
+              "default": "[]"
             },
             {
               "kind": "field",
@@ -2207,7 +2215,7 @@
               "kind": "field",
               "name": "_manifest",
               "type": {
-                "text": "LottieManifest"
+                "text": "LottieManifest | undefined"
               },
               "privacy": "private"
             },
@@ -2378,7 +2386,7 @@
                 {
                   "name": "json",
                   "type": {
-                    "text": "LottieJSON"
+                    "text": "AnimationData"
                   }
                 }
               ]
@@ -2638,9 +2646,9 @@
               "privacy": "public",
               "parameters": [
                 {
-                  "name": "{\n    animations,\n    fileName,\n    manifest,\n    shouldDownload = true,\n    src,\n    typeCheck,\n  }",
+                  "name": "{\n    animations = [],\n    fileName,\n    manifest,\n    shouldDownload = true,\n    src,\n    typeCheck,\n  }",
                   "type": {
-                    "text": "{\n    /** External type safety */\n    typeCheck?: boolean\n\n    /** Externally added manifest */\n    manifest?: LottieManifest\n\n    /** Externally added animations */\n    animations?: LottieJSON[]\n\n    src?: string\n\n    fileName?: string\n\n    /** Whether to trigger a download in the browser. Defaults to true */\n    shouldDownload?: boolean\n  }"
+                    "text": "{\n    /** External type safety */\n    typeCheck?: boolean\n\n    /** Externally added manifest */\n    manifest?: LottieManifest\n\n    /** Externally added animations */\n    animations?: AnimationData[]\n\n    src?: string\n\n    fileName?: string\n\n    /** Whether to trigger a download in the browser. Defaults to true */\n    shouldDownload?: boolean\n  }"
                   }
                 }
               ]
@@ -2693,8 +2701,8 @@
             }
           ],
           "superclass": {
-            "name": "EnhancedElement",
-            "package": "@/elements/EnhancedElement"
+            "name": "PropertyCallbackElement",
+            "package": "@/elements/helpers/PropertyCallbackElement"
           },
           "tagName": "dotlottie-player",
           "customElement": true
@@ -2707,31 +2715,6 @@
           "declaration": {
             "name": "DotLottiePlayer",
             "module": "src/elements/DotLottiePlayer.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/elements/EnhancedElement.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "HTMLElement enhanced to track property changes",
-          "name": "EnhancedElement",
-          "superclass": {
-            "name": "HTMLElement"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "EnhancedElement",
-            "module": "src/elements/EnhancedElement.ts"
           }
         }
       ]
@@ -2790,6 +2773,31 @@
           "declaration": {
             "name": "renderPlayer",
             "module": "src/templates/player.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/helpers/PropertyCallbackElement.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "HTMLElement enhanced to track property changes",
+          "name": "PropertyCallbackElement",
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "PropertyCallbackElement",
+            "module": "src/elements/helpers/PropertyCallbackElement.ts"
           }
         }
       ]

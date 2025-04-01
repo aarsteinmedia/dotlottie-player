@@ -6,8 +6,6 @@
     "keepClassNames": true,
     "parser": {
       "syntax": "typescript",
-      "decorators": true,
-      "dynamicImport": true
     },
     "target": "es2022"
   }

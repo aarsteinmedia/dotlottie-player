@@ -1,11 +1,13 @@
-import * as Lottie from 'lottie-web/build/player/lottie.js'
-import type {
-  AnimationConfig,
-  AnimationDirection,
-  AnimationItem,
-  AnimationSegment,
-  RendererType,
-} from 'lottie-web'
+import Lottie, {
+  type AnimationConfiguration,
+  type AnimationData,
+  type AnimationDirection,
+  type AnimationItem,
+  type AnimationSettings,
+  type LottieManifest,
+  type Vector2,
+} from '@aarsteinmedia/lottie-web'
+import { createElementID } from '@aarsteinmedia/lottie-web/utils'
 import renderPlayer from '@/templates/player'
 import renderControls from '@/templates/controls'
 import {
@@ -18,7 +20,6 @@ import {
   getFilename,
   handleErrors,
   isServer,
-  useId,
 } from '@/utils'
 import {
   ObjectFit,
@@ -26,19 +27,17 @@ import {
   PlayerEvents,
   PlayerState,
   PreserveAspectRatio,
+  RendererType,
 } from '@/enums'
 import {
   AnimationAttributes,
-  AnimationSettings,
   AnimateOnScroll,
   Autoplay,
   Controls,
   Loop,
-  LottieJSON,
-  LottieManifest,
   Subframe,
 } from '@/types'
-import EnhancedElement from '@/elements/EnhancedElement'
+import PropertyCallbackElement from '@/elements/helpers/PropertyCallbackElement'
 import pkg from '@/../package.json'
 import styles from '@/styles.css'
 
@@ -49,7 +48,7 @@ import styles from '@/styles.css'
  * @extends { EnhancedElement }
  * @description Web Component for playing Lottie animations in your web app.
  */
-export default class DotLottiePlayer extends EnhancedElement {
+export default class DotLottiePlayer extends PropertyCallbackElement {
   constructor() {
     super()
     this._complete = this._complete.bind(this)
@@ -538,10 +537,10 @@ export default class DotLottiePlayer extends EnhancedElement {
 
   get renderer() {
     const val = this.getAttribute('renderer')
-    if (val === 'canvas' || val === 'html') {
+    if (val === RendererType.Canvas || val === RendererType.HTML) {
       return val
     }
-    return 'svg'
+    return RendererType.SVG
   }
 
   /**
@@ -624,19 +623,19 @@ export default class DotLottiePlayer extends EnhancedElement {
   /**
    * Segment
    */
-  private _segment?: AnimationSegment
+  private _segment?: Vector2
 
   /**
    * Set playback segment
-   * @param { AnimationSegment } settings
+   * @param { Vector2 } segment
    */
-  public setSegment(segment: AnimationSegment) {
+  public setSegment(segment: Vector2) {
     this._segment = segment
   }
 
   /**
    * Get playback segment
-   * @returns { AnimationSegment }
+   * @returns { Vector2 }
    */
   public getSegment() {
     return this._segment
@@ -645,13 +644,13 @@ export default class DotLottiePlayer extends EnhancedElement {
   /**
    * Animation Container
    */
-  protected _container: Element | null = null
+  protected _container: HTMLElement | null = null
 
   /**
    * @state
    * Player state
    */
-  public playerState?: PlayerState = PlayerState.Loading
+  public playerState: PlayerState = PlayerState.Loading
 
   /**
    * @state
@@ -677,18 +676,18 @@ export default class DotLottiePlayer extends EnhancedElement {
    * so that next-button will show up
    * on load, if controls are visible
    */
-  private _animations!: LottieJSON[]
+  private _animations: AnimationData[] = []
 
   private _intersectionObserver?: IntersectionObserver
   private _lottieInstance: AnimationItem | null = null
-  protected _identifier = this.id || useId('dotlottie')
+  protected _identifier = this.id || createElementID()
   protected _errorMessage = 'Something went wrong'
 
   private _isBounce = false
 
   private _isDotLottie = false
 
-  private _manifest!: LottieManifest
+  private _manifest?: LottieManifest
 
   protected _playerState: {
     prev: PlayerState
@@ -721,12 +720,12 @@ export default class DotLottiePlayer extends EnhancedElement {
         ? this._multiAnimationSettings?.[this._currentAnimation]
         : undefined,
       currentAnimationManifest =
-        this._manifest.animations?.[this._currentAnimation]
+        this._manifest?.animations[this._currentAnimation]
 
     // Loop
     let loop = !!this.loop
     if (
-      currentAnimationManifest.loop !== undefined &&
+      currentAnimationManifest?.loop !== undefined &&
       this.loop === undefined
     ) {
       loop = !!currentAnimationManifest.loop
@@ -738,7 +737,7 @@ export default class DotLottiePlayer extends EnhancedElement {
     // Autoplay
     let autoplay = !!this.autoplay
     if (
-      currentAnimationManifest.autoplay !== undefined &&
+      currentAnimationManifest?.autoplay !== undefined &&
       this.autoplay === undefined
     ) {
       autoplay = !!currentAnimationManifest.autoplay
@@ -759,7 +758,9 @@ export default class DotLottiePlayer extends EnhancedElement {
       initialSegment = undefined
     }
 
-    const options: AnimationConfig<'svg' | 'canvas' | 'html'> = {
+    const options: AnimationConfiguration<
+      RendererType.SVG | RendererType.Canvas | RendererType.HTML
+    > = {
       autoplay,
       container: this._container,
       initialSegment,
@@ -810,8 +811,9 @@ export default class DotLottiePlayer extends EnhancedElement {
     }
 
     this._intersectionObserver = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting || document.hidden) {
+      const { length } = entries
+      for (let i = 0; i < length; i++) {
+        if (!entries[i].isIntersecting || document.hidden) {
           if (this.playerState === PlayerState.Playing) {
             this._freeze()
           }
@@ -866,7 +868,7 @@ export default class DotLottiePlayer extends EnhancedElement {
           {
             autoplay: !this.animateOnScroll && this.autoplay,
             direction: this.direction,
-            id: useId(),
+            id: createElementID(),
             loop: this.loop,
             mode: this.mode,
             speed: this.speed,
@@ -889,7 +891,7 @@ export default class DotLottiePlayer extends EnhancedElement {
       }
 
       // Initialize lottie player and load animation
-      this._lottieInstance = Lottie.default.loadAnimation({
+      this._lottieInstance = Lottie.loadAnimation({
         ...this._getOptions(),
         animationData: animations[this._currentAnimation],
       })
@@ -907,11 +909,11 @@ export default class DotLottiePlayer extends EnhancedElement {
     const speed =
         this._multiAnimationSettings?.[this._currentAnimation]?.speed ??
         this.speed ??
-        this._manifest.animations[this._currentAnimation].speed,
+        this._manifest?.animations[this._currentAnimation].speed,
       direction =
         this._multiAnimationSettings?.[this._currentAnimation]?.direction ??
         this.direction ??
-        this._manifest.animations[this._currentAnimation].direction ??
+        this._manifest?.animations[this._currentAnimation].direction ??
         1
 
     // Set initial playback speed and direction
@@ -1221,8 +1223,8 @@ export default class DotLottiePlayer extends EnhancedElement {
     )
   }
 
-  private _isLottie(json: LottieJSON) {
-    const mandatory: string[] = ['v', 'ip', 'op', 'layers', 'fr', 'w', 'h']
+  private _isLottie(json: AnimationData) {
+    const mandatory = ['v', 'ip', 'op', 'layers', 'fr', 'w', 'h']
 
     return mandatory.every((field: string) =>
       Object.prototype.hasOwnProperty.call(json, field)
@@ -1262,19 +1264,20 @@ export default class DotLottiePlayer extends EnhancedElement {
     } = this.src ? await getAnimationData(this.src) : {}
     try {
       manifest.generator = pkg.name
-      for (const config of configs) {
-        const { url } = config,
+      const { length } = configs
+      for (let i = 0; i < length; i++) {
+        const { url } = configs[i],
           { animations: animationsToAdd } = await getAnimationData(url)
         if (!animationsToAdd) {
           throw new Error('No animation loaded')
         }
-        if (manifest.animations.some(({ id }) => id === config.id)) {
+        if (manifest.animations.some(({ id }) => id === configs[i].id)) {
           throw new Error('Duplicate id for animation')
         }
 
-        manifest.animations = [...manifest.animations, { id: config.id }]
+        manifest.animations = [...manifest.animations, { id: configs[i].id }]
 
-        animations?.push(...animationsToAdd)
+        animations.push(...animationsToAdd)
       }
 
       return {
@@ -1644,7 +1647,7 @@ export default class DotLottiePlayer extends EnhancedElement {
       }
 
       // Re-initialize lottie player
-      this._lottieInstance = Lottie.default.loadAnimation({
+      this._lottieInstance = Lottie.loadAnimation({
         ...this._getOptions(),
         animationData: this._animations[this._currentAnimation],
       })
@@ -1707,7 +1710,7 @@ export default class DotLottiePlayer extends EnhancedElement {
   }
 
   public async convert({
-    animations,
+    animations = [],
     fileName,
     manifest,
     shouldDownload = true,
@@ -1721,7 +1724,7 @@ export default class DotLottiePlayer extends EnhancedElement {
     manifest?: LottieManifest
 
     /** Externally added animations */
-    animations?: LottieJSON[]
+    animations?: AnimationData[]
 
     src?: string
 
@@ -1739,12 +1742,13 @@ export default class DotLottiePlayer extends EnhancedElement {
     }
 
     return createDotLottie({
-      animations: animations || (await getAnimationData(this.src))?.animations,
+      animations:
+        animations || (await getAnimationData(this.src)).animations || [],
       fileName: `${getFilename(fileName || this.src || 'converted')}.lottie`,
       manifest: {
         ...(manifest || this._manifest),
         generator: pkg.name,
-      },
+      } as LottieManifest,
       shouldDownload,
     })
   }

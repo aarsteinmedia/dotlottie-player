@@ -1,11 +1,10 @@
-import * as Lottie from 'lottie-web/build/player/lottie.js';
-import type { AnimationDirection, AnimationSegment, RendererType } from 'lottie-web';
+import { type AnimationData, type AnimationDirection, type AnimationItem, type AnimationSettings, type LottieManifest, type Vector2 } from '@aarsteinmedia/lottie-web';
 import renderPlayer from '../templates/player';
 import renderControls from '../templates/controls';
-import { PlayMode, PlayerState, PreserveAspectRatio } from '../enums';
-import { AnimationAttributes, AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieJSON, LottieManifest, Subframe } from '../types';
-import EnhancedElement from '../elements/EnhancedElement';
-export default class DotLottiePlayer extends EnhancedElement {
+import { PlayMode, PlayerState, PreserveAspectRatio, RendererType } from '../enums';
+import { AnimationAttributes, AnimateOnScroll, Autoplay, Controls, Loop, Subframe } from '../types';
+import PropertyCallbackElement from '../elements/helpers/PropertyCallbackElement';
+export default class DotLottiePlayer extends PropertyCallbackElement {
     constructor();
     connectedCallback(): Promise<void>;
     disconnectedCallback(): void;
@@ -57,10 +56,10 @@ export default class DotLottiePlayer extends EnhancedElement {
     getMultiAnimationSettings(): AnimationSettings[];
     setMultiAnimationSettings(settings: AnimationSettings[]): void;
     private _segment?;
-    setSegment(segment: AnimationSegment): void;
-    getSegment(): Lottie.AnimationSegment | undefined;
-    protected _container: Element | null;
-    playerState?: PlayerState;
+    setSegment(segment: Vector2): void;
+    getSegment(): Vector2 | undefined;
+    protected _container: HTMLElement | null;
+    playerState: PlayerState;
     protected _isSettingsOpen: boolean;
     protected _seeker: number;
     private _currentAnimation;
@@ -71,7 +70,7 @@ export default class DotLottiePlayer extends EnhancedElement {
     protected _errorMessage: string;
     private _isBounce;
     private _isDotLottie;
-    private _manifest;
+    private _manifest?;
     protected _playerState: {
         prev: PlayerState;
         count: number;
@@ -83,7 +82,7 @@ export default class DotLottiePlayer extends EnhancedElement {
     private _getOptions;
     private _addIntersectionObserver;
     load(src: string | null): Promise<void>;
-    getManifest(): LottieManifest;
+    getManifest(): LottieManifest | undefined;
     private _toggleEventListeners;
     private _addEventListeners;
     private _removeEventListeners;
@@ -105,7 +104,7 @@ export default class DotLottiePlayer extends EnhancedElement {
         success: boolean;
         error?: string;
     }>;
-    getLottie(): Lottie.AnimationItem | null;
+    getLottie(): AnimationItem | null;
     play(): Promise<void>;
     pause(): void;
     stop(): void;
@@ -131,7 +130,7 @@ export default class DotLottiePlayer extends EnhancedElement {
     convert({ animations, fileName, manifest, shouldDownload, src, typeCheck, }: {
         typeCheck?: boolean;
         manifest?: LottieManifest;
-        animations?: LottieJSON[];
+        animations?: AnimationData[];
         src?: string;
         fileName?: string;
         shouldDownload?: boolean;

@@ -6,8 +6,13 @@ import {
   type Unzipped,
   type Zippable,
 } from 'fflate'
+import type {
+  AnimationData,
+  LottieAsset,
+  LottieManifest,
+} from '@aarsteinmedia/lottie-web'
+import { createElementID } from '@aarsteinmedia/lottie-web/utils'
 import { ObjectFit } from '@/enums'
-import type { LottieAsset, LottieJSON, LottieManifest } from '@/types'
 
 export class CustomError extends Error {
   status?: number
@@ -57,19 +62,19 @@ export const addExt = (ext: string, str?: string) => {
    * Convert a JSON Lottie to dotLottie or combine several animations and download new dotLottie file in your browser.
    */
   createDotLottie = async ({
-    animations,
+    animations = [],
     fileName,
     manifest,
     shouldDownload = true,
   }: {
-    animations?: LottieJSON[]
+    animations?: AnimationData[]
     manifest: LottieManifest
     fileName?: string
     shouldDownload?: boolean
   }) => {
     try {
       // Input validation
-      if (!animations?.length || !manifest) {
+      if (!animations.length || !manifest) {
         throw new Error(
           `Missing or malformed required parameter(s):\n ${
             animations?.length ? '- manifest\n' : ''
@@ -89,15 +94,25 @@ export const addExt = (ext: string, str?: string) => {
         }
 
       // Add animations and assets to the dotLottie file
-      for (const [i, animation] of animations.entries()) {
-        for (const asset of animation.assets ?? []) {
-          if (!asset.p || (!isImage(asset) && !isAudio(asset))) {
+      const { length } = animations
+      for (let i = 0; i < length; i++) {
+        const { length: jLen } = animations[i].assets
+        for (let j = 0; j < jLen; j++) {
+          if (
+            !animations[i].assets[j].p ||
+            (!isImage(animations[i].assets[j]) &&
+              !isAudio(animations[i].assets[j]))
+          ) {
             continue
           }
 
-          const { p: file, u: path } = asset,
-            // Original asset.id caused issues with multianimations
-            assetId = useId('asset'),
+          const { p: file, u: path } = animations[i].assets[j]
+
+          if (!file || !path) {
+            continue
+          }
+          // Original asset.id caused issues with multianimations
+          const assetId = createElementID(),
             isEncoded = file.startsWith('data:'),
             ext = isEncoded ? getExtFromB64(file) : getExt(file),
             // Check if the asset is already base64-encoded. If not, get path, fetch it, and encode it
@@ -110,21 +125,21 @@ export const addExt = (ext: string, str?: string) => {
                     : file
                 )
 
-          asset.p = `${assetId}.${ext}`
+          animations[i].assets[j].p = `${assetId}.${ext}`
 
           // Asset is embedded, so path empty string
-          asset.u = ''
+          animations[i].assets[j].u = ''
 
           // Asset is encoded
-          asset.e = 1
+          animations[i].assets[j].e = 1
 
           dotlottie[
-            `${isAudio(asset) ? 'audio' : 'images'}/${assetId}.${ext}`
+            `${isAudio(animations[i].assets[j]) ? 'audio' : 'images'}/${assetId}.${ext}`
           ] = [base64ToU8(dataURL), { level: animationCompressionLevel }]
         }
 
         dotlottie[`animations/${manifest.animations[i].id}.json`] = [
-          strToU8(JSON.stringify(animation), true),
+          strToU8(JSON.stringify(animations[i]), true),
           { level: animationCompressionLevel },
         ]
       }
@@ -146,14 +161,14 @@ export const addExt = (ext: string, str?: string) => {
     fileName,
     shouldDownload,
   }: {
-    animation?: LottieJSON
+    animation?: AnimationData
     fileName?: string
     shouldDownload?: boolean
   }) => {
     try {
       if (!animation) {
         throw new Error(
-          "Missing or malformed required parameter(s):\n - animation\n'"
+          "createJSON: Missing or malformed required parameter(s):\n - animation\n'"
         )
       }
 
@@ -222,7 +237,7 @@ export const addExt = (ext: string, str?: string) => {
   getAnimationData = async (
     input: unknown
   ): Promise<{
-    animations?: LottieJSON[]
+    animations?: AnimationData[]
     manifest?: LottieManifest
     isDotLottie: boolean
   }> => {
@@ -347,10 +362,13 @@ export const addExt = (ext: string, str?: string) => {
     const unzipped = await unzip(resp),
       manifest = getManifest(unzipped),
       data = [],
-      toResolve: Promise<void>[] = []
-    for (const { id } of manifest.animations) {
-      const str = strFromU8(unzipped[`animations/${id}.json`]),
-        lottie: LottieJSON = JSON.parse(prepareString(str))
+      toResolve: Promise<void>[] = [],
+      { length } = manifest.animations
+    for (let i = 0; i < length; i++) {
+      const str = strFromU8(
+          unzipped[`animations/${manifest.animations[i].id}.json`]
+        ),
+        lottie: AnimationData = JSON.parse(prepareString(str))
 
       toResolve.push(resolveAssets(unzipped, lottie.assets))
       data.push(lottie)
@@ -449,15 +467,16 @@ export const addExt = (ext: string, str?: string) => {
       return
     }
 
-    const toResolve: Promise<void>[] = []
+    const toResolve: Promise<void>[] = [],
+      { length } = assets
 
-    for (const asset of assets) {
-      if (!isAudio(asset) && !isImage(asset)) {
+    for (let i = 0; i < length; i++) {
+      if (!isAudio(assets[i]) && !isImage(assets[i])) {
         continue
       }
 
-      const type = isImage(asset) ? 'images' : 'audio',
-        u8 = unzipped?.[`${type}/${asset.p}`]
+      const type = isImage(assets[i]) ? 'images' : 'audio',
+        u8 = unzipped?.[`${type}/${assets[i].p}`]
 
       if (!u8) {
         continue
@@ -474,12 +493,12 @@ export const addExt = (ext: string, str?: string) => {
                 )
               )
 
-          asset.p =
-            asset.p?.startsWith('data:') || isBase64(asset.p)
-              ? asset.p
-              : `data:${getMimeFromExt(getExt(asset.p))};base64,${assetB64}`
-          asset.e = 1
-          asset.u = ''
+          assets[i].p =
+            assets[i].p?.startsWith('data:') || isBase64(assets[i].p)
+              ? assets[i].p
+              : `data:${getMimeFromExt(getExt(assets[i].p))};base64,${assetB64}`
+          assets[i].e = 1
+          assets[i].u = ''
 
           resolveAsset()
         })

@@ -74,10 +74,13 @@ const isProd = process.env.NODE_ENV !== 'development',
   /**
    * @type {import('rollup').RollupOptions.InputPluginOption}
    * */
-  unpkgPlugins = () => [
-    ...plugins(),
-    isProd && minify(),
-    isProd && summary(),
+  unpkgPlugins = () => [...plugins(), isProd && minify(), isProd && summary()],
+  /**
+   * @type {import('rollup').RollupOptions.InputPluginOption}
+   * */
+  modulePlugins = () => [
+    ...plugins(true),
+    summary(),
     !isProd &&
       serve({
         open: true,
@@ -85,14 +88,16 @@ const isProd = process.env.NODE_ENV !== 'development',
     !isProd && livereload(),
   ],
   /**
-   * @type {import('rollup').RollupOptions.InputPluginOption}
-   * */
-  modulePlugins = () => [...plugins(true), summary()],
-  /**
    * @type {import('rollup').RollupOptions}
    * */
   types = {
-    external: ['react', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
+    external: [
+      '@aarsteinmedia/lottie-web',
+      '@aarsteinmedia/lottie-web/utils',
+      'react',
+      'react/jsx-runtime',
+      'react/jsx-dev-runtime',
+    ],
     input: path.resolve(__dirname, 'types', 'index.d.ts'),
     output: {
       file: pkg.types,
@@ -126,10 +131,11 @@ const isProd = process.env.NODE_ENV !== 'development',
    * */
   module = {
     external: [
+      '@aarsteinmedia/lottie-web',
+      '@aarsteinmedia/lottie-web/utils',
       'react',
       'react/jsx-runtime',
       'react/jsx-dev-runtime',
-      'lottie-web/build/player/lottie.js',
       'fflate',
     ],
     input,
@@ -151,4 +157,4 @@ const isProd = process.env.NODE_ENV !== 'development',
     plugins: modulePlugins(),
   }
 
-export default isProd ? [module, types, unpkg] : unpkg
+export default isProd ? [module, types, unpkg] : module

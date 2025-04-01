@@ -37,6 +37,7 @@ export default TSESLint.config(
     rules: {
       ...ESLintPluginPrettier.configs?.recommended.rules,
       ...ESLintConfigPrettier.rules,
+      '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-namespace': 'warn',
       '@typescript-eslint/no-unused-vars': [
         'error',
