@@ -77,7 +77,7 @@ export const addExt = (ext: string, str?: string) => {
       if (!animations.length || !manifest) {
         throw new Error(
           `Missing or malformed required parameter(s):\n ${
-            animations?.length ? '- manifest\n' : ''
+            animations.length ? '- manifest\n' : ''
           } ${manifest ? '- animations\n' : ''}`
         )
       }
@@ -85,7 +85,7 @@ export const addExt = (ext: string, str?: string) => {
       const manifestCompressionLevel = 0,
         animationCompressionLevel = 9,
         // Prepare the dotLottie file
-        name = addExt('lottie', fileName) || `${useId()}.lottie`,
+        name = addExt('lottie', fileName) || `${createElementID()}.lottie`,
         dotlottie: Zippable = {
           'manifest.json': [
             strToU8(JSON.stringify(manifest), true),
@@ -108,7 +108,7 @@ export const addExt = (ext: string, str?: string) => {
 
           const { p: file, u: path } = animations[i].assets[j]
 
-          if (!file || !path) {
+          if (!file) {
             continue
           }
           // Original asset.id caused issues with multianimations
@@ -172,7 +172,7 @@ export const addExt = (ext: string, str?: string) => {
         )
       }
 
-      const name = addExt('json', fileName) || `${useId()}.json`,
+      const name = addExt('json', fileName) || `${createElementID()}.json`,
         jsonString = JSON.stringify(animation)
       return shouldDownload
         ? download(jsonString, {
@@ -197,7 +197,7 @@ export const addExt = (ext: string, str?: string) => {
     }
   ) => {
     const blob = new Blob([data], { type: options?.mimeType }),
-      fileName = options?.name || useId(),
+      fileName = options?.name || createElementID(),
       dataURL = URL.createObjectURL(blob),
       link = document.createElement('a')
 
@@ -524,9 +524,4 @@ export const addExt = (ext: string, str?: string) => {
         )
       })
     return unzipped
-  },
-  useId = (prefix?: string) => {
-    const s4 = () =>
-      (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-    return `${prefix ?? `:${s4()}`}_${s4()}`
   }

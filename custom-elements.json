@@ -520,7 +520,7 @@
               "name": "convert",
               "parameters": [
                 {
-                  "name": "{ animations = [], fileName, manifest, shouldDownload = true, src, typeCheck }"
+                  "name": "{ animations, fileName, manifest, shouldDownload = true, src, typeCheck }"
                 }
               ]
             },
@@ -1599,7 +1599,7 @@
               "name": "convert",
               "parameters": [
                 {
-                  "name": "{animations:t=[],fileName:e,manifest:s,shouldDownload:i=!0,src:r,typeCheck:a}"
+                  "name": "{animations:t,fileName:e,manifest:s,shouldDownload:i=!0,src:r,typeCheck:a}"
                 }
               ]
             },
@@ -2646,7 +2646,7 @@
               "privacy": "public",
               "parameters": [
                 {
-                  "name": "{\n    animations = [],\n    fileName,\n    manifest,\n    shouldDownload = true,\n    src,\n    typeCheck,\n  }",
+                  "name": "{\n    animations,\n    fileName,\n    manifest,\n    shouldDownload = true,\n    src,\n    typeCheck,\n  }",
                   "type": {
                     "text": "{\n    /** External type safety */\n    typeCheck?: boolean\n\n    /** Externally added manifest */\n    manifest?: LottieManifest\n\n    /** Externally added animations */\n    animations?: AnimationData[]\n\n    src?: string\n\n    fileName?: string\n\n    /** Whether to trigger a download in the browser. Defaults to true */\n    shouldDownload?: boolean\n  }"
                   }
