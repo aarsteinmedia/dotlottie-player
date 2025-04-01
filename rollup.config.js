@@ -80,7 +80,7 @@ const isProd = process.env.NODE_ENV !== 'development',
    * */
   modulePlugins = () => [
     ...plugins(true),
-    summary(),
+    isProd && summary(),
     !isProd &&
       serve({
         open: true,
@@ -112,7 +112,8 @@ const isProd = process.env.NODE_ENV !== 'development',
     external: ['react', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
     input,
     onwarn(warning, warn) {
-      if (warning.code === 'EVAL' || warning.code === 'CIRCULAR_DEPENDENCY') {
+      // warning.code === 'EVAL' ||
+      if (warning.code === 'CIRCULAR_DEPENDENCY') {
         return
       }
       warn(warning)
