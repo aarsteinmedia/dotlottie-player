@@ -5,280 +5,108 @@
 <head>
   <meta charset="utf-8" />
   <title>DotLottie Player Demo</title>
+  <style>
+    .preview {
+      width: auto !important;
+      height: auto !important;
+      max-width: 80vw;
+      max-height: 80vh;
+      min-height: 400px;
+      min-width: 400px;
+      shape-rendering: geometricPrecision;
+      display: inline-flex;
+    }
+
+    body {
+      font-family: Futura, sans-serif;
+      color: #000;
+      background-color: rgba(0, 0, 0, .5);
+      /*84c7da*/
+      /* background-image: url('/assets/win95.jpg'); */
+      background-size: cover;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-position: center;
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100%;
+      /* background-image: url('/assets/win95.jpg'); */
+      background-size: cover;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: .8;
+      z-index: -1;
+    }
+
+    header {
+      background-color: #000;
+      color: #FFF;
+      position: sticky;
+      display: flex;
+      top: 0;
+      left: 0;
+      right: 0;
+      margin: 0;
+      padding: 10px 30px;
+      z-index: 100;
+    }
+
+    .header-inner {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2em;
+    }
+  </style>
 </head>
 
 <body style="font-family: sans-serif; color: white; background-color: #0b1a29;">
-  <div style="width: 100vw;height:100vh;position:fixed;top:0;left:0;pointer-events:none;z-index:-1;">
-    <!-- <dotlottie-player subframe autoplay loop objectfit="fill" src="/assets/menuanimation.lottie"></dotlottie-player> -->
-  </div>
-  </dotlottie-player>
+  <header>
+    <div class="header-inner">
+      <h1 style="margin: 0;">dotlottie-player</h1>
+      <form id="preview">
+        <label>
+          Select file to preview:<br />
+          <select autofocus name="path" placeholder="Path to file">
+            <option disabled value="assets/test.svg">Path to file</option>
+          </select>
+        </label>
+      </form>
+    </div>
+  </header>
+  <!-- <div style="width: 100vw;height:100vh;position:fixed;top:0;left:0;pointer-events:none;z-index:-1;">
+    <dotlottie-player autoplay loop objectfit="fill" src="/assets/menuanimation.json"></dotlottie-player>
+  </div> -->
+
   <div style="margin: 40px auto; width: 80%; max-width: 800px;">
-    <h1>DotLottie Player Demo</h1>
-    <!-- <dotlottie-player autoplay background="#FFF" controls subframe
-      src="./assets/optimized_m2acyje2.lottie"></dotlottie-player> -->
-
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-      magna
-      aliqua. Tempus egestas sed sed risus pretium quam. Tellus at urna condimentum mattis. At in tellus integer feugiat
-      scelerisque varius. Magna etiam tempor orci eu lobortis. Mauris commodo quis imperdiet massa tincidunt nunc
-      pulvinar
-      sapien. Quam elementum pulvinar etiam non quam lacus suspendisse faucibus. Facilisi cras fermentum odio eu feugiat
-      pretium nibh ipsum. Magna fermentum iaculis eu non. Scelerisque viverra mauris in aliquam sem fringilla ut.
-      Vivamus at
-      augue eget arcu dictum varius duis at.</p>
-
-    <dotlottie-player background="#FFF" controls src="/assets/hero-web.lottie"></dotlottie-player>
-
-    <p>Dictum sit amet justo donec enim diam vulputate ut pharetra. Volutpat sed cras ornare arcu dui. Tincidunt dui ut
-      ornare
-      lectus sit amet. Ornare suspendisse sed nisi lacus sed viverra tellus. Accumsan sit amet nulla facilisi morbi
-      tempus.
-      Fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Purus sit amet volutpat consequat mauris nunc
-      congue.
-      Sit amet venenatis urna cursus eget. Id volutpat lacus laoreet non curabitur. Convallis tellus id interdum velit.
-      Consectetur lorem donec massa sapien faucibus. Pharetra sit amet aliquam id diam maecenas ultricies mi. Tincidunt
-      augue
-      interdum velit euismod in pellentesque.</p>
-
-    <dotlottie-player autoplay background="#FFF" loop src="/assets/6558.json"></dotlottie-player>
-
-    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque. Libero id faucibus nisl tincidunt eget
-      nullam
-      non
-      nisi. Sodales neque sodales ut etiam sit amet nisl. Massa tincidunt nunc pulvinar sapien et ligula ullamcorper
-      malesuada. Gravida arcu ac tortor dignissim convallis aenean et tortor. Cras fermentum odio eu feugiat pretium
-      nibh
-      ipsum consequat nisl. Ornare lectus sit amet est placerat in. Cras fermentum odio eu feugiat pretium. Nulla
-      pharetra
-      diam sit amet. Vel fringilla est ullamcorper eget nulla facilisi. Et netus et malesuada fames ac turpis egestas
-      integer.
-      Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Ac tortor vitae purus faucibus. Tellus
-      cras
-      adipiscing enim eu turpis egestas pretium aenean pharetra.</p>
-
-    <!-- <dotlottie-player autoplay loop src="/assets/blackCat.lottie"></dotlottie-player> -->
-
-    <p>Mauris ultrices eros in cursus turpis massa tincidunt dui ut. Malesuada bibendum arcu vitae elementum curabitur
-      vitae.
-      Dolor sit amet consectetur adipiscing elit. Purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae.
-      Nulla
-      pellentesque dignissim enim sit amet. Blandit aliquam etiam erat velit scelerisque in dictum non consectetur. Sit
-      amet
-      justo donec enim. Eget sit amet tellus cras adipiscing. Diam sit amet nisl suscipit adipiscing bibendum est.
-      Ultricies
-      tristique nulla aliquet enim tortor. Adipiscing enim eu turpis egestas.</p>
-
-    <p>Est sit amet facilisis magna etiam tempor orci. Sed enim ut sem viverra aliquet. Erat velit scelerisque in
-      dictum.
-      Vel
-      elit scelerisque mauris pellentesque. Cum sociis natoque penatibus et magnis dis parturient montes. Lobortis
-      scelerisque
-      fermentum dui faucibus in ornare quam viverra orci. Pellentesque nec nam aliquam sem. Ultrices mi tempus imperdiet
-      nulla. Scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Metus vulputate eu scelerisque
-      felis
-      imperdiet. Molestie ac feugiat sed lectus vestibulum mattis ullamcorper. Tincidunt eget nullam non nisi est sit
-      amet.
-      Metus dictum at tempor commodo ullamcorper. Ut placerat orci nulla pellentesque dignissim. Nulla at volutpat diam
-      ut
-      venenatis. Ante in nibh mauris cursus mattis molestie a. Egestas dui id ornare arcu odio ut sem nulla pharetra.
-      Adipiscing elit ut aliquam purus.</p>
-
-    <p>Ornare arcu dui vivamus arcu felis. Id ornare arcu odio ut sem nulla pharetra. Vitae proin sagittis nisl rhoncus
-      mattis.
-      Pellentesque eu tincidunt tortor aliquam nulla facilisi. Sed enim ut sem viverra aliquet eget sit amet. Blandit
-      turpis
-      cursus in hac habitasse platea dictumst. Placerat in egestas erat imperdiet. Eu ultrices vitae auctor eu.
-      Consectetur
-      libero id faucibus nisl tincidunt eget nullam non nisi. Dui ut ornare lectus sit amet est placerat. Et molestie ac
-      feugiat sed lectus. Vel facilisis volutpat est velit egestas dui id. Sit amet mauris commodo quis. Lorem sed risus
-      ultricies tristique nulla aliquet enim tortor. Vel pharetra vel turpis nunc. Non blandit massa enim nec dui nunc
-      mattis
-      enim. Donec pretium vulputate sapien nec sagittis. At erat pellentesque adipiscing commodo elit. Nulla pharetra
-      diam
-      sit
-      amet nisl suscipit adipiscing bibendum.</p>
-
-    <!-- <dotlottie-player animateOnScroll controls subframe src="./assets/dev.lottie"></dotlottie-player> -->
-
-    <p>Mauris ultrices eros in cursus turpis massa tincidunt dui ut. Malesuada bibendum arcu vitae elementum curabitur
-      vitae.
-      Dolor sit amet consectetur adipiscing elit. Purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae.
-      Nulla
-      pellentesque dignissim enim sit amet. Blandit aliquam etiam erat velit scelerisque in dictum non consectetur. Sit
-      amet
-      justo donec enim. Eget sit amet tellus cras adipiscing. Diam sit amet nisl suscipit adipiscing bibendum est.
-      Ultricies
-      tristique nulla aliquet enim tortor. Adipiscing enim eu turpis egestas.</p>
-
-    <p>Est sit amet facilisis magna etiam tempor orci. Sed enim ut sem viverra aliquet. Erat velit scelerisque in
-      dictum.
-      Vel
-      elit scelerisque mauris pellentesque. Cum sociis natoque penatibus et magnis dis parturient montes. Lobortis
-      scelerisque
-      fermentum dui faucibus in ornare quam viverra orci. Pellentesque nec nam aliquam sem. Ultrices mi tempus imperdiet
-      nulla. Scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Metus vulputate eu scelerisque
-      felis
-      imperdiet. Molestie ac feugiat sed lectus vestibulum mattis ullamcorper. Tincidunt eget nullam non nisi est sit
-      amet.
-      Metus dictum at tempor commodo ullamcorper. Ut placerat orci nulla pellentesque dignissim. Nulla at volutpat diam
-      ut
-      venenatis. Ante in nibh mauris cursus mattis molestie a. Egestas dui id ornare arcu odio ut sem nulla pharetra.
-      Adipiscing elit ut aliquam purus.</p>
-
-    <p>Ornare arcu dui vivamus arcu felis. Id ornare arcu odio ut sem nulla pharetra. Vitae proin sagittis nisl rhoncus
-      mattis.
-      Pellentesque eu tincidunt tortor aliquam nulla facilisi. Sed enim ut sem viverra aliquet eget sit amet. Blandit
-      turpis
-      cursus in hac habitasse platea dictumst. Placerat in egestas erat imperdiet. Eu ultrices vitae auctor eu.
-      Consectetur
-      libero id faucibus nisl tincidunt eget nullam non nisi. Dui ut ornare lectus sit amet est placerat. Et molestie ac
-      feugiat sed lectus. Vel facilisis volutpat est velit egestas dui id. Sit amet mauris commodo quis. Lorem sed risus
-      ultricies tristique nulla aliquet enim tortor. Vel pharetra vel turpis nunc. Non blandit massa enim nec dui nunc
-      mattis
-      enim. Donec pretium vulputate sapien nec sagittis. At erat pellentesque adipiscing commodo elit. Nulla pharetra
-      diam
-      sit
-      amet nisl suscipit adipiscing bibendum.</p>
-
-    <!-- <dotlottie-player autoplay background="#FFF" loop src="/assets/6558.json"></dotlottie-player> -->
-
-    <p>Mauris ultrices eros in cursus turpis massa tincidunt dui ut. Malesuada bibendum arcu vitae elementum curabitur
-      vitae.
-      Dolor sit amet consectetur adipiscing elit. Purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae.
-      Nulla
-      pellentesque dignissim enim sit amet. Blandit aliquam etiam erat velit scelerisque in dictum non consectetur. Sit
-      amet
-      justo donec enim. Eget sit amet tellus cras adipiscing. Diam sit amet nisl suscipit adipiscing bibendum est.
-      Ultricies
-      tristique nulla aliquet enim tortor. Adipiscing enim eu turpis egestas.</p>
-
-    <p>Est sit amet facilisis magna etiam tempor orci. Sed enim ut sem viverra aliquet. Erat velit scelerisque in
-      dictum.
-      Vel
-      elit scelerisque mauris pellentesque. Cum sociis natoque penatibus et magnis dis parturient montes. Lobortis
-      scelerisque
-      fermentum dui faucibus in ornare quam viverra orci. Pellentesque nec nam aliquam sem. Ultrices mi tempus imperdiet
-      nulla. Scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Metus vulputate eu scelerisque
-      felis
-      imperdiet. Molestie ac feugiat sed lectus vestibulum mattis ullamcorper. Tincidunt eget nullam non nisi est sit
-      amet.
-      Metus dictum at tempor commodo ullamcorper. Ut placerat orci nulla pellentesque dignissim. Nulla at volutpat diam
-      ut
-      venenatis. Ante in nibh mauris cursus mattis molestie a. Egestas dui id ornare arcu odio ut sem nulla pharetra.
-      Adipiscing elit ut aliquam purus.</p>
-
-    <p>Ornare arcu dui vivamus arcu felis. Id ornare arcu odio ut sem nulla pharetra. Vitae proin sagittis nisl rhoncus
-      mattis.
-      Pellentesque eu tincidunt tortor aliquam nulla facilisi. Sed enim ut sem viverra aliquet eget sit amet. Blandit
-      turpis
-      cursus in hac habitasse platea dictumst. Placerat in egestas erat imperdiet. Eu ultrices vitae auctor eu.
-      Consectetur
-      libero id faucibus nisl tincidunt eget nullam non nisi. Dui ut ornare lectus sit amet est placerat. Et molestie ac
-      feugiat sed lectus. Vel facilisis volutpat est velit egestas dui id. Sit amet mauris commodo quis. Lorem sed risus
-      ultricies tristique nulla aliquet enim tortor. Vel pharetra vel turpis nunc. Non blandit massa enim nec dui nunc
-      mattis
-      enim. Donec pretium vulputate sapien nec sagittis. At erat pellentesque adipiscing commodo elit. Nulla pharetra
-      diam
-      sit
-      amet nisl suscipit adipiscing bibendum.</p>
-
-    <p>Mauris ultrices eros in cursus turpis massa tincidunt dui ut. Malesuada bibendum arcu vitae elementum curabitur
-      vitae.
-      Dolor sit amet consectetur adipiscing elit. Purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae.
-      Nulla
-      pellentesque dignissim enim sit amet. Blandit aliquam etiam erat velit scelerisque in dictum non consectetur. Sit
-      amet
-      justo donec enim. Eget sit amet tellus cras adipiscing. Diam sit amet nisl suscipit adipiscing bibendum est.
-      Ultricies
-      tristique nulla aliquet enim tortor. Adipiscing enim eu turpis egestas.</p>
-
-    <p>Est sit amet facilisis magna etiam tempor orci. Sed enim ut sem viverra aliquet. Erat velit scelerisque in
-      dictum.
-      Vel
-      elit scelerisque mauris pellentesque. Cum sociis natoque penatibus et magnis dis parturient montes. Lobortis
-      scelerisque
-      fermentum dui faucibus in ornare quam viverra orci. Pellentesque nec nam aliquam sem. Ultrices mi tempus imperdiet
-      nulla. Scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Metus vulputate eu scelerisque
-      felis
-      imperdiet. Molestie ac feugiat sed lectus vestibulum mattis ullamcorper. Tincidunt eget nullam non nisi est sit
-      amet.
-      Metus dictum at tempor commodo ullamcorper. Ut placerat orci nulla pellentesque dignissim. Nulla at volutpat diam
-      ut
-      venenatis. Ante in nibh mauris cursus mattis molestie a. Egestas dui id ornare arcu odio ut sem nulla pharetra.
-      Adipiscing elit ut aliquam purus.</p>
-
-    <p>Ornare arcu dui vivamus arcu felis. Id ornare arcu odio ut sem nulla pharetra. Vitae proin sagittis nisl rhoncus
-      mattis.
-      Pellentesque eu tincidunt tortor aliquam nulla facilisi. Sed enim ut sem viverra aliquet eget sit amet. Blandit
-      turpis
-      cursus in hac habitasse platea dictumst. Placerat in egestas erat imperdiet. Eu ultrices vitae auctor eu.
-      Consectetur
-      libero id faucibus nisl tincidunt eget nullam non nisi. Dui ut ornare lectus sit amet est placerat. Et molestie ac
-      feugiat sed lectus. Vel facilisis volutpat est velit egestas dui id. Sit amet mauris commodo quis. Lorem sed risus
-      ultricies tristique nulla aliquet enim tortor. Vel pharetra vel turpis nunc. Non blandit massa enim nec dui nunc
-      mattis
-      enim. Donec pretium vulputate sapien nec sagittis. At erat pellentesque adipiscing commodo elit. Nulla pharetra
-      diam
-      sit
-      amet nisl suscipit adipiscing bibendum.</p>
-
-    <!-- <dotlottie-player animateOnScroll autoplay controls subframe src="./assets/dev.lottie"></dotlottie-player> -->
-
-    <p>Mauris ultrices eros in cursus turpis massa tincidunt dui ut. Malesuada bibendum arcu vitae elementum curabitur
-      vitae.
-      Dolor sit amet consectetur adipiscing elit. Purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae.
-      Nulla
-      pellentesque dignissim enim sit amet. Blandit aliquam etiam erat velit scelerisque in dictum non consectetur. Sit
-      amet
-      justo donec enim. Eget sit amet tellus cras adipiscing. Diam sit amet nisl suscipit adipiscing bibendum est.
-      Ultricies
-      tristique nulla aliquet enim tortor. Adipiscing enim eu turpis egestas.</p>
-
-    <p>Est sit amet facilisis magna etiam tempor orci. Sed enim ut sem viverra aliquet. Erat velit scelerisque in
-      dictum.
-      Vel
-      elit scelerisque mauris pellentesque. Cum sociis natoque penatibus et magnis dis parturient montes. Lobortis
-      scelerisque
-      fermentum dui faucibus in ornare quam viverra orci. Pellentesque nec nam aliquam sem. Ultrices mi tempus imperdiet
-      nulla. Scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Metus vulputate eu scelerisque
-      felis
-      imperdiet. Molestie ac feugiat sed lectus vestibulum mattis ullamcorper. Tincidunt eget nullam non nisi est sit
-      amet.
-      Metus dictum at tempor commodo ullamcorper. Ut placerat orci nulla pellentesque dignissim. Nulla at volutpat diam
-      ut
-      venenatis. Ante in nibh mauris cursus mattis molestie a. Egestas dui id ornare arcu odio ut sem nulla pharetra.
-      Adipiscing elit ut aliquam purus.</p>
-
-    <!-- <dotlottie-player autoplay loop subframe src="./assets/blackCat.lottie"></dotlottie-player> -->
-
-    <p>Ornare arcu dui vivamus arcu felis. Id ornare arcu odio ut sem nulla pharetra. Vitae proin sagittis nisl rhoncus
-      mattis.
-      Pellentesque eu tincidunt tortor aliquam nulla facilisi. Sed enim ut sem viverra aliquet eget sit amet. Blandit
-      turpis
-      cursus in hac habitasse platea dictumst. Placerat in egestas erat imperdiet. Eu ultrices vitae auctor eu.
-      Consectetur
-      libero id faucibus nisl tincidunt eget nullam non nisi. Dui ut ornare lectus sit amet est placerat. Et molestie ac
-      feugiat sed lectus. Vel facilisis volutpat est velit egestas dui id. Sit amet mauris commodo quis. Lorem sed risus
-      ultricies tristique nulla aliquet enim tortor. Vel pharetra vel turpis nunc. Non blandit massa enim nec dui nunc
-      mattis
-      enim. Donec pretium vulputate sapien nec sagittis. At erat pellentesque adipiscing commodo elit. Nulla pharetra
-      diam
-      sit
-      amet nisl suscipit adipiscing bibendum.</p>
-
-    <!-- <dotlottie-player animateOnScroll autoplay controls subframe src="./assets/dev.lottie"></dotlottie-player> -->
+    <div id="container"
+      style="text-align: center; display: flex; flex-direction: row; align-items: center; gap: 1em; justify-content: center;">
+      <dotlottie-player autoplay controls background="rgba(255,255,255,0.8)" class="preview"></dotlottie-player>
+    </div>
 
   </div>
   <script type="importmap">
-    {
-      "imports": {
-        "fflate": "./node_modules/fflate/esm/browser.js",
-        "@aarsteinmedia/lottie-web/utils": "./node_modules/@aarsteinmedia/lottie-web/dist/lottie-utils.js",
-        "@aarsteinmedia/lottie-web": "./node_modules/@aarsteinmedia/lottie-web/dist/lottie.js"
+      {
+        "imports": {
+          "fflate": "./node_modules/fflate/esm/browser.js",
+          "@aarsteinmedia/lottie-web/utils": "./node_modules/@aarsteinmedia/lottie-web/dist/lottie-utils.js",
+          "@aarsteinmedia/lottie-web": "./node_modules/@aarsteinmedia/lottie-web/dist/lottie.js"
+        }
       }
-    }
-  </script>
-    <script type="module" src="./dist/index.js"></script>
+    </script>
+  <script type="module" src="./dist/index.js"></script>
+  <script type="module" src="./testingScript.js"></script>
 </body>
 
 </html>
