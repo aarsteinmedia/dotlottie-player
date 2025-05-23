@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [5.0.1] - 23-05-2025
+
+### Changed
+
+- Added support for abbreviated (optimized) Lottie format.
+
 ## [5.0.0] - 25-02-2025
 
 ### Changed
@@ -205,6 +211,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[5.0.1]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/5.0.1
 [5.0.0]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/5.0.0
 [4.0.14]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/4.0.14
 [4.0.13]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/4.0.13

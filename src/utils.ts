@@ -238,7 +238,7 @@ export const addExt = (ext: string, str?: string) => {
     input: unknown
   ): Promise<{
     animations?: AnimationData[]
-    manifest?: LottieManifest
+    manifest: LottieManifest | null
     isDotLottie: boolean
   }> => {
     try {
@@ -251,7 +251,7 @@ export const addExt = (ext: string, str?: string) => {
         return {
           animations,
           isDotLottie: false,
-          manifest: undefined,
+          manifest: null,
         }
       }
 
@@ -268,30 +268,40 @@ export const addExt = (ext: string, str?: string) => {
       }
 
       /**
-       * Check if file is JSON, first by parsing file name for extension,
-       * then – if filename has no extension – by cloning the response
-       * and parsing it for content.
+       * Check if file is JSON, first by parsing headers for content-type,
+       * than by parsing filename, then – if filename has no extension – by
+       * cloning the response and parsing response for content.
        */
-      const ext = getExt(input)
-      if (ext === 'json' || !ext) {
-        if (ext) {
+      let isJSON = true
+      const contentType = result.headers.get('content-type')
+
+      if (contentType === 'application/zip+dotlottie') {
+        isJSON = false
+      }
+
+      if (isJSON) {
+        const ext = getExt(input)
+
+        if (ext === 'json') {
           const lottie = await result.json()
+
           return {
             animations: [lottie],
             isDotLottie: false,
-            manifest: undefined,
+            manifest: null,
           }
         }
         const text = await result.clone().text()
 
         try {
           const lottie = JSON.parse(text)
+
           return {
             animations: [lottie],
             isDotLottie: false,
-            manifest: undefined,
+            manifest: null,
           }
-        } catch (_e) {
+        } catch (error) {
           /* empty */
         }
       }
@@ -308,7 +318,7 @@ export const addExt = (ext: string, str?: string) => {
       return {
         animations: undefined,
         isDotLottie: false,
-        manifest: undefined,
+        manifest: null,
       }
     }
   },
@@ -364,10 +374,19 @@ export const addExt = (ext: string, str?: string) => {
       data = [],
       toResolve: Promise<void>[] = [],
       { length } = manifest.animations
+
+    /**
+     * Check whether Lottie animations folder is abbreviated.
+     */
+    let animationsFolder = 'animations'
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (unzipped[`a/${manifest.animations[0].id}.json`]) {
+      animationsFolder = 'a'
+    }
+
     for (let i = 0; i < length; i++) {
-      const str = strFromU8(
-          unzipped[`animations/${manifest.animations[i].id}.json`]
-        ),
+      const str = strFromU8(unzipped[`${animationsFolder}/${manifest.animations[i].id}.json`]),
         lottie: AnimationData = JSON.parse(prepareString(str))
 
       toResolve.push(resolveAssets(unzipped, lottie.assets))

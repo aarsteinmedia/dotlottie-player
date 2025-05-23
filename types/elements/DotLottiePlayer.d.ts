@@ -1,4 +1,4 @@
-import { type AnimationData, type AnimationDirection, type AnimationItem, type AnimationSettings, type LottieManifest, type Vector2 } from '@aarsteinmedia/lottie-web';
+import type { AnimationData, AnimationDirection, AnimationItem, AnimationSettings, LottieManifest, Vector2 } from '@aarsteinmedia/lottie-web';
 import renderPlayer from '../templates/player';
 import renderControls from '../templates/controls';
 import { PlayMode, PlayerState, PreserveAspectRatio, RendererType } from '../enums';

@@ -26,6 +26,7 @@ const files = [
   'hp-section-2.lottie',
   'dev.lottie',
   'shapes-test.json',
+  'BuildGarden copy.lottie',
 ]
 
 export default files

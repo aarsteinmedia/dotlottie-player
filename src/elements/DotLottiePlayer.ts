@@ -1,12 +1,13 @@
-import Lottie, {
-  type AnimationConfiguration,
-  type AnimationData,
-  type AnimationDirection,
-  type AnimationItem,
-  type AnimationSettings,
-  type LottieManifest,
-  type Vector2,
+import type {
+   AnimationConfiguration,
+   AnimationData,
+   AnimationDirection,
+   AnimationItem,
+   AnimationSettings,
+   LottieManifest,
+   Vector2,
 } from '@aarsteinmedia/lottie-web'
+import * as Lottie from 'lottie-web/build/player/lottie.js'
 import { createElementID } from '@aarsteinmedia/lottie-web/utils'
 import renderPlayer from '@/templates/player'
 import renderControls from '@/templates/controls'
@@ -785,6 +786,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         options.rendererSettings = {
           ...options.rendererSettings,
           clearCanvas: true,
+          // @ts-expect-error TODO:
           preserveAspectRatio,
           progressiveLoad: true,
         }
@@ -891,10 +893,11 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       }
 
       // Initialize lottie player and load animation
-      this._lottieInstance = Lottie.loadAnimation({
+      // @ts-expect-error TODO:
+      this._lottieInstance = Lottie.default.loadAnimation({
         ...this._getOptions(),
         animationData: animations[this._currentAnimation],
-      })
+      }) as unknown as AnimationItem
     } catch (err) {
       this._errorMessage = handleErrors(err).message
 
@@ -1263,6 +1266,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       },
     } = this.src ? await getAnimationData(this.src) : {}
     try {
+      // @ts-expect-error TODO:
       manifest.generator = pkg.name
       const { length } = configs
       for (let i = 0; i < length; i++) {
@@ -1271,10 +1275,11 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         if (!animationsToAdd) {
           throw new Error('No animation loaded')
         }
-        if (manifest.animations.some(({ id }) => id === configs[i].id)) {
+        if (manifest?.animations.some(({ id }) => id === configs[i].id)) {
           throw new Error('Duplicate id for animation')
         }
 
+        // @ts-expect-error TODO:
         manifest.animations = [...manifest.animations, { id: configs[i].id }]
 
         animations.push(...animationsToAdd)
@@ -1284,6 +1289,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         result: await createDotLottie({
           animations,
           fileName,
+          // @ts-expect-error TODO:
           manifest,
           shouldDownload,
         }),
@@ -1647,10 +1653,11 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       }
 
       // Re-initialize lottie player
-      this._lottieInstance = Lottie.loadAnimation({
+      // @ts-expect-error TODO:
+      this._lottieInstance = Lottie.default.loadAnimation({
         ...this._getOptions(),
         animationData: this._animations[this._currentAnimation],
-      })
+      }) as unknown as AnimationItem
 
       // Check play mode for current animation
       if (this._multiAnimationSettings?.[this._currentAnimation]?.mode) {
