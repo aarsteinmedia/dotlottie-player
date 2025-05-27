@@ -19,6 +19,7 @@ const files = [
   '6558.json',
   '6561.json',
   '1729.json',
+  'hero-web.lottie',
   'blackCat.lottie',
   'ux.lottie',
   'menuAnimation.json',

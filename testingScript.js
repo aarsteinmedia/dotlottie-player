@@ -68,7 +68,7 @@ function handleRefresh() {
 /**
  * View converted SVG.
  *
- * @param {SubmitEvent | Event | string} e - Either the submit event, the change event or the string value.
+ * @param e - Either the submit event, the change event or the string value.
  */
 async function viewFile(e) {
   try {

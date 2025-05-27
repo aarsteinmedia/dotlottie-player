@@ -1,13 +1,13 @@
 import type {
-   AnimationConfiguration,
-   AnimationData,
-   AnimationDirection,
-   AnimationItem,
-   AnimationSettings,
-   LottieManifest,
-   Vector2,
+  AnimationConfiguration,
+  AnimationData,
+  AnimationDirection,
+  AnimationItem,
+  AnimationSettings,
+  LottieManifest,
+  Vector2,
 } from '@aarsteinmedia/lottie-web'
-import * as Lottie from 'lottie-web/build/player/lottie.js'
+import Lottie from 'lottie-web/build/player/esm/lottie.min.js'
 import { createElementID } from '@aarsteinmedia/lottie-web/utils'
 import renderPlayer from '@/templates/player'
 import renderControls from '@/templates/controls'
@@ -893,8 +893,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       }
 
       // Initialize lottie player and load animation
-      // @ts-expect-error TODO:
-      this._lottieInstance = Lottie.default.loadAnimation({
+      this._lottieInstance = Lottie.loadAnimation({
         ...this._getOptions(),
         animationData: animations[this._currentAnimation],
       }) as unknown as AnimationItem
@@ -1654,7 +1653,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
       // Re-initialize lottie player
       // @ts-expect-error TODO:
-      this._lottieInstance = Lottie.default.loadAnimation({
+      this._lottieInstance = Lottie.loadAnimation({
         ...this._getOptions(),
         animationData: this._animations[this._currentAnimation],
       }) as unknown as AnimationItem

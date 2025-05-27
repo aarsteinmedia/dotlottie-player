@@ -380,13 +380,14 @@ export const addExt = (ext: string, str?: string) => {
      */
     let animationsFolder = 'animations'
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (unzipped[`a/${manifest.animations[0].id}.json`]) {
       animationsFolder = 'a'
     }
 
     for (let i = 0; i < length; i++) {
-      const str = strFromU8(unzipped[`${animationsFolder}/${manifest.animations[i].id}.json`]),
+      const str = strFromU8(
+          unzipped[`${animationsFolder}/${manifest.animations[i].id}.json`]
+        ),
         lottie: AnimationData = JSON.parse(prepareString(str))
 
       toResolve.push(resolveAssets(unzipped, lottie.assets))
