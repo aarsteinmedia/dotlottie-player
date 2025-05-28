@@ -2,8 +2,8 @@ export declare enum ObjectFit {
     Contain = "contain",
     Cover = "cover",
     Fill = "fill",
-    ScaleDown = "scale-down",
-    None = "none"
+    None = "none",
+    ScaleDown = "scale-down"
 }
 export declare enum PlayerState {
     Completed = "completed",
@@ -38,11 +38,11 @@ export declare enum PlayerEvents {
 export declare enum PreserveAspectRatio {
     Contain = "xMidYMid meet",
     Cover = "xMidYMid slice",
-    None = "xMinYMin slice",
-    Initial = "none"
+    Initial = "none",
+    None = "xMinYMin slice"
 }
 export declare enum RendererType {
-    SVG = "svg",
+    Canvas = "canvas",
     HTML = "html",
-    Canvas = "canvas"
+    SVG = "svg"
 }

@@ -1,15 +1,17 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 import 'react/jsx-runtime'
 import 'react/jsx-dev-runtime'
+
 import type { AnimationSettings } from '@aarsteinmedia/lottie-web'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
-import type DotLottiePlayer from '@/elements/DotLottiePlayer'
-export interface Animation extends AnimationSettings {
-  id: string
-}
 
-export interface AnimationAttributes extends Animation {
-  url: string
-}
+import type DotLottiePlayer from '@/elements/DotLottiePlayer'
+
+import type { tagName } from '.'
+
+export interface Animation extends AnimationSettings {id: string}
+
+export interface AnimationAttributes extends Animation {url: string}
 
 export type AnimateOnScroll = boolean | '' | null
 export type Autoplay = boolean | '' | 'autoplay' | null
@@ -17,44 +19,45 @@ export type Controls = boolean | '' | 'controls' | null
 export type Loop = boolean | '' | 'loop' | null
 export type Subframe = boolean | '' | null
 export interface CEMConfig {
-  /** Enable special handling for catalyst */
+  /** Enable special handling for catalyst. */
   catalyst: boolean
-  /** Include third party custom elements manifests */
+  /** Include third party custom elements manifests. */
   dependencies: boolean
-  /** Run in dev mode, provides extra logging */
+  /** Run in dev mode, provides extra logging. */
   dev: boolean
-  /** Globs to exclude */
+  /** Globs to exclude. */
   exclude: string[]
-  /** Enable special handling for fast */
+  /** Enable special handling for fast. */
   fast: boolean
-  /** Globs to analyze */
+  /** Globs to analyze. */
   globs: ['src/**/*.ts']
-  /** Enable special handling for litelement */
+  /** Enable special handling for litelement. */
   litelement: boolean
-  /** Directory to output CEM to */
+  /** Directory to output CEM to. */
   outdir: string
-  /** Output CEM path to `package.json`, defaults to true */
-  packagejson: boolean
-  /** Enable special handling for stencil */
-  stencil: boolean
-  /** Run in watch mode, runs on file changes */
-  watch: boolean
-  /** Provide custom plugins */
-  plugins: Array<() => Plugin>
-  /** Overrides default module creation: */
-  overrideModuleCreation({
+  /** Overrides default module creation. */
+  overrideModuleCreation: ({
     globs,
     ts,
   }: {
-    ts: unknown // TypeScrip
+    /**
+     * TypeScrip.
+     */
+    ts: unknown
     globs: string[]
-  }): unknown[] // SourceFile[]
+  }) => unknown[]
+  /** Output CEM path to `package.json`, defaults to true. */
+  packagejson: boolean
+  /** Provide custom plugins. */
+  plugins: (() => Plugin)[]
+  /** Enable special handling for stencil. */
+  stencil: boolean
+  /** Run in watch mode, runs on file changes. */
+  watch: boolean
 }
 
 declare global {
-  interface HTMLElementTagNameMap {
-    'dotlottie-player': DotLottiePlayer
-  }
+  interface HTMLElementTagNameMap { [tagName]: DotLottiePlayer}
   function dotLottiePlayer(): DotLottiePlayer
 }
 
@@ -67,24 +70,18 @@ type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
 
 declare module 'react' {
   namespace JSX {
-    interface IntrinsicElements {
-      'dotlottie-player': JSXLottiePlayer
-    }
+    interface IntrinsicElements { [tagName]: JSXLottiePlayer}
   }
 }
 
 declare module 'react/jsx-runtime' {
   namespace JSX {
-    interface IntrinsicElements {
-      'dotlottie-player': JSXLottiePlayer
-    }
+    interface IntrinsicElements { [tagName]: JSXLottiePlayer}
   }
 }
 
 declare module 'react/jsx-dev-runtime' {
   namespace JSX {
-    interface IntrinsicElements {
-      'dotlottie-player': JSXLottiePlayer
-    }
+    interface IntrinsicElements { [tagName]: JSXLottiePlayer}
   }
 }

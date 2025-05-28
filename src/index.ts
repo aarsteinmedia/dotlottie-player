@@ -1,18 +1,20 @@
-import { isServer } from '@/utils'
 import DotLottiePlayer from '@/elements/DotLottiePlayer'
+import { isServer } from '@/utils'
 
 export default DotLottiePlayer
 
-export { PlayMode, PlayerEvents, PlayerState } from '@/enums'
+export {
+  PlayerEvents, PlayerState, PlayMode
+} from '@/enums'
 
 /**
- * Expose DotLottiePlayer class as global variable
- * @returns { DotLottiePlayer }
+ * Expose DotLottiePlayer class as global variable.
+ *
  */
 globalThis.dotLottiePlayer = (): DotLottiePlayer => new DotLottiePlayer()
 
 export const tagName = 'dotlottie-player'
 
 if (!isServer()) {
-  customElements.define('dotlottie-player', DotLottiePlayer)
+  customElements.define(tagName, DotLottiePlayer)
 }

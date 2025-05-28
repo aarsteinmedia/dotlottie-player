@@ -1,5 +1,6 @@
-import { fixture } from '@open-wc/testing'
 import { assert, expect } from '@esm-bundle/chai'
+import { fixture } from '@open-wc/testing'
+
 import DotLottiePlayer from '@/index'
 
 describe('DotLottiePlayer Component', () => {
@@ -7,11 +8,12 @@ describe('DotLottiePlayer Component', () => {
 
   beforeEach(async () => {
     el = await fixture<DotLottiePlayer>(
-      /* HTML */ `<dotlottie-player
-        controls
-        src="./assets/dev.lottie"
-      ></dotlottie-player>`
-    )
+      /* HTML */ `
+        <dotlottie-player
+                controls
+                src="./assets/dev.lottie"
+              ></dotlottie-player>
+      `)
 
     assert(el instanceof DotLottiePlayer)
   })

@@ -5,7 +5,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "declaration": true,
-    "declarationDir": "./types",
+    "declarationDir": "types",
     "emitDeclarationOnly": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -25,7 +25,7 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "./dist",
+    "outDir": "dist",
     "plugins": [
       {
         "strict": true
@@ -33,10 +33,11 @@
     ],
     "removeComments": true,
     "resolveJsonModule": true,
-    "rootDir": "./src",
+    // "rootDir": "src",
     "strict": true,
     "target": "ES2022",
     "useDefineForClassFields": false,
+    "verbatimModuleSyntax": true,
     "paths": {
       "@/*": [
         "./src/*"
@@ -44,11 +45,13 @@
     }
   },
   "include": [
-    "./src/**/*",
-    "./global.d.ts"
+    "src/**/*",
+    "global.d.ts",
+    "eslint.config.ts",
+    "rollup.config.ts"
   ],
   "exclude": [
-    "node_modules",
-    "./dist",
+    "**/node_modules",
+    "**/dist",
   ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player",
   "exports": {
     ".": {
@@ -37,12 +37,12 @@
   "scripts": {
     "test": "wtr",
     "prebuild": "rimraf ./dist",
-    "build": "rollup -c",
+    "build": "rollup -c  --configPlugin typescript",
     "prebuild:types": "rimraf ./types",
-    "build:types": "tsc -p ./tsconfig.prod.json && tsc-alias",
+    "build:types": "tsc -p ./tsconfig.build.json && tsc-alias",
     "build:cem": "npx cem analyze --config cem.config.js",
     "prod": "pnpm build:types && pnpm build && pnpm build:cem",
-    "dev": "rollup -c -w --environment NODE_ENV:development",
+    "dev": "rollup -c  --configPlugin typescript -w --environment NODE_ENV:development",
     "lint:js": "eslint",
     "lint:js:fix": "eslint --fix",
     "lint:css": "npx stylelint **/*.css",
@@ -58,8 +58,6 @@
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.10.4",
-    "@eslint/compat": "^1.2.9",
-    "@eslint/js": "^9.27.0",
     "@esm-bundle/chai": "4.3.4-fix.0",
     "@open-wc/testing": "^4.0.0",
     "@rollup/plugin-commonjs": "^28.0.3",
@@ -68,8 +66,9 @@
     "@rollup/plugin-typescript": "^12.1.2",
     "@swc/core": "^1.11.29",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.21",
+    "@types/node": "^22.15.23",
     "@types/path-browserify": "^1.0.3",
+    "@types/postcss-flexbugs-fixes": "^5.0.3",
     "@types/react": "^19.1.6",
     "@web/dev-server-esbuild": "^1.0.4",
     "@web/dev-server-import-maps": "^0.2.1",
@@ -80,12 +79,11 @@
     "esbuild": "^0.25.5",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",
-    "eslint-import-resolver-typescript": "^4.4.1",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jsdoc": "^50.6.17",
+    "eslint-config-sheriff": "^28.0.0",
     "eslint-plugin-perfectionist": "^4.13.0",
-    "eslint-plugin-prettier": "^5.4.0",
     "globals": "^16.2.0",
+    "jiti": "^2.4.2",
+    "lodash-es": "^4.17.21",
     "postcss-flexbugs-fixes": "^5.0.2",
     "prettier": "^3.5.3",
     "react": "^19.1.0",
@@ -94,8 +92,8 @@
     "rollup-plugin-dts": "^6.2.1",
     "rollup-plugin-html-literals": "^1.1.8",
     "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-opener": "^0.1.4",
     "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-serve": "^3.0.0",
     "rollup-plugin-summary": "^3.0.1",
     "rollup-plugin-swc3": "^0.12.1",
     "rollup-plugin-typescript-paths": "^1.5.0",
@@ -104,7 +102,7 @@
     "tsc-alias": "^1.8.16",
     "tslib": "^2.8.1",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.32.1"
+    "typescript-eslint": "^8.33.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

@@ -3,6 +3,7 @@ import 'react/jsx-dev-runtime';
 import type { AnimationSettings } from '@aarsteinmedia/lottie-web';
 import type { Plugin } from '@custom-elements-manifest/analyzer';
 import type DotLottiePlayer from './elements/DotLottiePlayer';
+import type { tagName } from '.';
 export interface Animation extends AnimationSettings {
     id: string;
 }
@@ -23,18 +24,18 @@ export interface CEMConfig {
     globs: ['src/**/*.ts'];
     litelement: boolean;
     outdir: string;
-    packagejson: boolean;
-    stencil: boolean;
-    watch: boolean;
-    plugins: Array<() => Plugin>;
-    overrideModuleCreation({ globs, ts, }: {
+    overrideModuleCreation: ({ globs, ts, }: {
         ts: unknown;
         globs: string[];
-    }): unknown[];
+    }) => unknown[];
+    packagejson: boolean;
+    plugins: (() => Plugin)[];
+    stencil: boolean;
+    watch: boolean;
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'dotlottie-player': DotLottiePlayer;
+        [tagName]: DotLottiePlayer;
     }
     function dotLottiePlayer(): DotLottiePlayer;
 }
@@ -47,21 +48,21 @@ type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
 declare module 'react' {
     namespace JSX {
         interface IntrinsicElements {
-            'dotlottie-player': JSXLottiePlayer;
+            [tagName]: JSXLottiePlayer;
         }
     }
 }
 declare module 'react/jsx-runtime' {
     namespace JSX {
         interface IntrinsicElements {
-            'dotlottie-player': JSXLottiePlayer;
+            [tagName]: JSXLottiePlayer;
         }
     }
 }
 declare module 'react/jsx-dev-runtime' {
     namespace JSX {
         interface IntrinsicElements {
-            'dotlottie-player': JSXLottiePlayer;
+            [tagName]: JSXLottiePlayer;
         }
     }
 }

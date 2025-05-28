@@ -23,11 +23,14 @@ const files = [
   'blackCat.lottie',
   'ux.lottie',
   'menuAnimation.json',
+  'menuAnimation.lottie',
   'optimized_m2acyje2.lottie',
   'hp-section-2.lottie',
   'dev.lottie',
   'shapes-test.json',
   'BuildGarden copy.lottie',
+  'loopOut-star.json',
+  'loopOut-star.lottie',
 ]
 
 export default files

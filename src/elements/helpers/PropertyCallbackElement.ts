@@ -1,74 +1,81 @@
-import { isServer } from '@/utils'
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { isServer } from '@aarsteinmedia/lottie-web/utils'
 
 /**
- * Credit to:
- * @author Leonardo Favre <https://github.com/leofavre/observed-properties>
+ * Credit to: Leonardo Favre https://github.com/leofavre/observed-properties.
  */
 
-const UPDATE_ON_CONNECTED = Symbol('UPDATE_ON_CONNECTED')
+const updateOnConnected = Symbol('UPDATE_ON_CONNECTED')
 
 if (isServer()) {
   // Mock HTMLElement for server-side rendering
   global.HTMLElement =
-    class EmptyHTMLElement {} as unknown as typeof global.HTMLElement
+    // eslint-disable-next-line @typescript-eslint/no-extraneous-class
+    class EmptyHTMLElement { } as unknown as typeof global.HTMLElement
 }
 
 /**
- * HTMLElement enhanced to track property changes
+ * HTMLElement enhanced to track property changes.
  */
-export default class PropertyCallbackElement extends HTMLElement {
+export default abstract class PropertyCallbackElement extends HTMLElement {
   constructor() {
     super()
-    const { observedProperties = [] } = this.constructor as any
-    if (UPDATE_ON_CONNECTED in this) {
-      this[UPDATE_ON_CONNECTED] = []
+
+    if (updateOnConnected in this) {
+      this[updateOnConnected] = []
     }
 
-    if (
-      'propertyChangedCallback' in this &&
-      typeof this.propertyChangedCallback === 'function'
-    ) {
-      const { length } = observedProperties
-      for (let i = 0; i < length; i++) {
-        const initialValue = this[observedProperties[i] as keyof this],
-          CACHED_VALUE = Symbol(observedProperties[i] as string)
+    const { observedProperties = [] } =
+      this.constructor as unknown as { observedProperties: string[] }
 
-        // @ts-expect-error: ingore
-        this[CACHED_VALUE] = initialValue
+    const { length } = observedProperties
 
-        Object.defineProperty(this, observedProperties[i], {
+    for (let i = 0; i < length; i++) {
+      const initialValue = this[observedProperties[i] as keyof this],
+        cachedValue = Symbol(observedProperties[i]) as keyof this
+
+      this[cachedValue] = initialValue
+
+      Object.defineProperty(
+        this, observedProperties[i], {
           get() {
-            return this[CACHED_VALUE]
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            return this[cachedValue]
           },
           set(value) {
-            const oldValue = this[CACHED_VALUE]
-            this[CACHED_VALUE] = value
-            this.propertyChangedCallback(observedProperties[i], oldValue, value)
-          },
-        })
-        if (typeof initialValue !== 'undefined') {
-          if (
-            UPDATE_ON_CONNECTED in this &&
-            Array.isArray(this[UPDATE_ON_CONNECTED])
-          ) {
-            ;(this[UPDATE_ON_CONNECTED] as (keyof this)[]).push(
-              observedProperties[i]
+            const oldValue = this[cachedValue]
+
+            this[cachedValue] = value
+            this.propertyChangedCallback(
+              observedProperties[i], oldValue, value
             )
-          }
+          },
         }
+      )
+      if (
+        typeof initialValue !== 'undefined' &&
+        updateOnConnected in this &&
+        Array.isArray(this[updateOnConnected])
+      ) {
+        ; (this[updateOnConnected] as (keyof this)[]).push(observedProperties[i] as keyof this)
       }
     }
   }
 
-  connectedCallback() {
-    let arr = []
+
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async connectedCallback() {
+    let arr: string[] = []
+
     if (
-      UPDATE_ON_CONNECTED in this &&
-      Array.isArray(this[UPDATE_ON_CONNECTED])
+      updateOnConnected in this &&
+      Array.isArray(this[updateOnConnected])
     ) {
-      arr = this[UPDATE_ON_CONNECTED]
+      arr = this[updateOnConnected]
     }
     const { length } = arr
+
     for (let i = 0; i < length; i++) {
       if (
         !('propertyChangedCallback' in this) ||
@@ -85,5 +92,11 @@ export default class PropertyCallbackElement extends HTMLElement {
         )
       }
     }
+  }
+
+  propertyChangedCallback(
+    _name: string, _oldValue: unknown, _value: unknown
+  ) {
+    throw new Error(`${this.constructor.name}: Method propertyChangedCallback is not implemented`)
   }
 }
