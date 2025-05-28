@@ -44,6 +44,8 @@ import {
   isServer,
 } from '@/utils'
 
+const generator = '@aarsteinmedia/dotlottie-player'
+
 /**
  * DotLottie Player Web Component.
  */
@@ -496,7 +498,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       if (!manifest) {
         throw new Error('Manifest is not set')
       }
-      manifest.generator = '[[GENERATOR]]'
+      manifest.generator = generator
       const { length } = configs
 
       for (let i = 0; i < length; i++) {
@@ -714,7 +716,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       fileName: `${getFilename(fileName || src || 'converted')}.lottie`,
       manifest: {
         ...manifest ?? this._manifest,
-        generator: '[[GENERATOR]]',
+        generator,
       } as LottieManifest,
       shouldDownload,
     })
