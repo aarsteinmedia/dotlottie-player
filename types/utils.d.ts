@@ -5,7 +5,7 @@ import { ObjectFit } from './enums';
 export declare class CustomError extends Error {
     status?: number;
 }
-export declare const getManifest: (unzipped: Unzipped) => LottieManifest, isServer: () => boolean;
+export declare const getManifest: (unzipped: Unzipped) => LottieManifest;
 export declare const getExt: (str?: string) => string | undefined;
 export declare const download: (data: string | ArrayBuffer, options?: {
     name: string;

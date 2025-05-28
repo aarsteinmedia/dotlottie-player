@@ -1,4 +1,4 @@
-import type { AnimationData, AnimationDirection, AnimationItem, AnimationSettings, LottieManifest, Vector2 } from '@aarsteinmedia/lottie-web';
+import { type AnimationData, type AnimationDirection, type AnimationItem, type AnimationSettings, type LottieManifest, type Vector2 } from '@aarsteinmedia/lottie-web';
 import type { AnimationAttributes, AnimateOnScroll, Autoplay, Controls, Loop, Subframe } from '../types';
 import PropertyCallbackElement from '../elements/helpers/PropertyCallbackElement';
 import { ObjectFit, PlayMode, PlayerState, PreserveAspectRatio, RendererType } from '../enums';

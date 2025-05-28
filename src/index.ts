@@ -1,5 +1,6 @@
+import { isServer } from '@aarsteinmedia/lottie-web/utils'
+
 import DotLottiePlayer from '@/elements/DotLottiePlayer'
-import { isServer } from '@/utils'
 
 export default DotLottiePlayer
 
