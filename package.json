@@ -49,8 +49,7 @@
   },
   "dependencies": {
     "@aarsteinmedia/lottie-web": "^0.2.25",
-    "fflate": "^0.8.2",
-    "lottie-web": "^5.13.0"
+    "fflate": "^0.8.2"
   },
   "peerDependencies": {
     "@types/react": ">= 16.0.0"
