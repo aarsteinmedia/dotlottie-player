@@ -7,7 +7,7 @@ import Lottie, {
   type LottieManifest,
   type Vector2,
 } from '@aarsteinmedia/lottie-web'
-import { createElementID } from '@aarsteinmedia/lottie-web/utils'
+import { createElementID, isServer } from '@aarsteinmedia/lottie-web/utils'
 
 import type {
   AnimationAttributes,
@@ -39,7 +39,6 @@ import {
   getAnimationData,
   getFilename,
   handleErrors,
-  isServer,
 } from '@/utils'
 
 const generator = '@aarsteinmedia/dotlottie-player'

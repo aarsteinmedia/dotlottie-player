@@ -4,7 +4,9 @@ import type {
   LottieManifest,
 } from '@aarsteinmedia/lottie-web'
 
-import { createElementID, PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils'
+import {
+  createElementID, isServer, PreserveAspectRatio
+} from '@aarsteinmedia/lottie-web/utils'
 import {
   strFromU8,
   strToU8,
@@ -24,20 +26,18 @@ export class CustomError extends Error {
  * Methods used locally and exported.
  */
 export const getManifest = (unzipped: Unzipped) => {
-    const file = strFromU8(unzipped['manifest.json'], false),
-      manifest: LottieManifest = JSON.parse(file)
+  const file = strFromU8(unzipped['manifest.json'], false),
+    manifest: LottieManifest = JSON.parse(file)
 
-    if (!('animations' in manifest)) {
-      throw new Error('Manifest not found')
-    }
-    if (manifest.animations.length === 0) {
-      throw new Error('No animations listed in manifest')
-    }
+  if (!('animations' in manifest)) {
+    throw new Error('Manifest not found')
+  }
+  if (manifest.animations.length === 0) {
+    throw new Error('No animations listed in manifest')
+  }
 
-    return manifest
-  },
-  isServer = () => !(typeof window !== 'undefined' && window.document)
-
+  return manifest
+}
 /**
  * Methods used only locally.
  */
