@@ -22,6 +22,13 @@ const isProd = process.env.NODE_ENV !== 'development',
 
   pkgBuffer = await readFile(new URL(path.resolve(__dirname, 'package.json'), import.meta.url)),
   pkg: typeof import('./package.json') = JSON.parse(pkgBuffer.toString()),
+  injectVersion = () => ({
+    name: 'inject-version',
+    renderChunk: (code: string) =>
+      code
+        .replace('[[BM_VERSION]]', pkg.version)
+        .replace('[[GENERATOR]]', pkg.name),
+  }),
 
   external = [
     '@aarsteinmedia/lottie-web',
@@ -71,6 +78,7 @@ const isProd = process.env.NODE_ENV !== 'development',
       preferBuiltins,
     }),
     commonjs(),
+    injectVersion(),
     swc(),
   ],
 
@@ -107,7 +115,6 @@ const isProd = process.env.NODE_ENV !== 'development',
   },
 
   unpkg: RollupOptions = {
-    external,
     input,
     onwarn(warning, warn) {
       // warning.code === 'EVAL' ||
@@ -147,6 +154,8 @@ const isProd = process.env.NODE_ENV !== 'development',
     plugins: modulePlugins(),
   }
 
-export default isProd ? [module,
+export default isProd ? [
+  module,
   types,
-  unpkg] : module
+  unpkg
+] : module

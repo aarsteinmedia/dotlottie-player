@@ -20,7 +20,6 @@ import type {
   Subframe,
 } from '@/types'
 
-import pkg from '@/../package.json'
 import PropertyCallbackElement from '@/elements/helpers/PropertyCallbackElement'
 import {
   ObjectFit,
@@ -497,7 +496,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       if (!manifest) {
         throw new Error('Manifest is not set')
       }
-      manifest.generator = pkg.name
+      manifest.generator = '[[GENERATOR]]'
       const { length } = configs
 
       for (let i = 0; i < length; i++) {
@@ -715,7 +714,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       fileName: `${getFilename(fileName || src || 'converted')}.lottie`,
       manifest: {
         ...manifest ?? this._manifest,
-        generator: pkg.name,
+        generator: '[[GENERATOR]]',
       } as LottieManifest,
       shouldDownload,
     })
