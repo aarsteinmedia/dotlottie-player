@@ -474,10 +474,10 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     fileName?: string,
     shouldDownload = true
   ): Promise<{
-      result?: null | ArrayBuffer
-      success: boolean
-      error?: string
-    }> {
+    result?: null | ArrayBuffer
+    success: boolean
+    error?: string
+  }> {
     // Initialize meta object for animation, with fallbacks for
     // when the method is called indepenently
     const {
@@ -548,9 +548,9 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         this._lottieInstance.autoplay = false
         addEventListener(
           'scroll', this._handleScroll, {
-            capture: true,
-            passive: true,
-          }
+          capture: true,
+          passive: true,
+        }
         )
 
         return
@@ -1564,9 +1564,9 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       }, 400)
 
       const adjustedScroll =
-          scrollY > this._playerState.scrollY
-            ? scrollY - this._playerState.scrollY
-            : this._playerState.scrollY - scrollY,
+        scrollY > this._playerState.scrollY
+          ? scrollY - this._playerState.scrollY
+          : this._playerState.scrollY - scrollY,
         clampedScroll = Math.min(Math.max(adjustedScroll / 3, 1),
           this._lottieInstance.totalFrames * 3),
         roundedScroll = clampedScroll / 3
@@ -1612,10 +1612,10 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     const {
-        playDirection,
-        // firstFrame,
-        totalFrames,
-      } = this._lottieInstance,
+      playDirection,
+      // firstFrame,
+      totalFrames,
+    } = this._lottieInstance,
       inPoint = this._segment ? this._segment[0] : 0,
       outPoint = this._segment ? this._segment[0] : totalFrames
 
@@ -1782,23 +1782,23 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
     window[method](
       'focus', this._handleWindowBlur as EventListener, {
-        capture: false,
-        passive: true,
-      }
+      capture: false,
+      passive: true,
+    }
     )
     window[method](
       'blur', this._handleWindowBlur as EventListener, {
-        capture: false,
-        passive: true,
-      }
+      capture: false,
+      passive: true,
+    }
     )
 
     if (this.animateOnScroll) {
       window[method](
         'scroll', this._handleScroll, {
-          capture: true,
-          passive: true,
-        }
+        capture: true,
+        passive: true,
+      }
       )
     }
   }
