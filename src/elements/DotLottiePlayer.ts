@@ -474,10 +474,10 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     fileName?: string,
     shouldDownload = true
   ): Promise<{
-      result?: null | ArrayBuffer
-      success: boolean
-      error?: string
-    }> {
+    result?: null | ArrayBuffer
+    success: boolean
+    error?: string
+  }> {
     // Initialize meta object for animation, with fallbacks for
     // when the method is called indepenently
     const {
@@ -539,7 +539,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     _oldValue: unknown,
     value: string
   ) {
-    if (!this._lottieInstance) {
+    if (!this._lottieInstance || !this.shadow) {
       return
     }
 
@@ -548,9 +548,9 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         this._lottieInstance.autoplay = false
         addEventListener(
           'scroll', this._handleScroll, {
-            capture: true,
-            passive: true,
-          }
+          capture: true,
+          passive: true,
+        }
         )
 
         return
@@ -597,7 +597,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     if (name === 'loop') {
-      const toggleLoop = this.shadow?.querySelector('.toggleLoop')
+      const toggleLoop = this.shadow.querySelector('.toggleLoop')
 
       if (toggleLoop instanceof HTMLButtonElement) {
         toggleLoop.dataset.active = value
@@ -606,7 +606,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     if (name === 'mode') {
-      const toggleBoomerang = this.shadow?.querySelector('.toggleBoomerang')
+      const toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
 
       if (toggleBoomerang instanceof HTMLButtonElement) {
         toggleBoomerang.dataset.active = (value as PlayMode === PlayMode.Bounce).toString()
@@ -723,7 +723,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
    * Destroy animation and element.
    */
   public destroy() {
-    if (!this._lottieInstance) {
+    if (!this._lottieInstance?.destroy) {
       return
     }
 
@@ -747,13 +747,11 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       this._intersectionObserver = undefined
     }
 
-    // Destroy the animation instance
-    if (this._lottieInstance) {
-      this._lottieInstance.destroy()
-    }
-
     // Remove the attached Visibility API's change event listener
     document.removeEventListener('visibilitychange', this._onVisibilityChange)
+
+    // Destroy the animation instance
+    this.destroy()
   }
 
   /**
@@ -816,6 +814,11 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
           PlayMode.Bounce
       }
 
+      if (manifest?.animations.length === 1) {
+        manifest.animations[0].autoplay = this.autoplay
+        manifest.animations[0].loop = this.loop
+      }
+
       this._isDotLottie = Boolean(isDotLottie)
       this._animations = animations
       this._manifest = manifest ?? {
@@ -832,9 +835,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       }
 
       // Clear previous animation, if any
-      if (this._lottieInstance) {
-        this._lottieInstance.destroy()
-      }
+      this._lottieInstance?.destroy()
 
       this.playerState = PlayerState.Stopped
       if (
@@ -1569,9 +1570,9 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       }, 400)
 
       const adjustedScroll =
-          scrollY > this._playerState.scrollY
-            ? scrollY - this._playerState.scrollY
-            : this._playerState.scrollY - scrollY,
+        scrollY > this._playerState.scrollY
+          ? scrollY - this._playerState.scrollY
+          : this._playerState.scrollY - scrollY,
         clampedScroll = Math.min(Math.max(adjustedScroll / 3, 1),
           this._lottieInstance.totalFrames * 3),
         roundedScroll = clampedScroll / 3
@@ -1617,10 +1618,10 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     const {
-        playDirection,
-        // firstFrame,
-        totalFrames,
-      } = this._lottieInstance,
+      playDirection,
+      // firstFrame,
+      totalFrames,
+    } = this._lottieInstance,
       inPoint = this._segment ? this._segment[0] : 0,
       outPoint = this._segment ? this._segment[0] : totalFrames
 
@@ -1787,23 +1788,23 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
     window[method](
       'focus', this._handleWindowBlur as EventListener, {
-        capture: false,
-        passive: true,
-      }
+      capture: false,
+      passive: true,
+    }
     )
     window[method](
       'blur', this._handleWindowBlur as EventListener, {
-        capture: false,
-        passive: true,
-      }
+      capture: false,
+      passive: true,
+    }
     )
 
     if (this.animateOnScroll) {
       window[method](
         'scroll', this._handleScroll, {
-          capture: true,
-          passive: true,
-        }
+        capture: true,
+        passive: true,
+      }
       )
     }
   }
