@@ -1,5 +1,5 @@
-import { type AnimationData, type AnimationDirection, type AnimationItem, type AnimationSettings, type LottieManifest, type Vector2 } from '@aarsteinmedia/lottie-web';
-import type { AnimationAttributes, AnimateOnScroll, Autoplay, Controls, Loop, Subframe } from '../types';
+import { type AnimationDirection, type AnimationItem, type AnimationSettings, type LottieManifest, type Vector2 } from '@aarsteinmedia/lottie-web';
+import type { AnimationAttributes, AnimateOnScroll, Autoplay, Controls, Loop, Subframe, ConvertParams } from '../types';
 import PropertyCallbackElement from '../elements/helpers/PropertyCallbackElement';
 import { ObjectFit, PlayMode, PlayerState, PreserveAspectRatio, RendererType } from '../enums';
 import renderControls from '../templates/controls';
@@ -80,14 +80,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }>;
     attributeChangedCallback(name: string, _oldValue: unknown, value: string): Promise<void>;
     connectedCallback(): Promise<void>;
-    convert({ animations: animationsFromProps, fileName, manifest, shouldDownload, src: srcFromProps, typeCheck, }: {
-        typeCheck?: boolean;
-        manifest?: LottieManifest;
-        animations?: AnimationData[];
-        src?: string;
-        fileName?: string;
-        shouldDownload?: boolean;
-    }): Promise<ArrayBuffer | null | undefined>;
+    convert({ animations: animationsFromProps, fileName, manifest, shouldDownload, src: srcFromProps, typeCheck, }: ConvertParams): Promise<ArrayBuffer | null | undefined>;
     destroy(): void;
     disconnectedCallback(): void;
     getLottie(): AnimationItem | null;

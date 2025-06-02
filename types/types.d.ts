@@ -1,6 +1,6 @@
 import 'react/jsx-runtime';
 import 'react/jsx-dev-runtime';
-import type { AnimationSettings } from '@aarsteinmedia/lottie-web';
+import type { AnimationData, AnimationSettings, LottieManifest } from '@aarsteinmedia/lottie-web';
 import type { Plugin } from '@custom-elements-manifest/analyzer';
 import type DotLottiePlayer from './elements/DotLottiePlayer';
 import type { tagName } from '.';
@@ -9,6 +9,14 @@ export interface Animation extends AnimationSettings {
 }
 export interface AnimationAttributes extends Animation {
     url: string;
+}
+export interface ConvertParams {
+    animations?: AnimationData[];
+    fileName?: string;
+    manifest?: LottieManifest;
+    shouldDownload?: boolean;
+    src?: string;
+    typeCheck?: boolean;
 }
 export type AnimateOnScroll = boolean | '' | null;
 export type Autoplay = boolean | '' | 'autoplay' | null;

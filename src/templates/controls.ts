@@ -198,6 +198,12 @@ export default function renderControls(this: DotLottiePlayer) {
       convert.onclick = this.convert as unknown as () => void
     }
 
+    // const convertJSON = this.shadow.querySelector('.convert-json')
+
+    // if (convertJSON instanceof HTMLButtonElement) {
+    //   convertJSON.onclick = this.convertJSON as unknown as () => void
+    // }
+
     const snapshot = this.shadow.querySelector('.snapshot')
 
     if (snapshot instanceof HTMLButtonElement) {

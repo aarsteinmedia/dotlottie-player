@@ -16,6 +16,7 @@ import type {
   Controls,
   Loop,
   Subframe,
+  ConvertParams,
 } from '@/types'
 
 import PropertyCallbackElement from '@/elements/helpers/PropertyCallbackElement'
@@ -461,6 +462,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     this.convert = this.convert.bind(this)
     this.destroy = this.destroy.bind(this)
 
+
     this.template = document.createElement('template')
     this.shadow = this.attachShadow({ mode: 'open' })
   }
@@ -665,23 +667,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     shouldDownload = true,
     src: srcFromProps,
     typeCheck,
-  }: {
-    /** External type safety. */
-    typeCheck?: boolean
-
-    /** Externally added manifest. */
-    manifest?: LottieManifest
-
-    /** Externally added animations. */
-    animations?: AnimationData[]
-
-    src?: string
-
-    fileName?: string
-
-    /** Whether to trigger a download in the browser. Defaults to true. */
-    shouldDownload?: boolean
-  }) {
+  }: ConvertParams) {
     const src = srcFromProps || this.src || this.source
 
     if (!src) {
@@ -1019,8 +1005,16 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       snapshot instanceof HTMLButtonElement
     ) {
       popover.hidden = !value
-      convert.hidden = this._isDotLottie
+      convert.hidden = false
       snapshot.hidden = this.renderer !== RendererType.SVG
+
+      if (this._isDotLottie) {
+        convert.ariaLabel = 'Convert dotLottie to JSON'
+        convert.innerHTML = convert.innerHTML.replace('dotLottie', 'JSON')
+      } else {
+        convert.ariaLabel = 'Convert JSON animation to dotLottie format'
+        convert.innerHTML = convert.innerHTML.replace('JSON', 'dotLottie')
+      }
     }
   }
 
