@@ -963,7 +963,8 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       seeker = this.shadow.querySelector('.seeker'),
       progress = this.shadow.querySelector('progress'),
       popover = this.shadow.querySelector('.popover'),
-      convert = this.shadow.querySelector('.convert')
+      convert = this.shadow.querySelector('.convert'),
+      snapshot = this.shadow.querySelector('.snapshot')
 
     if (
       !(togglePlay instanceof HTMLButtonElement) ||
@@ -1010,27 +1011,20 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     if (name === '_currentAnimation' && typeof value === 'number') {
-      if (value + 1 >= this._animations.length) {
-        next.hidden = true
-      } else {
-        next.hidden = false
-      }
-
-      if (value) {
-        prev.hidden = false
-      } else {
-        prev.hidden = true
-      }
+      next.hidden = value + 1 >= this._animations.length
+      prev.hidden = Boolean(value)
     }
 
     if (
       name === '_isSettingsOpen' &&
       typeof value === 'boolean' &&
       popover instanceof HTMLDivElement &&
-      convert instanceof HTMLButtonElement
+      convert instanceof HTMLButtonElement &&
+      snapshot instanceof HTMLButtonElement
     ) {
       popover.hidden = !value
       convert.hidden = this._isDotLottie
+      snapshot.hidden = this.renderer !== RendererType.SVG
     }
   }
 
