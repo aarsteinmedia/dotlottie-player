@@ -38,7 +38,7 @@ import {
   frameOutput,
   getAnimationData,
   getFilename,
-  handleErrors,
+  handleErrors
 } from '@/utils'
 
 const generator = '@aarsteinmedia/dotlottie-player'
@@ -474,10 +474,10 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     fileName?: string,
     shouldDownload = true
   ): Promise<{
-    result?: null | ArrayBuffer
-    success: boolean
-    error?: string
-  }> {
+      result?: null | ArrayBuffer
+      success: boolean
+      error?: string
+    }> {
     // Initialize meta object for animation, with fallbacks for
     // when the method is called indepenently
     const {
@@ -548,9 +548,9 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         this._lottieInstance.autoplay = false
         addEventListener(
           'scroll', this._handleScroll, {
-          capture: true,
-          passive: true,
-        }
+            capture: true,
+            passive: true,
+          }
         )
 
         return
@@ -959,7 +959,8 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       seeker = this.shadow.querySelector('.seeker'),
       progress = this.shadow.querySelector('progress'),
       popover = this.shadow.querySelector('.popover'),
-      convert = this.shadow.querySelector('.convert')
+      convert = this.shadow.querySelector('.convert'),
+      snapshot = this.shadow.querySelector('.snapshot')
 
     if (
       !(togglePlay instanceof HTMLButtonElement) ||
@@ -1006,27 +1007,20 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     if (name === '_currentAnimation' && typeof value === 'number') {
-      if (value + 1 >= this._animations.length) {
-        next.hidden = true
-      } else {
-        next.hidden = false
-      }
-
-      if (value) {
-        prev.hidden = false
-      } else {
-        prev.hidden = true
-      }
+      next.hidden = value + 1 >= this._animations.length
+      prev.hidden = Boolean(value)
     }
 
     if (
       name === '_isSettingsOpen' &&
       typeof value === 'boolean' &&
       popover instanceof HTMLDivElement &&
-      convert instanceof HTMLButtonElement
+      convert instanceof HTMLButtonElement &&
+      snapshot instanceof HTMLButtonElement
     ) {
       popover.hidden = !value
       convert.hidden = this._isDotLottie
+      snapshot.hidden = this.renderer !== RendererType.SVG
     }
   }
 
@@ -1462,8 +1456,8 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       throw new Error('Container not rendered')
     }
     const preserveAspectRatio =
-        this.preserveAspectRatio ??
-        aspectRatio(this.objectfit),
+      this.preserveAspectRatio ??
+      aspectRatio(this.objectfit),
       currentAnimationSettings = this._multiAnimationSettings.length > 0
         ? this._multiAnimationSettings[this._currentAnimation]
         : undefined,
@@ -1618,10 +1612,10 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     const {
-      playDirection,
-      // firstFrame,
-      totalFrames,
-    } = this._lottieInstance,
+        playDirection,
+        // firstFrame,
+        totalFrames,
+      } = this._lottieInstance,
       inPoint = this._segment ? this._segment[0] : 0,
       outPoint = this._segment ? this._segment[0] : totalFrames
 
@@ -1724,7 +1718,6 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         ...this._getOptions(),
         animationData: this._animations[this._currentAnimation],
       })
-
       // Check play mode for current animation
       if (this._multiAnimationSettings[this._currentAnimation]?.mode) {
         this._isBounce =
@@ -1788,23 +1781,23 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
     window[method](
       'focus', this._handleWindowBlur as EventListener, {
-      capture: false,
-      passive: true,
-    }
+        capture: false,
+        passive: true,
+      }
     )
     window[method](
       'blur', this._handleWindowBlur as EventListener, {
-      capture: false,
-      passive: true,
-    }
+        capture: false,
+        passive: true,
+      }
     )
 
     if (this.animateOnScroll) {
       window[method](
         'scroll', this._handleScroll, {
-        capture: true,
-        passive: true,
-      }
+          capture: true,
+          passive: true,
+        }
       )
     }
   }
