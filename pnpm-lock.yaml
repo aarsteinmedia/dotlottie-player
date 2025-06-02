@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@aarsteinmedia/lottie-web':
-        specifier: ^0.4.0
-        version: 0.4.0
+        specifier: ^0.4.1
+        version: 0.4.1
       fflate:
         specifier: ^0.8.2
         version: 0.8.2
@@ -156,8 +156,8 @@ importers:
 
 packages:
 
-  '@aarsteinmedia/lottie-web@0.4.0':
-    resolution: {integrity: sha512-PxbeJuoeRxLbq/N9a8WwqIsxwchfLYW6rNGKDTqLqqHsjKse6uWIU0UfsHpaU9x32LUrHRBi+YNa51bdjDGscA==}
+  '@aarsteinmedia/lottie-web@0.4.1':
+    resolution: {integrity: sha512-/I/324ItaxxiASTAEUeEDt/3bYhKpNKJWj3mz7YrmWstX2BUolbdC/qY4BxxbFnt+3NNXQVyolYDjC6Dv9HnEQ==}
     engines: {node: '>= 12.17.0'}
 
   '@astrojs/compiler@2.12.0':
@@ -2608,8 +2608,8 @@ packages:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
 
-  hookified@1.9.0:
-    resolution: {integrity: sha512-2yEEGqphImtKIe1NXWEhu6yD3hlFR4Mxk4Mtp3XEyScpSt4pQ4ymmXA1zzxZpj99QkFK+nN0nzjeb2+RUi/6CQ==}
+  hookified@1.9.1:
+    resolution: {integrity: sha512-u3pxtGhKjcSXnGm1CX6aXS9xew535j3lkOCegbA6jdyh0BaAjTbXI4aslKstCr6zUNtoCxFGFKwjbSHdGrMB8g==}
 
   hosted-git-info@2.8.9:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}
@@ -4558,7 +4558,7 @@ packages:
 
 snapshots:
 
-  '@aarsteinmedia/lottie-web@0.4.0': {}
+  '@aarsteinmedia/lottie-web@0.4.1': {}
 
   '@astrojs/compiler@2.12.0': {}
 
@@ -6090,7 +6090,7 @@ snapshots:
 
   cacheable@1.9.0:
     dependencies:
-      hookified: 1.9.0
+      hookified: 1.9.1
       keyv: 5.3.3
 
   call-bind-apply-helpers@1.0.2:
@@ -7326,7 +7326,7 @@ snapshots:
     dependencies:
       cacheable: 1.9.0
       flatted: 3.3.3
-      hookified: 1.9.0
+      hookified: 1.9.1
 
   flatted@3.3.3: {}
 
@@ -7504,7 +7504,7 @@ snapshots:
 
   he@1.2.0: {}
 
-  hookified@1.9.0: {}
+  hookified@1.9.1: {}
 
   hosted-git-info@2.8.9: {}
 
