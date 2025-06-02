@@ -25,12 +25,11 @@ const isProd = process.env.NODE_ENV !== 'development',
 
   external = [
     '@aarsteinmedia/lottie-web',
-    '@aarsteinmedia/lottie-web/light',
     '@aarsteinmedia/lottie-web/utils',
+    'fflate',
     'react',
     'react/jsx-runtime',
     'react/jsx-dev-runtime',
-    'fflate',
   ],
 
   input = path.resolve(
@@ -109,7 +108,6 @@ const isProd = process.env.NODE_ENV !== 'development',
   unpkg: RollupOptions = {
     input,
     onwarn(warning, warn) {
-      // warning.code === 'EVAL' ||
       if (warning.code === 'CIRCULAR_DEPENDENCY') {
         return
       }
@@ -130,8 +128,6 @@ const isProd = process.env.NODE_ENV !== 'development',
     input,
     onwarn(warning, warn) {
       if (
-        warning.code === 'THIS_IS_UNDEFINED' ||
-        warning.code === 'EVAL' ||
         warning.code === 'CIRCULAR_DEPENDENCY'
       ) {
         return

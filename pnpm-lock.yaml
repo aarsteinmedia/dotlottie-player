@@ -4553,8 +4553,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  zod@3.25.32:
-    resolution: {integrity: sha512-OSm2xTIRfW8CV5/QKgngwmQW/8aPfGdaQFlrGoErlgg/Epm7cjb6K6VEyExfe65a3VybUOnu381edLb0dfJl0g==}
+  zod@3.25.48:
+    resolution: {integrity: sha512-0X1mz8FtgEIvaxGjdIImYpZEaZMrund9pGXm3M6vM7Reba0e2eI71KPjSCGXBfwKDPwPoywf6waUKc3/tFvX2Q==}
 
 snapshots:
 
@@ -4773,7 +4773,7 @@ snapshots:
       '@eslint-react/eff': 1.50.0
       '@typescript-eslint/utils': 8.33.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       ts-pattern: 5.7.1
-      zod: 3.25.32
+      zod: 3.25.48
     transitivePeerDependencies:
       - eslint
       - supports-color
@@ -4785,7 +4785,7 @@ snapshots:
       '@eslint-react/kit': 1.50.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       '@typescript-eslint/utils': 8.33.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       ts-pattern: 5.7.1
-      zod: 3.25.32
+      zod: 3.25.48
     transitivePeerDependencies:
       - eslint
       - supports-color
@@ -6182,7 +6182,7 @@ snapshots:
     dependencies:
       devtools-protocol: 0.0.1452169
       mitt: 3.0.1
-      zod: 3.25.32
+      zod: 3.25.48
 
   ci-info@4.2.0: {}
 
@@ -9597,4 +9597,4 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  zod@3.25.32: {}
+  zod@3.25.48: {}

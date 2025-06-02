@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [5.1.0] - 02-06-2025
+
+### Changed
+
+- Dropped `lottie-web` as dependency in favour of `@aarsteinmedia/lottie-web`. This animation engine is based on `lottie-web`, has the same features + it works better in Node SSR environments, it doesn't rely on `eval()` to execute AE expressions, and it is hopefully easier to maintain and expand.
+
 ## [5.0.4] - 31-05-2025
 
 ### Changed
