@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "5.1.3",
+  "version": "5.1.4",
   "description": "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player",
   "type": "module",
   "exports": {
@@ -41,14 +41,14 @@
     "build:types": "tsc -p ./tsconfig.build.json && tsc-alias",
     "build:cem": "npx cem analyze --config 'cem.config.js'",
     "prod": "pnpm build:types && pnpm build && pnpm build:cem",
-    "dev": "rollup -c --configPlugin typescript -w --environment NODE_ENV:development",
+    "dev": "rollup -cw --configPlugin typescript --environment NODE_ENV:development",
     "lint:js": "eslint",
     "lint:js:fix": "eslint --fix",
     "lint:css": "npx stylelint **/*.css",
     "lint:css:fix": "npx stylelint **/*.css --fix"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^0.4.2",
+    "@aarsteinmedia/lottie-web": "^0.4.3",
     "fflate": "^0.8.2"
   },
   "peerDependencies": {
