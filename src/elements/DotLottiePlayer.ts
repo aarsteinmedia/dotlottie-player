@@ -991,7 +991,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
     if (name === '_currentAnimation' && typeof value === 'number') {
       next.hidden = value + 1 >= this._animations.length
-      prev.hidden = Boolean(value)
+      prev.hidden = !value
     }
 
     if (
