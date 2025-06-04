@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "5.1.5",
+  "version": "5.1.6",
   "description": "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player",
   "type": "module",
   "exports": {
@@ -48,7 +48,7 @@
     "lint:css:fix": "npx stylelint **/*.css --fix"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^0.4.3",
+    "@aarsteinmedia/lottie-web": "^0.4.4",
     "fflate": "^0.8.2"
   },
   "peerDependencies": {
