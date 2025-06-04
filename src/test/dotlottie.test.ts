@@ -47,7 +47,7 @@ describe('DotLottiePlayer Component', () => {
   //       download = htmlDoc.body.childNodes[0]
   //     }
   //   } catch (e) {
-  //     console.error('❌ Error while parsing SVG: ', e)
+  //     console.error('Error while parsing SVG: ', e)
   //   }
   //   assert(download instanceof SVGElement)
   // })

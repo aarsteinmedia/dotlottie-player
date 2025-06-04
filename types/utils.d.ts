@@ -22,7 +22,7 @@ export declare const download: (data: string | ArrayBuffer, options?: {
     animation?: AnimationData;
     fileName?: string;
     shouldDownload?: boolean;
-}) => void, frameOutput: (frame?: number) => string, getAnimationData: (input: unknown) => Promise<{
+}) => string | null, frameOutput: (frame?: number) => string, getAnimationData: (input: unknown) => Promise<{
     animations?: AnimationData[];
     manifest: LottieManifest | null;
     isDotLottie: boolean;

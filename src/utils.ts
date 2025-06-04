@@ -524,7 +524,7 @@ export const download = (data: string | ArrayBuffer,
 
       return buffer
     } catch (error) {
-      console.error(`❌ ${handleErrors(error).message}`)
+      console.error(handleErrors(error).message)
 
       return null
     }
@@ -551,11 +551,15 @@ export const download = (data: string | ArrayBuffer,
           mimeType: 'application/json',
           name,
         })
+
+        return null
       }
 
-      return
+      return jsonString
     } catch (error) {
-      console.error(`❌ ${handleErrors(error).message}`)
+      console.error(handleErrors(error).message)
+
+      return null
     }
   },
   frameOutput = (frame?: number) =>
@@ -637,7 +641,7 @@ export const download = (data: string | ArrayBuffer,
         manifest,
       }
     } catch (error) {
-      console.error(`❌ ${handleErrors(error).message}`)
+      console.error(handleErrors(error).message)
 
       return {
         animations: undefined,

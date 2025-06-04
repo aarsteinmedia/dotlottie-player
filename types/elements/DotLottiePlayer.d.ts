@@ -80,7 +80,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }>;
     attributeChangedCallback(name: string, _oldValue: unknown, value: string): Promise<void>;
     connectedCallback(): Promise<void>;
-    convert({ animations: animationsFromProps, fileName, manifest, shouldDownload, src: srcFromProps, typeCheck, }: ConvertParams): Promise<ArrayBuffer | null | undefined>;
+    convert({ animations: animationsFromProps, fileName, manifest, shouldDownload, src: srcFromProps, typeCheck, }: ConvertParams): Promise<string | ArrayBuffer | null>;
     destroy(): void;
     disconnectedCallback(): void;
     getLottie(): AnimationItem | null;

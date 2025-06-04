@@ -670,20 +670,8 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
   }: ConvertParams) {
     const src = srcFromProps || this.src || this.source
 
-    if (!src) {
+    if (!src && !animationsFromProps?.length) {
       throw new Error('No animation to convert')
-    }
-
-    if (typeCheck || this._isDotLottie) {
-      const animationData = await getAnimationData(src)
-
-      createJSON({
-        animation: animationData.animations?.[0],
-        fileName: `${getFilename(fileName || src || 'converted')}.json`,
-        shouldDownload,
-      })
-
-      return
     }
 
     let animations = animationsFromProps
@@ -692,6 +680,15 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       const animationData = await getAnimationData(src)
 
       animations = animationData.animations
+    }
+
+    if (typeCheck || this._isDotLottie) {
+
+      return createJSON({
+        animation: animations?.[0],
+        fileName: `${getFilename(fileName || src || 'converted')}.json`,
+        shouldDownload,
+      })
     }
 
     return createDotLottie({
