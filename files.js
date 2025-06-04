@@ -34,6 +34,8 @@ const files = [
   'loopOut-star.lottie',
   'models.lottie',
   'portal.lottie',
+  'strengths.json',
+  'strengths.lottie',
 ]
 
 export default files
