@@ -261,7 +261,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
   /**
    * Resizing to container.
    */
-  set objectfit(value: ObjectFit) {
+  set objectfit(value: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down') {
     this.setAttribute('objectfit', value)
   }
 
@@ -1451,7 +1451,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
     const preserveAspectRatio =
       this.preserveAspectRatio ??
-      aspectRatio(this.objectfit),
+      aspectRatio(this.objectfit as ObjectFit),
       currentAnimationSettings = this._multiAnimationSettings.length > 0
         ? this._multiAnimationSettings[this._currentAnimation]
         : undefined,

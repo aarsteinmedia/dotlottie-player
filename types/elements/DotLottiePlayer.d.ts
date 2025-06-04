@@ -1,7 +1,7 @@
 import { type AnimationDirection, type AnimationItem, type AnimationSettings, type LottieManifest, type Vector2 } from '@aarsteinmedia/lottie-web';
 import type { AnimationAttributes, AnimateOnScroll, Autoplay, Controls, Loop, Subframe, ConvertParams } from '../types';
 import PropertyCallbackElement from '../elements/helpers/PropertyCallbackElement';
-import { ObjectFit, PlayMode, PlayerState, PreserveAspectRatio, RendererType } from '../enums';
+import { PlayMode, PlayerState, PreserveAspectRatio, RendererType } from '../enums';
 import renderControls from '../templates/controls';
 import renderPlayer from '../templates/player';
 export default class DotLottiePlayer extends PropertyCallbackElement {
@@ -34,8 +34,8 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     get loop(): Loop;
     set mode(value: PlayMode);
     get mode(): PlayMode;
-    set objectfit(value: ObjectFit);
-    get objectfit(): ObjectFit;
+    set objectfit(value: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down');
+    get objectfit(): "contain" | "cover" | "fill" | "none" | "scale-down";
     set preserveAspectRatio(value: PreserveAspectRatio | null);
     get preserveAspectRatio(): PreserveAspectRatio | null;
     set renderer(value: RendererType);
