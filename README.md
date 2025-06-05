@@ -8,7 +8,7 @@ PS: If you only need to render animations as SVG, and don't need to convert or c
 
 ## Demo
 
-Here is [a demo](https://www.aarstein.media/en/dotlottie-player), running on Next.js 13 using TypeScript.
+Here is [a demo](https://www.aarstein.media/en/dotlottie-player), running on Next.js 15 using TypeScript.
 
 ## Installation
 
@@ -42,15 +42,15 @@ import '@aarsteinmedia/dotlottie-player'
 
 ## Usage
 
-Add the element `dotlottie-player` to your markup and point `src` to a Lottie animation of your choice. If you're working in SSR environments like Next.js or Nuxt.js, it might be a good idea to set reflective booleans (like `autoplay`, `controls` and `loop`) to an empty string instead of `true` – to mimic how modern browsers treats these values in markup, as opposed to how Node.js treats them. This way you avoid hydration errors.
+Add the element `dotlottie-player` to your markup and point `src` to a Lottie animation of your choice.
 
-```xml
+```html
 <dotlottie-player
   id="find-me"
-  autoplay=""
-  controls=""
-  subframe=""
-  loop=""
+  autoplay
+  controls
+  subframe
+  loop
   src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
   style="width: 320px; margin: auto;"
 >
@@ -65,7 +65,10 @@ player?.load('https://storage.googleapis.com/aarsteinmedia/am.lottie')
 ```
 
 ### Convert to dotLottie
-If you have a Lottie JSON animation and want to convert it to a dotLottie – to leverage compression, combine multiple animations in one file and keep your file library tidy with a discrete file extension –  you can do so with the `convert()` method. This will trigger a download in the browser. If you have `controls` set to visible there's a convert button visible for JSON files.
+If you have a Lottie JSON animation and want to convert it to a dotLottie – to leverage compression, combine multiple animations in one file and keep your file library tidy with a discrete file extension –  you can do so with the `convert()` method. This will trigger a download in the browser. If you have `controls` set to visible there's a convert button in the context menu on the right hand side.
+
+### Convert to JSON
+If you're debugging a dotLottie animation – for instance if expressions aren't working as expected, you can convert it to JSON, either by usin the `convert()` method, or — if `controls` are set to visible – a button in the context menu on the right hand side.
 
 ### Combine animations
 If you want to combine multiple animations in one single dotLottie file you can use the `addAnimation` method. This will trigger a download in the browser. The source files can be either dotLottie or JSON, and the output file will will always be a dotLottie.
@@ -95,10 +98,10 @@ The new file wil automatically load the first animation when initialized. You ca
 
 Control the playback of multiple animations in a single file. In the example below the first animation will play once, and then the next animation will loop:
 
-```xml
+```html
 <dotlottie-player
   id="find-me"
-  subframe=""
+  subframe
   src="/path/to/combined-animations.lottie"
 >
 </dotlottie-player>  
@@ -151,9 +154,9 @@ function App() {
     <dotlottie-player
       class="your-class-name"
       src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
-      autoplay=""
-      controls=""
-      loop=""
+      autoplay
+      controls
+      loop
       style={{
         width: '320px',
         margin: 'auto'
@@ -177,7 +180,7 @@ function App() {
   return (
     <dotlottie-player
       ref={animation}
-      subframe=""
+      subframe
       src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
     />
   )
@@ -256,10 +259,10 @@ export default defineNuxtPlugin(({ vueApp }) => {
 <template>
   <dotlottie-player
     src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
-    autoplay=""
-    controls=""
-    subframe=""
-    loop=""
+    autoplay
+    controls
+    subframe
+    loop
     style="width: 320px; margin: auto;"
   />
 </template>
@@ -330,13 +333,13 @@ The following events are exposed and can be listened to via `addEventListener` c
 | `stop`     | Animation has stopped                                            |
 
 ## WordPress Plugins
-<img align="left" width="110" height="110" src="/.github/wpIcon.svg" />
+<img align="left" width="110" height="110" src="/.github/wpIcon.svg" style="margin-right:1em" />
 
 We've made a free WordPress plugin that works with Gutenberg Blocks, Elementor, Divi Builder and Flatsome UX Builder: [AM LottiePlayer](https://www.aarstein.media/en/am-lottieplayer). It has all the functionality of this package, with a helpful user interface.
 
 It's super lightweight – and only loads on pages where animations are used.
 
-We've also made a premium WordPress plugin for purchase: [AM LottiePlayerPRO](https://www.aarstein.media/en/am-lottieplayer/pro). It has an easy-to-use GUI for combining and controlling multiple Lottie animations in a single file, converting JSON to dotLottie with drag-and-drop, and many more exclusive features.
+We've also made a premium WordPress plugin for purchase: [AM LottiePlayer PRO](https://www.aarstein.media/en/am-lottieplayer/pro). It has an easy-to-use GUI for combining and controlling multiple Lottie animations in a single file, converting JSON to dotLottie with drag-and-drop, and many more exclusive features.
 
 ## License
 
