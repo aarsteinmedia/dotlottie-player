@@ -1,5 +1,5 @@
 import DotLottiePlayer from '@/elements/DotLottiePlayer'
-import { PlayerState } from '@/enums'
+import { PlayerState } from '@/utils/enums'
 
 /**
  * Render Player.

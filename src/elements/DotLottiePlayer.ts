@@ -20,6 +20,18 @@ import type {
 } from '@/types'
 
 import PropertyCallbackElement from '@/elements/helpers/PropertyCallbackElement'
+import styles from '@/styles.css'
+import renderControls from '@/templates/controls'
+import renderPlayer from '@/templates/player'
+import {
+  aspectRatio,
+  download,
+  frameOutput,
+  getFilename,
+  handleErrors
+} from '@/utils'
+import createDotLottie from '@/utils/createDotLottie'
+import createJSON from '@/utils/createJSON'
 import {
   ObjectFit,
   PlayMode,
@@ -27,20 +39,8 @@ import {
   PlayerState,
   PreserveAspectRatio,
   RendererType,
-} from '@/enums'
-import styles from '@/styles.css'
-import renderControls from '@/templates/controls'
-import renderPlayer from '@/templates/player'
-import {
-  aspectRatio,
-  createDotLottie,
-  createJSON,
-  download,
-  frameOutput,
-  getAnimationData,
-  getFilename,
-  handleErrors
-} from '@/utils'
+} from '@/utils/enums'
+import getAnimationData from '@/utils/getAnimationData'
 
 const generator = '@aarsteinmedia/dotlottie-player'
 

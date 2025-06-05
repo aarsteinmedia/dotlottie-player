@@ -6,7 +6,7 @@ export default DotLottiePlayer
 
 export {
   PlayerEvents, PlayerState, PlayMode
-} from '@/enums'
+} from '@/utils/enums'
 
 /**
  * Expose DotLottiePlayer class as global variable.
