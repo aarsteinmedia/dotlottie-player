@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "5.1.10",
+  "version": "5.1.11",
   "description": "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player",
   "type": "module",
   "exports": {
@@ -48,7 +48,7 @@
     "lint:css:fix": "npx stylelint **/*.css --fix"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^1.0.0",
+    "@aarsteinmedia/lottie-web": "^1.0.2",
     "fflate": "^0.8.2"
   },
   "peerDependencies": {
@@ -64,7 +64,7 @@
     "@rollup/plugin-typescript": "^12.1.2",
     "@swc/core": "^1.11.31",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.29",
+    "@types/node": "^22.15.30",
     "@types/path-browserify": "^1.0.3",
     "@types/postcss-flexbugs-fixes": "^5.0.3",
     "@types/react": "^19.1.6",
@@ -81,14 +81,13 @@
     "eslint-plugin-perfectionist": "^4.14.0",
     "globals": "^16.2.0",
     "jiti": "^2.4.2",
-    "lodash-es": "^4.17.21",
     "postcss-flexbugs-fixes": "^5.0.2",
     "prettier": "^3.5.3",
     "react": "^19.1.0",
     "rimraf": "^6.0.1",
     "rollup": "^4.41.1",
     "rollup-plugin-dts": "^6.2.1",
-    "rollup-plugin-html-literals": "^1.1.8",
+    "rollup-plugin-html-literals": "^2.0.0",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-opener": "^0.1.4",
     "rollup-plugin-postcss": "^4.0.2",
