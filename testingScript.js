@@ -1,12 +1,18 @@
 import files from './files.js'
 
 const previewForm = document.querySelector('form#preview'),
-  pathSelect = previewForm.querySelector('select'),
+  pathSelect = previewForm.querySelector('select[name="path"]'),
+  rendererSelect = previewForm.querySelector('select[name="renderer"]'),
+  /**
+   * @type {import('./src/elements/DotLottiePlayer').default}
+   */
+  dotLottie = document.querySelector('.preview'),
   fallbackSVG = 'assets/am.lottie',
   regex = /\.(?:lottie|json)$/
 
 previewForm?.addEventListener('submit', viewFile)
 pathSelect?.addEventListener('change', viewFile)
+rendererSelect?.addEventListener('change', changeRenderer)
 
 const { length } = files.sort()
 
@@ -65,6 +71,13 @@ function handleRefresh() {
   }
 }
 
+function changeRenderer(e) {
+  const { value: renderer } = e.target
+
+  dotLottie.renderer = renderer
+  handleRefresh()
+}
+
 /**
  * View converted SVG.
  *
@@ -87,11 +100,6 @@ async function viewFile(e) {
     } else {
       path = e
     }
-
-    /**
-     * @type {import('./src/elements/DotLottiePlayer').default}
-     */
-    const dotLottie = document.querySelector('.preview')
 
     if (!dotLottie || !path || !path === '') {
       throw new Error('No placeholder')

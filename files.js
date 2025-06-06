@@ -37,7 +37,8 @@ const files = [
   'strengths.json',
   'strengths.lottie',
   'gameAnimation.lottie',
-  'dinide.lottie'
+  'dinide.lottie',
+  'rond-qui-tourne.lottie'
 ]
 
 export default files

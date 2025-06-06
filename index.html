@@ -68,6 +68,18 @@
       align-items: center;
       gap: 2em;
     }
+
+    #preview {
+      display: flex;
+      gap: 1em;
+      
+      & label {
+        flex: 1 1;
+        & select {
+          width: 100%;
+        }
+      }
+    }
   </style>
 </head>
 
@@ -77,9 +89,17 @@
       <h1 style="margin: 0;">dotlottie-player</h1>
       <form id="preview">
         <label>
+          Choose renderer:<br />
+          <select name="renderer">
+            <option value="svg" selected>SVG</option>
+            <option value="canvas">Canvas</option>
+            <option value="html">HTML</option>
+          </select>
+        </label>
+        <label>
           Select file to preview:<br />
           <select autofocus name="path" placeholder="Path to file">
-            <option disabled value="assets/test.svg">Path to file</option>
+            <option disabled value="assets/am.lottie">Path to file</option>
           </select>
         </label>
       </form>

@@ -39,9 +39,13 @@ const unzip = async (resp: Response): Promise<Unzipped> => {
       .replaceAll(/(["'])(.*?)\1/g, (
         _match, quote: string, content: string
       ) => {
-        const replacedContent = content.replaceAll(/[^\w\s.#]/g, '')
+        /**
+         * TODO: This caused text layers and expressions to be mangled
+         * Consider a more nuanced sanitaiton, if at all.
+         */
+        // const replacedContent = content.replaceAll(/[^\w\s.#]/g, '')
 
-        return `${quote}${replacedContent}${quote}`
+        return `${quote}${content}${quote}`
       })
 
 export default async function getLottieJSON (resp: Response) {
