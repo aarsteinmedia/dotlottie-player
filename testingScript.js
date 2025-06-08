@@ -28,14 +28,23 @@ handleRefresh()
 
 function handleRefresh() {
   try {
-    const selection = localStorage.getItem('selection')
+    const selection = localStorage.getItem('selection'),
+      renderer = localStorage.getItem('renderer')
 
-    if (selection) {
-      pathSelect.value = selection
-      viewFile(selection)
+    if (selection || renderer) {
+      if (selection) {
+        pathSelect.value = selection
+        viewFile(selection)
+      }
+
+      if (renderer) {
+        rendererSelect.value = renderer
+        changeRenderer(renderer)
+      }
 
       return
     }
+
     if (previewForm?.path?.value) {
       const { value } = previewForm.path,
         path = value.includes('/')
@@ -71,11 +80,23 @@ function handleRefresh() {
   }
 }
 
-function changeRenderer(e) {
-  const { value: renderer } = e.target
+async function changeRenderer(e) {
+  let renderer
+
+  if (e instanceof Event) {
+    renderer = e.target.value
+  } else {
+    renderer = e
+  }
 
   dotLottie.renderer = renderer
-  handleRefresh()
+  localStorage.setItem('renderer', renderer)
+
+  const selection = localStorage.getItem('selection')
+
+  if (selection) {
+    await dotLottie.load(selection)
+  }
 }
 
 /**

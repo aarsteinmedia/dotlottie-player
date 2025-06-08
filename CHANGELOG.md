@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [5.2.0] - 07-06-2025
+
+### Changed
+
+- Fixed several issues with Canvas renderer.
+- Removed Hybrid renderer
+
 ## [5.1.13] - 06-06-2025
 
 ### Changed
@@ -265,6 +272,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[5.2.0]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/5.2.0
 [5.1.13]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/5.1.13
 [5.1.11]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/5.1.11
 [5.1.10]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/5.1.10
