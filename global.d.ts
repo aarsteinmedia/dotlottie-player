@@ -4,6 +4,19 @@ declare module '*.css' {
   export default content
 }
 
+// declare module 'rollup-plugin-esbuild-minify' {
+
+//   interface Options {
+//     logLevel?: string
+//     logLimit?: number
+//     minify?: boolean
+//   }
+
+//   const minify: (options?: Options) => any
+
+//   export { minify }
+// }
+
 // declare module 'rollup-plugin-serve' {
 //   interface Options {
 //     contentBase?: string | string[]

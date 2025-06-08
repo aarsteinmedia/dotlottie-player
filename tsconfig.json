@@ -35,7 +35,7 @@
     "resolveJsonModule": true,
     // "rootDir": "src",
     "strict": true,
-    "target": "ES2022",
+    "target": "ES2023",
     "useDefineForClassFields": false,
     "verbatimModuleSyntax": true,
     "paths": {

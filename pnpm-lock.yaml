@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@aarsteinmedia/lottie-web':
-        specifier: ^1.0.6
-        version: 1.0.6
+        specifier: ^1.0.7
+        version: 1.0.7
       fflate:
         specifier: ^0.8.2
         version: 0.8.2
@@ -111,6 +111,9 @@ importers:
       rollup-plugin-dts:
         specifier: ^6.2.1
         version: 6.2.1(rollup@4.42.0)(typescript@5.8.3)
+      rollup-plugin-esbuild-minify:
+        specifier: ^1.3.0
+        version: 1.3.0(rollup@4.42.0)
       rollup-plugin-html-literals:
         specifier: ^2.0.0
         version: 2.0.0(rollup@4.42.0)
@@ -153,8 +156,8 @@ importers:
 
 packages:
 
-  '@aarsteinmedia/lottie-web@1.0.6':
-    resolution: {integrity: sha512-wYaQeaL1z6qTTOplxMwKteLhJ9sNsnoc54wY6mzd7NbaDVUhk2iyIUf3lnDh+3NLBB6uQouE/b8JjdpxeRC3Vg==}
+  '@aarsteinmedia/lottie-web@1.0.7':
+    resolution: {integrity: sha512-jV0y/QP40LP0fDPUnsxUQBuOIXKRFVn6NzxtCyhXnlhxBrtSDsElwmitRzQxDgI+9qa3fbuf5XKPt+9thnwraA==}
     engines: {node: '>= 12.17.0'}
 
   '@astrojs/compiler@2.12.1':
@@ -527,8 +530,8 @@ packages:
   '@microsoft/tsdoc@0.14.2':
     resolution: {integrity: sha512-9b8mPpKrfeGRuhFH5iO1iwCLeIIsV6+H1sRfxbkoGXIyQE2BTsPd9zqSqQJ+pv5sJ/hT5M1zvOFL02MnEezFug==}
 
-  '@napi-rs/wasm-runtime@0.2.10':
-    resolution: {integrity: sha512-bCsCyeZEwVErsGmyPNSzwfwFn4OdxBj0mmv6hOFucB/k81Ojdu68RbZdxYsRQUPc9l6SU5F/cG+bXgWs3oUgsQ==}
+  '@napi-rs/wasm-runtime@0.2.11':
+    resolution: {integrity: sha512-9DPkXtvHydrcOsopiYpUgPHpmj0HWZKMUnL2dZqpvC42lsratuBG06V5ipyno0fUek5VlFsNQ+AcFATSrJXgMA==}
 
   '@next/eslint-plugin-next@15.3.3':
     resolution: {integrity: sha512-VKZJEiEdpKkfBmcokGjHu0vGDG+8CehGs90tBEy/IDoDDKGngeyIStt2MmE5FYNyU9BhgR7tybNWTAJY/30u+Q==}
@@ -3895,6 +3898,12 @@ packages:
       rollup: ^3.29.4 || ^4
       typescript: ^4.5 || ^5.0
 
+  rollup-plugin-esbuild-minify@1.3.0:
+    resolution: {integrity: sha512-y7BDyMMGYhq5901EijNABWgjEzC8myYhOXKmlnU8xIRvX7KQucSWABBR3IEyITuLJFyq/rXIlezDh9zvnR0k2w==}
+    engines: {node: '>= 14.18'}
+    peerDependencies:
+      rollup: ^2 || ^3 || ^4
+
   rollup-plugin-html-literals@2.0.0:
     resolution: {integrity: sha512-gZn6XMJKwk+jRSnYoRViM3abfOzPCX6QsrBO1yUHKtS0PX3WD9AhWno1NRSdZHX0i/5e0TMA3M718AoZb094vQ==}
     engines: {node: '>=16'}
@@ -4541,7 +4550,7 @@ packages:
 
 snapshots:
 
-  '@aarsteinmedia/lottie-web@1.0.6': {}
+  '@aarsteinmedia/lottie-web@1.0.7': {}
 
   '@astrojs/compiler@2.12.1': {}
 
@@ -4906,7 +4915,7 @@ snapshots:
 
   '@microsoft/tsdoc@0.14.2': {}
 
-  '@napi-rs/wasm-runtime@0.2.10':
+  '@napi-rs/wasm-runtime@0.2.11':
     dependencies:
       '@emnapi/core': 1.4.3
       '@emnapi/runtime': 1.4.3
@@ -5564,7 +5573,7 @@ snapshots:
 
   '@unrs/resolver-binding-wasm32-wasi@1.7.11':
     dependencies:
-      '@napi-rs/wasm-runtime': 0.2.10
+      '@napi-rs/wasm-runtime': 0.2.11
     optional: true
 
   '@unrs/resolver-binding-win32-arm64-msvc@1.7.11':
@@ -8771,6 +8780,11 @@ snapshots:
       typescript: 5.8.3
     optionalDependencies:
       '@babel/code-frame': 7.27.1
+
+  rollup-plugin-esbuild-minify@1.3.0(rollup@4.42.0):
+    dependencies:
+      esbuild: 0.25.5
+      rollup: 4.42.0
 
   rollup-plugin-html-literals@2.0.0(rollup@4.42.0):
     dependencies:

@@ -5,8 +5,8 @@
     "loose": true,
     "keepClassNames": true,
     "parser": {
-      "syntax": "typescript",
+      "syntax": "typescript"
     },
-    "target": "es2022"
+    "target": "es2023"
   }
 }
