@@ -6,5 +6,6 @@
     "**/*.dev.ts",
     "**/*.config.ts",
     "**/dist",
+    "**/preview"
   ]
 }

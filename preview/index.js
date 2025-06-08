@@ -1,10 +1,12 @@
+// eslint-disable-next-line import/no-useless-path-segments
+import '../dist/index.js'
 import files from './files.js'
 
 const previewForm = document.querySelector('form#preview'),
   pathSelect = previewForm.querySelector('select[name="path"]'),
   rendererSelect = previewForm.querySelector('select[name="renderer"]'),
   /**
-   * @type {import('./src/elements/DotLottiePlayer').default}
+   * @type {import('../src/elements/DotLottiePlayer').default}
    */
   dotLottie = document.querySelector('.preview'),
   fallbackSVG = 'assets/am.lottie',
