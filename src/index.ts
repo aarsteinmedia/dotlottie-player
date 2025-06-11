@@ -1,4 +1,4 @@
-import { _isServer, PlayerEvents } from '@aarsteinmedia/lottie-web/utils'
+import { isServer, PlayerEvents } from '@aarsteinmedia/lottie-web/utils'
 
 import DotLottiePlayer from '@/elements/DotLottiePlayer'
 
@@ -15,6 +15,6 @@ globalThis.dotLottiePlayer = (): DotLottiePlayer => new DotLottiePlayer()
 
 export const tagName = 'dotlottie-player'
 
-if (!_isServer) {
+if (!isServer) {
   customElements.define(tagName, DotLottiePlayer)
 }

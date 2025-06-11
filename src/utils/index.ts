@@ -1,7 +1,7 @@
 import type { LottieAsset } from '@aarsteinmedia/lottie-web'
 
 import {
-  createElementID, _isServer, PreserveAspectRatio
+  createElementID, isServer, PreserveAspectRatio
 } from '@aarsteinmedia/lottie-web/utils'
 import { strToU8 } from 'fflate'
 
@@ -113,7 +113,7 @@ export const aspectRatio = (objectFit: ObjectFit) => {
    * @returns UTF-8/Latin-1 binary.
    */
   base64ToU8 = (str: string) =>
-    strToU8(_isServer
+    strToU8(isServer
       ? Buffer.from(parseBase64(str), 'base64').toString('binary')
       : atob(parseBase64(str)),
     true),
@@ -126,7 +126,7 @@ export const aspectRatio = (objectFit: ObjectFit) => {
   handleErrors = (err: unknown) => {
     const res = {
       message: 'Unknown error',
-      status: _isServer ? 500 : 400,
+      status: isServer ? 500 : 400,
     }
 
     if (err && typeof err === 'object') {

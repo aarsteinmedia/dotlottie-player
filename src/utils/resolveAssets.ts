@@ -1,7 +1,7 @@
 import type { LottieAsset } from '@aarsteinmedia/lottie-web'
 import type { Unzipped } from 'fflate'
 
-import { _isServer } from '@aarsteinmedia/lottie-web/utils'
+import { isServer } from '@aarsteinmedia/lottie-web/utils'
 
 import {
   getExt, isAudio, isImage,
@@ -67,7 +67,7 @@ export default async function resolveAssets (unzipped?: Unzipped, assets?: Lotti
     toResolve.push(new Promise<void>((resolveAsset) => {
       let assetB64: string
 
-      if (_isServer) {
+      if (isServer) {
         assetB64 = Buffer.from(u8).toString('base64')
       } else {
         let result = ''

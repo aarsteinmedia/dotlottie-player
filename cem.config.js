@@ -1,6 +1,6 @@
 /**
  * @type {import('./src/types').CEMConfig}
- * */
+  */
 const cemConfig = {
   catalyst: false,
   dependencies: false,
