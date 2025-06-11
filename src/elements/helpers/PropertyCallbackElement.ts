@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { isServer } from '@aarsteinmedia/lottie-web/utils'
+import { _isServer } from '@aarsteinmedia/lottie-web/utils'
 
 /**
  * Credit to: Leonardo Favre https://github.com/leofavre/observed-properties.
@@ -8,7 +8,7 @@ import { isServer } from '@aarsteinmedia/lottie-web/utils'
 
 const updateOnConnected = Symbol('UPDATE_ON_CONNECTED')
 
-if (isServer()) {
+if (_isServer) {
   // Mock HTMLElement for server-side rendering
   global.HTMLElement =
     // eslint-disable-next-line @typescript-eslint/no-extraneous-class

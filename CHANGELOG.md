@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [5.2.2] - 11-06-2025
+
+### Changed
+
+- Optimization to animation engine:
+  - Prevented needless function calls to check for rendering context, when only one is sufficiant.
+  - Swapped deprecated attributes like xml:href and xml:space for modern equivalents.
+
 ## [5.2.1] - 08-06-2025
 
 - Fixed runtime bug where minification caused some functionality to break

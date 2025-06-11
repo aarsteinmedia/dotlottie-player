@@ -7,7 +7,9 @@ import Lottie, {
   type LottieManifest,
   type Vector2,
 } from '@aarsteinmedia/lottie-web'
-import { createElementID, isServer } from '@aarsteinmedia/lottie-web/utils'
+import {
+  _isServer, createElementID, PlayerEvents
+} from '@aarsteinmedia/lottie-web/utils'
 
 import type {
   AnimationAttributes,
@@ -35,7 +37,6 @@ import createJSON from '@/utils/createJSON'
 import {
   ObjectFit,
   PlayMode,
-  PlayerEvents,
   PlayerState,
   PreserveAspectRatio,
   RendererType,
@@ -1541,7 +1542,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     if (!this.animateOnScroll || !this._lottieInstance) {
       return
     }
-    if (isServer()) {
+    if (_isServer) {
       console.warn('DotLottie: Scroll animations might not work properly in a Server Side Rendering context. Try to wrap this in a client component.')
 
       return
