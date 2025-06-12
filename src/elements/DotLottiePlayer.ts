@@ -754,7 +754,6 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
   /**
    * Get Multi-animation settings.
-   *
    */
   public getMultiAnimationSettings() {
     return this._multiAnimationSettings
@@ -762,7 +761,6 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
   /**
    * Get playback segment.
-   *
    */
   public getSegment() {
     return this._segment
