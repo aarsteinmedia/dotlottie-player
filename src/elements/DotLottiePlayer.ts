@@ -9,7 +9,9 @@ import Lottie, {
 } from '@aarsteinmedia/lottie-web'
 import {
   isServer, createElementID, PlayerEvents,
-  RendererType
+  RendererType,
+  PlayMode,
+  PreserveAspectRatio
 } from '@aarsteinmedia/lottie-web/utils'
 
 import type {
@@ -37,9 +39,7 @@ import createDotLottie from '@/utils/createDotLottie'
 import createJSON from '@/utils/createJSON'
 import {
   ObjectFit,
-  PlayMode,
   PlayerState,
-  PreserveAspectRatio,
 } from '@/utils/enums'
 import getAnimationData from '@/utils/getAnimationData'
 

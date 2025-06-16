@@ -1,15 +1,16 @@
-import { isServer, PlayerEvents } from '@aarsteinmedia/lottie-web/utils'
+import {
+  isServer, PlayerEvents, PlayMode
+} from '@aarsteinmedia/lottie-web/utils'
 
 import DotLottiePlayer from '@/elements/DotLottiePlayer'
 
-export { PlayerEvents }
+export { PlayerEvents, PlayMode }
 export default DotLottiePlayer
 
-export { PlayerState, PlayMode } from '@/utils/enums'
+export { PlayerState } from '@/utils/enums'
 
 /**
  * Expose DotLottiePlayer class as global variable.
- *
  */
 globalThis.dotLottiePlayer = (): DotLottiePlayer => new DotLottiePlayer()
 

@@ -15,13 +15,3 @@ export declare enum PlayerState {
     Playing = "playing",
     Stopped = "stopped"
 }
-export declare enum PlayMode {
-    Bounce = "bounce",
-    Normal = "normal"
-}
-export declare enum PreserveAspectRatio {
-    Contain = "xMidYMid meet",
-    Cover = "xMidYMid slice",
-    Initial = "none",
-    None = "xMinYMin slice"
-}

@@ -11,10 +11,6 @@
           "name": "PlayerState"
         },
         {
-          "kind": "variable",
-          "name": "PlayMode"
-        },
-        {
           "kind": "class",
           "description": "DotLottie Player Web Component.",
           "name": "DotLottiePlayer",
@@ -663,6 +659,14 @@
       "exports": [
         {
           "kind": "js",
+          "name": "PlayMode",
+          "declaration": {
+            "name": "PlayMode",
+            "package": "@aarsteinmedia/lottie-web/utils"
+          }
+        },
+        {
+          "kind": "js",
           "name": "PlayerEvents",
           "declaration": {
             "name": "PlayerEvents",
@@ -674,14 +678,6 @@
           "name": "tagName",
           "declaration": {
             "name": "DotLottiePlayer",
-            "module": "dist/index.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "PlayMode",
-          "declaration": {
-            "name": "PlayMode",
             "module": "dist/index.js"
           }
         },
