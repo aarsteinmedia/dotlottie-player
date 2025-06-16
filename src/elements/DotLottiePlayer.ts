@@ -8,7 +8,8 @@ import Lottie, {
   type Vector2,
 } from '@aarsteinmedia/lottie-web'
 import {
-  isServer, createElementID, PlayerEvents
+  isServer, createElementID, PlayerEvents,
+  RendererType
 } from '@aarsteinmedia/lottie-web/utils'
 
 import type {
@@ -39,7 +40,6 @@ import {
   PlayMode,
   PlayerState,
   PreserveAspectRatio,
-  RendererType,
 } from '@/utils/enums'
 import getAnimationData from '@/utils/getAnimationData'
 
@@ -450,6 +450,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     this._mouseLeave = this._mouseLeave.bind(this)
     this._onVisibilityChange = this._onVisibilityChange.bind(this)
     this._switchInstance = this._switchInstance.bind(this)
+    this._handleSettingsClick = this._handleSettingsClick.bind(this)
 
     this.togglePlay = this.togglePlay.bind(this)
     this.stop = this.stop.bind(this)
@@ -1320,7 +1321,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
   /**
    * Handle settings click event.
    */
-  protected _handleSettingsClick = ({ target }: Event) => {
+  protected _handleSettingsClick({ target }: Event) {
     this._toggleSettings()
     // Because Safari does not add focus on click, we need to add it manually, so the onblur event will fire
     if (target instanceof HTMLElement) {

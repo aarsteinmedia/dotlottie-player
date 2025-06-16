@@ -28,9 +28,3 @@ export enum PreserveAspectRatio {
   Initial = 'none',
   None = 'xMinYMin slice',
 }
-
-export enum RendererType {
-  Canvas = 'canvas',
-  HTML = 'html',
-  SVG = 'svg',
-}

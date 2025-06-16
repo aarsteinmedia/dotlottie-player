@@ -370,6 +370,16 @@
             },
             {
               "kind": "method",
+              "name": "_handleSettingsClick",
+              "parameters": [
+                {
+                  "name": "{ target }"
+                }
+              ],
+              "description": "Handle settings click event."
+            },
+            {
+              "kind": "method",
               "name": "_addEventListeners",
               "description": "Add event listeners."
             },
@@ -585,10 +595,6 @@
                 "text": "array"
               },
               "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "_handleSettingsClick"
             },
             {
               "kind": "field",
