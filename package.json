@@ -48,7 +48,7 @@
     "lint:css:fix": "npx stylelint **/*.css --fix"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^1.0.12",
+    "@aarsteinmedia/lottie-web": "^1.0.13",
     "fflate": "^0.8.2"
   },
   "peerDependencies": {
@@ -64,7 +64,7 @@
     "@rollup/plugin-typescript": "^12.1.2",
     "@swc/core": "^1.12.1",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.0.1",
+    "@types/node": "^24.0.2",
     "@types/path-browserify": "^1.0.3",
     "@types/postcss-flexbugs-fixes": "^5.0.3",
     "@types/react": "^19.1.8",

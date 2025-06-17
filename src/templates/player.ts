@@ -1,3 +1,5 @@
+import { namespaceSVG, PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils'
+
 import DotLottiePlayer from '@/elements/DotLottiePlayer'
 import { PlayerState } from '@/utils/enums'
 
@@ -23,12 +25,12 @@ export default async function renderPlayer(this: DotLottiePlayer) {
           ? /* HTML */ `
             <div class="error">
                           <svg
-                            preserveAspectRatio="xMidYMid slice"
-                            xmlns="http://www.w3.org/2000/svg"
-                            xml:space="preserve"
+                            preserveAspectRatio="${PreserveAspectRatio.Cover}"
+                            xmlns="${namespaceSVG}"
                             width="1920"
                             height="1080"
                             viewBox="0 0 1920 1080"
+                            style="white-space: preserve"
                           >
                             <path fill="#fff" d="M0 0h1920v1080H0z" />
                             <path

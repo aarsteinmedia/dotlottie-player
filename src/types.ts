@@ -8,8 +8,7 @@ import type {
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
-
-import type { tagName } from '.'
+import type { tagName } from '@/index'
 
 export interface Animation extends AnimationSettings {id: string}
 

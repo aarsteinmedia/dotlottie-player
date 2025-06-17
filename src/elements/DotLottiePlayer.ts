@@ -1100,7 +1100,6 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
   /**
    * Set Multi-animation settings.
-   *
    */
   public setMultiAnimationSettings(settings: AnimationSettings[]) {
     this._multiAnimationSettings = settings
@@ -1108,7 +1107,6 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
   /**
    * Set playback segment.
-   *
    */
   public setSegment(segment: Vector2) {
     this._segment = segment
@@ -1304,7 +1302,6 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
   /**
    * Handles click and drag actions on the progress track.
-   *
    */
   protected _handleSeekChange({ target }: Event) {
     if (
