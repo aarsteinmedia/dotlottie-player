@@ -8,42 +8,42 @@ import Lottie, {
   type Vector2,
 } from '@aarsteinmedia/lottie-web'
 import {
-  isServer, createElementID, PlayerEvents,
+  addAnimation, convert, getAnimationData
+} from '@aarsteinmedia/lottie-web/dotlottie'
+import {
+  createElementID,
+  download,
+  getFilename,
+  isServer,
   RendererType,
+  PlayerEvents,
   PlayMode,
   PreserveAspectRatio
 } from '@aarsteinmedia/lottie-web/utils'
 
 import type {
-  AnimationAttributes,
   AnimateOnScroll,
   Autoplay,
   Controls,
   Loop,
   Subframe,
-  ConvertParams,
 } from '@/types'
 
 import PropertyCallbackElement from '@/elements/helpers/PropertyCallbackElement'
 import styles from '@/styles.css'
 import renderControls from '@/templates/controls'
+import pauseIcon from '@/templates/icons/pauseIcon'
+import playIcon from '@/templates/icons/playIcon'
 import renderPlayer from '@/templates/player'
 import {
   aspectRatio,
-  download,
   frameOutput,
-  getFilename,
   handleErrors
 } from '@/utils'
-import createDotLottie from '@/utils/createDotLottie'
-import createJSON from '@/utils/createJSON'
 import {
   ObjectFit,
   PlayerState,
 } from '@/utils/enums'
-import getAnimationData from '@/utils/getAnimationData'
-
-const generator = '@aarsteinmedia/dotlottie-player'
 
 /**
  * DotLottie Player Web Component.
@@ -90,16 +90,21 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
   }
 
+  public addAnimation = addAnimation
+
+  public convert = convert
+
   /**
    * Player state.
    */
   public playerState: PlayerState = PlayerState.Loading
-  public shadow: ShadowRoot | undefined
 
+  public shadow: ShadowRoot | undefined
   /**
    * Store source for later use, when player is loaded programatically.
    */
   public source?: string
+
   public template: HTMLTemplateElement
 
   /**
@@ -227,6 +232,10 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     return 0
+  }
+
+  public get isDotLottie() {
+    return this._isDotLottie
   }
 
   /**
@@ -406,14 +415,12 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
    * Seeker.
    */
   protected _seeker = 0
-
   /**
    * This is included in watched properties,
    * so that next-button will show up
    * on load, if controls are visible.
    */
   private _animations: AnimationData[] = []
-
   /**
    * Which animation to show, if several.
    */
@@ -421,9 +428,10 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
   private _intersectionObserver?: IntersectionObserver
   private _isBounce = false
   private _isDotLottie = false
-  private _lottieInstance: AnimationItem | null = null
-  private _manifest?: LottieManifest
 
+  private _lottieInstance: AnimationItem | null = null
+
+  private _manifest?: LottieManifest
   /**
    * Multi-animation settings.
    */
@@ -433,6 +441,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
    * Segment.
    */
   private _segment?: Vector2
+
   constructor() {
     super()
     this._complete = this._complete.bind(this)
@@ -461,78 +470,11 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     this.toggleLoop = this.toggleLoop.bind(this)
     this.toggleBoomerang = this.toggleBoomerang.bind(this)
 
-    this.convert = this.convert.bind(this)
     this.destroy = this.destroy.bind(this)
 
 
     this.template = document.createElement('template')
     this.shadow = this.attachShadow({ mode: 'open' })
-  }
-
-  /**
-   * Creates a new dotLottie file, by combinig several animations.
-   * If set to false the function returns an ArrayBuffer. Defaults to true.
-   */
-  public async addAnimation(
-    configs: AnimationAttributes[],
-    fileName?: string,
-    shouldDownload = true
-  ): Promise<{
-      result?: null | ArrayBuffer
-      success: boolean
-      error?: string
-    }> {
-    // Initialize meta object for animation, with fallbacks for
-    // when the method is called indepenently
-    const {
-      animations = [],
-      manifest = {
-        animations: this.src
-          ? [
-            { id: this._identifier },
-          ]
-          : [],
-      },
-    } = this.src ? await getAnimationData(this.src) : {}
-
-    try {
-      if (!manifest) {
-        throw new Error('Manifest is not set')
-      }
-      manifest.generator = generator
-      const { length } = configs
-
-      for (let i = 0; i < length; i++) {
-        const { url } = configs[i],
-          { animations: animationsToAdd } = await getAnimationData(url)
-
-        if (!animationsToAdd) {
-          throw new Error('No animation loaded')
-        }
-        if (manifest.animations.some(({ id }) => id === configs[i].id)) {
-          throw new Error('Duplicate id for animation')
-        }
-
-        manifest.animations = [...manifest.animations, { id: configs[i].id }]
-
-        animations.push(...animationsToAdd)
-      }
-
-      return {
-        result: await createDotLottie({
-          animations,
-          fileName,
-          manifest,
-          shouldDownload,
-        }),
-        success: true,
-      }
-    } catch (error) {
-      return {
-        error: handleErrors(error).message,
-        success: false,
-      }
-    }
   }
 
   /**
@@ -638,70 +580,35 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
   /**
    * Initialize everything on component first render.
    */
-  override async connectedCallback() {
-    await super.connectedCallback()
-    await this._render()
+  override connectedCallback() {
+    super.connectedCallback()
+    try {
+      void (async () => {
+        await this._render()
 
-    if (!this.shadow) {
-      throw new Error('Missing Shadow element')
+        if (!this.shadow) {
+          throw new Error('Missing Shadow element')
+        }
+
+        this._container = this.shadow.querySelector('.animation')
+
+        // Add listener for Visibility API's change event.
+        if (typeof document.hidden !== 'undefined') {
+          document.addEventListener('visibilitychange', this._onVisibilityChange)
+        }
+
+        // Add intersection observer for detecting component being out-of-view.
+        this._addIntersectionObserver()
+
+        // Setup lottie player
+        await this.load(this.src)
+
+        this.dispatchEvent(new CustomEvent(PlayerEvents.Rendered))
+      })()
+    } catch (error) {
+      console.error(error)
+      this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
     }
-
-    this._container = this.shadow.querySelector('.animation')
-    this._renderControls()
-
-    // Add listener for Visibility API's change event.
-    if (typeof document.hidden !== 'undefined') {
-      document.addEventListener('visibilitychange', this._onVisibilityChange)
-    }
-
-    // Add intersection observer for detecting component being out-of-view.
-    this._addIntersectionObserver()
-
-    // Setup lottie player
-    await this.load(this.src)
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Rendered))
-  }
-
-  public async convert({
-    animations: animationsFromProps,
-    fileName,
-    manifest,
-    shouldDownload = true,
-    src: srcFromProps,
-    typeCheck,
-  }: ConvertParams) {
-    const src = srcFromProps || this.src || this.source
-
-    if (!src && !animationsFromProps?.length) {
-      throw new Error('No animation to convert')
-    }
-
-    let animations = animationsFromProps
-
-    if (!animations) {
-      const animationData = await getAnimationData(src)
-
-      animations = animationData.animations
-    }
-
-    if (typeCheck || this._isDotLottie) {
-
-      return createJSON({
-        animation: animations?.[0],
-        fileName: `${getFilename(fileName || src || 'converted')}.json`,
-        shouldDownload,
-      })
-    }
-
-    return createDotLottie({
-      animations,
-      fileName: `${getFilename(fileName || src || 'converted')}.lottie`,
-      manifest: {
-        ...manifest ?? this._manifest,
-        generator,
-      } as LottieManifest,
-      shouldDownload,
-    })
   }
 
   /**
@@ -771,14 +678,15 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
    * Initialize Lottie Web player.
    */
   public async load(src: string | null) {
-    if (!this.shadowRoot || !src) {
-      return
-    }
-
-    this.source = src
-
-    // Load the resource
     try {
+      if (!this.shadowRoot || !src) {
+        return
+      }
+
+      this.source = src
+
+      // Load the resource
+
       const {
         animations, isDotLottie, manifest
       } = await getAnimationData(src)
@@ -802,7 +710,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         manifest.animations[0].loop = this.loop
       }
 
-      this._isDotLottie = Boolean(isDotLottie)
+      this._isDotLottie = isDotLottie
       this._animations = animations
       this._manifest = manifest ?? {
         animations: [
@@ -834,44 +742,55 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         ...this._getOptions(),
         animationData: animations[this._currentAnimation],
       })
+
+
+      this._addEventListeners()
+
+      const speed =
+      this._multiAnimationSettings[this._currentAnimation]?.speed ??
+      this.speed,
+        direction =
+        this._multiAnimationSettings[this._currentAnimation]?.direction ??
+        this.direction
+
+      // Set initial playback speed and direction
+      this._lottieInstance.setSpeed(speed)
+      this._lottieInstance.setDirection(direction)
+      this._lottieInstance.setSubframe(Boolean(this.subframe))
+
+      // Start playing if autoplay is enabled
+      if (this.autoplay || this.animateOnScroll) {
+        if (this.direction === -1) {
+          this.seek('99%')
+        }
+
+        if (!('IntersectionObserver' in window)) {
+          if (!this.animateOnScroll) {
+            this.play()
+          }
+          this._playerState.visible = true
+        }
+
+        this._addIntersectionObserver()
+      }
+
+      this._renderControls()
+
+      if (this.autoplay) {
+        const togglePlay = this.shadow?.querySelector('.togglePlay')
+
+        if (togglePlay) {
+          togglePlay.innerHTML = pauseIcon
+        }
+      }
     } catch (error) {
+      console.error(error)
+
       this._errorMessage = handleErrors(error).message
 
       this.playerState = PlayerState.Error
 
       this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
-
-      return
-    }
-
-    this._addEventListeners()
-
-    const speed =
-      this._multiAnimationSettings[this._currentAnimation]?.speed ??
-      this.speed,
-      direction =
-        this._multiAnimationSettings[this._currentAnimation]?.direction ??
-        this.direction
-
-    // Set initial playback speed and direction
-    this._lottieInstance.setSpeed(speed)
-    this._lottieInstance.setDirection(direction)
-    this._lottieInstance.setSubframe(Boolean(this.subframe))
-
-    // Start playing if autoplay is enabled
-    if (this.autoplay || this.animateOnScroll) {
-      if (this.direction === -1) {
-        this.seek('99%')
-      }
-
-      if (!('IntersectionObserver' in window)) {
-        if (!this.animateOnScroll) {
-          this.play()
-        }
-        this._playerState.visible = true
-      }
-
-      this._addIntersectionObserver()
     }
   }
 
@@ -942,7 +861,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       seeker = this.shadow.querySelector('.seeker'),
       progress = this.shadow.querySelector('progress'),
       popover = this.shadow.querySelector('.popover'),
-      convert = this.shadow.querySelector('.convert'),
+      convertButton = this.shadow.querySelector('.convert'),
       snapshot = this.shadow.querySelector('.snapshot')
 
     if (
@@ -963,19 +882,9 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       stop.dataset.active = (value === PlayerState.Stopped).toString()
 
       if (value === PlayerState.Playing) {
-        togglePlay.innerHTML = /* HTML */ `
-          <svg width="24" height="24" aria-hidden="true" focusable="false">
-            <path
-              d="M14.016 5.016H18v13.969h-3.984V5.016zM6 18.984V5.015h3.984v13.969H6z"
-            />
-          </svg>
-        `
+        togglePlay.innerHTML = pauseIcon
       } else {
-        togglePlay.innerHTML = /* HTML */ `
-          <svg width="24" height="24" aria-hidden="true" focusable="false">
-            <path d="M8.016 5.016L18.985 12 8.016 18.984V5.015z" />
-          </svg>
-        `
+        togglePlay.innerHTML = playIcon
       }
     }
 
@@ -998,20 +907,12 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       name === '_isSettingsOpen' &&
       typeof value === 'boolean' &&
       popover instanceof HTMLDivElement &&
-      convert instanceof HTMLButtonElement &&
+      convertButton instanceof HTMLButtonElement &&
       snapshot instanceof HTMLButtonElement
     ) {
       popover.hidden = !value
-      convert.hidden = false
+      convertButton.hidden = false
       snapshot.hidden = this.renderer !== RendererType.SVG
-
-      if (this._isDotLottie) {
-        convert.ariaLabel = 'Convert dotLottie to JSON'
-        convert.innerHTML = convert.innerHTML.replace('dotLottie', 'JSON')
-      } else {
-        convert.ariaLabel = 'Convert JSON animation to dotLottie format'
-        convert.innerHTML = convert.innerHTML.replace('JSON', 'dotLottie')
-      }
     }
   }
 
@@ -1024,7 +925,6 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     this._lottieInstance.destroy()
-
     await this.load(this.src)
   }
 
@@ -1198,7 +1098,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
    * Toggle Boomerang.
    */
   public toggleBoomerang() {
-    const curr = this._multiAnimationSettings[this._currentAnimation]
+    const curr = this._multiAnimationSettings[this._currentAnimation] ?? {}
 
     if (curr.mode !== undefined) {
       if (curr.mode as PlayMode === PlayMode.Normal) {

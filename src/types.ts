@@ -10,15 +10,21 @@ import type { Plugin } from '@custom-elements-manifest/analyzer'
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
 import type { tagName } from '@/index'
 
-export interface Animation extends AnimationSettings {id: string}
-
-export interface AnimationAttributes extends Animation {url: string}
+interface AnimationAttributes extends AnimationSettings {
+  id: string
+  url: string
+}
 
 export interface ConvertParams {
   /** Externally added animations. */
   animations?: AnimationData[]
 
+  currentAnimation?: number
+
   fileName?: string
+  generator?: string
+
+  isDotLottie?: boolean
 
   /** Externally added manifest. */
   manifest?: LottieManifest
@@ -30,6 +36,21 @@ export interface ConvertParams {
 
   /** External type safety. */
   typeCheck?: boolean
+}
+
+export interface AddAnimationParams {
+  configs: AnimationAttributes[]
+  fileName?: string
+  generator: string
+  id?: string
+  shouldDownload?: boolean
+  src?: string
+}
+
+export interface Result {
+  error?: string
+  result?: null | string | ArrayBuffer
+  success: boolean
 }
 
 export type AnimateOnScroll = boolean | '' | null

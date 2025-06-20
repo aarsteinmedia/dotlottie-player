@@ -64,8 +64,7 @@ export default abstract class PropertyCallbackElement extends HTMLElement {
   }
 
 
-  // eslint-disable-next-line @typescript-eslint/require-await
-  async connectedCallback() {
+  connectedCallback() {
     let arr: string[] = []
 
     if (

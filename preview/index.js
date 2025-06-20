@@ -91,6 +91,10 @@ async function changeRenderer(e) {
     renderer = e
   }
 
+  if (dotLottie.renderer === renderer) {
+    return
+  }
+
   dotLottie.renderer = renderer
   localStorage.setItem('renderer', renderer)
 

@@ -75,6 +75,11 @@
             },
             {
               "kind": "field",
+              "name": "isDotLottie",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "loop",
               "description": "Loop animation."
             },
@@ -117,32 +122,6 @@
               "kind": "field",
               "name": "subframe",
               "description": "Subframe."
-            },
-            {
-              "kind": "method",
-              "name": "addAnimation",
-              "parameters": [
-                {
-                  "name": "configs"
-                },
-                {
-                  "name": "fileName"
-                },
-                {
-                  "name": "shouldDownload",
-                  "default": "true"
-                }
-              ],
-              "description": "Creates a new dotLottie file, by combinig several animations.\nIf set to false the function returns an ArrayBuffer. Defaults to true."
-            },
-            {
-              "kind": "method",
-              "name": "convert",
-              "parameters": [
-                {
-                  "name": "{ animations: animationsFromProps, fileName, manifest, shouldDownload = true, src: srcFromProps, typeCheck }"
-                }
-              ]
             },
             {
               "kind": "method",
@@ -485,6 +464,16 @@
                 }
               ],
               "description": "Toggle show Settings."
+            },
+            {
+              "kind": "field",
+              "name": "addAnimation",
+              "default": "addAnimation"
+            },
+            {
+              "kind": "field",
+              "name": "convert",
+              "default": "convert"
             },
             {
               "kind": "field",

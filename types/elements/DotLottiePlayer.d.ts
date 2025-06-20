@@ -1,6 +1,7 @@
 import { type AnimationDirection, type AnimationItem, type AnimationSettings, type LottieManifest, type Vector2 } from '@aarsteinmedia/lottie-web';
+import { addAnimation, convert } from '@aarsteinmedia/lottie-web/dotlottie';
 import { RendererType, PlayMode, PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils';
-import type { AnimationAttributes, AnimateOnScroll, Autoplay, Controls, Loop, Subframe, ConvertParams } from '../types';
+import type { AnimateOnScroll, Autoplay, Controls, Loop, Subframe } from '../types';
 import PropertyCallbackElement from '../elements/helpers/PropertyCallbackElement';
 import renderControls from '../templates/controls';
 import renderPlayer from '../templates/player';
@@ -9,6 +10,8 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     static get observedAttributes(): string[];
     static get observedProperties(): string[];
     static get styles(): () => Promise<CSSStyleSheet>;
+    addAnimation: typeof addAnimation;
+    convert: typeof convert;
     playerState: PlayerState;
     shadow: ShadowRoot | undefined;
     source?: string;
@@ -31,6 +34,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     get hover(): boolean;
     set intermission(value: number);
     get intermission(): number;
+    get isDotLottie(): boolean;
     set loop(value: Loop);
     get loop(): Loop;
     set mode(value: PlayMode);
@@ -74,14 +78,8 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     private _multiAnimationSettings;
     private _segment?;
     constructor();
-    addAnimation(configs: AnimationAttributes[], fileName?: string, shouldDownload?: boolean): Promise<{
-        result?: null | ArrayBuffer;
-        success: boolean;
-        error?: string;
-    }>;
     attributeChangedCallback(name: string, _oldValue: unknown, value: string): Promise<void>;
-    connectedCallback(): Promise<void>;
-    convert({ animations: animationsFromProps, fileName, manifest, shouldDownload, src: srcFromProps, typeCheck, }: ConvertParams): Promise<string | ArrayBuffer | null>;
+    connectedCallback(): void;
     destroy(): void;
     disconnectedCallback(): void;
     getLottie(): AnimationItem | null;

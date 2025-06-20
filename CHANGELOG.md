@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [5.3.0] - 20-06-2025
+
+- Fixed bug causing some elements to have wrong placement.
+- Fixed bug with toggling boomerang
+- Minor optimizations
+
+### Changed
+
 ## [5.2.4] - 11-06-2025
 
 ### Changed
