@@ -48,7 +48,8 @@
     "lint:css:fix": "npx stylelint **/*.css --fix"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^1.1.5"
+    "@aarsteinmedia/lottie-web": "^1.1.5",
+    "fflate": "^0.8.2"
   },
   "peerDependencies": {
     "@types/react": ">= 16.0.0"

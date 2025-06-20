@@ -9,6 +9,8 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 
 ## [5.3.0] - 20-06-2025
 
+### Changed
+
 - Fixed bug causing some elements to have wrong placement.
 - Fixed bug with toggling boomerang
 - Minor optimizations

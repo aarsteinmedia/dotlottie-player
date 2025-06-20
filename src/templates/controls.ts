@@ -107,6 +107,7 @@ export default function renderControls(this: DotLottiePlayer) {
             <button
               class="convert"
               aria-label="Convert JSON animation to dotLottie format"
+              aria-label="Convert ${this.isDotLottie ? 'dotLottie animation to JSON format' : 'JSON animation to dotLottie format'}"
               hidden
             >
               ${convertIcon}
