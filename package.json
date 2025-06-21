@@ -5,8 +5,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "node": "./dist/index.js",
+      "default": "./dist/index.js",
+      "unpkg": "./dist/unpkg.js",
       "types": "./dist/index.d.ts"
     }
   },
