@@ -120,6 +120,10 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     return Boolean(val === 'true' || val === '' || val === '1')
   }
 
+  public get animations() {
+    return this._animations
+  }
+
   /**
    * Autoplay.
    */
@@ -172,6 +176,10 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     return 0
+  }
+
+  public get currentAnimation() {
+    return this._currentAnimation
   }
 
   /**
@@ -408,9 +416,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
   protected _render = renderPlayer
-
   protected _renderControls = renderControls
-
   /**
    * Seeker.
    */
@@ -426,12 +432,14 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
    */
   private _currentAnimation = 0
   private _intersectionObserver?: IntersectionObserver
-  private _isBounce = false
-  private _isDotLottie = false
 
+  private _isBounce = false
+
+  private _isDotLottie = false
   private _lottieInstance: AnimationItem | null = null
 
   private _manifest?: LottieManifest
+
   /**
    * Multi-animation settings.
    */

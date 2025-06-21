@@ -35,6 +35,11 @@
             },
             {
               "kind": "field",
+              "name": "animations",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "autoplay",
               "description": "Autoplay."
             },
@@ -52,6 +57,11 @@
               "kind": "field",
               "name": "count",
               "description": "Number of times to loop."
+            },
+            {
+              "kind": "field",
+              "name": "currentAnimation",
+              "readonly": true
             },
             {
               "kind": "field",

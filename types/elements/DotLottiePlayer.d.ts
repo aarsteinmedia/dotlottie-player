@@ -1,4 +1,4 @@
-import { type AnimationDirection, type AnimationItem, type AnimationSettings, type LottieManifest, type Vector2 } from '@aarsteinmedia/lottie-web';
+import { type AnimationData, type AnimationDirection, type AnimationItem, type AnimationSettings, type LottieManifest, type Vector2 } from '@aarsteinmedia/lottie-web';
 import { addAnimation, convert } from '@aarsteinmedia/lottie-web/dotlottie';
 import { RendererType, PlayMode, PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils';
 import type { AnimateOnScroll, Autoplay, Controls, Loop, Subframe } from '../types';
@@ -18,6 +18,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     template: HTMLTemplateElement;
     set animateOnScroll(value: AnimateOnScroll);
     get animateOnScroll(): AnimateOnScroll;
+    get animations(): AnimationData[];
     set autoplay(value: Autoplay);
     get autoplay(): Autoplay;
     set background(value: string);
@@ -26,6 +27,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     get controls(): Controls;
     set count(value: number);
     get count(): number;
+    get currentAnimation(): number;
     set description(value: string | null);
     get description(): string | null;
     set direction(value: AnimationDirection);

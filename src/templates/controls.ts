@@ -53,7 +53,7 @@ export default function renderControls(this: DotLottiePlayer) {
       <button class="stop" data-active="${!this.autoplay}" aria-label="Stop">
         ${stopIcon}
       </button>
-      <button class="prev" aria-label="Previous animation" hidden>
+      <button class="prev" aria-label="Previous animation" hidden="false">
         ${prevIcon}
       </button>
       <button class="next" aria-label="Next animation" hidden>
@@ -128,22 +128,30 @@ export default function renderControls(this: DotLottiePlayer) {
     togglePlay.onclick = this.togglePlay
   }
 
-  const stop = this.shadow.querySelector('.stop')
+  const stopButton = this.shadow.querySelector('.stop')
 
-  if (stop instanceof HTMLButtonElement) {
-    stop.onclick = this.stop
+  if (stopButton instanceof HTMLButtonElement) {
+    stopButton.onclick = this.stop
   }
 
-  const prev = this.shadow.querySelector('.prev')
+  const prevButton = this.shadow.querySelector('.prev')
 
-  if (prev instanceof HTMLButtonElement) {
-    prev.onclick = this.prev
+  if (prevButton instanceof HTMLButtonElement) {
+    if (this.animations.length > 0 && this.currentAnimation) {
+      prevButton.hidden = false
+    }
+
+    prevButton.onclick = this.prev
   }
 
-  const next = this.shadow.querySelector('.next')
+  const nextButton = this.shadow.querySelector('.next')
 
-  if (next instanceof HTMLButtonElement) {
-    next.onclick = this.next
+  if (nextButton instanceof HTMLButtonElement) {
+    if (this.animations.length > 0 && this.currentAnimation < this.animations.length - 1) {
+      nextButton.hidden = false
+    }
+
+    nextButton.onclick = this.next
   }
 
   const seeker = this.shadow.querySelector('.seeker')
