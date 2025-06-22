@@ -34,10 +34,10 @@ Here is [a demo](https://www.aarstein.media/en/dotlottie-player), running on Nex
 
 ### In JavaScript or TypeScript
 
-1. Install using npm or yarn:
+1. Install using npm, pnpm or yarn:
 
 ```shell
-npm install --save @aarsteinmedia/dotlottie-player
+pnpm add @aarsteinmedia/dotlottie-player
 ```
 
 2. Import in your app:
@@ -51,6 +51,17 @@ or:
 ```javascript
 import '@aarsteinmedia/dotlottie-player/light'
 ```
+
+Because this is a Web Component, you're importing it's global scope and adding that to the global scope of your web app. As opposed to a modular component, you should only import this component once in you app, preferably as early as possible.
+
+If you're using TypeScript, and want to import the type for the component, you need to do it modularly, and in addition to the global import, like so:
+
+```typescript
+import '@aarsteinmedia/dotlottie-player' // Do this once in your app.
+import type DotLottiePlayer from '@aarsteinmedia/dotlottie-player' // Do this for every component that needs it.
+```
+
+Note that this pattern may provoke linter errors, like `import/no-duplicates`.
 
 ## Usage
 
@@ -112,8 +123,8 @@ Control the playback of multiple animations in a single file. In the example bel
 
 ```html
 <dotlottie-player
-  id="find-me"
   subframe
+  id="find-me"
   src="/path/to/combined-animations.lottie"
 >
 </dotlottie-player>  
@@ -156,7 +167,9 @@ export class AppComponent {
 
 ### React.js / Next.js
 
-If you've already imported the library in a parent component, you don't need to import it again in children of that component. If you want to assign the element a CSS class note that you need to use the `class` namespace, and not `className`.
+Because this is a Web Component, and not a React component, if you want to assign the element a CSS class note that you need to use the `class` namespace, and not `className`.
+
+If you prefer pure React logic, you may want to check out [@aarsteinmedia/dotlottie-react](https://www.npmjs.com/package/@aarsteinmedia/dotlottie-react).
 
 ```jsx
 import '@aarsteinmedia/dotlottie-player'
@@ -164,11 +177,11 @@ import '@aarsteinmedia/dotlottie-player'
 function App() {
   return (
     <dotlottie-player
-      class="your-class-name"
-      src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
       autoplay
       controls
       loop
+      class="your-class-name"
+      src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
       style={{
         width: '320px',
         margin: 'auto'
@@ -191,8 +204,8 @@ function App() {
   const animation = useRef<DotLottiePlayer | null>(null)
   return (
     <dotlottie-player
-      ref={animation}
       subframe
+      ref={animation}
       src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
     />
   )
