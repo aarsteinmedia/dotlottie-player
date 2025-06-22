@@ -131,7 +131,6 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     private _getOptions;
     private _handleScroll;
     private _handleWindowBlur;
-    private _isLottie;
     private _loopComplete;
     private _mouseEnter;
     private _mouseLeave;

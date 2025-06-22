@@ -40,7 +40,8 @@ import renderPlayer from '@/templates/player'
 import {
   aspectRatio,
   frameOutput,
-  handleErrors
+  handleErrors,
+  isLottie
 } from '@/utils'
 import {
   ObjectFit,
@@ -712,7 +713,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
       if (
         !animations ||
-        animations.some((animation) => !this._isLottie(animation))
+        animations.some((animation) => !isLottie(animation))
       ) {
         throw new Error('Broken or corrupted file')
       }
@@ -1480,21 +1481,6 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     if (this.playerState === PlayerState.Frozen && type === 'focus') {
       this.play()
     }
-  }
-
-  private _isLottie(json: AnimationData) {
-    const mandatory = [
-      'v',
-      'ip',
-      'op',
-      'layers',
-      'fr',
-      'w',
-      'h'
-    ]
-
-    return mandatory.every((field: string) =>
-      Object.hasOwn(json, field))
   }
 
   private _loopComplete() {

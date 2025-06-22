@@ -4,7 +4,7 @@
 
 We proudly claim this to be the most versatile, lightweight and efficient Lottie Player Web Component available. It's compatible with server side rendering, and completely framework agnostic.
 
-PS: If you only need to render animations as SVG, and don't need to convert or combine animations on the fly, we've made light version: [@aarsteinmedia/dotlottie-player-light](https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light).
+If you only need to render animations as SVGs, don't use any SVG effects like blur or drop shadow, don't use [Expressions](https://helpx.adobe.com/after-effects/using/expression-basics.html), and don't need to be able convert or combine animations on the fly – you can access a light version of this package by importing `@aarsteinmedia/dotlottie-player/light`.
 
 ## Demo
 
@@ -15,16 +15,22 @@ Here is [a demo](https://www.aarstein.media/en/dotlottie-player), running on Nex
 ### In HTML
 
 - Import from CDN:
-
-```xml
-<script src="https://unpkg.com/@aarsteinmedia/dotlottie-player@latest/dist/index.js"></script>
-```
+  - Full version:
+  ```html
+  <script src="https://unpkg.com/@aarsteinmedia/dotlottie-player@latest/dist/unpkg-full.js"></script>
+  ```
+  - Light version:
+  ```html
+  <script src="https://unpkg.com/@aarsteinmedia/dotlottie-player@latest/dist/unpkg-light.js"></script>
+  ```
 
 - Import from node_modules directory:
-
-```xml
-<script src="/node_modules/@aarsteinmedia/dotlottie-player/dist/index.js"></script>
-```
+  - Full version:
+  ```html
+  <script src="/node_modules/@aarsteinmedia/dotlottie-player/dist/unpkg-full.js"></script>
+  ```
+  - Light Version:
+  <script src="/node_modules/@aarsteinmedia/dotlottie-player/dist/unpkg-light.js"></script>
 
 ### In JavaScript or TypeScript
 
@@ -38,6 +44,12 @@ npm install --save @aarsteinmedia/dotlottie-player
 
 ```javascript
 import '@aarsteinmedia/dotlottie-player'
+```
+
+or:
+
+```javascript
+import '@aarsteinmedia/dotlottie-player/light'
 ```
 
 ## Usage
@@ -272,6 +284,7 @@ export default defineNuxtPlugin(({ vueApp }) => {
 
 | Property / Attribute      | Description                                                                                                                   | Type                                     | Default           |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ----------------- |
+| `animateOnScroll`         | Animate by scrolling                                                                                                          | `boolean`                                | `false`           |
 | `autoplay`                | Play animation on load                                                                                                        | `boolean`                                | `false`           |
 | `background`              | Background color                                                                                                              | `string`                                 | `undefined`       |
 | `controls`                | Show controls                                                                                                                 | `boolean`                                | `false`           |
@@ -290,8 +303,8 @@ export default defineNuxtPlugin(({ vueApp }) => {
 
 | Method                                                          | Function
 | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `addAnimation(config: Config[]) => void`                        | Add animation. Triggers download of new dotLottie file.                                                   |
-| `convert() => void`                                             | If the current animation is in JSON format – convert it to dotLottie. Triggers a download in the browser. |
+| `addAnimation(params: AddAnimationParams) => Promise<Result>`   | Add animation. Triggers download of new dotLottie file.                                                   |
+| `convert(params: ConvertParams) => Promise<Result>`             | If the current animation is in JSON format – convert it to dotLottie. Triggers a download in the browser. |
 | `destroy() => void`                                             | Nullify animation and remove element from the DOM.                                                        |
 | `getLottie() => AnimationItem \| null`                          | Returns the lottie-web instance used in the component                                                     |
 | `load(src: string) => void`                                     | Load animation by URL or JSON object                                                                      |

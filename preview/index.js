@@ -1,5 +1,5 @@
 
-import '../dist/light.js'
+import '../dist/full.js'
 import files from './files.js'
 
 const previewForm = document.querySelector('form#preview'),
