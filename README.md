@@ -2,13 +2,13 @@
 
 ![Awesome Vector Animations](/.github/readmeBanner.svg)
 
-We proudly claim this to be the most versatile, lightweight and efficient Lottie Player Web Component available. It's compatible with server side rendering, and completely framework agnostic.
+We proudly claim this to be the most versatile, lightweight, and efficient Lottie Player Web Component available. It's compatible with server-side rendering and completely framework-agnostic.
 
-If you only need to render animations as SVGs, don't use any SVG effects like blur or drop shadow, don't use [Expressions](https://helpx.adobe.com/after-effects/using/expression-basics.html), and don't need to be able convert or combine animations on the fly – you can access a light version of this package by importing `@aarsteinmedia/dotlottie-player/light`.
+If you only need to render animations as SVGs, don’t use any SVG effects like blur or drop shadow, don’t use [Expressions](https://helpx.adobe.com/after-effects/using/expression-basics.html), and don’t need to convert or combine animations on the fly — you can use a lighter version of this package by importing `@aarsteinmedia/dotlottie-player/light`.
 
 ## Demo
 
-Here is [a demo](https://www.aarstein.media/en/dotlottie-player), running on Next.js 15 using TypeScript.
+Here is [a demo](https://www.aarstein.media/en/dotlottie-player), running on Next.js 15 with TypeScript.
 
 ## Installation
 
@@ -16,64 +16,66 @@ Here is [a demo](https://www.aarstein.media/en/dotlottie-player), running on Nex
 
 - Import from CDN:
   - Full version:
-  ```html
-  <script src="https://unpkg.com/@aarsteinmedia/dotlottie-player@latest/dist/unpkg-full.js"></script>
-  ```
+    ```html
+    <script src="https://unpkg.com/@aarsteinmedia/dotlottie-player@latest/dist/unpkg-full.js"></script>
+    ```
   - Light version:
-  ```html
-  <script src="https://unpkg.com/@aarsteinmedia/dotlottie-player@latest/dist/unpkg-light.js"></script>
-  ```
+    ```html
+    <script src="https://unpkg.com/@aarsteinmedia/dotlottie-player@latest/dist/unpkg-light.js"></script>
+    ```
 
-- Import from node_modules directory:
+- Import from `node_modules`:
   - Full version:
-  ```html
-  <script src="/node_modules/@aarsteinmedia/dotlottie-player/dist/unpkg-full.js"></script>
-  ```
-  - Light Version:
-  <script src="/node_modules/@aarsteinmedia/dotlottie-player/dist/unpkg-light.js"></script>
+    ```html
+    <script src="/node_modules/@aarsteinmedia/dotlottie-player/dist/unpkg-full.js"></script>
+    ```
+  - Light version:
+    ```html
+    <script src="/node_modules/@aarsteinmedia/dotlottie-player/dist/unpkg-light.js"></script>
+    ```
 
 ### In JavaScript or TypeScript
 
-1. Install using npm, pnpm or yarn:
+1. Install using npm, pnpm, or yarn:
 
-```shell
-pnpm add @aarsteinmedia/dotlottie-player
-```
+    ```bash
+    pnpm add @aarsteinmedia/dotlottie-player
+    ```
 
 2. Import in your app:
 
-```javascript
-import '@aarsteinmedia/dotlottie-player'
+    ```js
+    import '@aarsteinmedia/dotlottie-player'
+    ```
+
+    Or for the light version:
+
+    ```js
+    import '@aarsteinmedia/dotlottie-player/light'
+    ```
+
+Because this is a Web Component, you're adding it to the global scope of your web app. Unlike modular components, it should only be imported once – preferably early in your app lifecycle.
+
+If you're using TypeScript and want to import the component type, do it modularly in addition to the global import:
+
+```ts
+import '@aarsteinmedia/dotlottie-player' // Do this once globally.
+import type DotLottiePlayer from '@aarsteinmedia/dotlottie-player' // Do this per component that needs it.
 ```
 
-or:
-
-```javascript
-import '@aarsteinmedia/dotlottie-player/light'
-```
-
-Because this is a Web Component, you're importing it's global scope and adding that to the global scope of your web app. As opposed to a modular component, you should only import this component once in you app, preferably as early as possible.
-
-If you're using TypeScript, and want to import the type for the component, you need to do it modularly, and in addition to the global import, like so:
-
-```typescript
-import '@aarsteinmedia/dotlottie-player' // Do this once in your app.
-import type DotLottiePlayer from '@aarsteinmedia/dotlottie-player' // Do this for every component that needs it.
-```
-
-Note that this pattern may provoke linter errors, like `import/no-duplicates`.
+⚠️ Note that this pattern may provoke linter errors, such as `import/no-duplicates`.
 
 ## Usage
 
-Add the element `dotlottie-player` to your markup and point `src` to a Lottie animation of your choice.
+Add the `dotlottie-player` element to your markup and point the `src` to a Lottie animation of your choice:
 
 ```html
 <dotlottie-player
-  id="find-me"
   autoplay
   controls
   subframe
   loop
+  id="find-me"
   src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
   style="width: 320px; margin: auto;"
 >
@@ -88,13 +90,15 @@ player?.load('https://storage.googleapis.com/aarsteinmedia/am.lottie')
 ```
 
 ### Convert to dotLottie
-If you have a Lottie JSON animation and want to convert it to a dotLottie – to leverage compression, combine multiple animations in one file and keep your file library tidy with a discrete file extension –  you can do so with the `convert()` method. This will trigger a download in the browser. If you have `controls` set to visible there's a convert button in the context menu on the right hand side.
+If you have a Lottie JSON animation and want to convert it to a dotLottie file – to leverage compression, combine multiple animations, and maintain a tidy file library – you can use the `convert()` method. This will trigger a browser download.
+
+If `controls` are visible, there’s also a convert button in the context menu on the right-hand side.
 
 ### Convert to JSON
-If you're debugging a dotLottie animation – for instance if expressions aren't working as expected, you can convert it to JSON, either by usin the `convert()` method, or — if `controls` are set to visible – a button in the context menu on the right hand side.
+If you're debugging a dotLottie animation (e.g., expressions aren’t working as expected), you can convert it to JSON either using the `convert()` method or via the convert button if `controls` are enabled.
 
 ### Combine animations
-If you want to combine multiple animations in one single dotLottie file you can use the `addAnimation` method. This will trigger a download in the browser. The source files can be either dotLottie or JSON, and the output file will will always be a dotLottie.
+To combine multiple animations into a single dotLottie file, use the `addAnimation()` method. This also triggers a browser download. Source files can be either dotLottie or JSON, and the output will always be dotLottie:
 
 ```javascript
 const lottiePlayer = document.querySelector('#find-me')
@@ -106,9 +110,9 @@ const lottiePlayer = document.querySelector('#find-me')
 }()) 
 ```
 
-You can also use this method independent of any Lottie player on the page, as long as the script is loaded, of course.
+You can also use this method without any `<dotlottie-player>` on the page. As long as the script is loaded, `dotLottiePlayer()` is available as a global method.
 
-```javascript
+```js
 (async () => {
   await dotLottiePlayer().addAnimation([
     { id: 'animation_1', url: '/path/to/animation_1.lottie' },
@@ -117,9 +121,9 @@ You can also use this method independent of any Lottie player on the page, as lo
 }())
 ```
 
-The new file wil automatically load the first animation when initialized. You can toggle between animations with the `next()` and `prev()` methods, or you can use the navigation buttons in the controls.
+The new file will automatically load the first animation when initialized. You can toggle between animations using the `next()` and `prev()` methods, or the navigation buttons in the controls.
 
-Control the playback of multiple animations in a single file. In the example below the first animation will play once, and then the next animation will loop:
+Here’s how to control playback settings for multiple animations:
 
 ```html
 <dotlottie-player
@@ -130,7 +134,7 @@ Control the playback of multiple animations in a single file. In the example bel
 </dotlottie-player>  
 ```
 
-```javascript
+```js
   const player = document.querySelector('#find-me')
   player?.setMultiAnimationSettings(
     [
@@ -149,7 +153,7 @@ Control the playback of multiple animations in a single file. In the example bel
 
 1. Import the component in `app.component.ts`.
 
-```typescript
+```ts
 import { Component } from '@angular/core'
 import '@aarsteinmedia/dotlottie-player'
 
@@ -167,7 +171,7 @@ export class AppComponent {
 
 ### React.js / Next.js
 
-Because this is a Web Component, and not a React component, if you want to assign the element a CSS class note that you need to use the `class` namespace, and not `className`.
+Because this is a Web Component and not a React component, note that you must use the `class` attribute (not `className`) when assigning a CSS class.
 
 If you prefer pure React logic, you may want to check out [@aarsteinmedia/dotlottie-react](https://www.npmjs.com/package/@aarsteinmedia/dotlottie-react).
 
@@ -193,7 +197,7 @@ function App() {
 export default App
 ```
 
-If you're using TypeScript and want to assign the component a `ref`, you can do it like this:
+If you're using TypeScript and want to assign a `ref`, do it like this:
 
 ```tsx
 import { useRef } from 'react'
@@ -223,7 +227,7 @@ Compared to React and Angular there's a couple of extra steps, but surely nothin
 #### In Vue.js
 `vite.config.ts`:
 
-```typescript
+```ts
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -243,7 +247,7 @@ export default defineConfig({
 #### In Nuxt.js
 `nuxt.config.ts`:
 
-```typescript
+```ts
 export default defineNuxtConfig({
   vue: {
     compilerOptions: {
@@ -258,7 +262,7 @@ export default defineNuxtConfig({
 #### In Vue.js
 `main.ts`:
 
-```typescript
+```ts
 import { createApp } from 'vue'
 import DotLottiePlayer from '@aarsteinmedia/dotlottie-player'
 import App from './App.vue'
