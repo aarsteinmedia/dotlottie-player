@@ -1,2 +1,2 @@
-import type DotLottiePlayer from '../elements/DotLottiePlayer';
-export default function renderControls(this: DotLottiePlayer): void;
+import type DotLottiePlayerBase from '../elements/DotLottiePlayerBase';
+export default function renderControls(this: DotLottiePlayerBase): void;

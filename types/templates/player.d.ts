@@ -1,2 +1,2 @@
-import DotLottiePlayer from '../elements/DotLottiePlayer';
-export default function renderPlayer(this: DotLottiePlayer): Promise<void>;
+import DotLottiePlayerBase from '../elements/DotLottiePlayerBase';
+export default function renderPlayer(this: DotLottiePlayerBase): Promise<void>;

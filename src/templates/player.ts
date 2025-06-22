@@ -1,15 +1,15 @@
 import { namespaceSVG, PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils'
 
-import DotLottiePlayer from '@/elements/DotLottiePlayer'
+import DotLottiePlayerBase from '@/elements/DotLottiePlayerBase'
 import { PlayerState } from '@/utils/enums'
 
 /**
  * Render Player.
  */
-export default async function renderPlayer(this: DotLottiePlayer) {
+export default async function renderPlayer(this: DotLottiePlayerBase) {
 
-  if (!this.shadow) {
-    throw new Error('No Shadow Element')
+  if (!this.shadow || !this.template) {
+    throw new Error('No Shadow Element or Template')
   }
 
   this.template.innerHTML = /* HTML */ `
@@ -56,6 +56,6 @@ export default async function renderPlayer(this: DotLottiePlayer) {
     </div>
   `
 
-  this.shadow.adoptedStyleSheets = [await DotLottiePlayer.styles()]
+  this.shadow.adoptedStyleSheets = [await DotLottiePlayerBase.styles()]
   this.shadow.appendChild(this.template.content.cloneNode(true))
 }

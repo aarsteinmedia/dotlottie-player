@@ -1,7 +1,7 @@
 import { convert } from '@aarsteinmedia/lottie-web/dotlottie'
 import { PlayMode } from '@aarsteinmedia/lottie-web/utils'
 
-import type DotLottiePlayer from '@/elements/DotLottiePlayer'
+import type DotLottiePlayerBase from '@/elements/DotLottiePlayerBase'
 
 import boomerangIcon from '@/templates/icons/boomerangIcon'
 import convertIcon from '@/templates/icons/convertIcon'
@@ -17,7 +17,7 @@ import { PlayerState } from '@/utils/enums'
 /**
  * Render Controls.
  */
-export default function renderControls(this: DotLottiePlayer) {
+export default function renderControls(this: DotLottiePlayerBase) {
 
   if (!this.shadow) {
     throw new Error('No Shadow Element')

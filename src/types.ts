@@ -2,56 +2,11 @@
 import 'react/jsx-runtime'
 import 'react/jsx-dev-runtime'
 
-import type {
-  AnimationData, AnimationSettings, LottieManifest
-} from '@aarsteinmedia/lottie-web'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
-import type { tagName } from '@/index'
-
-interface AnimationAttributes extends AnimationSettings {
-  id: string
-  url: string
-}
-
-export interface ConvertParams {
-  /** Externally added animations. */
-  animations?: AnimationData[]
-
-  currentAnimation?: number
-
-  fileName?: string
-  generator?: string
-
-  isDotLottie?: boolean
-
-  /** Externally added manifest. */
-  manifest?: LottieManifest
-
-  /** Whether to trigger a download in the browser. Defaults to true. */
-  shouldDownload?: boolean
-
-  src?: string
-
-  /** External type safety. */
-  typeCheck?: boolean
-}
-
-export interface AddAnimationParams {
-  configs: AnimationAttributes[]
-  fileName?: string
-  generator: string
-  id?: string
-  shouldDownload?: boolean
-  src?: string
-}
-
-export interface Result {
-  error?: string
-  result?: null | string | ArrayBuffer
-  success: boolean
-}
+import type DotLottiePlayerLight from '@/elements/DotLottiePlayerLight'
+import type { tagName } from '@/utils/enums'
 
 export type AnimateOnScroll = boolean | '' | null
 export type Autoplay = boolean | '' | 'autoplay' | null
@@ -97,11 +52,11 @@ export interface CEMConfig {
 }
 
 declare global {
-  interface HTMLElementTagNameMap { [tagName]: DotLottiePlayer}
-  function dotLottiePlayer(): DotLottiePlayer
+  interface HTMLElementTagNameMap { [tagName]: DotLottiePlayer | DotLottiePlayerLight }
+  function dotLottiePlayer(): DotLottiePlayer | DotLottiePlayerLight
 }
 
-type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
+type JSXLottiePlayer = Omit<Partial<DotLottiePlayer | DotLottiePlayerLight>, 'style'> & {
   class?: string
   ref?: React.RefObject<unknown>
   style?: React.CSSProperties

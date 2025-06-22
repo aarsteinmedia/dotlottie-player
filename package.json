@@ -1,18 +1,23 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "5.3.2",
+  "version": "6.0.0",
   "description": "Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player",
   "type": "module",
   "exports": {
     ".": {
-      "default": "./dist/index.js",
-      "unpkg": "./dist/unpkg.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/full.js",
+      "unpkg": "./dist/unpkg-full.js",
+      "types": "./dist/full.d.ts"
+    },
+    "./light": {
+      "default": "./dist/light.js",
+      "unpkg": "./dist/unpkg-light.js",
+      "types": "./dist/light.d.ts"
     }
   },
-  "main": "./dist/index.js",
-  "unpkg": "./dist/unpkg.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/full.js",
+  "unpkg": "./dist/unpkg-full.js",
+  "types": "./dist/full.d.ts",
   "homepage": "https://www.aarstein.media/en/dotlottie-player",
   "repository": {
     "url": "git+https://github.com/aarsteinmedia/dotlottie-player.git",
@@ -41,14 +46,15 @@
     "build:types": "tsc -p ./tsconfig.build.json && tsc-alias",
     "build:cem": "npx cem analyze --config 'cem.config.js'",
     "prod": "pnpm build:types && pnpm build && pnpm build:cem",
-    "dev": "rollup -cw --configPlugin typescript --environment NODE_ENV:development",
-    "lint:js": "eslint",
-    "lint:js:fix": "eslint --fix",
+    "dev": "rollup -cw --configPlugin typescript --environment NODE_ENV:development --environment VER:full",
+    "dev:light": "rollup -cw --configPlugin typescript --environment NODE_ENV:development --environment VER:light",
+    "lint:js": "eslint src",
+    "lint:js:fix": "eslint --fix src",
     "lint:css": "npx stylelint **/*.css",
     "lint:css:fix": "npx stylelint **/*.css --fix"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^1.1.5",
+    "@aarsteinmedia/lottie-web": "^1.1.7",
     "fflate": "^0.8.2"
   },
   "peerDependencies": {

@@ -18,6 +18,7 @@ import { minify, swc } from 'rollup-plugin-swc3'
 import { typescriptPaths } from 'rollup-plugin-typescript-paths'
 
 const isProd = process.env.NODE_ENV !== 'development',
+  isLight = process.env.VER === 'light',
   __dirname = path.dirname(fileURLToPath(import.meta.url)),
 
   pkgBuffer = await readFile(new URL(path.resolve(__dirname, 'package.json'), import.meta.url)),
@@ -25,6 +26,7 @@ const isProd = process.env.NODE_ENV !== 'development',
 
   external = [
     '@aarsteinmedia/lottie-web',
+    '@aarsteinmedia/lottie-web/light',
     '@aarsteinmedia/lottie-web/utils',
     '@aarsteinmedia/lottie-web/dotlottie',
     'fflate',
@@ -33,9 +35,19 @@ const isProd = process.env.NODE_ENV !== 'development',
     'react/jsx-dev-runtime',
   ],
 
-  input = path.resolve(
-    __dirname, 'src', 'index.ts'
-  ),
+  inputs = [
+    {
+      file: path.resolve(
+        __dirname, 'src', 'full.ts'
+      ),
+      name: 'full'
+    }, {
+      file: path.resolve(
+        __dirname, 'src', 'light.ts'
+      ),
+      name: 'light'
+    }
+  ],
 
   plugins = (preferBuiltins = false): Plugin[] => [
     typescriptPaths(),
@@ -56,7 +68,13 @@ const isProd = process.env.NODE_ENV !== 'development',
         ),
       ],
       options: {
-        shouldMinify({ parts }) {
+        shouldMinify({ parts }: {
+          parts: {
+            text: string;
+            start: number;
+            end: number;
+          }[]
+        }) {
           return parts.some(({ text }) =>
           // Matches Polymer templates that are not tagged
             text.includes('<figure') ||
@@ -94,20 +112,20 @@ const isProd = process.env.NODE_ENV !== 'development',
       livereload(),
     ],
 
-  types: RollupOptions = {
+  types: RollupOptions[] = inputs.map((input) => ({
     external,
     input: path.resolve(
-      __dirname, 'types', 'index.d.ts'
+      __dirname, 'types', `${input.name}.d.ts`
     ),
     output: {
-      file: pkg.types,
+      file: `./dist/${input.name}.d.ts`,
       format: 'esm',
     },
     plugins: [dts()],
-  },
+  })),
 
-  unpkg: RollupOptions = {
-    input,
+  unpkgs: RollupOptions[] = inputs.map((input) => ({
+    input: input.file,
     onwarn(warning, warn) {
       if (warning.code === 'CIRCULAR_DEPENDENCY') {
         return
@@ -117,16 +135,16 @@ const isProd = process.env.NODE_ENV !== 'development',
     output: {
       exports: 'named',
       extend: true,
-      file: pkg.unpkg,
+      file: `./dist/unpkg-${input.name}.js`,
       format: 'iife',
       name: pkg.name,
     },
     plugins: unpkgPlugins,
-  },
+  })),
 
-  module: RollupOptions = {
+  modules: RollupOptions[] = inputs.map((input) => ({
     external,
-    input,
+    input: input.file,
     onwarn(warning, warn) {
       if (
         warning.code === 'CIRCULAR_DEPENDENCY'
@@ -137,14 +155,15 @@ const isProd = process.env.NODE_ENV !== 'development',
     },
     output: {
       exports: 'named',
-      file: pkg.main,
+      file: `./dist/${input.name}.js`,
       format: 'esm',
     },
     plugins: modulePlugins(),
-  }
+  })),
 
-export default isProd ? [
-  module,
-  types,
-  unpkg
-] : module
+  output = isProd ?
+    [...modules,
+      ...types,
+      ...unpkgs] : modules[isLight ? 1 : 0]
+
+export default output

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [6.0.0] - 22-06-2025
+
+### Changed
+
+- Refactored code to export both full and light version from this package, thereby deprecating `@aarsteinmedia/dotlottie-player-light`. To import light version use `@aarsteinmedia/dotlottie-player/light`.
+
 ## [5.3.2] - 21-06-2025
 
 ### Changed

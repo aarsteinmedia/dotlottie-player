@@ -1,6 +1,5 @@
+import { getExt } from '@aarsteinmedia/lottie-web/utils'
 import { expect } from '@esm-bundle/chai'
-
-import { getExt } from '@/utils'
 
 it('Get extension from filename, URL or path', () => {
   expect(getExt('cat.jpg')).to.equal('jpg')
