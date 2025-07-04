@@ -38,7 +38,7 @@ export default abstract class PropertyCallbackElement extends HTMLElement {
       this[cachedValue] = initialValue
 
       Object.defineProperty(
-        this, observedProperties[i], {
+        this, observedProperties[i] ?? '', {
           get() {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             return this[cachedValue]
@@ -83,9 +83,9 @@ export default abstract class PropertyCallbackElement extends HTMLElement {
         continue
       }
 
-      if (arr[i] in this) {
+      if (arr[i] ?? '' in this) {
         this.propertyChangedCallback(
-          arr[i],
+          arr[i] ?? '',
           undefined,
           this[arr[i] as keyof this]
         )

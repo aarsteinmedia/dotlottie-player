@@ -98,7 +98,6 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
   public isLight = false
 
-
   /**
    * Player state.
    */
@@ -218,6 +217,19 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   }
 
   /**
+   * Whether to freeze animation when window loses focus.
+   */
+  set dontFreezeOnBlur(value: boolean) {
+    this.setAttribute('dontFreezeOnBlur', value.toString())
+  }
+
+  get dontFreezeOnBlur() {
+    const val = this.getAttribute('dontFreezeOnBlur')
+
+    return val === 'true' || val === '' || val === '1'
+  }
+
+  /**
    * Whether to play on mouseover.
    */
   set hover(value: boolean) {
@@ -227,7 +239,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get hover() {
     const val = this.getAttribute('hover')
 
-    return Boolean(val === 'true' || val === '' || val === '1')
+    return val === 'true' || val === '' || val === '1'
   }
 
   /**
@@ -721,13 +733,15 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       this._isBounce = this.mode === PlayMode.Bounce
       if (this._multiAnimationSettings.length > 0 && this._multiAnimationSettings[this._currentAnimation]?.mode) {
         this._isBounce =
-          this._multiAnimationSettings[this._currentAnimation].mode as PlayMode ===
+          this._multiAnimationSettings[this._currentAnimation]?.mode as PlayMode ===
           PlayMode.Bounce
       }
 
-      if (manifest?.animations.length === 1) {
-        manifest.animations[0].autoplay = this.autoplay
-        manifest.animations[0].loop = this.loop
+      const firstAnimation = manifest?.animations[0]
+
+      if (firstAnimation) {
+        firstAnimation.autoplay = this.autoplay
+        firstAnimation.loop = this.loop
       }
 
       this._isDotLottie = isDotLottie
@@ -1286,7 +1300,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       const { length } = entries
 
       for (let i = 0; i < length; i++) {
-        if (!entries[i].isIntersecting || document.hidden) {
+        if (!entries[i]?.isIntersecting || document.hidden) {
           if (this.playerState === PlayerState.Playing) {
             this._freeze()
           }
@@ -1475,6 +1489,9 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   }
 
   private _handleWindowBlur({ type }: FocusEvent) {
+    if (this.dontFreezeOnBlur) {
+      return
+    }
     if (this.playerState === PlayerState.Playing && type === 'blur') {
       this._freeze()
     }
@@ -1598,7 +1615,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       // Check play mode for current animation
       if (this._multiAnimationSettings[this._currentAnimation]?.mode) {
         this._isBounce =
-          this._multiAnimationSettings[this._currentAnimation].mode as PlayMode ===
+          this._multiAnimationSettings[this._currentAnimation]?.mode as PlayMode ===
           PlayMode.Bounce
       }
 

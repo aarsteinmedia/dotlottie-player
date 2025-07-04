@@ -30,6 +30,8 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     get description(): string | null;
     set direction(value: AnimationDirection);
     get direction(): AnimationDirection;
+    set dontFreezeOnBlur(value: boolean);
+    get dontFreezeOnBlur(): boolean;
     set hover(value: boolean);
     get hover(): boolean;
     set intermission(value: number);
