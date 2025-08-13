@@ -121,7 +121,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get animateOnScroll() {
     const val = this.getAttribute('animateOnScroll')
 
-    return Boolean(val === 'true' || val === '' || val === '1')
+    return val === 'true' || val === '' || val === '1'
   }
 
   public get animations() {
@@ -138,7 +138,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get autoplay() {
     const val = this.getAttribute('autoplay')
 
-    return Boolean(val === 'true' || val === '' || val === '1')
+    return val === 'true' || val === '' || val === '1'
   }
 
   /**
@@ -162,7 +162,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get controls() {
     const val = this.getAttribute('controls')
 
-    return Boolean(val === 'true' || val === '' || val === '1')
+    return val === 'true' || val === '' || val === '1'
   }
 
   /**
@@ -273,14 +273,14 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get loop() {
     const val = this.getAttribute('loop')
 
-    return Boolean(val === 'true' || val === '' || val === '1')
+    return val === 'true' || val === '' || val === '1'
   }
 
   /**
    * Play mode.
    */
   set mode(value: PlayMode) {
-    this.setAttribute('mode', value.toString())
+    this.setAttribute('mode', value)
   }
 
   get mode() {
@@ -358,7 +358,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get simple() {
     const val = this.getAttribute('simple')
 
-    return Boolean(val === 'true' || val === '' || val === '1')
+    return val === 'true' || val === '' || val === '1'
   }
 
   /**
@@ -399,7 +399,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get subframe() {
     const val = this.getAttribute('subframe')
 
-    return Boolean(val === 'true' || val === '' || val === '1')
+    return val === 'true' || val === '' || val === '1'
   }
 
   /**

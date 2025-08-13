@@ -98,7 +98,7 @@ export default function renderControls(this: DotLottiePlayerBase) {
             class="toggleSettings"
             aria-label="Settings"
             aria-haspopup="true"
-            aria-expanded="${Boolean(this._isSettingsOpen)}"
+            aria-expanded="${this._isSettingsOpen}"
             aria-controls="${this._identifier}-settings"
           >
             ${settingsIcon}
