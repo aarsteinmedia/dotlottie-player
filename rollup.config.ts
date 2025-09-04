@@ -41,11 +41,24 @@ const isProd = process.env.NODE_ENV !== 'development',
         __dirname, 'src', 'full.ts'
       ),
       name: 'full'
-    }, {
+    },
+    {
       file: path.resolve(
         __dirname, 'src', 'light.ts'
       ),
       name: 'light'
+    },
+    {
+      file: path.resolve(
+        __dirname, 'src', 'svg.ts'
+      ),
+      name: 'svg'
+    },
+    {
+      file: path.resolve(
+        __dirname, 'src', 'canvas.ts'
+      ),
+      name: 'canvas'
     }
   ],
 

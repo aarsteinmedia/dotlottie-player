@@ -4,6 +4,8 @@ import type { Plugin } from '@custom-elements-manifest/analyzer';
 import type DotLottiePlayer from './elements/DotLottiePlayer';
 import type DotLottiePlayerLight from './elements/DotLottiePlayerLight';
 import type { tagName } from './utils/enums';
+import type DotLottiePlayerCanvas from './elements/DotLottiePlayerCanvas';
+import type DotLottiePlayerSVG from './svg';
 export type AnimateOnScroll = boolean | '' | null;
 export type Autoplay = boolean | '' | 'autoplay' | null;
 export type Controls = boolean | '' | 'controls' | null;
@@ -31,7 +33,7 @@ declare global {
     interface HTMLElementTagNameMap {
         [tagName]: DotLottiePlayer | DotLottiePlayerLight;
     }
-    function dotLottiePlayer(): DotLottiePlayer | DotLottiePlayerLight;
+    function dotLottiePlayer(): DotLottiePlayer | DotLottiePlayerLight | DotLottiePlayerSVG | DotLottiePlayerCanvas;
 }
 type JSXLottiePlayer = Omit<Partial<DotLottiePlayer | DotLottiePlayerLight>, 'style'> & {
     class?: string;
