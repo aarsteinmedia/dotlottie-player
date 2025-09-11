@@ -5,6 +5,8 @@ import files from './files.js'
 const previewForm = document.querySelector('form#preview'),
   pathSelect = previewForm.querySelector('select[name="path"]'),
   rendererSelect = previewForm.querySelector('select[name="renderer"]'),
+  attributesSelect = previewForm.querySelector('select[name="attributes"]'),
+  loremIpsum = document.getElementById('lorem-ipsum'),
   /**
    * @type {import('../src/elements/DotLottiePlayer').default}
    */
@@ -15,6 +17,7 @@ const previewForm = document.querySelector('form#preview'),
 previewForm?.addEventListener('submit', viewFile)
 pathSelect?.addEventListener('change', viewFile)
 rendererSelect?.addEventListener('change', changeRenderer)
+attributesSelect?.addEventListener('change', setAttributes)
 
 const { length } = files.sort()
 
@@ -31,9 +34,10 @@ handleRefresh()
 function handleRefresh() {
   try {
     const selection = localStorage.getItem('selection'),
-      renderer = localStorage.getItem('renderer')
+      renderer = localStorage.getItem('renderer'),
+      attributes = localStorage.getItem('attributes')
 
-    if (selection || renderer) {
+    if (selection || renderer || attributes) {
       if (selection) {
         pathSelect.value = selection
         viewFile(selection)
@@ -42,6 +46,11 @@ function handleRefresh() {
       if (renderer) {
         rendererSelect.value = renderer
         changeRenderer(renderer)
+      }
+
+      if (attributes) {
+        attributesSelect.value = attributes
+        setAttributes(attributes)
       }
 
       return
@@ -80,6 +89,20 @@ function handleRefresh() {
   } catch (error) {
     console.error(error)
   }
+}
+
+function setAttributes(e) {
+  let attributes
+
+  if (e instanceof Event) {
+    attributes = e.target.value
+  } else {
+    attributes = e
+  }
+
+  dotLottie.autoplay = attributes === 'autoplay'
+  dotLottie.animateOnScroll = attributes === 'animateOnScroll'
+  loremIpsum.hidden = attributes !== 'animateOnScroll'
 }
 
 async function changeRenderer(e) {

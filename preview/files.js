@@ -39,7 +39,8 @@ const files = [
   'strengths.lottie',
   'gameAnimation.lottie',
   'dinide.lottie',
-  'rond-qui-tourne.lottie'
+  'rond-qui-tourne.lottie',
+  'tysk.json'
 ]
 
 export default files
