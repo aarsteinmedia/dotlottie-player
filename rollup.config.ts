@@ -27,6 +27,8 @@ const isProd = process.env.NODE_ENV !== 'development',
   external = [
     '@aarsteinmedia/lottie-web',
     '@aarsteinmedia/lottie-web/light',
+    '@aarsteinmedia/lottie-web/svg',
+    '@aarsteinmedia/lottie-web/canvas',
     '@aarsteinmedia/lottie-web/utils',
     '@aarsteinmedia/lottie-web/dotlottie',
     'fflate',

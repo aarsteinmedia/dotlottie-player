@@ -6,11 +6,11 @@ const previewForm = document.querySelector('form#preview'),
   pathSelect = previewForm.querySelector('select[name="path"]'),
   rendererSelect = previewForm.querySelector('select[name="renderer"]'),
   attributesSelect = previewForm.querySelector('select[name="attributes"]'),
-  loremIpsum = document.getElementById('lorem-ipsum'),
+  loremIpsum = [...document.getElementsByClassName('lorem-ipsum')],
   /**
-   * @type {import('../src/elements/DotLottiePlayer').default}
+   * @type {import('../src/elements/DotLottiePlayer').default[]}
    */
-  dotLottie = document.querySelector('.preview'),
+  dotLotties = [...document.getElementsByClassName('preview')],
   fallbackSVG = 'assets/am.lottie',
   regex = /\.(?:lottie|json)$/
 
@@ -100,9 +100,13 @@ function setAttributes(e) {
     attributes = e
   }
 
-  dotLottie.autoplay = attributes === 'autoplay'
-  dotLottie.animateOnScroll = attributes === 'animateOnScroll'
-  loremIpsum.hidden = attributes !== 'animateOnScroll'
+  dotLotties[0].autoplay = attributes === 'autoplay'
+  dotLotties[0].animateOnScroll = attributes === 'animateOnScroll'
+  loremIpsum.forEach(element => {
+    element.hidden = attributes !== 'animateOnScroll'
+  })
+
+  localStorage.setItem('attributes', attributes)
 }
 
 async function changeRenderer(e) {
@@ -114,17 +118,28 @@ async function changeRenderer(e) {
     renderer = e
   }
 
-  if (dotLottie.renderer === renderer) {
+  if (dotLotties[0].renderer === renderer) {
     return
   }
 
-  dotLottie.renderer = renderer
+  dotLotties.forEach(element => {
+    element.renderer = renderer
+  })
   localStorage.setItem('renderer', renderer)
 
-  const selection = localStorage.getItem('selection')
+  const selection = localStorage.getItem('selection'),
+    attributes = localStorage.getItem('attributes')
 
   if (selection) {
-    await dotLottie.load(selection)
+    if (attributes === 'animateOnScroll') {
+
+      dotLotties.forEach( async (el) => {
+        await el.load(selection)
+      })
+
+      return
+    }
+    await dotLotties[0].load(selection)
   }
 }
 
@@ -151,11 +166,19 @@ async function viewFile(e) {
       path = e
     }
 
-    if (!dotLottie || !path || !path === '') {
+    if (!dotLotties[0] || !path || !path === '') {
       throw new Error('No placeholder')
     }
 
-    await dotLottie.load(path)
+    const attributes = localStorage.getItem('attributes')
+
+    if (attributes === 'animateOnScroll') {
+      dotLotties.forEach(async el => {
+        await el.load(path)
+      })
+    } else {
+      await dotLotties[0].load(path)
+    }
 
     // dotLottie.addEventListener('complete', () => console.debug('complete'))
   } catch (error) {

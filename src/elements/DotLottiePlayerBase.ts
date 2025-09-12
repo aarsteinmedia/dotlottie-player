@@ -1310,10 +1310,18 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         if (!this.animateOnScroll && this.playerState === PlayerState.Frozen) {
           this.play()
         }
-        if (!this._playerState.scrollY) {
+
+        /**
+         * If the player is a ways down the page, we need to account for this by
+         * setting _playerState.scrollY to the current scroll position. However, we
+         * also need to check that the player hasn't been scrolled past, so we check
+         * boundingClientRect as well.
+         */
+        if (!this._playerState.scrollY && (entries[i]?.boundingClientRect.y || 0) > 0) {
           this._playerState.scrollY = scrollY
         }
         this._playerState.visible = true
+
       }
     })
 
