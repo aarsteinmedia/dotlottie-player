@@ -102,6 +102,7 @@ function setAttributes(e) {
 
   dotLotties[0].autoplay = attributes === 'autoplay'
   dotLotties[0].animateOnScroll = attributes === 'animateOnScroll'
+  dotLotties[0].hover = attributes === 'hover'
   loremIpsum.forEach(element => {
     element.hidden = attributes !== 'animateOnScroll'
   })

@@ -41,7 +41,8 @@ import {
   aspectRatio,
   frameOutput,
   handleErrors,
-  isLottie
+  isLottie,
+  isTouch
 } from '@/utils'
 import {
   ObjectFit,
@@ -291,6 +292,28 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     }
 
     return PlayMode.Normal
+  }
+
+  /**
+   * Action on mouseout.
+   */
+  set mouseout(value: 'void' | 'stop' | 'pause' | 'reverse') {
+    this.setAttribute('mouseout', value)
+  }
+
+  get mouseout() {
+    const val = this.getAttribute('mouseout')
+
+    switch (val) {
+      case 'void':
+      case 'pause':
+      case 'reverse': {
+        return val
+      }
+      default: {
+        return 'stop'
+      }
+    }
   }
 
   /**
@@ -1567,7 +1590,18 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
    * Handle MouseEnter.
    */
   private _mouseEnter() {
-    if (this.hover && this.playerState !== PlayerState.Playing) {
+    if (!this.hover || !this._lottieInstance || isTouch()) {
+      return
+    }
+
+    if (this.playerState === PlayerState.Completed) {
+      this._lottieInstance.goToAndPlay(0, true)
+      this.playerState = PlayerState.Playing
+
+      return
+    }
+
+    if (this.playerState !== PlayerState.Playing) {
       this.play()
     }
   }
@@ -1576,8 +1610,28 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
    * Handle MouseLeave.
    */
   private _mouseLeave() {
-    if (this.hover && this.playerState === PlayerState.Playing) {
-      this.stop()
+    if (!this.hover || this.playerState !== PlayerState.Playing) {
+      return
+    }
+
+    switch (this.mouseout) {
+      case 'void': {
+        break
+      }
+      case 'pause': {
+        this.pause()
+        break
+      }
+      case 'reverse': {
+        const newDirection = this.direction * -1 as AnimationDirection
+
+        this._lottieInstance?.setDirection(newDirection)
+        this.direction = newDirection
+        break
+      }
+      default: {
+        this.stop()
+      }
     }
   }
 
