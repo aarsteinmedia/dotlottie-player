@@ -90,11 +90,20 @@
       <h1 style="margin: 0;">dotlottie-player</h1>
       <form id="preview">
         <label>
+          On mouseout:<br />
+          <select name="mouseout">
+            <option value="stop" selected>Stop</option>
+            <option value="void">Nothing</option>
+            <option value="pause">Pause</option>
+            <option value="reverse">Reverse</option>
+          </select>
+        </label>
+        <label>
           Attributes:<br />
           <select name="attributes">
             <option value="animateOnScroll">Animate on scroll</option>
             <option value="autoplay" selected>Autoplay</option>
-            <option value="hover" selected>Play on hover</option>
+            <option value="hover">Play on hover</option>
           </select>
         </label>
         <label>
@@ -106,7 +115,7 @@
           </select>
         </label>
         <label>
-          Select file to preview:<br />
+          File to preview:<br />
           <select autofocus name="path">
             <option disabled value="assets/am.lottie" selected>Path to file</option>
           </select>

@@ -6,6 +6,7 @@ const previewForm = document.querySelector('form#preview'),
   pathSelect = previewForm.querySelector('select[name="path"]'),
   rendererSelect = previewForm.querySelector('select[name="renderer"]'),
   attributesSelect = previewForm.querySelector('select[name="attributes"]'),
+  mouseoutSelect = previewForm.querySelector('select[name="mouseout"]'),
   loremIpsum = [...document.getElementsByClassName('lorem-ipsum')],
   /**
    * @type {import('../src/elements/DotLottiePlayer').default[]}
@@ -18,6 +19,7 @@ previewForm?.addEventListener('submit', viewFile)
 pathSelect?.addEventListener('change', viewFile)
 rendererSelect?.addEventListener('change', changeRenderer)
 attributesSelect?.addEventListener('change', setAttributes)
+mouseoutSelect?.addEventListener('change', setMouseout)
 
 const { length } = files.sort()
 
@@ -35,9 +37,10 @@ function handleRefresh() {
   try {
     const selection = localStorage.getItem('selection'),
       renderer = localStorage.getItem('renderer'),
-      attributes = localStorage.getItem('attributes')
+      attributes = localStorage.getItem('attributes'),
+      mouseout = localStorage.getItem('mouseout')
 
-    if (selection || renderer || attributes) {
+    if (selection || renderer || attributes || mouseout) {
       if (selection) {
         pathSelect.value = selection
         viewFile(selection)
@@ -51,6 +54,11 @@ function handleRefresh() {
       if (attributes) {
         attributesSelect.value = attributes
         setAttributes(attributes)
+      }
+
+      if (mouseout) {
+        mouseoutSelect.value = mouseout
+        setMouseout(mouseout)
       }
 
       return
@@ -91,6 +99,20 @@ function handleRefresh() {
   }
 }
 
+function setMouseout(e) {
+  let action
+
+  if (e instanceof Event) {
+    action = e.target.value
+  } else {
+    action = e
+  }
+
+  dotLotties[0].mouseout = action
+
+  localStorage.setItem('mouseout', action)
+}
+
 function setAttributes(e) {
   let attributes
 
@@ -103,6 +125,7 @@ function setAttributes(e) {
   dotLotties[0].autoplay = attributes === 'autoplay'
   dotLotties[0].animateOnScroll = attributes === 'animateOnScroll'
   dotLotties[0].hover = attributes === 'hover'
+  mouseoutSelect.parentElement.hidden = attributes !== 'hover'
   loremIpsum.forEach(element => {
     element.hidden = attributes !== 'animateOnScroll'
   })

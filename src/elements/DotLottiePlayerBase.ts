@@ -1594,6 +1594,10 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       return
     }
 
+    if (this.mouseout === 'reverse') {
+      this._lottieInstance.setDirection(1)
+    }
+
     if (this.playerState === PlayerState.Completed) {
       this._lottieInstance.goToAndPlay(0, true)
       this.playerState = PlayerState.Playing
@@ -1610,7 +1614,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
    * Handle MouseLeave.
    */
   private _mouseLeave() {
-    if (!this.hover || this.playerState !== PlayerState.Playing) {
+    if (!this.hover || !this._lottieInstance || isTouch()) {
       return
     }
 
@@ -1623,10 +1627,13 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         break
       }
       case 'reverse': {
-        const newDirection = this.direction * -1 as AnimationDirection
+        // const { direction = 1 } =
+        //   this._multiAnimationSettings.length > 0 ?
+        //     this._multiAnimationSettings[this._currentAnimation + 1] ?? { direction: 1 } : this,
+        //   newDirection = direction * -1 as AnimationDirection
 
-        this._lottieInstance?.setDirection(newDirection)
-        this.direction = newDirection
+        this._lottieInstance.setDirection(-1)
+        this.play()
         break
       }
       default: {
