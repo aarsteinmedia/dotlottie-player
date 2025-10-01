@@ -103,6 +103,8 @@
           <select name="attributes">
             <option value="animateOnScroll">Animate on scroll</option>
             <option value="autoplay" selected>Autoplay</option>
+            <option value="playOnClick">Play on click</option>
+            <option value="playOnVisible">Play on visible</option>
             <option value="hover">Play on hover</option>
           </select>
         </label>
@@ -139,7 +141,7 @@
     </div>
     <div id="container"
       style="text-align: center; display: flex; flex-direction: row; align-items: center; gap: 1em; justify-content: center;">
-      <dotlottie-player autoplay subframe controls background="rgba(255,255,255,0.8)" dontFreezeOnBlur
+      <dotlottie-player subframe controls background="rgba(255,255,255,0.8)" dontFreezeOnBlur
         class="preview"></dotlottie-player>
     </div>
     <div class="lorem-ipsum" hidden style="margin: 40px auto; max-width: 600px;">
@@ -177,8 +179,10 @@
         aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
       </p>
 
-      <dotlottie-player animateOnScroll subframe controls background="rgba(255,255,255,0.8)" dontFreezeOnBlur
-        class="preview"></dotlottie-player>
+      <div style="margin-left: -100px; margin-right: -100px;">
+        <dotlottie-player subframe controls background="rgba(255,255,255,0.8)" dontFreezeOnBlur
+          class="preview"></dotlottie-player>
+      </div>
 
       <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem
         placerat. In

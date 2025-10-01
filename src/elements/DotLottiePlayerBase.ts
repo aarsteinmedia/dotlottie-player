@@ -67,7 +67,10 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       'direction',
       'hover',
       'loop',
+      'mouseout',
       'mode',
+      'playOnClick',
+      'playOnVisible',
       'speed',
       'src',
       'subframe',
@@ -334,6 +337,32 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   }
 
   /**
+   * Whether to toggle play on click.
+   */
+  set playOnClick(value: boolean) {
+    this.setAttribute('playOnClick', value.toString())
+  }
+
+  get playOnClick() {
+    const val = this.getAttribute('playOnClick')
+
+    return val === 'true' || val === '' || val === '1'
+  }
+
+  /**
+   * Play when visible.
+   */
+  set playOnVisible(value: boolean) {
+    this.setAttribute('playOnVisible', value.toString())
+  }
+
+  get playOnVisible() {
+    const val = this.getAttribute('playOnVisible')
+
+    return val === 'true' || val === '' || val === '1'
+  }
+
+  /**
    * Resizing to container (Deprecated).
    */
   set preserveAspectRatio(value: PreserveAspectRatio | null) {
@@ -499,6 +528,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     this._enterFrame = this._enterFrame.bind(this)
     this._freeze = this._freeze.bind(this)
     this._handleBlur = this._handleBlur.bind(this)
+    this._handleClick = this._handleClick.bind(this)
     this._handleScroll = this._handleScroll.bind(this)
     this._handleSeekChange = this._handleSeekChange.bind(this)
     this._handleWindowBlur = this._handleWindowBlur.bind(this)
@@ -558,7 +588,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     }
 
     if (name === 'autoplay') {
-      if (this.animateOnScroll) {
+      if (this.animateOnScroll || this.playOnVisible) {
         return
       }
       if (value === '' || Boolean(value)) {
@@ -609,6 +639,23 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         toggleBoomerang.dataset.active = (value as PlayMode === PlayMode.Bounce).toString()
       }
       this._isBounce = value as PlayMode === PlayMode.Bounce
+    }
+
+    if (name === 'playOnClick') {
+      if (!this._container) {
+        return
+      }
+      if (value === '' || Boolean(value)) {
+        this._lottieInstance.autoplay = false
+        this._container.addEventListener('click', this._handleClick)
+
+        return
+      }
+      this._container.removeEventListener('click', this._handleClick)
+    }
+
+    if (name === 'playOnVisible' && (value === '' || Boolean(value))) {
+      this._lottieInstance.autoplay = false
     }
 
     if (name === 'speed') {
@@ -763,7 +810,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       const firstAnimation = manifest?.animations[0]
 
       if (firstAnimation) {
-        firstAnimation.autoplay = this.autoplay
+        firstAnimation.autoplay = !this.animateOnScroll && !this.playOnVisible && this.autoplay
         firstAnimation.loop = this.loop
       }
 
@@ -772,7 +819,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       this._manifest = manifest ?? {
         animations: [
           {
-            autoplay: !this.animateOnScroll && this.autoplay,
+            autoplay: !this.animateOnScroll && !this.playOnVisible && this.autoplay,
             direction: this.direction,
             id: createElementID(),
             loop: this.loop,
@@ -788,6 +835,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       this.playerState = PlayerState.Stopped
       if (
         !this.animateOnScroll &&
+        !this.playOnVisible &&
         (this.autoplay ||
           this._multiAnimationSettings[this._currentAnimation]?.autoplay)
       ) {
@@ -816,7 +864,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       this._lottieInstance.setSubframe(Boolean(this.subframe))
 
       // Start playing if autoplay is enabled
-      if (this.autoplay || this.animateOnScroll) {
+      if (this.autoplay || this.animateOnScroll || this.playOnVisible) {
         if (this.direction === -1) {
           this.seek('99%')
         }
@@ -833,7 +881,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
       this._renderControls()
 
-      if (this.autoplay) {
+      if (this.autoplay || this.playOnVisible) {
         const togglePlay = this.shadow?.querySelector('.togglePlay')
 
         if (togglePlay) {
@@ -1262,6 +1310,17 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   }
 
   /**
+   * Handle click.
+   */
+  protected _handleClick() {
+    if (!this.playOnClick) {
+      return
+    }
+
+    this.togglePlay()
+  }
+
+  /**
    * Handles click and drag actions on the progress track.
    */
   protected _handleSeekChange({ target }: Event) {
@@ -1330,7 +1389,11 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
           this._playerState.visible = false
           continue
         }
-        if (!this.animateOnScroll && this.playerState === PlayerState.Frozen) {
+        if (
+          !this.animateOnScroll &&
+          this.playerState === PlayerState.Frozen ||
+          this.playOnVisible
+        ) {
           this.play()
         }
 
@@ -1737,9 +1800,14 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       this._lottieInstance[method]('data_failed', this._dataFailed)
     }
 
-    if (this._container && this.hover) {
-      this._container[method]('mouseenter', this._mouseEnter)
-      this._container[method]('mouseleave', this._mouseLeave)
+    if (this._container) {
+      if (this.hover) {
+        this._container[method]('mouseenter', this._mouseEnter)
+        this._container[method]('mouseleave', this._mouseLeave)
+      }
+      if (this.playOnClick) {
+        this._container[method]('click', this._handleClick)
+      }
     }
 
     window[method](

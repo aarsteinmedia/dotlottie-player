@@ -125,9 +125,14 @@ function setAttributes(e) {
   dotLotties[0].autoplay = attributes === 'autoplay'
   dotLotties[0].animateOnScroll = attributes === 'animateOnScroll'
   dotLotties[0].hover = attributes === 'hover'
+  dotLotties[0].playOnClick = attributes === 'playOnClick'
+  dotLotties[0].playOnVisible = attributes === 'playOnVisible'
   mouseoutSelect.parentElement.hidden = attributes !== 'hover'
   loremIpsum.forEach(element => {
-    element.hidden = attributes !== 'animateOnScroll'
+    element.hidden =
+      attributes !== 'animateOnScroll' &&
+      attributes !== 'autoplay' &&
+      attributes !== 'playOnVisible'
   })
 
   localStorage.setItem('attributes', attributes)
@@ -155,7 +160,11 @@ async function changeRenderer(e) {
     attributes = localStorage.getItem('attributes')
 
   if (selection) {
-    if (attributes === 'animateOnScroll') {
+    if (
+      attributes === 'animateOnScroll' ||
+      attributes === 'autoplay' ||
+      attributes === 'playOnVisible'
+    ) {
 
       dotLotties.forEach( async (el) => {
         await el.load(selection)
@@ -196,9 +205,21 @@ async function viewFile(e) {
 
     const attributes = localStorage.getItem('attributes')
 
-    if (attributes === 'animateOnScroll') {
+    if (
+      attributes === 'animateOnScroll' ||
+      attributes === 'autoplay' ||
+      attributes === 'playOnVisible'
+    ) {
       dotLotties.forEach(async el => {
         await el.load(path)
+
+        // eslint-disable-next-line require-atomic-updates
+        el.animateOnScroll = attributes === 'animateOnScroll'
+        // eslint-disable-next-line require-atomic-updates
+        el.autoplay = attributes === 'autoplay'
+        // eslint-disable-next-line require-atomic-updates
+        el.playOnVisible = attributes === 'playOnVisible'
+
       })
     } else {
       await dotLotties[0].load(path)
