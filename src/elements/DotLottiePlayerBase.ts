@@ -67,14 +67,14 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       'direction',
       'hover',
       'loop',
-      'mouseout',
+      // 'mouseout',
       'mode',
       'playOnClick',
       'playOnVisible',
       'speed',
       'src',
       'subframe',
-    ]
+    ] as const
   }
 
   static get observedProperties() {
@@ -562,116 +562,134 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
    * Runs when the value of an attribute is changed on the component.
    */
   async attributeChangedCallback(
-    name: string,
+    name: typeof DotLottiePlayerBase.observedAttributes[number],
     _oldValue: unknown,
     value: string
   ) {
-    if (!this._lottieInstance || !this.shadow) {
+    if (
+      !this._lottieInstance ||
+      !this.shadow ||
+      !this._container
+    ) {
       return
     }
 
-    if (name === 'animateOnScroll') {
-      if (value === '' || Boolean(value)) {
-        this._lottieInstance.autoplay = false
-        addEventListener(
-          'scroll', this._handleScroll, {
-            capture: true,
-            passive: true,
-          }
+    switch (name) {
+      case 'animateOnScroll': {
+        if (value === '' || Boolean(value)) {
+          this._lottieInstance.autoplay = false
+          addEventListener(
+            'scroll', this._handleScroll, {
+              capture: true,
+              passive: true,
+            }
+          )
+
+          return
+        }
+        removeEventListener(
+          'scroll', this._handleScroll, true
         )
-
-        return
+        break
       }
-      removeEventListener(
-        'scroll', this._handleScroll, true
-      )
-    }
 
-    if (name === 'autoplay') {
-      if (this.animateOnScroll || this.playOnVisible) {
-        return
+      case 'autoplay': {
+        if (this.animateOnScroll || this.playOnVisible) {
+          return
+        }
+        if (value === '' || Boolean(value)) {
+          this.play()
+
+          return
+        }
+        this.stop()
+        break
       }
-      if (value === '' || Boolean(value)) {
-        this.play()
 
-        return
+      case 'controls': {
+        this._renderControls()
+        break
       }
-      this.stop()
-    }
 
-    if (name === 'controls') {
-      this._renderControls()
-    }
+      case 'direction': {
+        if (Number(value) === -1) {
+          this.setDirection(-1)
 
-    if (name === 'direction') {
-      if (Number(value) === -1) {
-        this.setDirection(-1)
-
-        return
+          return
+        }
+        this.setDirection(1)
+        break
       }
-      this.setDirection(1)
-    }
 
-    if (name === 'hover' && this._container) {
-      if (value === '' || Boolean(value)) {
-        this._container.addEventListener('mouseenter', this._mouseEnter)
-        this._container.addEventListener('mouseleave', this._mouseLeave)
+      case 'hover': {
+        if (value === '' || Boolean(value)) {
+          this._container.addEventListener('mouseenter', this._mouseEnter)
+          this._container.addEventListener('mouseleave', this._mouseLeave)
 
-        return
+          return
+        }
+        this._container.removeEventListener('mouseenter', this._mouseEnter)
+        this._container.removeEventListener('mouseleave', this._mouseLeave)
+        break
       }
-      this._container.removeEventListener('mouseenter', this._mouseEnter)
-      this._container.removeEventListener('mouseleave', this._mouseLeave)
-    }
 
-    if (name === 'loop') {
-      const toggleLoop = this.shadow.querySelector('.toggleLoop')
+      case 'loop': {
+        const toggleLoop = this.shadow.querySelector('.toggleLoop')
 
-      if (toggleLoop instanceof HTMLButtonElement) {
-        toggleLoop.dataset.active = value
+        if (toggleLoop instanceof HTMLButtonElement) {
+          toggleLoop.dataset.active = value
+        }
+        this.setLoop(value === '' || Boolean(value))
+        break
       }
-      this.setLoop(value === '' || Boolean(value))
-    }
 
-    if (name === 'mode') {
-      const toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
+      case 'mode': {
+        const toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
 
-      if (toggleBoomerang instanceof HTMLButtonElement) {
-        toggleBoomerang.dataset.active = (value as PlayMode === PlayMode.Bounce).toString()
+        if (toggleBoomerang instanceof HTMLButtonElement) {
+          toggleBoomerang.dataset.active = (value as PlayMode === PlayMode.Bounce).toString()
+        }
+        this._isBounce = value as PlayMode === PlayMode.Bounce
+        break
       }
-      this._isBounce = value as PlayMode === PlayMode.Bounce
-    }
 
-    if (name === 'playOnClick') {
-      if (!this._container) {
-        return
+      case 'playOnClick': {
+        if (value === '' || Boolean(value)) {
+          this._lottieInstance.autoplay = false
+          this._container.addEventListener('click', this._handleClick)
+
+          return
+        }
+        this._container.removeEventListener('click', this._handleClick)
+        break
       }
-      if (value === '' || Boolean(value)) {
-        this._lottieInstance.autoplay = false
-        this._container.addEventListener('click', this._handleClick)
 
-        return
+      case 'playOnVisible': {
+        if (value === '' || Boolean(value)) {
+          this._lottieInstance.autoplay = false // TODO: Could this be it?
+        }
+        break
       }
-      this._container.removeEventListener('click', this._handleClick)
-    }
 
-    if (name === 'playOnVisible' && (value === '' || Boolean(value))) {
-      this._lottieInstance.autoplay = false
-    }
+      case 'speed': {
+        const val = Number(value)
 
-    if (name === 'speed') {
-      const val = Number(value)
+        if (val && !isNaN(val)) {
+          this.setSpeed(val)
+        }
 
-      if (val && !isNaN(val)) {
-        this.setSpeed(val)
+        break
       }
-    }
 
-    if (name === 'src') {
-      await this.load(value)
-    }
+      case 'src': {
+        await this.load(value)
+        break
+      }
 
-    if (name === 'subframe') {
-      this.setSubframe(value === '' || Boolean(value))
+      case 'subframe': {
+        this.setSubframe(value === '' || Boolean(value))
+        break
+      }
     }
   }
 
@@ -835,9 +853,12 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       this.playerState = PlayerState.Stopped
       if (
         !this.animateOnScroll &&
-        !this.playOnVisible &&
-        (this.autoplay ||
-          this._multiAnimationSettings[this._currentAnimation]?.autoplay)
+        // !this.playOnVisible &&
+        (
+          this.autoplay ||
+          this._multiAnimationSettings[this._currentAnimation]?.autoplay ||
+          this.playOnVisible
+        )
       ) {
         this.playerState = PlayerState.Playing
       }
@@ -1391,10 +1412,19 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         }
         if (
           !this.animateOnScroll &&
-          this.playerState === PlayerState.Frozen ||
-          this.playOnVisible
+          !this.playOnVisible &&
+          this.playerState === PlayerState.Frozen
         ) {
           this.play()
+        }
+
+        if (this.playOnVisible) {
+          if (this.playerState === PlayerState.Completed) {
+            this.playerState = PlayerState.Playing
+            this._lottieInstance?.goToAndPlay(0)
+          } else {
+            this.play()
+          }
         }
 
         /**
