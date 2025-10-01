@@ -708,6 +708,9 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
         this._container = this.shadow.querySelector('.animation')
 
+        // Setup lottie player
+        await this.load(this.src)
+
         // Add listener for Visibility API's change event.
         if (typeof document.hidden !== 'undefined') {
           document.addEventListener('visibilitychange', this._onVisibilityChange)
@@ -715,9 +718,6 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
         // Add intersection observer for detecting component being out-of-view.
         this._addIntersectionObserver()
-
-        // Setup lottie player
-        await this.load(this.src)
 
         this.dispatchEvent(new CustomEvent(PlayerEvents.Rendered))
       })()
@@ -825,6 +825,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
           PlayMode.Bounce
       }
 
+      // Relevant for dotLotties with multiple animations
       const firstAnimation = manifest?.animations[0]
 
       if (firstAnimation) {
