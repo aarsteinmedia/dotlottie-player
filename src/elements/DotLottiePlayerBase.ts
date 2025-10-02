@@ -337,6 +337,20 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   }
 
   /**
+   * Whether to play once or reset,
+   * if playOnVisible is true.
+   */
+  set once(value: boolean) {
+    this.setAttribute('once', value.toString())
+  }
+
+  get once() {
+    const val = this.getAttribute('once')
+
+    return val === 'true' || val === '' || val === '1'
+  }
+
+  /**
    * Whether to toggle play on click.
    */
   set playOnClick(value: boolean) {
@@ -886,19 +900,22 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       this._lottieInstance.setSubframe(Boolean(this.subframe))
 
       // Start playing if autoplay is enabled
-      if (this.autoplay || this.animateOnScroll || this.playOnVisible) {
-        if (this.direction === -1) {
-          this.seek('99%')
-        }
+      if (
+        (this.autoplay ||
+          this.animateOnScroll ||
+          this.playOnVisible) &&
+          this.direction === -1
+      ) {
+        this.seek('99%')
 
-        if (!('IntersectionObserver' in window)) {
-          if (!this.animateOnScroll) {
-            this.play()
-          }
-          this._playerState.visible = true
-        }
+        // if (!('IntersectionObserver' in window)) {
+        //   if (!this.animateOnScroll) {
+        //     this.play()
+        //   }
+        //   this._playerState.visible = true
+        // }
 
-        this._addIntersectionObserver()
+        // this._addIntersectionObserver()
       }
 
       this._renderControls()
@@ -942,11 +959,16 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     }
     this._playerState.prev = this.playerState
 
+    let hasError = false
+
     try {
       this._lottieInstance.pause()
       this.dispatchEvent(new CustomEvent(PlayerEvents.Pause))
+    } catch(error) {
+      hasError = true
+      console.error(error)
     } finally {
-      this.playerState = PlayerState.Paused
+      this.playerState = hasError ? PlayerState.Error : PlayerState.Paused
     }
   }
 
@@ -959,11 +981,16 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     }
     this._playerState.prev = this.playerState
 
+    let hasError = false
+
     try {
       this._lottieInstance.play()
       this.dispatchEvent(new CustomEvent(PlayerEvents.Play))
+    } catch(error) {
+      hasError = true
+      console.error(error)
     } finally {
-      this.playerState = PlayerState.Playing
+      this.playerState = hasError ? PlayerState.Error : PlayerState.Playing
     }
   }
 
@@ -1394,9 +1421,24 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   private _addIntersectionObserver() {
     if (
       !this._container ||
-      this._intersectionObserver ||
-      !('IntersectionObserver' in window)
+      this._intersectionObserver
     ) {
+      return
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      this._intersectionObserverFallback()
+
+      removeEventListener(
+        'scroll', this._intersectionObserverFallback, true
+      )
+      addEventListener(
+        'scroll', this._intersectionObserverFallback, {
+          capture: true,
+          passive: true
+        }
+      )
+
       return
     }
 
@@ -1420,9 +1462,12 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         }
 
         if (this.playOnVisible) {
-          if (this.playerState === PlayerState.Completed) {
+          if (
+            this.playerState === PlayerState.Completed &&
+            !this.once
+          ) {
             this.playerState = PlayerState.Playing
-            this._lottieInstance?.goToAndPlay(0)
+            this._lottieInstance?.goToAndPlay(this.direction === 1 ? 0 : this._lottieInstance.totalFrames)
           } else {
             this.play()
           }
@@ -1623,6 +1668,36 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     if (this.playerState === PlayerState.Frozen && type === 'focus') {
       this.play()
     }
+  }
+
+  private _intersectionObserverFallback() {
+    if (!this._container) {
+      return
+    }
+    const {
+      bottom, left, right, top
+    } = this._container.getBoundingClientRect()
+
+
+    this._playerState.visible =
+      top >= 0 &&
+      left >= 0 &&
+      bottom <= innerHeight &&
+      right <= innerWidth
+
+    if (
+      this.autoplay ||
+      this.playOnVisible ||
+      this.playerState === PlayerState.Playing ||
+      this.playerState === PlayerState.Frozen
+    ) {
+      if (this._playerState.visible) {
+        this.play()
+      } else {
+        this._freeze()
+      }
+    }
+
   }
 
   private _loopComplete() {
