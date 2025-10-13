@@ -28,6 +28,7 @@ import type {
   Autoplay,
   Controls,
   Loop,
+  Settings,
   Subframe,
 } from '@/types'
 
@@ -71,6 +72,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       'mode',
       'playOnClick',
       'playOnVisible',
+      'selector',
       'speed',
       'src',
       'subframe',
@@ -432,6 +434,22 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   }
 
   /**
+   * Play on clicked element by id attribute, other than animation.
+   */
+  set selector(value: string | null) {
+    if (value) {
+      this.setAttribute('selector', value)
+
+      return
+    }
+    this.removeAttribute('selector')
+  }
+
+  get selector() {
+    return this.getAttribute('selector')
+  }
+
+  /**
    * Hide advanced controls.
    */
   set simple(value: boolean) {
@@ -523,6 +541,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
    * Seeker.
    */
   protected _seeker = 0
+
   /**
    * This is included in watched properties,
    * so that next-button will show up
@@ -702,6 +721,13 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         break
       }
 
+      case 'selector': {
+        const selector = document.getElementById(this.selector ?? '')
+
+        selector?.addEventListener('click', this._handleClick)
+        break
+      }
+
       case 'speed': {
         const val = Number(value)
 
@@ -847,6 +873,24 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         animations.some((animation) => !isLottie(animation))
       ) {
         throw new Error('Broken or corrupted file')
+      }
+
+      const ldScript = this.parentElement?.querySelector('script[type="application/ld+json"]')
+
+      if (ldScript) {
+        const settings = JSON.parse(ldScript.innerHTML) as Settings
+
+        if (settings.selector) {
+          this.selector = settings.selector
+        }
+
+        if (settings.segment) {
+          this.setSegment(settings.segment as Vector2)
+        }
+
+        if (settings.multiAnimationSettings) {
+          this.setMultiAnimationSettings(settings.multiAnimationSettings)
+        }
       }
 
       this._isBounce = this.mode === PlayMode.Bounce
@@ -1379,7 +1423,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
    * Handle click.
    */
   protected _handleClick() {
-    if (!this.playOnClick) {
+    if (!this.playOnClick && !this.selector) {
       return
     }
 
@@ -1926,7 +1970,22 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       this._lottieInstance[method]('data_failed', this._dataFailed)
     }
 
-    if (this._container) {
+    if (this.selector) {
+      const selector = document.getElementById(this.selector)
+
+      if (selector) {
+        if (this.hover) {
+          selector[method]('mouseenter', this._mouseEnter)
+          selector[method]('mouseleave', this._mouseLeave)
+        } else {
+          selector[method]('click', this._handleClick)
+        }
+      } else {
+        this.selector = null
+      }
+    }
+
+    if (this._container && !this.selector) {
       if (this.hover) {
         this._container[method]('mouseenter', this._mouseEnter)
         this._container[method]('mouseleave', this._mouseLeave)

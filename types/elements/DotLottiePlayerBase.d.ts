@@ -6,7 +6,7 @@ import renderControls from '../templates/controls';
 import renderPlayer from '../templates/player';
 import { PlayerState } from '../utils/enums';
 export default abstract class DotLottiePlayerBase extends PropertyCallbackElement {
-    static get observedAttributes(): readonly ["animateOnScroll", "autoplay", "controls", "direction", "hover", "loop", "mode", "playOnClick", "playOnVisible", "speed", "src", "subframe"];
+    static get observedAttributes(): readonly ["animateOnScroll", "autoplay", "controls", "direction", "hover", "loop", "mode", "playOnClick", "playOnVisible", "selector", "speed", "src", "subframe"];
     static get observedProperties(): string[];
     static get styles(): () => Promise<CSSStyleSheet>;
     isLight: boolean;
@@ -57,6 +57,8 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     get preserveAspectRatio(): PreserveAspectRatio | null;
     set renderer(value: RendererType);
     get renderer(): RendererType;
+    set selector(value: string | null);
+    get selector(): string | null;
     set simple(value: boolean);
     get simple(): boolean;
     set speed(value: number);

@@ -2,6 +2,7 @@
 import 'react/jsx-runtime'
 import 'react/jsx-dev-runtime'
 
+import type { AnimationSettings } from '@aarsteinmedia/lottie-web'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
@@ -52,6 +53,12 @@ export interface CEMConfig {
   stencil: boolean
   /** Run in watch mode, runs on file changes. */
   watch: boolean
+}
+
+export interface Settings {
+  multiAnimationSettings: AnimationSettings[] | null
+  segment: number[] | null
+  selector: string | null
 }
 
 declare global {
