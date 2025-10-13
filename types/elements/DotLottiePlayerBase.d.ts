@@ -6,7 +6,7 @@ import renderControls from '../templates/controls';
 import renderPlayer from '../templates/player';
 import { PlayerState } from '../utils/enums';
 export default abstract class DotLottiePlayerBase extends PropertyCallbackElement {
-    static get observedAttributes(): string[];
+    static get observedAttributes(): readonly ["animateOnScroll", "autoplay", "controls", "direction", "hover", "loop", "mode", "playOnClick", "playOnVisible", "speed", "src", "subframe"];
     static get observedProperties(): string[];
     static get styles(): () => Promise<CSSStyleSheet>;
     isLight: boolean;
@@ -26,6 +26,8 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     set count(value: number);
     get count(): number;
     get currentAnimation(): number;
+    set delay(value: number);
+    get delay(): number;
     set description(value: string | null);
     get description(): string | null;
     set direction(value: AnimationDirection);
@@ -41,8 +43,16 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     get loop(): Loop;
     set mode(value: PlayMode);
     get mode(): PlayMode;
+    set mouseout(value: 'void' | 'stop' | 'pause' | 'reverse');
+    get mouseout(): "void" | "stop" | "pause" | "reverse";
     set objectfit(value: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down');
     get objectfit(): "contain" | "cover" | "fill" | "none" | "scale-down";
+    set once(value: boolean);
+    get once(): boolean;
+    set playOnClick(value: boolean);
+    get playOnClick(): boolean;
+    set playOnVisible(value: boolean);
+    get playOnVisible(): boolean;
     set preserveAspectRatio(value: PreserveAspectRatio | null);
     get preserveAspectRatio(): PreserveAspectRatio | null;
     set renderer(value: RendererType);
@@ -81,7 +91,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     private _segment?;
     constructor();
     addAnimation(_params: AddAnimationParams): Promise<Result>;
-    attributeChangedCallback(name: string, _oldValue: unknown, value: string): Promise<void>;
+    attributeChangedCallback(name: typeof DotLottiePlayerBase.observedAttributes[number], _oldValue: unknown, value: string): Promise<void>;
     connectedCallback(): void;
     convert(_params: ConvertParams): Promise<Result>;
     destroy(): void;
@@ -113,6 +123,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     togglePlay(): void;
     protected _freeze(): void;
     protected _handleBlur(): void;
+    protected _handleClick(): void;
     protected _handleSeekChange({ target }: Event): void;
     protected _handleSettingsClick({ target }: Event): void;
     protected setOptions(_options: {
@@ -133,6 +144,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     private _getOptions;
     private _handleScroll;
     private _handleWindowBlur;
+    private _intersectionObserverFallback;
     private _loopComplete;
     private _mouseEnter;
     private _mouseLeave;

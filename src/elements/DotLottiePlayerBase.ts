@@ -191,6 +191,23 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   }
 
   /**
+   * Delay playback on playOnVisible.
+   */
+  set delay(value: number) {
+    this.setAttribute('delay', value.toString())
+  }
+
+  get delay() {
+    const val = this.getAttribute('delay')
+
+    if (val) {
+      return Number(val)
+    }
+
+    return 0
+  }
+
+  /**
    * Description for screen readers.
    */
   set description(value: string | null) {
@@ -680,7 +697,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
       case 'playOnVisible': {
         if (value === '' || Boolean(value)) {
-          this._lottieInstance.autoplay = false // TODO: Could this be it?
+          this._lottieInstance.autoplay = false
         }
         break
       }
@@ -1469,7 +1486,10 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
             this.playerState = PlayerState.Playing
             this._lottieInstance?.goToAndPlay(this.direction === 1 ? 0 : this._lottieInstance.totalFrames)
           } else {
-            this.play()
+            setTimeout(() => {
+              this.play()
+            }, this.delay)
+
           }
         }
 

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [6.1.0] - 13-10-2025
+
+### Changed
+
+- Added attributes:
+  - `delay` – Delay playback on playOnVisible, in miliseconds
+  - `mouseout` – Action on mouseout
+  - `once` – Whether, if playOnVisible is true, to play once or anytime animation is in view
+  - `playOnClick` – Whether to toggle play on click
+  - `playOnVisible` – Play when visible
+
 ## [6.0.5] - 12-09-2025
 
 ### Changed

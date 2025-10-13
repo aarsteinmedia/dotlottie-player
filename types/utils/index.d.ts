@@ -4,4 +4,4 @@ import { ObjectFit } from '../utils/enums';
 export declare const aspectRatio: (objectFit: ObjectFit) => PreserveAspectRatio, handleErrors: (err: unknown) => {
     message: string;
     status: number;
-}, isLottie: (json: AnimationData) => boolean, frameOutput: (frame?: number) => string;
+}, isLottie: (json: AnimationData) => boolean, isTouch: () => boolean, frameOutput: (frame?: number) => string;
