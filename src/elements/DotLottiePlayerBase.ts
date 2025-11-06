@@ -20,7 +20,8 @@ import {
   RendererType,
   PlayerEvents,
   PlayMode,
-  PreserveAspectRatio
+  PreserveAspectRatio,
+  clamp
 } from '@aarsteinmedia/lottie-web/utils'
 
 import type {
@@ -1695,31 +1696,39 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
       return
     }
-    if (this._playerState.visible) {
-      if (this._playerState.scrollTimeout) {
-        clearTimeout(this._playerState.scrollTimeout)
-      }
-      this._playerState.scrollTimeout = setTimeout(() => {
-        this.playerState = PlayerState.Paused
-      }, 400)
-
-      const adjustedScroll =
-        scrollY > this._playerState.scrollY
-          ? scrollY - this._playerState.scrollY
-          : this._playerState.scrollY - scrollY,
-        clampedScroll = Math.min(Math.max(adjustedScroll / 3, 1),
-          this._lottieInstance.totalFrames * 3),
-        roundedScroll = clampedScroll / 3
-
-      requestAnimationFrame(() => {
-        if (roundedScroll < (this._lottieInstance?.totalFrames ?? 0)) {
-          this.playerState = PlayerState.Playing
-          this._lottieInstance?.goToAndStop(roundedScroll, true)
-        } else {
-          this.playerState = PlayerState.Paused
-        }
-      })
+    if (!this._playerState.visible) {
+      return
     }
+    if (this._playerState.scrollTimeout) {
+      clearTimeout(this._playerState.scrollTimeout)
+    }
+    this._playerState.scrollTimeout = setTimeout(() => {
+      this.playerState = PlayerState.Paused
+    }, 400)
+
+    const { totalFrames } = this._lottieInstance
+
+    let scrollPosition = scrollY - this._playerState.scrollY
+
+    if (scrollY <= this._playerState.scrollY) {
+      scrollPosition = this._playerState.scrollY - scrollY
+    }
+
+    const scrollProgress = scrollPosition / innerHeight,
+      currentFrame = clamp(
+        scrollProgress * (totalFrames - 1), 1, totalFrames
+      )
+
+    requestAnimationFrame(() => {
+      if (currentFrame >= totalFrames) {
+        this.playerState = PlayerState.Paused
+
+        return
+      }
+
+      this.playerState = PlayerState.Playing
+      this._lottieInstance?.goToAndStop(currentFrame, true)
+    })
   }
 
   private _handleWindowBlur({ type }: FocusEvent) {

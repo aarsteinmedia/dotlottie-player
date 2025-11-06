@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [6.2.0] - 13-10-2025
+
+### Changed
+
+- Adjusted length of animation on animateOnScroll, to fit screen height dynamically.
+
 ## [6.1.1] - 13-10-2025
 
 ### Changed
