@@ -124,7 +124,8 @@ const isProd = process.env.NODE_ENV !== 'development',
       ...plugins(true),
       serve({
         browser: 'firefox',
-        open: true
+        open: true,
+        openPage: isLight ? 'light.html' : undefined
       }),
       livereload(),
     ],

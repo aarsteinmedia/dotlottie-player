@@ -1,5 +1,3 @@
-
-import '../dist/full.js'
 import files from './files.js'
 
 const previewForm = document.querySelector('form#preview'),
@@ -7,6 +5,7 @@ const previewForm = document.querySelector('form#preview'),
   rendererSelect = previewForm.querySelector('select[name="renderer"]'),
   attributesSelect = previewForm.querySelector('select[name="attributes"]'),
   mouseoutSelect = previewForm.querySelector('select[name="mouseout"]'),
+
   loremIpsum = [...document.getElementsByClassName('lorem-ipsum')],
   /**
    * @type {import('../src/elements/DotLottiePlayer').default[]}
@@ -30,8 +29,6 @@ for (let i = 0; i < length; i++) {
   opt.value = `/assets/${files[i].trim()}`
   pathSelect.appendChild(opt)
 }
-
-handleRefresh()
 
 function handleRefresh() {
   try {
@@ -230,3 +227,15 @@ async function viewFile(e) {
     console.error(error)
   }
 }
+
+async function preview(full = true) {
+  if (full) {
+    await import('../dist/full.js')
+  } else {
+    await import('../dist/light.js')
+  }
+
+  handleRefresh()
+}
+
+await preview()
