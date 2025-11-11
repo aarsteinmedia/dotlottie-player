@@ -6,6 +6,7 @@ import type {
   AnimationItem,
   AnimationSettings,
   ConvertParams,
+  HTMLBooleanAttribute,
   LottieManifest,
   Result,
   Vector2,
@@ -24,14 +25,7 @@ import {
   clamp
 } from '@aarsteinmedia/lottie-web/utils'
 
-import type {
-  AnimateOnScroll,
-  Autoplay,
-  Controls,
-  Loop,
-  Settings,
-  Subframe,
-} from '@/types'
+import type { Settings } from '@/types'
 
 import PropertyCallbackElement from '@/elements/helpers/PropertyCallbackElement'
 import styles from '@/styles.css'
@@ -122,7 +116,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   /**
    * Whether to trigger next frame with scroll.
    */
-  set animateOnScroll(value: AnimateOnScroll) {
+  set animateOnScroll(value: HTMLBooleanAttribute) {
     this.setAttribute('animateOnScroll', Boolean(value).toString())
   }
 
@@ -139,7 +133,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   /**
    * Autoplay.
    */
-  set autoplay(value: Autoplay) {
+  set autoplay(value: HTMLBooleanAttribute) {
     this.setAttribute('autoplay', Boolean(value).toString())
   }
 
@@ -163,7 +157,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   /**
    * Show controls.
    */
-  set controls(value: Controls) {
+  set controls(value: HTMLBooleanAttribute) {
     this.setAttribute('controls', Boolean(value).toString())
   }
 
@@ -291,7 +285,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   /**
    * Loop animation.
    */
-  set loop(value: Loop) {
+  set loop(value: HTMLBooleanAttribute) {
     this.setAttribute('loop', Boolean(value).toString())
   }
 
@@ -361,8 +355,8 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
    * Whether to play once or reset,
    * if playOnVisible is true.
    */
-  set once(value: boolean) {
-    this.setAttribute('once', value.toString())
+  set once(value: HTMLBooleanAttribute) {
+    this.setAttribute('once', Boolean(value).toString())
   }
 
   get once() {
@@ -374,8 +368,8 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   /**
    * Whether to toggle play on click.
    */
-  set playOnClick(value: boolean) {
-    this.setAttribute('playOnClick', value.toString())
+  set playOnClick(value: HTMLBooleanAttribute) {
+    this.setAttribute('playOnClick', Boolean(value).toString())
   }
 
   get playOnClick() {
@@ -387,8 +381,8 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   /**
    * Play when visible.
    */
-  set playOnVisible(value: boolean) {
-    this.setAttribute('playOnVisible', value.toString())
+  set playOnVisible(value: HTMLBooleanAttribute) {
+    this.setAttribute('playOnVisible', Boolean(value).toString())
   }
 
   get playOnVisible() {
@@ -454,8 +448,8 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   /**
    * Hide advanced controls.
    */
-  set simple(value: boolean) {
-    this.setAttribute('simple', value.toString())
+  set simple(value: HTMLBooleanAttribute) {
+    this.setAttribute('simple', Boolean(value).toString())
   }
 
   get simple() {
@@ -495,7 +489,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   /**
    * Subframe.
    */
-  set subframe(value: Subframe) {
+  set subframe(value: HTMLBooleanAttribute) {
     this.setAttribute('subframe', Boolean(value).toString())
   }
 
