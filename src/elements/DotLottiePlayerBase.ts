@@ -1717,7 +1717,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
     const scrollProgress = scrollPosition / innerHeight,
       currentFrame = clamp(
-        scrollProgress * (totalFrames - 1), 1, totalFrames
+        scrollProgress * (totalFrames - 1), 0, totalFrames
       )
 
     requestAnimationFrame(() => {
