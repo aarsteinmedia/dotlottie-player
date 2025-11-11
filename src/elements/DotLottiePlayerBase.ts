@@ -238,8 +238,8 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   /**
    * Whether to freeze animation when window loses focus.
    */
-  set dontFreezeOnBlur(value: boolean) {
-    this.setAttribute('dontFreezeOnBlur', value.toString())
+  set dontFreezeOnBlur(value: HTMLBooleanAttribute) {
+    this.setAttribute('dontFreezeOnBlur', Boolean(value).toString())
   }
 
   get dontFreezeOnBlur() {
@@ -251,8 +251,8 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   /**
    * Whether to play on mouseover.
    */
-  set hover(value: boolean) {
-    this.setAttribute('hover', value.toString())
+  set hover(value: HTMLBooleanAttribute) {
+    this.setAttribute('hover', Boolean(value).toString())
   }
 
   get hover() {
