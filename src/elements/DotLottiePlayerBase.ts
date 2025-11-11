@@ -47,6 +47,7 @@ import {
   isTouch
 } from '@/utils'
 import {
+  MouseOut,
   ObjectFit,
   PlayerState,
 } from '@/utils/enums'
@@ -320,7 +321,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   /**
    * Action on mouseout.
    */
-  set mouseout(value: 'void' | 'stop' | 'pause' | 'reverse') {
+  set mouseout(value: MouseOut) {
     this.setAttribute('mouseout', value)
   }
 
@@ -328,13 +329,13 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     const val = this.getAttribute('mouseout')
 
     switch (val) {
-      case 'void':
-      case 'pause':
-      case 'reverse': {
+      case MouseOut.Void:
+      case MouseOut.Pause:
+      case MouseOut.Reverse: {
         return val
       }
       default: {
-        return 'stop'
+        return MouseOut.Stop
       }
     }
   }
@@ -1836,7 +1837,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       return
     }
 
-    if (this.mouseout === 'reverse') {
+    if (this.mouseout === MouseOut.Reverse) {
       this._lottieInstance.setDirection(1)
     }
 
@@ -1861,14 +1862,14 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     }
 
     switch (this.mouseout) {
-      case 'void': {
+      case MouseOut.Void: {
         break
       }
-      case 'pause': {
+      case MouseOut.Pause: {
         this.pause()
         break
       }
-      case 'reverse': {
+      case MouseOut.Reverse: {
         // const { direction = 1 } =
         //   this._multiAnimationSettings.length > 0 ?
         //     this._multiAnimationSettings[this._currentAnimation + 1] ?? { direction: 1 } : this,

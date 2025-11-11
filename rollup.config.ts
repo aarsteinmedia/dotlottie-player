@@ -17,6 +17,14 @@ import pluginSummary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
 import { typescriptPaths } from 'rollup-plugin-typescript-paths'
 
+interface MinifyOptions {
+  parts: {
+    text: string;
+    start: number;
+    end: number;
+  }[]
+}
+
 const isProd = process.env.NODE_ENV !== 'development',
   isLight = process.env.VER === 'light',
   __dirname = path.dirname(fileURLToPath(import.meta.url)),
@@ -83,13 +91,7 @@ const isProd = process.env.NODE_ENV !== 'development',
         ),
       ],
       options: {
-        shouldMinify({ parts }: {
-          parts: {
-            text: string;
-            start: number;
-            end: number;
-          }[]
-        }) {
+        shouldMinify({ parts }: MinifyOptions) {
           return parts.some(({ text }) =>
           // Matches Polymer templates that are not tagged
             text.includes('<figure') ||

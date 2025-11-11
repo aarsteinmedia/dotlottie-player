@@ -8,7 +8,9 @@ import { tagName } from '@/utils/enums'
 export { PlayerEvents, PlayMode }
 export default DotLottiePlayerSVG
 
-export { PlayerState, tagName } from '@/utils/enums'
+export {
+  MouseOut, PlayerState, tagName
+} from '@/utils/enums'
 
 /**
  * Expose DotLottiePlayer class as global variable.

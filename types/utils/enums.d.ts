@@ -5,6 +5,12 @@ export declare enum ObjectFit {
     None = "none",
     ScaleDown = "scale-down"
 }
+export declare enum MouseOut {
+    Pause = "pause",
+    Reverse = "reverse",
+    Stop = "stop",
+    Void = "void"
+}
 export declare enum PlayerState {
     Completed = "completed",
     Destroyed = "destroyed",

@@ -4,7 +4,7 @@ import type { AnimateOnScroll, Autoplay, Controls, Loop, Subframe } from '../typ
 import PropertyCallbackElement from '../elements/helpers/PropertyCallbackElement';
 import renderControls from '../templates/controls';
 import renderPlayer from '../templates/player';
-import { PlayerState } from '../utils/enums';
+import { MouseOut, PlayerState } from '../utils/enums';
 export default abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     static get observedAttributes(): readonly ["animateOnScroll", "autoplay", "controls", "direction", "hover", "loop", "mode", "playOnClick", "playOnVisible", "selector", "speed", "src", "subframe"];
     static get observedProperties(): string[];
@@ -43,8 +43,8 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     get loop(): Loop;
     set mode(value: PlayMode);
     get mode(): PlayMode;
-    set mouseout(value: 'void' | 'stop' | 'pause' | 'reverse');
-    get mouseout(): "void" | "stop" | "pause" | "reverse";
+    set mouseout(value: MouseOut);
+    get mouseout(): MouseOut;
     set objectfit(value: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down');
     get objectfit(): "contain" | "cover" | "fill" | "none" | "scale-down";
     set once(value: boolean);

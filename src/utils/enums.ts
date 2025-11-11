@@ -6,6 +6,13 @@ export enum ObjectFit {
   ScaleDown = 'scale-down',
 }
 
+export enum MouseOut {
+  Pause = 'pause',
+  Reverse = 'reverse',
+  Stop = 'stop',
+  Void = 'void'
+}
+
 export enum PlayerState {
   Completed = 'completed',
   Destroyed = 'destroyed',
