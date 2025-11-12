@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "6.2.4",
+  "version": "6.2.5",
   "description": "Web Component for playing Lottie animations in your web app.",
   "type": "module",
   "exports": {
@@ -80,10 +80,10 @@
     "@rollup/plugin-typescript": "^12.3.0",
     "@swc/core": "^1.15.1",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.10.0",
+    "@types/node": "^24.10.1",
     "@types/path-browserify": "^1.0.3",
     "@types/postcss-flexbugs-fixes": "^5.0.3",
-    "@types/react": "^19.2.2",
+    "@types/react": "^19.2.3",
     "@web/dev-server-esbuild": "^1.0.4",
     "@web/dev-server-import-maps": "^0.2.1",
     "@web/dev-server-rollup": "^0.6.4",

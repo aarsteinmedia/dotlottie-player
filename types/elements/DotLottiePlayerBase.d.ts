@@ -67,6 +67,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     set subframe(value: HTMLBooleanAttribute);
     get subframe(): HTMLBooleanAttribute;
     protected _container: HTMLElement | null;
+    protected _DOMRect: DOMRect | null;
     protected _errorMessage: string;
     protected _identifier: string;
     protected _isSettingsOpen: boolean;

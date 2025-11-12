@@ -504,6 +504,8 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
    */
   protected _container: HTMLElement | null = null
 
+  protected _DOMRect: DOMRect | null = null
+
   protected _errorMessage = 'Something went wrong'
 
   protected _identifier = this.id || createElementID()
@@ -767,6 +769,10 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         // Add listener for Visibility API's change event.
         if (typeof document.hidden !== 'undefined') {
           document.addEventListener('visibilitychange', this._onVisibilityChange)
+        }
+
+        if (this._container) {
+          this._DOMRect = this._container.getBoundingClientRect()
         }
 
         // Add intersection observer for detecting component being out-of-view.
@@ -1683,7 +1689,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
    * Handle scroll.
    */
   private _handleScroll() {
-    if (!this.animateOnScroll || !this._lottieInstance) {
+    if (!this.animateOnScroll || !this._DOMRect || !this._lottieInstance) {
       return
     }
     if (isServer) {
@@ -1709,7 +1715,16 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       scrollPosition = this._playerState.scrollY - scrollY
     }
 
-    const scrollProgress = scrollPosition / innerHeight,
+    const {
+      bottom, height, top
+    } = this._DOMRect
+    let offset = height - bottom
+
+    if (top >= innerHeight) {
+      offset = height
+    }
+
+    const scrollProgress = scrollPosition / (innerHeight + offset),
       currentFrame = clamp(
         scrollProgress * (totalFrames - 1), 0, totalFrames
       )
