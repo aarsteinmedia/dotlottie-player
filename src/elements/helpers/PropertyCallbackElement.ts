@@ -26,7 +26,7 @@ export default abstract class PropertyCallbackElement extends HTMLElement {
       this[updateOnConnected] = []
     }
 
-    const { observedProperties = [] } =
+    const { observedProperties } =
       this.constructor as unknown as { observedProperties: string[] }
 
     const { length } = observedProperties
