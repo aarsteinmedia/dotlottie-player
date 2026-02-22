@@ -1,7 +1,6 @@
-/**
- * @type {import('./src/types').CEMConfig}
-  */
-const cemConfig = {
+import type { CEMConfig } from '@/types'
+
+const cemConfig: CEMConfig = {
   catalyst: false,
   dependencies: false,
   dev: false,

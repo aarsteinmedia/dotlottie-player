@@ -6,9 +6,9 @@ export default class DotLottiePlayerSVG extends DotLottiePlayerBase {
     get renderer(): RendererType;
     constructor();
     protected setOptions({ container, hasAutoplay, hasLoop, initialSegment, preserveAspectRatio, }: {
-        container?: HTMLElement;
+        container?: undefined | HTMLElement;
         rendererType: RendererType;
-        initialSegment?: Vector2;
+        initialSegment?: undefined | Vector2;
         hasAutoplay: boolean;
         hasLoop: boolean;
         preserveAspectRatio: PreserveAspectRatio;

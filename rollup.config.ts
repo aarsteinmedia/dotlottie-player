@@ -1,6 +1,5 @@
 import type { Plugin, RollupOptions } from 'rollup'
 
-import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import autoprefixer from 'autoprefixer'
@@ -11,7 +10,7 @@ import flexbugs from 'postcss-flexbugs-fixes'
 import { dts } from 'rollup-plugin-dts'
 import template from 'rollup-plugin-html-literals'
 import livereload from 'rollup-plugin-livereload'
-import serve from 'rollup-plugin-opener'
+import { serve } from 'rollup-plugin-opener'
 import postcss from 'rollup-plugin-postcss'
 import pluginSummary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
@@ -105,7 +104,6 @@ const isProd = process.env.NODE_ENV !== 'development',
       extensions: ['.ts'],
       preferBuiltins,
     }),
-    commonjs(),
     swc(),
   ],
 

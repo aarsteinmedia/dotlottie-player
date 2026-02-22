@@ -7,9 +7,9 @@ export default class DotLottiePlayer extends DotLottiePlayerBase {
     convert: typeof convert;
     loadAnimation: typeof import("@aarsteinmedia/lottie-web").loadAnimation;
     protected setOptions({ container, hasAutoplay, hasLoop, initialSegment, preserveAspectRatio, rendererType }: {
-        container?: HTMLElement;
+        container?: undefined | HTMLElement;
         rendererType: RendererType;
-        initialSegment?: Vector2;
+        initialSegment?: undefined | Vector2;
         hasAutoplay: boolean;
         hasLoop: boolean;
         preserveAspectRatio: PreserveAspectRatio;

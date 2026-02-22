@@ -9,16 +9,16 @@
     "declarationDir": "types",
     "emitDeclarationOnly": true,
     "esModuleInterop": true,
+    "composite": false,
     "isolatedModules": true,
     "lib": [
       "DOM",
       "DOM.Iterable",
-      "ESNext"
+      "ES2023"
     ],    
-    "composite": false,
     "module": "preserve",
     "moduleResolution": "Bundler",
-    "noEmit": true,
+    "noEmit": false,
     "allowImportingTsExtensions": false,
     "noImplicitAny": true,
     "noImplicitOverride": true,
@@ -39,16 +39,15 @@
     "resolveJsonModule": true,
     "strict": true,
     "target": "ES2023",
-    "useDefineForClassFields": false,
+    "useDefineForClassFields": true,
     "verbatimModuleSyntax": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
-    "exactOptionalPropertyTypes": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-
+    "exactOptionalPropertyTypes": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "paths": {
       "@/*": [
         "./src/*"
@@ -56,10 +55,7 @@
     }
   },
   "include": [
-    "src/**/*",
-    "global.d.ts",
-    "eslint.config.ts",
-    "rollup.config.ts"
+    "**/*.ts"
   ],
   "exclude": [
     "**/node_modules",

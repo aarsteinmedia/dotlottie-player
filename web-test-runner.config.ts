@@ -1,3 +1,5 @@
+import type { TestRunnerConfig } from '@web/test-runner'
+
 import { esbuildPlugin } from '@web/dev-server-esbuild'
 import { importMapsPlugin } from '@web/dev-server-import-maps'
 import { fromRollup } from '@web/dev-server-rollup'
@@ -7,10 +9,8 @@ import { typescriptPaths as rollupTypescriptPaths } from 'rollup-plugin-typescri
 
 const typescriptPaths = fromRollup(rollupTypescriptPaths),
   postcss = fromRollup(rollupPostcss),
-  /**
-   * @type {import('@web/test-runner').TestRunnerConfig}
-    */
-  testRunnerConfig = {
+
+  testRunnerConfig: TestRunnerConfig = {
     // browsers: [playwrightLauncher({ product: 'firefox' })],
     files: ['src/**/*.test.ts', 'src/**/*.spec.ts'],
     nodeResolve: true,

@@ -550,7 +550,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
    * Which animation to show, if several.
    */
   private _currentAnimation = 0
-  private _intersectionObserver?: IntersectionObserver
+  private _intersectionObserver?: undefined | IntersectionObserver
   private _isBounce = false
   private _isDotLottie = false
 
@@ -1459,9 +1459,9 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   }
 
   protected setOptions(_options: {
-    container?: HTMLElement
+    container?: undefined |  HTMLElement
     rendererType: RendererType
-    initialSegment?: Vector2
+    initialSegment?: undefined |  Vector2
     hasAutoplay: boolean
     hasLoop: boolean
     preserveAspectRatio: PreserveAspectRatio

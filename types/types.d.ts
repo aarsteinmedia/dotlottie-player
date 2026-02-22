@@ -3,25 +3,25 @@ import 'react/jsx-dev-runtime';
 import type { AnimationSettings } from '@aarsteinmedia/lottie-web';
 import type { Plugin } from '@custom-elements-manifest/analyzer';
 import type DotLottiePlayer from './elements/DotLottiePlayer';
-import type DotLottiePlayerLight from './elements/DotLottiePlayerLight';
-import type { tagName } from './utils/enums';
 import type DotLottiePlayerCanvas from './elements/DotLottiePlayerCanvas';
+import type DotLottiePlayerLight from './elements/DotLottiePlayerLight';
 import type DotLottiePlayerSVG from './svg';
+import type { tagName } from './utils/enums';
 export interface CEMConfig {
     catalyst: boolean;
     dependencies: boolean;
     dev: boolean;
     exclude: string[];
     fast: boolean;
-    globs: ['src/**/*.ts'];
+    globs: string[];
     litelement: boolean;
     outdir: string;
-    overrideModuleCreation: ({ globs, ts, }: {
+    overrideModuleCreation?: ({ globs, ts, }: {
         ts: unknown;
         globs: string[];
     }) => unknown[];
     packagejson: boolean;
-    plugins: (() => Plugin)[];
+    plugins?: (() => Plugin)[];
     stencil: boolean;
     watch: boolean;
 }

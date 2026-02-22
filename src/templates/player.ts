@@ -17,10 +17,19 @@ export default async function renderPlayer(this: DotLottiePlayerBase) {
       class="animation-container main"
       data-controls="${this.controls ?? false}"
       lang="${this.description ? document.documentElement.lang : 'en'}"
-      aria-label="${this.description ?? 'Lottie animation'}"
       data-loaded="${this._playerState.loaded}"
     >
-      <figure class="animation" style="background:${this.background}">
+      <figure
+        class="animation"
+        style="background:${this.background}"
+        ${this.description ?
+          /* HTML */ `
+            aria-label="${this.description}"
+          `
+            :
+            ''
+        }
+      >
         ${this.playerState === PlayerState.Error
           ? /* HTML */ `
             <div class="error">

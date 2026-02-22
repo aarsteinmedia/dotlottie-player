@@ -6,11 +6,10 @@ import type { AnimationSettings } from '@aarsteinmedia/lottie-web'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
+import type DotLottiePlayerCanvas from '@/elements/DotLottiePlayerCanvas'
 import type DotLottiePlayerLight from '@/elements/DotLottiePlayerLight'
+import type DotLottiePlayerSVG from '@/svg'
 import type { tagName } from '@/utils/enums'
-
-import type DotLottiePlayerCanvas from './elements/DotLottiePlayerCanvas'
-import type DotLottiePlayerSVG from './svg'
 
 export interface CEMConfig {
   /** Enable special handling for catalyst. */
@@ -24,18 +23,18 @@ export interface CEMConfig {
   /** Enable special handling for fast. */
   fast: boolean
   /** Globs to analyze. */
-  globs: ['src/**/*.ts']
+  globs: string[]
   /** Enable special handling for litelement. */
   litelement: boolean
   /** Directory to output CEM to. */
   outdir: string
   /** Overrides default module creation. */
-  overrideModuleCreation: ({
+  overrideModuleCreation?: ({
     globs,
     ts,
   }: {
     /**
-     * TypeScrip.
+     * TypeScript.
      */
     ts: unknown
     globs: string[]
@@ -43,7 +42,7 @@ export interface CEMConfig {
   /** Output CEM path to `package.json`, defaults to true. */
   packagejson: boolean
   /** Provide custom plugins. */
-  plugins: (() => Plugin)[]
+  plugins?: (() => Plugin)[]
   /** Enable special handling for stencil. */
   stencil: boolean
   /** Run in watch mode, runs on file changes. */

@@ -129,9 +129,9 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     protected _handleSeekChange({ target }: Event): void;
     protected _handleSettingsClick({ target }: Event): void;
     protected setOptions(_options: {
-        container?: HTMLElement;
+        container?: undefined | HTMLElement;
         rendererType: RendererType;
-        initialSegment?: Vector2;
+        initialSegment?: undefined | Vector2;
         hasAutoplay: boolean;
         hasLoop: boolean;
         preserveAspectRatio: PreserveAspectRatio;
