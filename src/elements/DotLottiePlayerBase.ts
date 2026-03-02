@@ -46,7 +46,14 @@ import {
   PlayerState,
 } from '@/utils/enums'
 
-const notImplemented = 'Method is not implemented'
+const notImplemented = 'Method is not implemented',
+  getStyles = async () => {
+    const styleSheet = new CSSStyleSheet()
+
+    await styleSheet.replace(styles)
+
+    return styleSheet
+  }
 
 /**
  * DotLottie Player Web Component.
@@ -89,13 +96,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
    * Return the styles for the component.
    */
   static get styles() {
-    return async () => {
-      const styleSheet = new CSSStyleSheet()
-
-      await styleSheet.replace(styles)
-
-      return styleSheet
-    }
+    return getStyles
   }
 
   public isLight = false
