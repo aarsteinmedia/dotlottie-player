@@ -1,5 +1,3 @@
-import type { ConfigArray } from 'typescript-eslint'
-
 import {
   sheriff, type SheriffSettings, tseslint
 } from 'eslint-config-sheriff'
@@ -18,7 +16,7 @@ const sheriffOptions: SheriffSettings = {
   'vitest': false
 }
 
-const config: ConfigArray = defineConfig(
+const config = defineConfig(
   sheriff(sheriffOptions),
   {
     files: ['**/*.{ts,js}'],

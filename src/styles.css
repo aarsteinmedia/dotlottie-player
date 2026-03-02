@@ -154,6 +154,34 @@
     }
   }
 
+  & progress {
+    appearance: none;
+    outline: none;
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    border-radius: 3px;
+    border: 0;
+    top: 0;
+    left: 0;
+    margin: 7.5px 0;
+    background-color: var(--lottie-player-seeker-track-color);
+    pointer-events: none;
+
+    &::-webkit-progress-inner-element {
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    &::-webkit-slider-runnable-track {
+      background-color: transparent;
+    }
+
+    &::-webkit-progress-value {
+      background-color: var(--lottie-player-seeker-thumb-color);
+    }
+  }
+
   .seeker {
     appearance: none;
     outline: none;
@@ -258,34 +286,6 @@
       &::-ms-fill-upper {
         background: var(--lottie-player-seeker-track-color);
       }
-    }
-  }
-
-  & progress {
-    appearance: none;
-    outline: none;
-    position: absolute;
-    width: 100%;
-    height: 5px;
-    border-radius: 3px;
-    border: 0;
-    top: 0;
-    left: 0;
-    margin: 7.5px 0;
-    background-color: var(--lottie-player-seeker-track-color);
-    pointer-events: none;
-
-    &::-webkit-progress-inner-element {
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    &::-webkit-slider-runnable-track {
-      background-color: transparent;
-    }
-
-    &::-webkit-progress-value {
-      background-color: var(--lottie-player-seeker-thumb-color);
     }
   }
 
