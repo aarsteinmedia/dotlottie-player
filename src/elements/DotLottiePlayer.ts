@@ -36,9 +36,7 @@ export default class DotLottiePlayer extends DotLottiePlayerBase {
     hasLoop: boolean;
     preserveAspectRatio: PreserveAspectRatio
   }) {
-    const options: AnimationConfiguration<
-      RendererType.SVG | RendererType.Canvas | RendererType.HTML
-    > = {
+    const options: AnimationConfiguration = {
       autoplay: hasAutoplay,
       container,
       initialSegment,

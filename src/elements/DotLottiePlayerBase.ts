@@ -1466,9 +1466,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     hasAutoplay: boolean
     hasLoop: boolean
     preserveAspectRatio: PreserveAspectRatio
-  }): AnimationConfiguration<
-    RendererType.SVG | RendererType.Canvas | RendererType.HTML
-    > {
+  }): AnimationConfiguration {
     throw new Error('Method not implemented')
   }
 
