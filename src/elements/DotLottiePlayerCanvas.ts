@@ -36,10 +36,10 @@ export default class DotLottiePlayerCanvas extends DotLottiePlayerBase {
     preserveAspectRatio,
   }: {
     container?: HTMLElement
-    rendererType: RendererType;
-    initialSegment?: Vector2;
-    hasAutoplay: boolean;
-    hasLoop: boolean;
+    rendererType: RendererType
+    initialSegment?: Vector2
+    hasAutoplay: boolean
+    hasLoop: boolean
     preserveAspectRatio: PreserveAspectRatio
   }) {
     const options: AnimationConfiguration<RendererType.Canvas> = {

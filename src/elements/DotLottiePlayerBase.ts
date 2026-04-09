@@ -55,6 +55,8 @@ const notImplemented = 'Method is not implemented',
     return styleSheet
   }
 
+export { RendererType }
+
 /**
  * DotLottie Player Web Component.
  */
@@ -71,7 +73,6 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       'direction',
       'hover',
       'loop',
-      // 'mouseout',
       'mode',
       'playOnClick',
       'playOnVisible',
@@ -1049,6 +1050,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
     try {
       this._lottieInstance.play()
+
       this.dispatchEvent(new CustomEvent(PlayerEvents.Play))
     } catch(error) {
       hasError = true

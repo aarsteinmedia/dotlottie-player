@@ -30,10 +30,10 @@ export default class DotLottiePlayer extends DotLottiePlayerBase {
     rendererType
   }: {
     container?: undefined |  HTMLElement
-    rendererType: RendererType;
-    initialSegment?: undefined |  Vector2;
-    hasAutoplay: boolean;
-    hasLoop: boolean;
+    rendererType: RendererType
+    initialSegment?: undefined |  Vector2
+    hasAutoplay: boolean
+    hasLoop: boolean
     preserveAspectRatio: PreserveAspectRatio
   }) {
     const options: AnimationConfiguration = {

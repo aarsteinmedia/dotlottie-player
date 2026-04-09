@@ -5,6 +5,8 @@ import {
 import DotLottiePlayerSVG from '@/elements/DotLottiePlayerSVG'
 import { tagName } from '@/utils/enums'
 
+export { RendererType } from '@aarsteinmedia/lottie-web/utils'
+
 export { PlayerEvents, PlayMode }
 export default DotLottiePlayerSVG
 

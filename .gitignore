@@ -11,6 +11,8 @@ node_modules
 .DS_Store
 *.pem
 
+./test
+
 packages/functional-tests/app/dotlottie-player.js
 
 TestElement.*

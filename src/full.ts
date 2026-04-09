@@ -11,6 +11,7 @@ export default DotLottiePlayer
 export {
   MouseOut, PlayerState, tagName
 } from '@/utils/enums'
+export { RendererType } from '@aarsteinmedia/lottie-web/utils'
 
 /**
  * Expose DotLottiePlayer class as global variable.
