@@ -78,7 +78,7 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-typescript": "^12.3.0",
-    "@swc/core": "^1.15.21",
+    "@swc/core": "^1.15.24",
     "@types/mocha": "^10.0.10",
     "@types/node": "^25.5.2",
     "@types/path-browserify": "^1.0.3",
