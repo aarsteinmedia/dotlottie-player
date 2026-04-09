@@ -3,7 +3,6 @@ import type {
   AnimationConfiguration,
   AnimationData,
   AnimationDirection,
-  AnimationItem,
   AnimationSettings,
   ConvertParams,
   HTMLBooleanAttribute,
@@ -56,6 +55,25 @@ const notImplemented = 'Method is not implemented',
   }
 
 export { RendererType }
+
+export interface DotLottieAnimationInstance {
+  addEventListener: (name: string, callback: (...args: any[]) => void) => void
+  autoplay?: boolean
+  currentFrame: number
+  destroy: () => void
+  goToAndPlay: (value: number, isFrame?: boolean) => void
+  goToAndStop: (value: number, isFrame?: boolean) => void
+  pause: () => void
+  play: () => void
+  playDirection: number
+  removeEventListener: (name: string, callback: (...args: any[]) => void) => void
+  setDirection: (direction: AnimationDirection) => void
+  setLoop: (loop: boolean) => void
+  setSpeed: (speed: number) => void
+  setSubframe: (useSubframe: boolean) => void
+  stop: () => void
+  totalFrames: number
+}
 
 /**
  * DotLottie Player Web Component.
@@ -556,7 +574,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   private _isBounce = false
   private _isDotLottie = false
 
-  private _lottieInstance: AnimationItem | null = null
+  private _lottieInstance: DotLottieAnimationInstance | null = null
 
   private _manifest?: LottieManifest
   /**
@@ -1003,7 +1021,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     }
   }
 
-  public loadAnimation(_config: AnimationConfiguration): AnimationItem {
+  public loadAnimation(_config: AnimationConfiguration): DotLottieAnimationInstance {
     throw new Error(notImplemented)
   }
 

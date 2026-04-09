@@ -19,7 +19,9 @@ export default class DotLottiePlayer extends DotLottiePlayerBase {
 
   public override convert = convert
 
-  public override loadAnimation = Lottie.loadAnimation
+  public override loadAnimation(config: AnimationConfiguration) {
+    return (Lottie.loadAnimation as DotLottiePlayerBase['loadAnimation'])(config)
+  }
 
   protected override setOptions({
     container,
@@ -58,12 +60,13 @@ export default class DotLottiePlayer extends DotLottiePlayerBase {
       }
       case RendererType.Canvas: {
         options.rendererSettings = {
-          ...options.rendererSettings,
-          // @ts-expect-error TODO:
+          ...(options.rendererSettings as object),
+          // `clearCanvas` is canvas-only, but `rendererSettings` is typed as a
+          // renderer union, so we have to narrow/cast in this branch.
           clearCanvas: true,
           preserveAspectRatio,
           progressiveLoad: true,
-        }
+        } as AnimationConfiguration['rendererSettings']
         break
       }
       // case RendererType.HTML: {

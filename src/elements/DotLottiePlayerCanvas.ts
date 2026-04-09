@@ -16,9 +16,6 @@ import DotLottiePlayerBase from '@/elements/DotLottiePlayerBase'
  */
 export default class DotLottiePlayerCanvas extends DotLottiePlayerBase {
 
-  // @ts-expect-error: TODO:
-  public override loadAnimation = Lottie.loadAnimation
-
   override get renderer() {
     return RendererType.SVG
   }
@@ -26,6 +23,10 @@ export default class DotLottiePlayerCanvas extends DotLottiePlayerBase {
   constructor() {
     super()
     this.isLight = true
+  }
+
+  public override loadAnimation(config: AnimationConfiguration) {
+    return (Lottie.loadAnimation as DotLottiePlayerBase['loadAnimation'])(config)
   }
 
   protected override setOptions({
@@ -48,9 +49,10 @@ export default class DotLottiePlayerCanvas extends DotLottiePlayerBase {
       initialSegment,
       loop: hasLoop,
       renderer: RendererType.Canvas,
-      // @ts-expect-error TODO:
       rendererSettings: {
         clearCanvas: true,
+        contentVisibility: 'visible',
+        id: this.id,
         imagePreserveAspectRatio: preserveAspectRatio,
         preserveAspectRatio,
         progressiveLoad: true,

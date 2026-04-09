@@ -56,7 +56,7 @@ export interface Settings {
 
 declare global {
   interface HTMLElementTagNameMap { [tagName]: DotLottiePlayer | DotLottiePlayerLight }
-  function dotLottiePlayer(): DotLottiePlayer | DotLottiePlayerLight | DotLottiePlayerSVG | DotLottiePlayerCanvas
+  var dotLottiePlayer: () => DotLottiePlayer | DotLottiePlayerLight | DotLottiePlayerSVG | DotLottiePlayerCanvas
 }
 
 type JSXLottiePlayer = Omit<Partial<DotLottiePlayer | DotLottiePlayerLight>, 'style'> & {

@@ -16,9 +16,6 @@ import DotLottiePlayerBase from '@/elements/DotLottiePlayerBase'
  */
 export default class DotLottiePlayerLight extends DotLottiePlayerBase {
 
-  // @ts-expect-error: TODO:
-  public override loadAnimation = Lottie.loadAnimation
-
   override get renderer() {
     return RendererType.SVG
   }
@@ -26,6 +23,10 @@ export default class DotLottiePlayerLight extends DotLottiePlayerBase {
   constructor() {
     super()
     this.isLight = true
+  }
+
+  public override loadAnimation(config: AnimationConfiguration) {
+    return (Lottie.loadAnimation as DotLottiePlayerBase['loadAnimation'])(config)
   }
 
   protected override setOptions({
