@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "6.3.2",
+  "version": "6.3.3",
   "description": "Web Component for playing Lottie animations in your web app.",
   "type": "module",
   "exports": {
@@ -65,7 +65,7 @@
     "deploy": "npm login && npm publish"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^1.3.7",
+    "@aarsteinmedia/lottie-web": "^1.3.8",
     "fflate": "^0.8.2"
   },
   "peerDependencies": {
