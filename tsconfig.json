@@ -4,6 +4,7 @@
     "swc": true
   },
   "compilerOptions": {
+    "rootDir": ".",
     "declaration": true,
     "declarationDir": "types",
     "emitDeclarationOnly": true,
