@@ -1,9 +1,9 @@
 import type { AddAnimationParams, AnimationConfiguration, AnimationData, AnimationDirection, AnimationItem, AnimationSettings, ConvertParams, HTMLBooleanAttribute, LottieManifest, Result, Vector2 } from '@aarsteinmedia/lottie-web';
 import { RendererType, PlayMode, PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils';
-import PropertyCallbackElement from '../elements/helpers/PropertyCallbackElement';
-import renderControls from '../templates/controls';
-import renderPlayer from '../templates/player';
-import { MouseOut, PlayerState } from '../utils/enums';
+import PropertyCallbackElement from '@/elements/helpers/PropertyCallbackElement';
+import renderControls from '@/templates/controls';
+import renderPlayer from '@/templates/player';
+import { MouseOut, PlayerState } from '@/utils/enums';
 export default abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     static get observedAttributes(): readonly ["animateOnScroll", "autoplay", "controls", "direction", "hover", "loop", "mode", "playOnClick", "playOnVisible", "selector", "speed", "src", "subframe"];
     static get observedProperties(): string[];
@@ -135,7 +135,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         hasAutoplay: boolean;
         hasLoop: boolean;
         preserveAspectRatio: PreserveAspectRatio;
-    }): AnimationConfiguration<RendererType.SVG | RendererType.Canvas | RendererType.HTML>;
+    }): AnimationConfiguration;
     private _addEventListeners;
     private _addIntersectionObserver;
     private _complete;

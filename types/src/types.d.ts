@@ -2,11 +2,11 @@ import 'react/jsx-runtime';
 import 'react/jsx-dev-runtime';
 import type { AnimationSettings } from '@aarsteinmedia/lottie-web';
 import type { Plugin } from '@custom-elements-manifest/analyzer';
-import type DotLottiePlayer from './elements/DotLottiePlayer';
-import type DotLottiePlayerCanvas from './elements/DotLottiePlayerCanvas';
-import type DotLottiePlayerLight from './elements/DotLottiePlayerLight';
-import type DotLottiePlayerSVG from './svg';
-import type { tagName } from './utils/enums';
+import type DotLottiePlayer from '@/elements/DotLottiePlayer';
+import type DotLottiePlayerCanvas from '@/elements/DotLottiePlayerCanvas';
+import type DotLottiePlayerLight from '@/elements/DotLottiePlayerLight';
+import type DotLottiePlayerSVG from '@/svg';
+import type { tagName } from '@/utils/enums';
 export interface CEMConfig {
     catalyst: boolean;
     dependencies: boolean;

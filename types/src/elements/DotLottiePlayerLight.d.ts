@@ -1,8 +1,8 @@
 import type { AnimationConfiguration, Vector2 } from '@aarsteinmedia/lottie-web';
 import { type PreserveAspectRatio, RendererType } from '@aarsteinmedia/lottie-web/utils';
-import DotLottiePlayerBase from '../elements/DotLottiePlayerBase';
-export default class DotLottiePlayerCanvas extends DotLottiePlayerBase {
-    loadAnimation: typeof import("@aarsteinmedia/lottie-web/canvas").loadAnimation;
+import DotLottiePlayerBase from '@/elements/DotLottiePlayerBase';
+export default class DotLottiePlayerLight extends DotLottiePlayerBase {
+    loadAnimation: typeof import("@aarsteinmedia/lottie-web/light").loadAnimation;
     get renderer(): RendererType;
     constructor();
     protected setOptions({ container, hasAutoplay, hasLoop, initialSegment, preserveAspectRatio, }: {
@@ -12,5 +12,5 @@ export default class DotLottiePlayerCanvas extends DotLottiePlayerBase {
         hasAutoplay: boolean;
         hasLoop: boolean;
         preserveAspectRatio: PreserveAspectRatio;
-    }): AnimationConfiguration<RendererType.Canvas>;
+    }): AnimationConfiguration<RendererType.SVG>;
 }
