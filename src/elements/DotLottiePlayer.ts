@@ -35,7 +35,7 @@ export default class DotLottiePlayer extends DotLottiePlayerBase {
     hasAutoplay: boolean
     hasLoop: boolean
     preserveAspectRatio: PreserveAspectRatio
-  }) {
+  }): AnimationConfiguration {
     const options: AnimationConfiguration = {
       autoplay: hasAutoplay,
       container,

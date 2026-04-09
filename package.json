@@ -107,7 +107,9 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "@swc/core"
+      "@swc/core",
+      "rs-module-lexer",
+      "unrs-resolver"
     ]
   },
   "browserslist": {
