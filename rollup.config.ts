@@ -4,7 +4,7 @@ import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import autoprefixer from 'autoprefixer'
 import { readFile } from 'node:fs/promises'
-import path from 'node:path'
+import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import flexbugs from 'postcss-flexbugs-fixes'
 import { dts } from 'rollup-plugin-dts'
@@ -26,9 +26,9 @@ interface MinifyOptions {
 
 const isProd = process.env.NODE_ENV !== 'development',
   isLight = process.env.VER === 'light',
-  __dirname = path.dirname(fileURLToPath(import.meta.url)),
+  __dirname = dirname(fileURLToPath(import.meta.url)),
 
-  pkgBuffer = await readFile(new URL(path.resolve(__dirname, 'package.json'), import.meta.url)),
+  pkgBuffer = await readFile(new URL(resolve(__dirname, 'package.json'), import.meta.url)),
   pkg: typeof import('./package.json') = JSON.parse(pkgBuffer.toString()),
 
   external = [
@@ -46,25 +46,25 @@ const isProd = process.env.NODE_ENV !== 'development',
 
   inputs = [
     {
-      file: path.resolve(
+      file: resolve(
         __dirname, 'src', 'full.ts'
       ),
       name: 'full'
     },
     {
-      file: path.resolve(
+      file: resolve(
         __dirname, 'src', 'light.ts'
       ),
       name: 'light'
     },
     {
-      file: path.resolve(
+      file: resolve(
         __dirname, 'src', 'svg.ts'
       ),
       name: 'svg'
     },
     {
-      file: path.resolve(
+      file: resolve(
         __dirname, 'src', 'canvas.ts'
       ),
       name: 'canvas'
@@ -83,9 +83,9 @@ const isProd = process.env.NODE_ENV !== 'development',
     }),
     template({
       include: [
-        path.resolve(
+        resolve(
           __dirname, 'src', 'elements', 'DotLottiePlayer.ts'
-        ), path.resolve(
+        ), resolve(
           __dirname, 'src', 'templates', '*'
         ),
       ],
@@ -121,7 +121,7 @@ const isProd = process.env.NODE_ENV !== 'development',
       pluginSummary(),
     ] : plugins())(),
 
-  modulePlugins = (): Plugin[] =>
+  modulePlugins = ((): Plugin[] =>
 
     isProd ? [
       ...plugins(true), pluginSummary()
@@ -133,11 +133,11 @@ const isProd = process.env.NODE_ENV !== 'development',
         openPage: isLight ? 'light.html' : undefined
       }),
       livereload(),
-    ],
+    ])(),
 
   types: RollupOptions[] = inputs.map((input) => ({
     external,
-    input: path.resolve(
+    input: resolve(
       __dirname, 'types', `${input.name}.d.ts`
     ),
     output: {
@@ -146,6 +146,13 @@ const isProd = process.env.NODE_ENV !== 'development',
     },
     plugins: [dts()],
   })),
+
+  // jsInput = Object.fromEntries(inputs.map((i) => [i.name, i.file])),
+  // dtsInput = Object.fromEntries(inputs.map((i) => [
+  //   i.name, resolve(
+  //     __dirname, 'types', `${i.name}.d.ts`
+  //   ),
+  // ])),
 
   unpkgs: RollupOptions[] = inputs.map((input) => ({
     input: input.file,
@@ -169,7 +176,7 @@ const isProd = process.env.NODE_ENV !== 'development',
       file: `./dist/${input.name}.js`,
       format: 'esm',
     },
-    plugins: modulePlugins(),
+    plugins: modulePlugins,
   })),
 
   output = isProd ?
