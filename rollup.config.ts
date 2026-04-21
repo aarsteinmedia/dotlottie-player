@@ -107,6 +107,13 @@ const isProd = process.env.NODE_ENV !== 'development',
     swc(),
   ],
 
+  onwarn: RollupOptions['onwarn'] = (warning, warn) => {
+    if (warning.code === 'CIRCULAR_DEPENDENCY') {
+      return
+    }
+    warn(warning)
+  },
+
   unpkgPlugins = ((): Plugin[] =>
     isProd ? [
       ...plugins(),
@@ -142,12 +149,7 @@ const isProd = process.env.NODE_ENV !== 'development',
 
   unpkgs: RollupOptions[] = inputs.map((input) => ({
     input: input.file,
-    onwarn(warning, warn) {
-      if (warning.code === 'CIRCULAR_DEPENDENCY') {
-        return
-      }
-      warn(warning)
-    },
+    onwarn,
     output: {
       exports: 'named',
       extend: true,
@@ -161,14 +163,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   modules: RollupOptions[] = inputs.map((input) => ({
     external,
     input: input.file,
-    onwarn(warning, warn) {
-      if (
-        warning.code === 'CIRCULAR_DEPENDENCY'
-      ) {
-        return
-      }
-      warn(warning)
-    },
+    onwarn,
     output: {
       exports: 'named',
       file: `./dist/${input.name}.js`,
@@ -180,6 +175,6 @@ const isProd = process.env.NODE_ENV !== 'development',
   output = isProd ?
     [...modules,
       ...types,
-      ...unpkgs] : modules[isLight ? 1 : 0]
+      ...unpkgs] : modules
 
-export default output
+export default output[isLight ? 1 : 0]
