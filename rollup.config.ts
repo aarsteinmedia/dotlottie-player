@@ -3,7 +3,6 @@ import type { Plugin, RollupOptions } from 'rollup'
 import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import autoprefixer from 'autoprefixer'
-import { readFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import flexbugs from 'postcss-flexbugs-fixes'
@@ -16,6 +15,16 @@ import pluginSummary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
 import { typescriptPaths } from 'rollup-plugin-typescript-paths'
 
+// type Mode = 'development' | 'production'
+type Ver = 'full' | 'light' | 'svg' | 'canvas'
+// type OutputType = 'esm' | 'iife'
+// type Target = 'modules' | 'unpkg' | 'types' | 'all'
+
+interface InputsDef {
+  file: string
+  name: Ver
+}
+
 interface MinifyOptions {
   parts: {
     text: string;
@@ -27,9 +36,6 @@ interface MinifyOptions {
 const isProd = process.env.NODE_ENV !== 'development',
   isLight = process.env.VER === 'light',
   __dirname = dirname(fileURLToPath(import.meta.url)),
-
-  pkgBuffer = await readFile(new URL(resolve(__dirname, 'package.json'), import.meta.url)),
-  pkg: typeof import('./package.json') = JSON.parse(pkgBuffer.toString()),
 
   external = [
     '@aarsteinmedia/lottie-web',
@@ -44,7 +50,25 @@ const isProd = process.env.NODE_ENV !== 'development',
     'react/jsx-dev-runtime',
   ],
 
-  inputs = [
+  // parseEnv = (_env = process.env) => {
+  //   const mode: Mode =
+  //     _env.NODE_ENV === 'development' ? 'development' : 'production',
+  //     ver: Ver =
+  //       _env.VER === 'light' ? 'light' : 'full',
+  //     outputType: OutputType =
+  //       _env.TYPE === 'iife' ? 'iife' : 'esm',
+  //     target: Target =
+  //       (_env.TARGET as Target | undefined) ?? 'all'
+
+  //   return {
+  //     mode,
+  //     outputType,
+  //     target,
+  //     ver
+  //   }
+  // },
+
+  inputs: readonly InputsDef[] = [
     {
       file: resolve(
         __dirname, 'src', 'full.ts'
@@ -69,7 +93,7 @@ const isProd = process.env.NODE_ENV !== 'development',
       ),
       name: 'canvas'
     }
-  ],
+  ] as const,
 
   plugins = (preferBuiltins = false): Plugin[] => [
     typescriptPaths(),
@@ -135,24 +159,12 @@ const isProd = process.env.NODE_ENV !== 'development',
       livereload(),
     ])(),
 
-  types: RollupOptions[] = inputs.map((input) => ({
-    external,
-    input: resolve(
-      __dirname, 'types', `${input.name}.d.ts`
+  jsInput = Object.fromEntries(inputs.map((i) => [i.name, i.file])),
+  dtsInput = Object.fromEntries(inputs.map((i) => [
+    i.name, resolve(
+      __dirname, 'types', `${i.name}.d.ts`
     ),
-    output: {
-      file: `./dist/${input.name}.d.ts`,
-      format: 'esm',
-    },
-    plugins: [dts()],
-  })),
-
-  // jsInput = Object.fromEntries(inputs.map((i) => [i.name, i.file])),
-  // dtsInput = Object.fromEntries(inputs.map((i) => [
-  //   i.name, resolve(
-  //     __dirname, 'types', `${i.name}.d.ts`
-  //   ),
-  // ])),
+  ])),
 
   unpkgs: RollupOptions[] = inputs.map((input) => ({
     input: input.file,
@@ -162,26 +174,39 @@ const isProd = process.env.NODE_ENV !== 'development',
       extend: true,
       file: `./dist/unpkg-${input.name}.js`,
       format: 'iife',
-      name: pkg.name,
+      name: '@aarsteinmedia/dotlottie-player',
     },
     plugins: unpkgPlugins,
   })),
 
-  modules: RollupOptions[] = inputs.map((input) => ({
+  modules: RollupOptions[] = [{
     external,
-    input: input.file,
+    input: jsInput,
     onwarn,
     output: {
+      chunkFileNames: 'chunks/[name]-[hash].js',
+      dir: resolve(__dirname, 'dist'),
+      entryFileNames: '[name].js',
       exports: 'named',
-      file: `./dist/${input.name}.js`,
       format: 'esm',
     },
     plugins: modulePlugins,
-  })),
+  }, {
+    external,
+    input: dtsInput,
+    output: {
+      chunkFileNames: 'chunks/[name]-[hash].d.ts',
+      dir: resolve(__dirname, 'dist'),
+      entryFileNames: '[name].d.ts',
+      format: 'esm',
+    },
+    plugins: [dts()],
+  }
+  ],
+
+  // env = parseEnv(),
 
   output = isProd ?
-    [...modules,
-      ...types,
-      ...unpkgs] : modules
+    [...unpkgs, ...modules] : modules[isLight ? 1 : 0]
 
-export default output[isLight ? 1 : 0]
+export default output
