@@ -46,6 +46,20 @@ export const aspectRatio = (objectFit: ObjectFit) => {
     return res
   },
 
+  isEnum = <T extends Record<string, string | number>>(
+    val: unknown,
+    _enum: T
+  ): val is T[keyof T] => {
+    if (val === undefined || val === null) {
+      return false
+    }
+
+    // Numeric enums have reverse-mapping keys like "0", "1", etc.
+    const enumKeys = Object.keys(_enum).filter((k) => Number.isNaN(Number(k)))
+
+    return enumKeys.some((k) => _enum[k] === (val as T[keyof T]))
+  },
+
   isLottie = (json: AnimationData) => {
     const mandatory = [
       'v',

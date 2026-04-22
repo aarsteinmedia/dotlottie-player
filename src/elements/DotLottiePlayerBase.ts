@@ -3,6 +3,7 @@ import type {
   AnimationConfiguration,
   AnimationData,
   AnimationDirection,
+  AnimationItem,
   AnimationSettings,
   ConvertParams,
   HTMLBooleanAttribute,
@@ -36,6 +37,7 @@ import {
   aspectRatio,
   frameOutput,
   handleErrors,
+  isEnum,
   isLottie,
   isTouch
 } from '@/utils'
@@ -56,24 +58,24 @@ const notImplemented = 'Method is not implemented',
 
 export { RendererType }
 
-export interface DotLottieAnimationInstance {
-  addEventListener: (name: string, callback: (...args: any[]) => void) => void
-  autoplay?: boolean
-  currentFrame: number
-  destroy: () => void
-  goToAndPlay: (value: number, isFrame?: boolean) => void
-  goToAndStop: (value: number, isFrame?: boolean) => void
-  pause: () => void
-  play: () => void
-  playDirection: number
-  removeEventListener: (name: string, callback: (...args: any[]) => void) => void
-  setDirection: (direction: AnimationDirection) => void
-  setLoop: (loop: boolean) => void
-  setSpeed: (speed: number) => void
-  setSubframe: (useSubframe: boolean) => void
-  stop: () => void
-  totalFrames: number
-}
+// export interface DotLottieAnimationInstance {
+//   addEventListener: (name: string, callback: (...args: any[]) => void) => void
+//   autoplay?: boolean
+//   currentFrame: number
+//   destroy: () => void
+//   goToAndPlay: (value: number, isFrame?: boolean) => void
+//   goToAndStop: (value: number, isFrame?: boolean) => void
+//   pause: () => void
+//   play: () => void
+//   playDirection: number
+//   removeEventListener: (name: string, callback: (...args: any[]) => void) => void
+//   setDirection: (direction: AnimationDirection) => void
+//   setLoop: (loop: boolean) => void
+//   setSpeed: (speed: number) => void
+//   setSubframe: (useSubframe: boolean) => void
+//   stop: () => void
+//   totalFrames: number
+// }
 
 /**
  * DotLottie Player Web Component.
@@ -108,7 +110,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       '_seeker',
       '_currentAnimation',
       '_animations',
-    ]
+    ] as const
   }
 
   /**
@@ -364,8 +366,8 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get objectfit() {
     const val = this.getAttribute('objectfit')
 
-    if (val && Object.values(ObjectFit).includes(val as ObjectFit)) {
-      return val as ObjectFit
+    if (isEnum(val, ObjectFit)) {
+      return val
     }
 
     return ObjectFit.Contain
@@ -422,11 +424,8 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get preserveAspectRatio() {
     const val = this.getAttribute('preserveAspectRatio')
 
-    if (
-      val &&
-      Object.values(PreserveAspectRatio).includes(val as PreserveAspectRatio)
-    ) {
-      return val as PreserveAspectRatio
+    if (isEnum(val, PreserveAspectRatio)) {
+      return val
     }
 
     return null
@@ -574,7 +573,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   private _isBounce = false
   private _isDotLottie = false
 
-  private _lottieInstance: DotLottieAnimationInstance | null = null
+  private _lottieInstance: AnimationItem | null = null
 
   private _manifest?: LottieManifest
   /**
@@ -714,10 +713,14 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       case 'mode': {
         const toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
 
-        if (toggleBoomerang instanceof HTMLButtonElement) {
-          toggleBoomerang.dataset.active = (value as PlayMode === PlayMode.Bounce).toString()
+        if (!isEnum(value, PlayMode)) {
+          break
         }
-        this._isBounce = value as PlayMode === PlayMode.Bounce
+
+        if (toggleBoomerang instanceof HTMLButtonElement) {
+          toggleBoomerang.dataset.active = (value === PlayMode.Bounce).toString()
+        }
+        this._isBounce = value === PlayMode.Bounce
         break
       }
 
@@ -918,7 +921,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       this._isBounce = this.mode === PlayMode.Bounce
       if (this._multiAnimationSettings.length > 0 && this._multiAnimationSettings[this._currentAnimation]?.mode) {
         this._isBounce =
-          this._multiAnimationSettings[this._currentAnimation]?.mode as PlayMode ===
+          this._multiAnimationSettings[this._currentAnimation]?.mode ===
           PlayMode.Bounce
       }
 
@@ -1021,7 +1024,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     }
   }
 
-  public loadAnimation(_config: AnimationConfiguration): DotLottieAnimationInstance {
+  public loadAnimation(_config: AnimationConfiguration): AnimationItem {
     throw new Error(notImplemented)
   }
 
@@ -1955,7 +1958,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       // Check play mode for current animation
       if (this._multiAnimationSettings[this._currentAnimation]?.mode) {
         this._isBounce =
-          this._multiAnimationSettings[this._currentAnimation]?.mode as PlayMode ===
+          this._multiAnimationSettings[this._currentAnimation]?.mode ===
           PlayMode.Bounce
       }
 

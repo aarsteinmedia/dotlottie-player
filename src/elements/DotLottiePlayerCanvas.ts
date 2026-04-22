@@ -26,7 +26,7 @@ export default class DotLottiePlayerCanvas extends DotLottiePlayerBase {
   }
 
   public override loadAnimation(config: AnimationConfiguration) {
-    return (Lottie.loadAnimation as DotLottiePlayerBase['loadAnimation'])(config)
+    return Lottie.loadAnimation(config)
   }
 
   protected override setOptions({
