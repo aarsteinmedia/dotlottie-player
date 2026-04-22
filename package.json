@@ -66,7 +66,7 @@
     "deploy": "npm login && npm publish"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^1.3.10",
+    "@aarsteinmedia/lottie-web": "^1.3.11",
     "fflate": "^0.8.2"
   },
   "peerDependencies": {
