@@ -1343,7 +1343,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     const curr = this._multiAnimationSettings[this._currentAnimation] ?? {}
 
     if (curr.mode !== undefined) {
-      if (curr.mode as PlayMode === PlayMode.Normal) {
+      if (curr.mode === PlayMode.Normal) {
         curr.mode = PlayMode.Bounce
         this._isBounce = true
 
