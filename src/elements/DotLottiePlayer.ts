@@ -61,9 +61,7 @@ export default class DotLottiePlayer extends DotLottiePlayerBase {
       case RendererType.Canvas: {
         options.rendererSettings = {
           ...options.rendererSettings,
-          // `clearCanvas` is canvas-only, but `rendererSettings` is typed as a
-          // renderer union, so we have to narrow/cast in this branch.
-          clearCanvas: true,
+          // clearCanvas: true,
           preserveAspectRatio,
           progressiveLoad: true,
         }
