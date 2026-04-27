@@ -66,7 +66,7 @@ export default class DotLottiePlayer extends DotLottiePlayerBase {
           clearCanvas: true,
           preserveAspectRatio,
           progressiveLoad: true,
-        } as AnimationConfiguration['rendererSettings']
+        }
         break
       }
       // case RendererType.HTML: {
