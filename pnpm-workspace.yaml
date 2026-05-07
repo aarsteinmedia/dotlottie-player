@@ -1,0 +1,4 @@
+allowBuilds:
+  '@swc/core': true
+  rs-module-lexer: true
+  unrs-resolver: true

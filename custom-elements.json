@@ -1,5 +1,119 @@
 {
   "schemaVersion": "1.0.0",
   "readme": "",
-  "modules": []
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "dist/full.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "DotLottie Player Web Component.",
+          "name": "DotLottiePlayer",
+          "members": [
+            {
+              "kind": "method",
+              "name": "loadAnimation",
+              "parameters": [
+                {
+                  "name": "config"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setOptions",
+              "parameters": [
+                {
+                  "name": "{ container, hasAutoplay, hasLoop, initialSegment, preserveAspectRatio, rendererType }"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "addAnimation",
+              "default": "addAnimation"
+            },
+            {
+              "kind": "field",
+              "name": "convert",
+              "default": "convert"
+            }
+          ],
+          "superclass": {
+            "name": "DotLottiePlayerBase",
+            "module": "/dist/chunks/DotLottiePlayerBase-BBHa6yP8.js"
+          },
+          "tagName": "tagName",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PlayMode",
+          "declaration": {
+            "name": "PlayMode",
+            "package": "@aarsteinmedia/lottie-web/utils"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "PlayerEvents",
+          "declaration": {
+            "name": "PlayerEvents",
+            "package": "@aarsteinmedia/lottie-web/utils"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "RendererType",
+          "declaration": {
+            "name": "RendererType",
+            "package": "@aarsteinmedia/lottie-web/utils"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "MouseOut",
+          "declaration": {
+            "name": "M",
+            "module": "./chunks/DotLottiePlayerBase-BBHa6yP8.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "PlayerState",
+          "declaration": {
+            "name": "P",
+            "module": "./chunks/DotLottiePlayerBase-BBHa6yP8.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "tagName",
+          "declaration": {
+            "name": "DotLottiePlayer",
+            "module": "dist/full.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "DotLottiePlayer",
+            "module": "dist/full.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "tagName",
+          "declaration": {
+            "name": "tagName",
+            "module": "dist/full.js"
+          }
+        }
+      ]
+    }
+  ]
 }

@@ -6,7 +6,7 @@ const cemConfig: CEMConfig = {
   dev: false,
   exclude: ['dev', '**/*.test.*'],
   fast: false,
-  globs: ['dist/index.js'],
+  globs: ['dist/full.js'],
   litelement: false,
   outdir: '.',
   packagejson: true,
