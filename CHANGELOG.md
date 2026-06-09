@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [6.3.6] - 09-06-2026
+
+### Changed
+
+- Added support for seedRandom expression.
+- Various backend optimizations.
+
 ## [6.3.0] - 22-02-2026
 
 ### Changed
