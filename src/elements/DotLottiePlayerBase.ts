@@ -27,11 +27,10 @@ import {
 
 import type { Settings } from '@/types'
 
+import { loadControlsModule } from '@/elements/helpers/controlsLoader'
 import PropertyCallbackElement from '@/elements/helpers/PropertyCallbackElement'
 import styles from '@/styles.css'
-import renderControls from '@/templates/controls'
-import pauseIcon from '@/templates/icons/pauseIcon'
-import playIcon from '@/templates/icons/playIcon'
+import { updatePlayPauseButton } from '@/templates/controls'
 import renderPlayer from '@/templates/player'
 import {
   aspectRatio,
@@ -47,6 +46,8 @@ import {
   PlayerState,
 } from '@/utils/enums'
 
+import { loadErrorModule } from './helpers/errorLoader'
+
 const notImplemented = 'Method is not implemented',
   getStyles = async () => {
     const styleSheet = new CSSStyleSheet()
@@ -57,25 +58,6 @@ const notImplemented = 'Method is not implemented',
   }
 
 export { RendererType }
-
-// export interface DotLottieAnimationInstance {
-//   addEventListener: (name: string, callback: (...args: any[]) => void) => void
-//   autoplay?: boolean
-//   currentFrame: number
-//   destroy: () => void
-//   goToAndPlay: (value: number, isFrame?: boolean) => void
-//   goToAndStop: (value: number, isFrame?: boolean) => void
-//   pause: () => void
-//   play: () => void
-//   playDirection: number
-//   removeEventListener: (name: string, callback: (...args: any[]) => void) => void
-//   setDirection: (direction: AnimationDirection) => void
-//   setLoop: (loop: boolean) => void
-//   setSpeed: (speed: number) => void
-//   setSubframe: (useSubframe: boolean) => void
-//   stop: () => void
-//   totalFrames: number
-// }
 
 /**
  * DotLottie Player Web Component.
@@ -552,8 +534,6 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
   protected _render = renderPlayer
 
-  protected _renderControls = renderControls
-
   /**
    * Seeker.
    */
@@ -565,17 +545,22 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
    * on load, if controls are visible.
    */
   private _animations: AnimationData[] = []
+
+  private _controlsLoadId = 0
+
   /**
    * Which animation to show, if several.
    */
   private _currentAnimation = 0
+
+  private _errorLoadId = 0
+
   private _intersectionObserver?: undefined | IntersectionObserver
   private _isBounce = false
   private _isDotLottie = false
-
   private _lottieInstance: AnimationItem | null = null
-
   private _manifest?: LottieManifest
+
   /**
    * Multi-animation settings.
    */
@@ -585,7 +570,6 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
    * Segment.
    */
   private _segment?: Vector2
-
   constructor() {
     super()
     this._complete = this._complete.bind(this)
@@ -610,7 +594,6 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     this.stop = this.stop.bind(this)
     this.prev = this.prev.bind(this)
     this.next = this.next.bind(this)
-    this._renderControls = this._renderControls.bind(this)
     this.snapshot = this.snapshot.bind(this)
     this.toggleLoop = this.toggleLoop.bind(this)
     this.toggleBoomerang = this.toggleBoomerang.bind(this)
@@ -674,7 +657,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       }
 
       case 'controls': {
-        this._renderControls()
+        await this._renderControls()
         break
       }
 
@@ -993,26 +976,10 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
           this.direction === -1
       ) {
         this.seek('99%')
-
-        // if (!('IntersectionObserver' in window)) {
-        //   if (!this.animateOnScroll) {
-        //     this.play()
-        //   }
-        //   this._playerState.visible = true
-        // }
-
-        // this._addIntersectionObserver()
       }
 
-      this._renderControls()
+      await this._renderControls()
 
-      if (this.autoplay || this.playOnVisible) {
-        const togglePlay = this.shadow?.querySelector('.togglePlay')
-
-        if (togglePlay) {
-          togglePlay.innerHTML = pauseIcon
-        }
-      }
     } catch (error) {
       console.error(error)
 
@@ -1121,16 +1088,9 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     }
 
     if (name === 'playerState') {
-      togglePlay.dataset.active = (
-        value === PlayerState.Playing || value === PlayerState.Paused
-      ).toString()
-      stopButton.dataset.active = (value === PlayerState.Stopped).toString()
+      updatePlayPauseButton(togglePlay, value as PlayerState)
 
-      if (value === PlayerState.Playing) {
-        togglePlay.innerHTML = pauseIcon
-      } else {
-        togglePlay.innerHTML = playIcon
-      }
+      stopButton.dataset.active = (value === PlayerState.Stopped).toString()
     }
 
     if (name === '_seeker' && typeof value === 'number') {
@@ -1480,6 +1440,50 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     if (target instanceof HTMLElement) {
       target.focus()
     }
+  }
+
+  protected _renderControls = async () => {
+    const slot = this.shadow?.querySelector('slot[name=controls]')
+
+    if (!slot) {
+      return
+    }
+
+    if (!this.controls) {
+      slot.innerHTML = ''
+
+      return
+    }
+
+    const loadId = ++this._controlsLoadId,
+      { default: renderControls } = await loadControlsModule()
+
+    if (loadId !== this._controlsLoadId) {
+      return
+    }
+
+    renderControls.call(this)
+  }
+
+  protected async _showError() {
+    if (this.playerState !== PlayerState.Error) {
+      return
+    }
+
+    const figure = this.shadow?.querySelector('.animation')
+
+    if (!(figure instanceof HTMLElement)) {
+      return
+    }
+
+    const loadId = ++this._errorLoadId,
+      { default: errorScreen } = await loadErrorModule()
+
+    if (loadId !== this._errorLoadId) {
+      return
+    }
+
+    figure.innerHTML = errorScreen(this._errorMessage)
   }
 
   protected setOptions(_options: {

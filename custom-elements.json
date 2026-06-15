@@ -13,6 +13,24 @@
           "members": [
             {
               "kind": "method",
+              "name": "addAnimation",
+              "parameters": [
+                {
+                  "name": "params"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "convert",
+              "parameters": [
+                {
+                  "name": "params"
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "loadAnimation",
               "parameters": [
                 {
@@ -28,21 +46,11 @@
                   "name": "{ container, hasAutoplay, hasLoop, initialSegment, preserveAspectRatio, rendererType }"
                 }
               ]
-            },
-            {
-              "kind": "field",
-              "name": "addAnimation",
-              "default": "addAnimation"
-            },
-            {
-              "kind": "field",
-              "name": "convert",
-              "default": "convert"
             }
           ],
           "superclass": {
             "name": "DotLottiePlayerBase",
-            "module": "/dist/chunks/DotLottiePlayerBase-BBHa6yP8.js"
+            "module": "/dist/chunks/DotLottiePlayerBase-COmjFUND.js"
           },
           "tagName": "tagName",
           "customElement": true
@@ -78,7 +86,7 @@
           "name": "MouseOut",
           "declaration": {
             "name": "M",
-            "module": "./chunks/DotLottiePlayerBase-BBHa6yP8.js"
+            "module": "./chunks/DotLottiePlayerBase-COmjFUND.js"
           }
         },
         {
@@ -86,7 +94,7 @@
           "name": "PlayerState",
           "declaration": {
             "name": "P",
-            "module": "./chunks/DotLottiePlayerBase-BBHa6yP8.js"
+            "module": "./chunks/DotLottiePlayerBase-COmjFUND.js"
           }
         },
         {

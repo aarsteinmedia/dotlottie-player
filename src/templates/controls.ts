@@ -1,13 +1,14 @@
-import { convert } from '@aarsteinmedia/lottie-web/dotlottie'
 import { PlayMode } from '@aarsteinmedia/lottie-web/utils'
 
 import type DotLottiePlayerBase from '@/elements/DotLottiePlayerBase'
 
+import { loadDotLottieTools } from '@/elements/helpers/dotlottieLoader'
 import boomerangIcon from '@/templates/icons/boomerangIcon'
 import convertIcon from '@/templates/icons/convertIcon'
 import downloadIcon from '@/templates/icons/downloadIcon'
 import loopIcon from '@/templates/icons/loopIcon'
 import nextIcon from '@/templates/icons/nextIcon'
+import pauseIcon from '@/templates/icons/pauseIcon'
 import playIcon from '@/templates/icons/playIcon'
 import prevIcon from '@/templates/icons/prevIcon'
 import settingsIcon from '@/templates/icons/settingsIcon'
@@ -177,12 +178,20 @@ export default function renderControls(this: DotLottiePlayerBase) {
     const convertButton = this.shadow.querySelector('.convert')
 
     if (convertButton instanceof HTMLButtonElement) {
-      convertButton.onclick = () => {
-        void convert({
-          isDotLottie: this.isDotLottie,
-          manifest: this.getManifest(),
-          src: this.src || this.source
-        })
+      convertButton.onclick = async () => {
+        convertButton.disabled = true
+
+        try {
+          const { convert } = await loadDotLottieTools()
+
+          await convert({
+            isDotLottie: this.isDotLottie,
+            manifest: this.getManifest(),
+            src: this.src || this.source
+          })
+        } finally {
+          convertButton.disabled = false
+        }
       }
     }
 
@@ -199,4 +208,12 @@ export default function renderControls(this: DotLottiePlayerBase) {
       toggleSettings.onblur = this._handleBlur
     }
   }
+}
+
+export function updatePlayPauseButton(togglePlay: HTMLButtonElement,
+  state: PlayerState) {
+  const isActive = state === PlayerState.Playing || state === PlayerState.Paused
+
+  togglePlay.dataset.active = isActive.toString()
+  togglePlay.innerHTML = state === PlayerState.Playing ? pauseIcon : playIcon
 }

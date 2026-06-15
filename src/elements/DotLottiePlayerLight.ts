@@ -3,7 +3,7 @@ import type {
   Vector2,
 } from '@aarsteinmedia/lottie-web'
 
-import Lottie from '@aarsteinmedia/lottie-web/light'
+import { loadAnimation } from '@aarsteinmedia/lottie-web/light'
 import {
   type PreserveAspectRatio,
   RendererType,
@@ -26,7 +26,7 @@ export default class DotLottiePlayerLight extends DotLottiePlayerBase {
   }
 
   public override loadAnimation(config: AnimationConfiguration) {
-    return Lottie.loadAnimation(config)
+    return loadAnimation(config)
   }
 
   protected override setOptions({

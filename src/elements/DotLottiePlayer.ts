@@ -1,26 +1,37 @@
-import Lottie, {
+import {
+  loadAnimation,
+  type AddAnimationParams,
   type AnimationConfiguration,
+  type ConvertParams,
   type Vector2,
 } from '@aarsteinmedia/lottie-web'
-import { addAnimation, convert } from '@aarsteinmedia/lottie-web/dotlottie'
 import {
   type PreserveAspectRatio,
   RendererType,
 } from '@aarsteinmedia/lottie-web/utils'
 
 import DotLottiePlayerBase from '@/elements/DotLottiePlayerBase'
+import { loadDotLottieTools } from '@/elements/helpers/dotlottieLoader'
 
 /**
  * DotLottie Player Web Component.
  */
 export default class DotLottiePlayer extends DotLottiePlayerBase {
 
-  public override addAnimation = addAnimation
+  public override async addAnimation(params: AddAnimationParams) {
+    const { addAnimation } = await loadDotLottieTools()
 
-  public override convert = convert
+    return await addAnimation(params)
+  }
+
+  public override async convert(params: ConvertParams) {
+    const { convert } = await loadDotLottieTools()
+
+    return await convert(params)
+  }
 
   public override loadAnimation(config: AnimationConfiguration) {
-    return Lottie.loadAnimation(config)
+    return loadAnimation(config)
   }
 
   protected override setOptions({
@@ -61,18 +72,11 @@ export default class DotLottiePlayer extends DotLottiePlayerBase {
       case RendererType.Canvas: {
         options.rendererSettings = {
           ...options.rendererSettings,
-          // clearCanvas: true,
           preserveAspectRatio,
           progressiveLoad: true,
         }
         break
       }
-      // case RendererType.HTML: {
-      //   options.rendererSettings = {
-      //     ...options.rendererSettings,
-      //     hideOnTransparent: true,
-      //   }
-      // }
     }
 
     return options
