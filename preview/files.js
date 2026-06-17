@@ -16,7 +16,8 @@ const files = [
   'dinide.lottie',
   'rond-qui-tourne.lottie',
   'tysk.json',
-  'seedRandom.json'
+  'seedRandom.json',
+  'care-education-combined.lottie',
 ]
 
 export default files
