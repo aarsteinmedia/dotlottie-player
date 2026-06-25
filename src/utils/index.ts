@@ -78,4 +78,10 @@ export const aspectRatio = (objectFit: ObjectFit) => {
   isTouch = () => 'ontouchstart' in window,
 
   frameOutput = (frame?: number) =>
-    ((frame ?? 0) + 1).toString().padStart(3, '0')
+    ((frame ?? 0) + 1).toString().padStart(3, '0'),
+
+  parseHTMLBooleans = (val: string | null) => val !== null && [
+    'true',
+    '',
+    '1',
+  ].includes(val)

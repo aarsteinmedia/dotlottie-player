@@ -19,7 +19,7 @@ import {
   getFilename,
   isServer,
   RendererType,
-  PlayerEvents,
+  PlayerEvent,
   PlayMode,
   PreserveAspectRatio,
   clamp
@@ -38,7 +38,8 @@ import {
   handleErrors,
   isEnum,
   isLottie,
-  isTouch
+  isTouch,
+  parseHTMLBooleans
 } from '@/utils'
 import {
   MouseOut,
@@ -127,7 +128,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get animateOnScroll() {
     const val = this.getAttribute('animateOnScroll')
 
-    return val === 'true' || val === '' || val === '1'
+    return parseHTMLBooleans(val)
   }
 
   public get animations() {
@@ -144,7 +145,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get autoplay() {
     const val = this.getAttribute('autoplay')
 
-    return val === 'true' || val === '' || val === '1'
+    return parseHTMLBooleans(val)
   }
 
   /**
@@ -168,7 +169,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get controls() {
     const val = this.getAttribute('controls')
 
-    return val === 'true' || val === '' || val === '1'
+    return parseHTMLBooleans(val)
   }
 
   /**
@@ -249,7 +250,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get dontFreezeOnBlur() {
     const val = this.getAttribute('dontFreezeOnBlur')
 
-    return val === 'true' || val === '' || val === '1'
+    return parseHTMLBooleans(val)
   }
 
   /**
@@ -262,7 +263,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get hover() {
     const val = this.getAttribute('hover')
 
-    return val === 'true' || val === '' || val === '1'
+    return parseHTMLBooleans(val)
   }
 
   /**
@@ -296,7 +297,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get loop() {
     const val = this.getAttribute('loop')
 
-    return val === 'true' || val === '' || val === '1'
+    return parseHTMLBooleans(val)
   }
 
   /**
@@ -366,7 +367,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get once() {
     const val = this.getAttribute('once')
 
-    return val === 'true' || val === '' || val === '1'
+    return parseHTMLBooleans(val)
   }
 
   /**
@@ -379,7 +380,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get playOnClick() {
     const val = this.getAttribute('playOnClick')
 
-    return val === 'true' || val === '' || val === '1'
+    return parseHTMLBooleans(val)
   }
 
   /**
@@ -392,7 +393,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get playOnVisible() {
     const val = this.getAttribute('playOnVisible')
 
-    return val === 'true' || val === '' || val === '1'
+    return parseHTMLBooleans(val)
   }
 
   /**
@@ -456,7 +457,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get simple() {
     const val = this.getAttribute('simple')
 
-    return val === 'true' || val === '' || val === '1'
+    return parseHTMLBooleans(val)
   }
 
   /**
@@ -497,7 +498,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   get subframe() {
     const val = this.getAttribute('subframe')
 
-    return val === 'true' || val === '' || val === '1'
+    return parseHTMLBooleans(val)
   }
 
   /**
@@ -784,11 +785,11 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         // Add intersection observer for detecting component being out-of-view.
         this._addIntersectionObserver()
 
-        this.dispatchEvent(new CustomEvent(PlayerEvents.Rendered))
+        this.dispatchEvent(new CustomEvent(PlayerEvent.Rendered))
       })()
     } catch (error) {
       console.error(error)
-      this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
+      this.dispatchEvent(new CustomEvent(PlayerEvent.Error))
     }
   }
 
@@ -808,7 +809,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
     this._lottieInstance.destroy()
     this._lottieInstance = null
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Destroyed))
+    this.dispatchEvent(new CustomEvent(PlayerEvent.Destroyed))
     this.remove()
 
     document.removeEventListener('visibilitychange', this._onVisibilityChange)
@@ -987,7 +988,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
       this.playerState = PlayerState.Error
 
-      this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
+      this.dispatchEvent(new CustomEvent(PlayerEvent.Error))
     }
   }
 
@@ -1016,7 +1017,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
     try {
       this._lottieInstance.pause()
-      this.dispatchEvent(new CustomEvent(PlayerEvents.Pause))
+      this.dispatchEvent(new CustomEvent(PlayerEvent.Pause))
     } catch(error) {
       hasError = true
       console.error(error)
@@ -1039,7 +1040,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     try {
       this._lottieInstance.play()
 
-      this.dispatchEvent(new CustomEvent(PlayerEvents.Play))
+      this.dispatchEvent(new CustomEvent(PlayerEvent.Play))
     } catch(error) {
       hasError = true
       console.error(error)
@@ -1293,7 +1294,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
     try {
       this._lottieInstance.stop()
-      this.dispatchEvent(new CustomEvent(PlayerEvents.Stop))
+      this.dispatchEvent(new CustomEvent(PlayerEvent.Stop))
     } finally {
       this.playerState = PlayerState.Stopped
     }
@@ -1392,7 +1393,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
     try {
       this._lottieInstance.pause()
-      this.dispatchEvent(new CustomEvent(PlayerEvents.Freeze))
+      this.dispatchEvent(new CustomEvent(PlayerEvent.Freeze))
     } finally {
       this.playerState = PlayerState.Frozen
     }
@@ -1610,7 +1611,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
     this.playerState = PlayerState.Completed
 
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Complete, {
+    this.dispatchEvent(new CustomEvent(PlayerEvent.Complete, {
       detail: {
         frame: currentFrame,
         seeker: this._seeker,
@@ -1620,16 +1621,16 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
   private _dataFailed() {
     this.playerState = PlayerState.Error
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
+    this.dispatchEvent(new CustomEvent(PlayerEvent.Error))
   }
 
   private _dataReady() {
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Load))
+    this.dispatchEvent(new CustomEvent(PlayerEvent.Load))
   }
 
   private _DOMLoaded() {
     this._playerState.loaded = true
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Ready))
+    this.dispatchEvent(new CustomEvent(PlayerEvent.Ready))
   }
 
   private _enterFrame() {
@@ -1640,7 +1641,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
     this._seeker = Math.round(currentFrame / totalFrames * 100)
 
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Frame, {
+    this.dispatchEvent(new CustomEvent(PlayerEvent.Frame, {
       detail: {
         frame: currentFrame,
         seeker: this._seeker,
@@ -1833,13 +1834,13 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         this.setLoop(false)
 
         this.playerState = PlayerState.Completed
-        this.dispatchEvent(new CustomEvent(PlayerEvents.Complete))
+        this.dispatchEvent(new CustomEvent(PlayerEvent.Complete))
 
         return
       }
     }
 
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Loop))
+    this.dispatchEvent(new CustomEvent(PlayerEvent.Loop))
 
     if (this._isBounce) {
       this._lottieInstance.goToAndStop(playDirection === -1 ? inPoint : outPoint * 0.99,
@@ -1970,7 +1971,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       this._removeEventListeners()
       this._addEventListeners()
 
-      this.dispatchEvent(new CustomEvent(isPrevious ? PlayerEvents.Previous : PlayerEvents.Next))
+      this.dispatchEvent(new CustomEvent(isPrevious ? PlayerEvent.Previous : PlayerEvent.Next))
 
       if (
         this._multiAnimationSettings[this._currentAnimation]?.autoplay ??
@@ -1996,7 +1997,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
 
       this.playerState = PlayerState.Error
 
-      this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
+      this.dispatchEvent(new CustomEvent(PlayerEvent.Error))
     }
   }
 
@@ -2007,12 +2008,12 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     const method = action === 'add' ? 'addEventListener' : 'removeEventListener'
 
     if (this._lottieInstance) {
-      this._lottieInstance[method]('enterFrame', this._enterFrame)
-      this._lottieInstance[method]('complete', this._complete)
-      this._lottieInstance[method]('loopComplete', this._loopComplete)
-      this._lottieInstance[method]('DOMLoaded', this._DOMLoaded)
-      this._lottieInstance[method]('data_ready', this._dataReady)
-      this._lottieInstance[method]('data_failed', this._dataFailed)
+      this._lottieInstance[method](PlayerEvent.EnterFrame, this._enterFrame)
+      this._lottieInstance[method](PlayerEvent.Complete, this._complete)
+      this._lottieInstance[method](PlayerEvent.LoopComplete, this._loopComplete)
+      this._lottieInstance[method](PlayerEvent.DOMLoaded, this._DOMLoaded)
+      this._lottieInstance[method](PlayerEvent.DataReady, this._dataReady)
+      this._lottieInstance[method](PlayerEvent.DataFailed, this._dataFailed)
     }
 
     if (this.selector) {

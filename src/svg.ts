@@ -1,5 +1,5 @@
 import {
-  isServer, PlayerEvents, PlayMode
+  isServer, PlayerEvent, PlayMode
 } from '@aarsteinmedia/lottie-web/utils'
 
 import DotLottiePlayerSVG from '@/elements/DotLottiePlayerSVG'
@@ -7,7 +7,7 @@ import { tagName } from '@/utils/enums'
 
 export { RendererType } from '@aarsteinmedia/lottie-web/utils'
 
-export { PlayerEvents, PlayMode }
+export { PlayerEvent, PlayMode }
 export default DotLottiePlayerSVG
 
 export {

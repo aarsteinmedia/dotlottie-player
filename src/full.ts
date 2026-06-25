@@ -1,11 +1,11 @@
 import {
-  isServer, PlayerEvents, PlayMode
+  isServer, PlayerEvent, PlayMode
 } from '@aarsteinmedia/lottie-web/utils'
 
 import DotLottiePlayer from '@/elements/DotLottiePlayer'
 import { tagName } from '@/utils/enums'
 
-export { PlayerEvents, PlayMode }
+export { PlayerEvent, PlayMode }
 export default DotLottiePlayer
 
 export {

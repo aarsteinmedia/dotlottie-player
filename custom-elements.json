@@ -50,7 +50,7 @@
           ],
           "superclass": {
             "name": "DotLottiePlayerBase",
-            "module": "/dist/chunks/DotLottiePlayerBase-COmjFUND.js"
+            "module": "/dist/chunks/DotLottiePlayerBase-B4yJibwF.js"
           },
           "tagName": "tagName",
           "customElement": true
@@ -67,9 +67,9 @@
         },
         {
           "kind": "js",
-          "name": "PlayerEvents",
+          "name": "PlayerEvent",
           "declaration": {
-            "name": "PlayerEvents",
+            "name": "PlayerEvent",
             "package": "@aarsteinmedia/lottie-web/utils"
           }
         },
@@ -86,7 +86,7 @@
           "name": "MouseOut",
           "declaration": {
             "name": "M",
-            "module": "./chunks/DotLottiePlayerBase-COmjFUND.js"
+            "module": "./chunks/DotLottiePlayerBase-B4yJibwF.js"
           }
         },
         {
@@ -94,7 +94,7 @@
           "name": "PlayerState",
           "declaration": {
             "name": "P",
-            "module": "./chunks/DotLottiePlayerBase-COmjFUND.js"
+            "module": "./chunks/DotLottiePlayerBase-B4yJibwF.js"
           }
         },
         {
