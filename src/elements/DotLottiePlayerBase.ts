@@ -1821,7 +1821,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         totalFrames,
       } = this._lottieInstance,
       inPoint = this._segment ? this._segment[0] : 0,
-      outPoint = this._segment ? this._segment[0] : totalFrames
+      outPoint = this._segment ? this._segment[1] : totalFrames
 
     if (this.count) {
       if (this._isBounce) {
