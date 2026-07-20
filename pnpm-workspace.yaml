@@ -17,5 +17,5 @@ minimumReleaseAgeExclude:
   - '@swc/core-win32-x64-msvc@1.15.41'
   - '@swc/core@1.15.41'
   - prettier@3.8.4
-  - '@aarsteinmedia/lottie-web@1.4.0 || 1.5.0'
-  - stylelint@17.14.0
+  - '@aarsteinmedia/lottie-web@1.4.0 || 1.5.0 || 1.5.1'
+  - stylelint@17.14.0 || 17.14.1
