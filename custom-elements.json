@@ -107,6 +107,14 @@
         },
         {
           "kind": "js",
+          "name": "DotLottiePlayerBase",
+          "declaration": {
+            "name": "DotLottiePlayerBase",
+            "module": "dist/full.js"
+          }
+        },
+        {
+          "kind": "js",
           "name": "default",
           "declaration": {
             "name": "DotLottiePlayer",

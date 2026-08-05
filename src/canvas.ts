@@ -7,6 +7,7 @@ import { tagName } from '@/utils/enums'
 
 export { PlayerEvent, PlayMode }
 export default DotLottiePlayerCanvas
+export { default as DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
 export {
   MouseOut, PlayerState, tagName
 } from '@/utils/enums'

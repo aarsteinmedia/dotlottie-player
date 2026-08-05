@@ -9,7 +9,7 @@ export { RendererType } from '@aarsteinmedia/lottie-web/utils'
 
 export { PlayerEvent, PlayMode }
 export default DotLottiePlayerLight
-
+export { default as DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
 export {
   MouseOut, PlayerState, tagName
 } from '@/utils/enums'
