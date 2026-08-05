@@ -7,11 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [6.3.13] - 05-08-2026
+
+### Changed
+
+- Fixed error causing beziers to be dropped from keyframes.
+- Minor bugrixes.
+
 ## [6.3.11] - 20-07-2026
 
 ### Changed
 
-- Minor bugfixes, including fixing nullish coalescing not covered in brackets. Thanks to [@koloml](https://github.com/koloml)!
+- Fix by [@koloml](https://github.com/koloml) on nullish coalescing not covered correctly in brackets.
+- Minor bugfixes
 
 ## [6.3.6] - 09-06-2026
 

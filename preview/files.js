@@ -1,23 +1,3 @@
-const files = [
-  'hero-web.lottie',
-  'blackCat.lottie',
-  'ux.lottie',
-  'menuAnimation.json',
-  'optimized_m2acyje2.lottie',
-  'hp-section-2.lottie',
-  'dev.lottie',
-  'shapes-test.json',
-  'BuildGarden copy.lottie',
-  'loopOut-star.lottie',
-  'models.lottie',
-  'portal.lottie',
-  'strengths.lottie',
-  'gameAnimation.lottie',
-  'dinide.lottie',
-  'rond-qui-tourne.lottie',
-  'tysk.json',
-  'seedRandom.json',
-  'care-education-combined.lottie',
-]
+const files = ["32b1-d979.lottie","404 copy.lottie","404.lottie","404_bulb copy.lottie","404_bulb.lottie","BuildGarden copy.lottie","am.lottie","blackCat.json","blackCat.lottie","bodymovin.json","bulb.lottie","care-education-1.lottie","care-education-2.lottie","care-education-combined.lottie","cat.json","dev.lottie","dinide.lottie","factoryLine.json","factoryLine.lottie","gameAnimation.lottie","hero-web.json","hero-web.lottie","hp-section-2.lottie","intro.json","loading.json","loopOut-star.json","loopOut-star.lottie","lottieFiles.json","manually-combined.json","menuAnimation-intro.lottie","menuAnimation.json","menuAnimation.lottie","minihero.lottie","models.lottie","optimized_m2acyje2.lottie","portal.lottie","rond-qui-tourne.lottie","seedRandom.json","shapes-test.json","strengths.json","strengths.lottie","text.json","thinking.json","thinking.lottie","tysk.json","ux.json","ux.lottie","wp-banner-pro.json","wp-banner-pro.lottie","wp-banner.json","wp-banner.lottie"]
 
 export default files
