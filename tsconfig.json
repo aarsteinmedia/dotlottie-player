@@ -43,7 +43,7 @@
     "verbatimModuleSyntax": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-    "noUncheckedIndexedAccess": true,
+    "noUncheckedIndexedAccess": false,
     "noImplicitReturns": true,
     "exactOptionalPropertyTypes": true,
     "noUnusedLocals": true,

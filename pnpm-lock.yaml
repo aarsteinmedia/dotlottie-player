@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@aarsteinmedia/lottie-web':
-        specifier: ^1.5.3
-        version: 1.5.3(fflate@0.8.3)
+        specifier: ^1.5.4
+        version: 1.5.4(fflate@0.8.3)
     devDependencies:
       '@custom-elements-manifest/analyzer':
         specifier: ^0.11.0
@@ -111,8 +111,8 @@ importers:
 
 packages:
 
-  '@aarsteinmedia/lottie-web@1.5.3':
-    resolution: {integrity: sha512-oosvHnPqCgIEpGyewAbzvZ25gF6FDT3/MfjsHHaj1rgJI230et/9LsR/IzHM+Q2adiPk9UpqVxAJIdfm/Khxug==}
+  '@aarsteinmedia/lottie-web@1.5.4':
+    resolution: {integrity: sha512-ad35KIIDsgChcJQ//omM8+xn8w4Y947+yEeE6vXvvc6HCrIjlAxsCaHZth/oibK1goxt/RTrTtwdrU/u5xhOCg==}
     engines: {node: '>= 12.17.0'}
     peerDependencies:
       fflate: ^0.8.3
@@ -3712,7 +3712,7 @@ packages:
 
 snapshots:
 
-  '@aarsteinmedia/lottie-web@1.5.3(fflate@0.8.3)':
+  '@aarsteinmedia/lottie-web@1.5.4(fflate@0.8.3)':
     dependencies:
       fflate: 0.8.3
 
