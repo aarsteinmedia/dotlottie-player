@@ -60,7 +60,6 @@
   "exclude": [
     "**/node_modules",
     "**/dist",
-    "**/types",
-    "**/preview"
+    "**/types"
   ]
 }

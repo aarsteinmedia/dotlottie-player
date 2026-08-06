@@ -20,3 +20,4 @@ minimumReleaseAgeExclude:
   - '@aarsteinmedia/lottie-web@1.4.0 || 1.5.0 || 1.5.1 || 1.5.2 || 1.5.3'
   - stylelint@17.14.0 || 17.14.1
   - rollup-plugin-dts@6.5.1
+  - rollup-plugin-opener@0.2.3
