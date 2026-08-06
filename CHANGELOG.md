@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [6.4.0] - 06-08-2026
+
+### Changed
+
+- Major change in how critical load error are handled – from being relegated to console logs while staying quiet on the front end, to rendering graphic error screen. This behavior can be changed by using the boolean `quiet` attribute.
+
 ## [6.3.13] - 05-08-2026
 
 ### Changed

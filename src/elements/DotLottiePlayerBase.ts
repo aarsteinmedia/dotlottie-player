@@ -415,6 +415,19 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
   }
 
   /**
+   * Whether to display error screen on load error.
+   */
+  set quiet(value: HTMLBooleanAttribute) {
+    this.setAttribute('quiet', Boolean(value).toString())
+  }
+
+  get quiet() {
+    const val = this.getAttribute('quiet')
+
+    return parseHTMLBooleans(val)
+  }
+
+  /**
    * Renderer to use: svg, canvas or html.
    */
   set renderer(value: RendererType) {
@@ -788,8 +801,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         this.dispatchEvent(new CustomEvent(PlayerEvent.Rendered))
       })()
     } catch (error) {
-      console.error(error)
-      this.dispatchEvent(new CustomEvent(PlayerEvent.Error))
+      void this._handleError(error)
     }
   }
 
@@ -872,7 +884,6 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       this.source = src
 
       // Load the resource
-
       const {
         animations, isDotLottie, manifest
       } = await getAnimationData(src)
@@ -933,7 +944,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       }
 
       // Clear previous animation, if any
-      this._lottieInstance?.destroy()
+      this._clearPrevious()
 
       this.playerState = PlayerState.Stopped
       if (
@@ -982,13 +993,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       await this._renderControls()
 
     } catch (error) {
-      console.error(error)
-
-      this._errorMessage = handleErrors(error).message
-
-      this.playerState = PlayerState.Error
-
-      this.dispatchEvent(new CustomEvent(PlayerEvent.Error))
+      await this._handleError(error)
     }
   }
 
@@ -1471,7 +1476,16 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       return
     }
 
-    const figure = this.shadow?.querySelector('.animation')
+    const figure = this.shadow?.querySelector('.animation'),
+
+      /**
+       * Hide controls if visible.
+       */
+      controlSlot = this.shadow?.querySelector('slot[name=controls]')
+
+    if (controlSlot) {
+      controlSlot.innerHTML = ''
+    }
 
     if (!(figure instanceof HTMLElement)) {
       return
@@ -1581,6 +1595,16 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     })
 
     this._intersectionObserver.observe(this._container)
+  }
+
+  private _clearPrevious() {
+    this._lottieInstance?.destroy()
+
+    const figure = this.shadow?.querySelector('.animation')
+
+    if (figure) {
+      figure.innerHTML = ''
+    }
   }
 
   private _complete() {
@@ -1710,6 +1734,19 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
       preserveAspectRatio,
       rendererType: this.renderer
     })
+  }
+
+  private async _handleError(error: unknown) {
+    this.playerState = PlayerState.Error
+
+    if (!this.quiet) {
+      this._errorMessage = handleErrors(error).message
+      await this._showError()
+    }
+
+    this.dispatchEvent(new CustomEvent(PlayerEvent.Error))
+
+    console.error(error)
   }
 
   /**
