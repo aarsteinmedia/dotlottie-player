@@ -18,7 +18,7 @@ if (isServer) {
 /**
  * HTMLElement enhanced to track property changes.
  */
-export default abstract class PropertyCallbackElement extends HTMLElement {
+export abstract class PropertyCallbackElement extends HTMLElement {
   constructor() {
     super()
 

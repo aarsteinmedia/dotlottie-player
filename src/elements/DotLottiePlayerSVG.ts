@@ -9,12 +9,12 @@ import {
   RendererType,
 } from '@aarsteinmedia/lottie-web/utils'
 
-import DotLottiePlayerBase from '@/elements/DotLottiePlayerBase'
+import { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
 
 /**
  * DotLottie Player Web Component.
  */
-export default class DotLottiePlayerSVG extends DotLottiePlayerBase {
+export class DotLottiePlayerSVG extends DotLottiePlayerBase {
 
   override get renderer() {
     return RendererType.SVG

@@ -28,10 +28,11 @@ import {
 import type { Settings } from '@/types'
 
 import { loadControlsModule } from '@/elements/helpers/controlsLoader'
-import PropertyCallbackElement from '@/elements/helpers/PropertyCallbackElement'
+import { loadErrorModule } from '@/elements/helpers/errorLoader'
+import { PropertyCallbackElement } from '@/elements/helpers/PropertyCallbackElement'
 import styles from '@/styles.css'
 import { updatePlayPauseButton } from '@/templates/controls'
-import renderPlayer from '@/templates/player'
+import { renderPlayer } from '@/templates/player'
 import {
   aspectRatio,
   frameOutput,
@@ -47,8 +48,6 @@ import {
   PlayerState,
 } from '@/utils/enums'
 
-import { loadErrorModule } from './helpers/errorLoader'
-
 const notImplemented = 'Method is not implemented',
   getStyles = async () => {
     const styleSheet = new CSSStyleSheet()
@@ -63,7 +62,7 @@ export { RendererType }
 /**
  * DotLottie Player Web Component.
  */
-export default abstract class DotLottiePlayerBase extends PropertyCallbackElement {
+export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
 
   /**
    * Attributes to observe.
@@ -888,10 +887,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
         animations, isDotLottie, manifest
       } = await getAnimationData(src)
 
-      if (
-        !animations ||
-        animations.some((animation) => !isLottie(animation))
-      ) {
+      if (!animations?.every(isLottie)) {
         throw new Error('Broken or corrupted file')
       }
 
@@ -1462,7 +1458,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     }
 
     const loadId = ++this._controlsLoadId,
-      { default: renderControls } = await loadControlsModule()
+      { renderControls } = await loadControlsModule()
 
     if (loadId !== this._controlsLoadId) {
       return
@@ -1492,7 +1488,7 @@ export default abstract class DotLottiePlayerBase extends PropertyCallbackElemen
     }
 
     const loadId = ++this._errorLoadId,
-      { default: errorScreen } = await loadErrorModule()
+      { errorScreen } = await loadErrorModule()
 
     if (loadId !== this._errorLoadId) {
       return

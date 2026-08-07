@@ -10,13 +10,13 @@ import {
   RendererType,
 } from '@aarsteinmedia/lottie-web/utils'
 
-import DotLottiePlayerBase from '@/elements/DotLottiePlayerBase'
+import { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
 import { loadDotLottieTools } from '@/elements/helpers/dotlottieLoader'
 
 /**
  * DotLottie Player Web Component.
  */
-export default class DotLottiePlayer extends DotLottiePlayerBase {
+export class DotLottiePlayer extends DotLottiePlayerBase {
 
   public override async addAnimation(params: AddAnimationParams) {
     const { addAnimation } = await loadDotLottieTools()

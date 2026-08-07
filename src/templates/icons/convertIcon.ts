@@ -1,4 +1,4 @@
-const convertIcon = /* HTML */ `
+export const convertIcon = /* HTML */ `
   <svg
     width="24"
     height="24"
@@ -10,5 +10,3 @@ const convertIcon = /* HTML */ `
     />
   </svg>
 `
-
-export default convertIcon

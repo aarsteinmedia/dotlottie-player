@@ -8,4 +8,4 @@ export function loadControlsModule() {
   return modulePromise
 }
 
-export type RenderControls = ControlsModule['default']
+export type RenderControls = ControlsModule['renderControls']

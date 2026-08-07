@@ -1,24 +1,24 @@
 import { PlayMode } from '@aarsteinmedia/lottie-web/utils'
 
-import type DotLottiePlayerBase from '@/elements/DotLottiePlayerBase'
+import type { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
 
 import { loadDotLottieTools } from '@/elements/helpers/dotlottieLoader'
-import boomerangIcon from '@/templates/icons/boomerangIcon'
-import convertIcon from '@/templates/icons/convertIcon'
-import downloadIcon from '@/templates/icons/downloadIcon'
-import loopIcon from '@/templates/icons/loopIcon'
-import nextIcon from '@/templates/icons/nextIcon'
-import pauseIcon from '@/templates/icons/pauseIcon'
-import playIcon from '@/templates/icons/playIcon'
-import prevIcon from '@/templates/icons/prevIcon'
-import settingsIcon from '@/templates/icons/settingsIcon'
-import stopIcon from '@/templates/icons/stopIcon'
+import { boomerangIcon } from '@/templates/icons/boomerangIcon'
+import { convertIcon } from '@/templates/icons/convertIcon'
+import { downloadIcon } from '@/templates/icons/downloadIcon'
+import { loopIcon } from '@/templates/icons/loopIcon'
+import { nextIcon } from '@/templates/icons/nextIcon'
+import { pauseIcon } from '@/templates/icons/pauseIcon'
+import { playIcon } from '@/templates/icons/playIcon'
+import { prevIcon } from '@/templates/icons/prevIcon'
+import { settingsIcon } from '@/templates/icons/settingsIcon'
+import { stopIcon } from '@/templates/icons/stopIcon'
 import { PlayerState } from '@/utils/enums'
 
 /**
  * Render Controls.
  */
-export default function renderControls(this: DotLottiePlayerBase) {
+export function renderControls(this: DotLottiePlayerBase) {
 
   if (!this.shadow) {
     throw new Error('No Shadow Element')

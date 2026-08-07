@@ -1,9 +1,9 @@
-import DotLottiePlayerBase from '@/elements/DotLottiePlayerBase'
+import { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
 
 /**
  * Render Player.
  */
-export default async function renderPlayer(this: DotLottiePlayerBase) {
+export async function renderPlayer(this: DotLottiePlayerBase) {
 
   if (!this.shadow || !this.template) {
     throw new Error('No Shadow Element or Template')

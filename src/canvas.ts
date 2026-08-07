@@ -2,12 +2,13 @@ import {
   isServer, PlayerEvent, PlayMode
 } from '@aarsteinmedia/lottie-web/utils'
 
-import DotLottiePlayerCanvas from '@/elements/DotLottiePlayerCanvas'
+import { DotLottiePlayerCanvas } from '@/elements/DotLottiePlayerCanvas'
 import { tagName } from '@/utils/enums'
 
 export { PlayerEvent, PlayMode }
+// eslint-disable-next-line import/no-default-export
 export default DotLottiePlayerCanvas
-export { default as DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
+export { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
 export {
   MouseOut, PlayerState, tagName
 } from '@/utils/enums'

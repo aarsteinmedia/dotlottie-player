@@ -1,6 +1,6 @@
 import { namespaceSVG, PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils'
 
-export default function errorScreen(message: string) {
+export function errorScreen(message: string) {
   return /* HTML */ `
     <div class="error">
       <svg

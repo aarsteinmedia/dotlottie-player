@@ -1,4 +1,4 @@
-const downloadIcon = /* HTML */ `
+export const downloadIcon = /* HTML */ `
   <svg
     width="24"
     height="24"
@@ -10,5 +10,3 @@ const downloadIcon = /* HTML */ `
     />
   </svg>
 `
-
-export default downloadIcon
