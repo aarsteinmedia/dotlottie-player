@@ -180,6 +180,8 @@ async function changeRenderer(e) {
  */
 async function viewFile(e) {
   try {
+    console.clear()
+
     let path
 
     if (e instanceof SubmitEvent) {

@@ -7,14 +7,16 @@
   <title>DotLottie Player Demo</title>
   <style>
     .preview {
-      width: auto !important;
-      height: auto !important;
-      max-width: 80vw;
-      max-height: 80vh;
-      min-height: 400px;
-      min-width: 400px;
-      shape-rendering: geometricPrecision;
       display: inline-flex;
+      &[renderer="svg"] {
+        width: auto !important;
+        height: auto !important;
+        max-width: 80vw;
+        max-height: 80vh;
+        min-height: 400px;
+        min-width: 400px;
+        shape-rendering: geometricPrecision;
+      }
     }
 
     body {
