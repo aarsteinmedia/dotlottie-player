@@ -15,7 +15,12 @@
       "DOM",
       "DOM.Iterable",
       "ES2023"
-    ],    
+    ],
+    "types": [
+      "node",
+      "postcss-flexbugs-fixes",
+      "react"
+    ],
     "module": "preserve",
     "moduleResolution": "Bundler",
     "noEmit": false,
