@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@aarsteinmedia/lottie-web':
-        specifier: ^1.5.7
-        version: 1.5.7(fflate@0.8.3)
+        specifier: ^1.5.8
+        version: 1.5.8(fflate@0.8.3)
     devDependencies:
       '@custom-elements-manifest/analyzer':
         specifier: ^0.11.0
@@ -111,9 +111,9 @@ importers:
 
 packages:
 
-  '@aarsteinmedia/lottie-web@1.5.7':
-    resolution: {integrity: sha512-P3TcfecYAvu4q5WVz0l638Tn6dkl0wau7Ke/clWNThtvrXhr1GOCUgXpm1t9hm/TORkj0qLSsHjTBC6WLcXivg==}
-    engines: {node: '>= 12.17.0'}
+  '@aarsteinmedia/lottie-web@1.5.8':
+    resolution: {integrity: sha512-gpcx2h2sZEKW33OAxFG/8/A7jCsnzIhqEqHybyND9cLkogR8wcPNx3CM3Y6KkVWkSIZBIeXVoYTP6/Lp+3vQZA==}
+    engines: {node: '>=22'}
     peerDependencies:
       fflate: ^0.8.3
 
@@ -3517,8 +3517,8 @@ packages:
     resolution: {integrity: sha512-9kY+CygyYM6j02t5YFHbNz2FN5QmYGv9zAjVp4lCDjlCw7amdckXlEt/bjMhUIfj4ThGRE4gCUH5+yGnNuPo5A==}
     engines: {node: '>=10.0.0'}
 
-  terser@5.49.2:
-    resolution: {integrity: sha512-rGbJiKeQ4WDe3EXlDAIaQcwftVfv2Q8o1awFNfvXolJYKkb1AuZY1RTOmqx4LJXZENbWZA7eIsYGHuEzHsi1nQ==}
+  terser@5.50.0:
+    resolution: {integrity: sha512-CN9BVxWhgS/hRxtUMjtC2uRWSTcSfQFHMDWma6sKKfIivCD91sM+FOPfvwoaRMqCSrUpe1nv3jDamd9eEQ4y+w==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -3712,7 +3712,7 @@ packages:
 
 snapshots:
 
-  '@aarsteinmedia/lottie-web@1.5.7(fflate@0.8.3)':
+  '@aarsteinmedia/lottie-web@1.5.8(fflate@0.8.3)':
     dependencies:
       fflate: 0.8.3
 
@@ -6203,7 +6203,7 @@ snapshots:
       entities: 4.5.0
       param-case: 3.0.4
       relateurl: 0.2.7
-      terser: 5.49.2
+      terser: 5.50.0
 
   html-tags@5.1.0: {}
 
@@ -7144,7 +7144,7 @@ snapshots:
       globals: 15.15.0
       gzip-size: 7.0.0
       rollup: 4.62.4
-      terser: 5.49.2
+      terser: 5.50.0
     transitivePeerDependencies:
       - supports-color
 
@@ -7521,7 +7521,7 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
 
-  terser@5.49.2:
+  terser@5.50.0:
     dependencies:
       '@jridgewell/source-map': 0.3.11
       acorn: 8.18.0

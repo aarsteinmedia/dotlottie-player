@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "6.4.4",
+  "version": "6.4.5",
   "description": "Web Component for playing Lottie animations in your web app.",
   "type": "module",
   "exports": {
@@ -60,14 +60,14 @@
     "dev": "rollup -cw --configPlugin typescript --environment NODE_ENV:development --environment VER:full",
     "dev:light": "rollup -cw --configPlugin typescript --environment NODE_ENV:development --environment VER:light",
     "dev:iife": "rollup -cw --configPlugin typescript --environment NODE_ENV:development --environment TYPE:iife",
-    "lint:js": "eslint src",
-    "lint:js:fix": "eslint src --fix",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "lint:css": "npx stylelint **/*.css",
     "lint:css:fix": "npx stylelint **/*.css --fix",
     "deploy": "npm login && npm publish"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^1.5.7"
+    "@aarsteinmedia/lottie-web": "^1.5.8"
   },
   "peerDependencies": {
     "@types/react": ">= 16.0.0"
@@ -137,7 +137,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">= 12.17.0"
+    "node": ">=22"
   },
   "funding": {
     "type": "paypal",

@@ -4,35 +4,42 @@
 
 We proudly claim this to be the most versatile, lightweight, and efficient Lottie Player Web Component available. It's compatible with server-side rendering and completely framework-agnostic.
 
-If you only need to render animations as SVGs, don’t use any SVG effects like blur or drop shadow, don’t use [Expressions](https://helpx.adobe.com/after-effects/using/expression-basics.html), and don’t need to convert or combine animations on the fly — you can use a lighter version of this package by importing `@aarsteinmedia/dotlottie-player/light`.
+### Choosing a build
+
+| Import | When to use it |
+| ------ | -------------- |
+| `@aarsteinmedia/dotlottie-player` | Full player: all renderers, [expressions](https://helpx.adobe.com/after-effects/using/expression-basics.html), SVG effects, plus convert/combine on the fly. |
+| `@aarsteinmedia/dotlottie-player/svg` | SVG renderer with expressions and SVG effects, but without convert/combine. Use this when you need those features but don’t want to load the full build. |
+| `@aarsteinmedia/dotlottie-player/canvas` | Canvas renderer – usually easier on the hardware and visually similar to SVG for most animations. Most SVG-specific effects aren’t available, and animation support isn’t as broad as SVG. |
+| `@aarsteinmedia/dotlottie-player/light` | Smallest build: SVG only, with expressions and SVG effects stripped out. No convert/combine. |
 
 ## Demo
 
-Here is [a demo](https://www.aarstein.media/en/dotlottie-player), running on Next.js 15 with TypeScript.
+Here is [a demo](https://www.aarstein.media/en/dotlottie-player), running on Next.js with TypeScript.
 
 ## Installation
 
 ### In HTML
 
 - Import from CDN:
-  - Full version:
+  - Full:
     ```html
     <script src="https://unpkg.com/@aarsteinmedia/dotlottie-player@latest/dist/unpkg-full.js"></script>
     ```
-  - Light version:
+  - SVG:
+    ```html
+    <script src="https://unpkg.com/@aarsteinmedia/dotlottie-player@latest/dist/unpkg-svg.js"></script>
+    ```
+  - Canvas:
+    ```html
+    <script src="https://unpkg.com/@aarsteinmedia/dotlottie-player@latest/dist/unpkg-canvas.js"></script>
+    ```
+  - Light:
     ```html
     <script src="https://unpkg.com/@aarsteinmedia/dotlottie-player@latest/dist/unpkg-light.js"></script>
     ```
 
-- Import from `node_modules`:
-  - Full version:
-    ```html
-    <script src="/node_modules/@aarsteinmedia/dotlottie-player/dist/unpkg-full.js"></script>
-    ```
-  - Light version:
-    ```html
-    <script src="/node_modules/@aarsteinmedia/dotlottie-player/dist/unpkg-light.js"></script>
-    ```
+- Import from `node_modules` the same way, e.g. `/node_modules/@aarsteinmedia/dotlottie-player/dist/unpkg-full.js`.
 
 ### In JavaScript or TypeScript
 
@@ -42,15 +49,13 @@ Here is [a demo](https://www.aarstein.media/en/dotlottie-player), running on Nex
     pnpm add @aarsteinmedia/dotlottie-player
     ```
 
-2. Import in your app:
+2. Import in your app (pick one build):
 
     ```js
     import '@aarsteinmedia/dotlottie-player'
-    ```
-
-    Or for the light version:
-
-    ```js
+    // or:
+    import '@aarsteinmedia/dotlottie-player/svg'
+    import '@aarsteinmedia/dotlottie-player/canvas'
     import '@aarsteinmedia/dotlottie-player/light'
     ```
 
@@ -60,7 +65,7 @@ If you're using TypeScript and want to import the component type, do it modularl
 
 ```ts
 import '@aarsteinmedia/dotlottie-player' // Do this once globally.
-import type DotLottiePlayer from '@aarsteinmedia/dotlottie-player' // Do this per component that needs it.
+import type DotLottiePlayer from '@aarsteinmedia/dotlottie-player' // Do this per file that needs the type.
 ```
 
 ⚠️ Note that this pattern may provoke linter errors, such as `import/no-duplicates`.
@@ -81,44 +86,51 @@ Add the `dotlottie-player` element to your markup and point the `src` to a Lotti
 >
 </dotlottie-player>
 ```
+
 ### Load animation
+
 To set animations programmatically, use the `load()` method.
 
 ```javascript
-const lottiePlayer = document.querySelector('#find-me')
-player?.load('https://storage.googleapis.com/aarsteinmedia/am.lottie')
+const player = document.querySelector('#find-me')
+await player?.load('https://storage.googleapis.com/aarsteinmedia/am.lottie')
 ```
 
 ### Convert to dotLottie
+
+*(Full build only.)*
+
 If you have a Lottie JSON animation and want to convert it to a dotLottie file – to leverage compression, combine multiple animations, and maintain a tidy file library – you can use the `convert()` method. This will trigger a browser download.
 
 If `controls` are visible, there’s also a convert button in the context menu on the right-hand side.
 
 ### Convert to JSON
+
+*(Full build only.)*
+
 If you're debugging a dotLottie animation (e.g., expressions aren’t working as expected), you can convert it to JSON either using the `convert()` method or via the convert button if `controls` are enabled.
 
 ### Combine animations
+
+*(Full build only.)*
+
 To combine multiple animations into a single dotLottie file, use the `addAnimation()` method. This also triggers a browser download. Source files can be either dotLottie or JSON, and the output will always be dotLottie:
 
 ```javascript
-const lottiePlayer = document.querySelector('#find-me')
-(async () => {
-  await lottiePlayer?.addAnimation([
-    { id: 'animation_1', url: '/url/to/animation_1.lottie' },
-    { id: 'animation_2', url: '/url/to/animation_2.json', direction: -1, speed: 2 }
-  ])
-}()) 
+const player = document.querySelector('#find-me')
+await player?.addAnimation([
+  { id: 'animation_1', url: '/url/to/animation_1.lottie' },
+  { id: 'animation_2', url: '/url/to/animation_2.json', direction: -1, speed: 2 }
+])
 ```
 
 You can also use this method without any `<dotlottie-player>` on the page. As long as the script is loaded, `dotLottiePlayer()` is available as a global method.
 
 ```js
-(async () => {
-  await dotLottiePlayer().addAnimation([
-    { id: 'animation_1', url: '/path/to/animation_1.lottie' },
-    { id: 'animation_2', url: '/path/to/animation_2.json', direction: -1, speed: 2 }
-  ])
-}())
+await dotLottiePlayer().addAnimation([
+  { id: 'animation_1', url: '/path/to/animation_1.lottie' },
+  { id: 'animation_2', url: '/path/to/animation_2.json', direction: -1, speed: 2 }
+])
 ```
 
 The new file will automatically load the first animation when initialized. You can toggle between animations using the `next()` and `prev()` methods, or the navigation buttons in the controls.
@@ -131,22 +143,20 @@ Here’s how to control playback settings for multiple animations:
   id="find-me"
   src="/path/to/combined-animations.lottie"
 >
-</dotlottie-player>  
+</dotlottie-player>
 ```
 
 ```js
-  const player = document.querySelector('#find-me')
-  player?.setMultiAnimationSettings(
-    [
-      {
-        autplay: true
-      },
-      {
-        autoplay: true,
-        loop: true
-      }
-    ]
-  )
+const player = document.querySelector('#find-me')
+player?.setMultiAnimationSettings([
+  {
+    autoplay: true
+  },
+  {
+    autoplay: true,
+    loop: true
+  }
+])
 ```
 
 ### Angular
@@ -163,11 +173,11 @@ import '@aarsteinmedia/dotlottie-player'
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'your-app-name';
+  title = 'your-app-name'
 }
 ```
 
-2. Add the player to your html template.
+2. Add the player to your HTML template.
 
 ### React.js / Next.js
 
@@ -220,11 +230,10 @@ export default App
 
 ### Vue.js / Nuxt.js (using Vite.js)
 
-Compared to React and Angular there's a couple of extra steps, but surely nothing too daunting.
-
-1. Declare the dotlottie-player tag as a custom element, to prevent Vue from attempting to resolve it.
+1. Declare the `dotlottie-player` tag as a custom element, so Vue doesn’t try to resolve it as a Vue component.
 
 #### In Vue.js
+
 `vite.config.ts`:
 
 ```ts
@@ -236,7 +245,7 @@ export default defineConfig({
     vue({
       template: {
         compilerOptions: {
-          isCustomElement: (tag: string) => ['dotlottie-player'].includes(tag),
+          isCustomElement: (tag: string) => tag === 'dotlottie-player',
         }
       }
     })
@@ -245,44 +254,44 @@ export default defineConfig({
 ```
 
 #### In Nuxt.js
+
 `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
   vue: {
     compilerOptions: {
-      isCustomElement: (tag: string) => ['dotlottie-player'].includes(tag),
+      isCustomElement: (tag: string) => tag === 'dotlottie-player',
     }
   }
 })
 ```
 
-2. Import/initiate the component.
+2. Import the package once for its side effect (registers the custom element).
 
 #### In Vue.js
+
 `main.ts`:
 
 ```ts
 import { createApp } from 'vue'
-import DotLottiePlayer from '@aarsteinmedia/dotlottie-player'
+import '@aarsteinmedia/dotlottie-player'
 import App from './App.vue'
 
-const app = createApp(App)
-app.component('DotLottiePlayer', DotLottiePlayer)
+createApp(App).mount('#app')
 ```
 
 #### In Nuxt.js
-Create a `plugins` folder in your root if it doesn't exist already, add a file named `dotlottie-player.js`:
 
-```javascript
-import DotLottiePlayer from '@aarsteinmedia/dotlottie-player'
+Create a `plugins` folder in your root if it doesn't exist already, and add a client plugin named e.g. `dotlottie-player.client.ts`:
 
-export default defineNuxtPlugin(({ vueApp }) => {
-  vueApp.component('DotLottiePlayer', DotLottiePlayer)
-})
+```ts
+import '@aarsteinmedia/dotlottie-player'
+
+export default defineNuxtPlugin(() => {})
 ```
 
-3. The component can now be used in your pages or components template tags.
+3. Use the element in your templates:
 
 ```vue
 <template>
@@ -299,78 +308,85 @@ export default defineNuxtPlugin(({ vueApp }) => {
 
 ## Properties
 
-| Property / Attribute      | Description                                                                                                                   | Type                                     | Default           |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ----------------- |
-| `animateOnScroll`         | Animate by scrolling.                                                                                                          | `boolean`                                | `false`           |
-| `autoplay`                | Play animation on load.                                                                                                        | `boolean`                                | `false`           |
-| `background`              | Background color.                                                                                                              | `string`                                 | `undefined`       |
-| `controls`                | Show controls.                                                                                                                 | `boolean`                                | `false`           |
-| `count`                   | Number of times to loop animation.                                                                                             | `number`                                 | `undefined`       |
-| `delay`                   | Delay playback on playOnVisible, in miliseconds.                                                                               | `number`                                 | `0`               | 
-| `description`             | Description for screen readers.                                                                                                | `string`                                 | `undefined`       |
-| `direction`               | Direction of animation.                                                                                                        | `1` \| `-1`                              | `1`               |
-| `dontFreezeOnBlur`        | Whether to freeze playback on window blur. This is default behavior, but can be disabled.                                      | `boolean`                                | `1`               |
-| `hover`                   | Whether to play on mouse hover.                                                                                                | `boolean`                                | `false`           |
-| `intermission`            | Pause between loop intrations, in miliseconds.                                                                                 | `number`                                 | `0`               |
-| `loop`                    | Whether to loop animation.                                                                                                     | `boolean`                                | `false`           |
-| `mode`                    | Play mode.                                                                                                                     | `normal` \| `bounce`                     | `normal`          |
-| `mouseout`                | Action on mouseout.                                                                                                            | `void` \| `stop` \| `pause` \| `reverse` | `stop`            |
-| `objectfit`               | Resizing of animation in container.                                                                                            | `contain` \| `cover` \| `fill` \| `none` | `contain`         |
-| `once`                    | Whether, if playOnVisible is true, to play once or anytime animation is in view.                                               | `boolean`                                | `false`           |
-| `playOnClick`             | Whether to toggle play on click.                                                                                               | `boolean`                                | `false`           |
-| `playOnVisible`           | Play when visible.                                                                                                             | `boolean`                                | `false`           |
-| `quiet`                   | Whether to display graphic error screen on critical load errors.                                                               | `boolean`                                | `false`           |
-| `renderer`                | Renderer to use.                                                                                                               | `svg` \| `canvas` \| `html`              | `svg`             |
-| `selector`                | Play on clicked element by id attribute.                                                                                       | `string`                                 | `undefined`       |
-| `speed`                   | Animation speed.                                                                                                               | `number`                                 | `1`               |
-| `src` _(required)_        | URL to LottieJSON or dotLottie.                                                                                                | `string`                                 | `undefined`       |
-| `subframe`                | When enabled this can help to reduce flicker on some animations, especially on Safari and iOS devices.                         | `boolean`                                | `false`           |
+| Property / Attribute      | Description                                                                                                                   | Type                                                      | Default           |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | ----------------- |
+| `animateOnScroll`         | Animate by scrolling.                                                                                                         | `boolean`                                                 | `false`           |
+| `autoplay`                | Play animation on load.                                                                                                       | `boolean`                                                 | `false`           |
+| `background`              | Background color.                                                                                                             | `string`                                                  | `transparent`     |
+| `controls`                | Show controls.                                                                                                                | `boolean`                                                 | `false`           |
+| `count`                   | Number of times to loop animation.                                                                                            | `number`                                                  | `0`               |
+| `delay`                   | Delay playback on playOnVisible, in milliseconds.                                                                             | `number`                                                  | `0`               |
+| `description`             | Description for screen readers.                                                                                               | `string`                                                  | `undefined`       |
+| `direction`               | Direction of animation.                                                                                                       | `1` \| `-1`                                               | `1`               |
+| `dontFreezeOnBlur`        | Disable freezing playback when the window loses focus (freeze-on-blur is the default).                                        | `boolean`                                                 | `false`           |
+| `hover`                   | Whether to play on mouse hover.                                                                                               | `boolean`                                                 | `false`           |
+| `intermission`            | Pause between loop iterations, in milliseconds.                                                                               | `number`                                                  | `0`               |
+| `loop`                    | Whether to loop animation.                                                                                                    | `boolean`                                                 | `false`           |
+| `mode`                    | Play mode.                                                                                                                    | `normal` \| `bounce`                                      | `normal`          |
+| `mouseout`                | Action on mouseout.                                                                                                           | `void` \| `stop` \| `pause` \| `reverse`                  | `stop`            |
+| `objectfit`               | Resizing of animation in container.                                                                                           | `contain` \| `cover` \| `fill` \| `none` \| `scale-down`  | `contain`         |
+| `once`                    | Whether, if playOnVisible is true, to play once or anytime the animation is in view.                                          | `boolean`                                                 | `false`           |
+| `playOnClick`             | Whether to toggle play on click.                                                                                              | `boolean`                                                 | `false`           |
+| `playOnVisible`           | Play when visible.                                                                                                            | `boolean`                                                 | `false`           |
+| `quiet`                   | Suppress the graphic error screen on critical load errors.                                                                    | `boolean`                                                 | `false`           |
+| `renderer`                | Renderer to use (full build only; other builds lock this).                                                                    | `svg` \| `canvas` \| `html`                               | `svg`             |
+| `selector`                | Play on clicked element by id attribute.                                                                                      | `string`                                                  | `undefined`       |
+| `simple`                  | Hide advanced controls (loop, boomerang, convert, snapshot, settings).                                                        | `boolean`                                                 | `false`           |
+| `speed`                   | Animation speed.                                                                                                              | `number`                                                  | `1`               |
+| `src` _(required)_        | URL to Lottie JSON or dotLottie.                                                                                              | `string`                                                  | `undefined`       |
+| `subframe`                | When enabled this can help to reduce flicker on some animations, especially on Safari and iOS devices.                        | `boolean`                                                 | `false`           |
 
 ## Methods
 
-| Method                                                          | Function
-| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `addAnimation(params: AddAnimationParams) => Promise<Result>`   | Add animation. Triggers download of new dotLottie file.                                                   |
-| `convert(params: ConvertParams) => Promise<Result>`             | If the current animation is in JSON format – convert it to dotLottie. Triggers a download in the browser. |
-| `destroy() => void`                                             | Nullify animation and remove element from the DOM.                                                        |
-| `getLottie() => AnimationItem \| null`                          | Returns the lottie-web instance used in the component                                                     |
-| `load(src: string) => void`                                     | Load animation by URL or JSON object                                                                      |
-| `next() => void`                                                | Next animation (if several in file)                                                                       |
-| `pause() => void`                                               | Pause                                                                                                     |
-| `prev() => void`                                                | Previous animation (if several in file)                                                                   |
-| `play() => void`                                                | Play                                                                                                      |
-| `reload() => void`                                              | Reload                                                                                                    |
-| `seek(value: number \| string) => void`                         | Go to frame. Can be a number or a percentage string (e. g. 50%).                                          |
-| `setCount(value: number) => void`                               | Dynamically set number of loops                                                                           |
-| `setDirection(value: 1 \| -1) => void`                          | Set Direction                                                                                             |
-| `setLooping(value: boolean) => void`                            | Set Looping                                                                                               |
-| `setMultiAnimationSettings(value: AnimationSettings[]) => void` | Set Multi-animation settings                                                                              |
-| `setSegment(value: AnimationSegment) => void`                   | Play only part of an animation. E. g. from frame 10 to frame 60 would be `[10, 60]`                       |
-| `setSpeed(value?: number) => void`                              | Set Speed                                                                                                 |
-| `setSubframe(value: boolean) => void`                           | Set subframe                                                                                              |
-| `snapshot() => string`                                          | Snapshot the current frame as SVG. Triggers a download in the browser.                                    |
-| `stop() => void`                                                | Stop                                                                                                      |
-| `toggleBoomerang() => void`                                     | Toggle between `bounce` and `normal`                                                                      |
-| `toggleLooping() => void`                                       | Toggle looping                                                                                            |
-| `togglePlay() => void`                                          | Toggle play                                                                                               |
+| Method                                                          | Function |
+| --------------------------------------------------------------- | -------- |
+| `addAnimation(params: AddAnimationParams) => Promise<Result>`   | *(Full build only.)* Combine animations into a new dotLottie file and trigger a download. |
+| `convert(params: ConvertParams) => Promise<Result>`             | *(Full build only.)* Convert between JSON and dotLottie. Triggers a download in the browser. |
+| `destroy() => void`                                             | Nullify animation and remove element from the DOM. |
+| `getLottie() => AnimationItem \| null`                          | Returns the lottie-web instance used in the component. |
+| `getManifest() => LottieManifest \| undefined`                  | Returns the dotLottie manifest, if any. |
+| `getMultiAnimationSettings() => AnimationSettings[]`            | Returns multi-animation settings. |
+| `getSegment() => [number, number] \| undefined`                 | Returns the current playback segment. |
+| `load(src: string) => Promise<void>`                            | Load animation by URL or JSON string. |
+| `next() => void`                                                | Next animation (if several in file). |
+| `pause() => void`                                               | Pause. |
+| `prev() => void`                                                | Previous animation (if several in file). |
+| `play() => void`                                                | Play. |
+| `reload() => Promise<void>`                                     | Reload. |
+| `seek(value: number \| string) => void`                         | Go to frame. Can be a number or a percentage string (e.g. `50%`). |
+| `setCount(value: number) => void`                               | Dynamically set number of loops. |
+| `setDirection(value: 1 \| -1) => void`                          | Set direction. |
+| `setLoop(value: boolean) => void`                               | Set looping. |
+| `setMultiAnimationSettings(value: AnimationSettings[]) => void` | Set multi-animation settings. |
+| `setSegment(value: [number, number]) => void`                   | Play only part of an animation. E.g. from frame 10 to frame 60 would be `[10, 60]`. |
+| `setSpeed(value?: number) => void`                              | Set speed. |
+| `setSubframe(value: boolean) => void`                           | Set subframe. |
+| `snapshot(download?: boolean, name?: string) => string \| null` | Snapshot the current frame as SVG. Downloads by default when `download` is true. |
+| `stop() => void`                                                | Stop. |
+| `toggleBoomerang() => void`                                     | Toggle between `bounce` and `normal`. |
+| `toggleLoop() => void`                                          | Toggle looping. |
+| `togglePlay() => void`                                          | Toggle play. |
 
 ## Events
 
 The following events are exposed and can be listened to via `addEventListener` calls.
 
-| Name       | Description                                                      |
-| ---------- | ---------------------------------------------------------------- |
-| `complete` | Animation is complete – including all loops                      |
-| `destroyed`| Animation is destroyed                                           |
-| `error`    | The source cannot be parsed, fails to load or has format errors  |
-| `frame`    | A new frame is entered                                           |
-| `freeze`   | Animation is paused due to player being out of view              |
-| `load`     | Animation is loaded                                              |
-| `loop`     | A loop is completed                                              |
-| `play`     | Animation has started playing                                    |
-| `pause`    | Animation has paused                                             |
-| `ready`    | Animation is loaded and player is ready                          |
-| `stop`     | Animation has stopped                                            |
+| Name        | Description                                                     |
+| ----------- | --------------------------------------------------------------- |
+| `complete`  | Animation is complete – including all loops                     |
+| `destroyed` | Animation is destroyed                                          |
+| `error`     | The source cannot be parsed, fails to load, or has format errors |
+| `frame`     | A new frame is entered                                          |
+| `freeze`    | Animation is paused due to player being out of view             |
+| `load`      | Animation is loaded                                             |
+| `loop`      | A loop is completed                                             |
+| `next`      | Switched to next animation in a multi-animation file            |
+| `_play`     | Animation has started playing                                   |
+| `_pause`    | Animation has paused                                            |
+| `previous`  | Switched to previous animation in a multi-animation file        |
+| `ready`     | Animation is loaded and player is ready                         |
+| `rendered`  | Player UI has been rendered                                     |
+| `stop`      | Animation has stopped                                           |
 
 ## WordPress Plugins
 <img align="left" width="110" height="110" src="/.github/wpIcon.svg" style="margin-right:1em" />
