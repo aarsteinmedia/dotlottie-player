@@ -9,11 +9,27 @@ export async function renderPlayer(this: DotLottiePlayerBase) {
     throw new Error('No Shadow Element or Template')
   }
 
+  let langAttribute = ''
+
+  /**
+   * If player has aria-description, it's safe to assume
+   * language should be the same as `document.documentElement.lang`.
+   * Accessible labels on controls are only in English, so with no
+   * aria tag, and controls enabled, lang should reflect this.
+   * With neither controls or description, the lang attribute is
+   * not needed.
+   */
+  if (this.description || this.controls) {
+    const lang = this.description ? document.documentElement.lang : 'en'
+
+    langAttribute = `lang="${lang}"`
+  }
+
   this.template.innerHTML = /* HTML */ `
     <div
       class="animation-container main"
       data-controls="${this.controls ?? false}"
-      lang="${this.description ? document.documentElement.lang : 'en'}"
+      ${langAttribute}
       data-loaded="${this._playerState.loaded}"
     >
       <figure

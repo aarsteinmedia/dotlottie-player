@@ -395,7 +395,7 @@ We've made a free WordPress plugin that works with Gutenberg Blocks, Elementor, 
 
 It's super lightweight – and only loads on pages where animations are used.
 
-We've also made a premium WordPress plugin for purchase: [AM LottiePlayer PRO](https://www.aarstein.media/en/am-lottieplayer/pro). It has an easy-to-use GUI for combining and controlling multiple Lottie animations in a single file, converting JSON to dotLottie with drag-and-drop, and many more exclusive features.
+We've also made a premium WordPress plugin for purchase: [AM LottiePlayer PRO](https://www.am-lottieplayer.com). It has an easy-to-use GUI for combining and controlling multiple Lottie animations in a single file, converting JSON to dotLottie with drag-and-drop, and many more exclusive features.
 
 ## License
 

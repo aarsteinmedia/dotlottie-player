@@ -50,7 +50,7 @@
           ],
           "superclass": {
             "name": "DotLottiePlayerBase",
-            "module": "/dist/chunks/DotLottiePlayerBase-EYV9k8CY.js"
+            "module": "/dist/chunks/DotLottiePlayerBase-DlP7nSA9.js"
           },
           "tagName": "tagName",
           "customElement": true
@@ -86,7 +86,7 @@
           "name": "MouseOut",
           "declaration": {
             "name": "M",
-            "module": "./chunks/DotLottiePlayerBase-EYV9k8CY.js"
+            "module": "./chunks/DotLottiePlayerBase-DlP7nSA9.js"
           }
         },
         {
@@ -94,7 +94,7 @@
           "name": "PlayerState",
           "declaration": {
             "name": "P",
-            "module": "./chunks/DotLottiePlayerBase-EYV9k8CY.js"
+            "module": "./chunks/DotLottiePlayerBase-DlP7nSA9.js"
           }
         },
         {
