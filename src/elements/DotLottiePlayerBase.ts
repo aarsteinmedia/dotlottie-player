@@ -535,7 +535,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     loaded: boolean
     visible: boolean
     scrollY: number
-    scrollTimeout: NodeJS.Timeout | null
+    scrollTimeout: ReturnType<typeof setTimeout> | null
   } = {
       count: 0,
       loaded: false,
@@ -1246,10 +1246,16 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
   /**
    * Snapshot and download the current frame as SVG.
    */
-  public snapshot(shouldDownload = true, name = 'AM Lottie') {
+  public async snapshot(
+    shouldDownload = true, name = 'AM Lottie', src?: string
+  ) {
     try {
       if (!this.shadowRoot) {
         throw new Error('Unknown error')
+      }
+
+      if (src) {
+        await this.load(src)
       }
 
       // Get SVG element and serialize markup

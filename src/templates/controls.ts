@@ -198,7 +198,7 @@ export function renderControls(this: DotLottiePlayerBase) {
     const snapshot = this.shadow.querySelector('.snapshot')
 
     if (snapshot instanceof HTMLButtonElement) {
-      snapshot.onclick = () => this.snapshot(true)
+      snapshot.onclick = () => void this.snapshot(true)
     }
 
     const toggleSettings = this.shadow.querySelector('.toggleSettings')
