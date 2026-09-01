@@ -180,7 +180,7 @@ async function changeRenderer(e) {
  */
 async function viewFile(e) {
   try {
-    console.clear()
+    // console.clear()
 
     let path
 

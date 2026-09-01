@@ -1649,7 +1649,6 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
   }
 
   private _DOMLoaded() {
-    this._playerState.loaded = true
     this.dispatchEvent(new CustomEvent(PlayerEvent.Ready))
   }
 

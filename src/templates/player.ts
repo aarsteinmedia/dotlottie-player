@@ -30,7 +30,6 @@ export async function renderPlayer(this: DotLottiePlayerBase) {
       class="animation-container main"
       data-controls="${this.controls ?? false}"
       ${langAttribute}
-      data-loaded="${this._playerState.loaded}"
     >
       <figure
         class="animation"
