@@ -1246,16 +1246,10 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
   /**
    * Snapshot and download the current frame as SVG.
    */
-  public async snapshot(
-    shouldDownload = true, name = 'AM Lottie', src?: string
-  ) {
+  public snapshot(shouldDownload = true, name = 'AM Lottie') {
     try {
       if (!this.shadowRoot) {
         throw new Error('Unknown error')
-      }
-
-      if (src) {
-        await this.load(src)
       }
 
       // Get SVG element and serialize markup
