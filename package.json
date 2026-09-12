@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "6.4.9",
+  "version": "6.4.10",
   "description": "Web Component for playing Lottie animations in your web app.",
   "type": "module",
   "exports": {
@@ -67,7 +67,7 @@
     "deploy": "npm login && npm publish"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^1.5.9"
+    "@aarsteinmedia/lottie-web": "^1.5.10"
   },
   "peerDependencies": {
     "@types/react": ">= 16.0.0"
@@ -77,16 +77,16 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-typescript": "^12.3.0",
-    "@swc/core": "^1.16.1",
-    "@types/node": "^26.4.0",
+    "@swc/core": "^1.16.2",
+    "@types/node": "^26.5.1",
     "@types/postcss-flexbugs-fixes": "^5.0.3",
-    "@types/react": "^19.2.18",
-    "autoprefixer": "^10.5.4",
+    "@types/react": "^19.3.0",
+    "autoprefixer": "^10.6.0",
     "eslint": "^9.39.5",
     "eslint-config-sheriff": "^31.4.0",
     "eslint-plugin-perfectionist": "^5.11.0",
     "fflate": "^0.8.3",
-    "globals": "^17.11.0",
+    "globals": "^17.12.0",
     "jiti": "^2.7.0",
     "postcss-flexbugs-fixes": "^5.0.2",
     "prettier": "^3.9.6",
@@ -95,14 +95,14 @@
     "rollup-plugin-dts": "^6.5.1",
     "rollup-plugin-html-literals": "^2.0.1",
     "rollup-plugin-livereload": "^2.0.5",
-    "rollup-plugin-opener": "^0.2.3",
+    "rollup-plugin-opener": "^0.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-summary": "^3.0.1",
     "rollup-plugin-swc3": "^0.12.1",
     "rollup-plugin-typescript-paths": "^1.5.0",
-    "stylelint": "^17.14.1",
+    "stylelint": "^17.15.0",
     "stylelint-config-recommended": "^18.0.0",
-    "tsc-alias": "^1.9.3",
+    "tsc-alias": "^1.9.5",
     "tslib": "^2.8.1",
     "typescript": "^6.0.3"
   },

@@ -14,7 +14,7 @@
     "lib": [
       "DOM",
       "DOM.Iterable",
-      "ES2023"
+      "ES2024"
     ],
     "types": [
       "node",
@@ -43,7 +43,7 @@
     "removeComments": true,
     "resolveJsonModule": true,
     "strict": true,
-    "target": "ES2023",
+    "target": "ES2024",
     "useDefineForClassFields": true,
     "verbatimModuleSyntax": true,
     "noFallthroughCasesInSwitch": true,
