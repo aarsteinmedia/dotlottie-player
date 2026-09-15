@@ -68,18 +68,18 @@ type JSXLottiePlayer = Omit<Partial<DotLottiePlayer | DotLottiePlayerLight>, 'st
 
 declare module 'react' {
   namespace JSX {
-    interface IntrinsicElements { [tagName]: JSXLottiePlayer}
+    interface IntrinsicElements { [tagName]: JSXLottiePlayer }
   }
 }
 
 declare module 'react/jsx-runtime' {
   namespace JSX {
-    interface IntrinsicElements { [tagName]: JSXLottiePlayer}
+    interface IntrinsicElements { [tagName]: JSXLottiePlayer }
   }
 }
 
 declare module 'react/jsx-dev-runtime' {
   namespace JSX {
-    interface IntrinsicElements { [tagName]: JSXLottiePlayer}
+    interface IntrinsicElements { [tagName]: JSXLottiePlayer }
   }
 }

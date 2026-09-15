@@ -537,13 +537,13 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     scrollY: number
     scrollTimeout: ReturnType<typeof setTimeout> | null
   } = {
-      count: 0,
-      loaded: false,
-      prev: PlayerState.Loading,
-      scrollTimeout: null,
-      scrollY: 0,
-      visible: false,
-    }
+    count: 0,
+    loaded: false,
+    prev: PlayerState.Loading,
+    scrollTimeout: null,
+    scrollY: 0,
+    visible: false,
+  }
 
   protected _render = renderPlayer
 
@@ -624,6 +624,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
   /**
    * Runs when the value of an attribute is changed on the component.
    */
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   async attributeChangedCallback(
     name: typeof DotLottiePlayerBase.observedAttributes[number],
     _oldValue: unknown,
@@ -772,8 +773,8 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    */
   override connectedCallback() {
     super.connectedCallback()
-    try {
-      void (async () => {
+    void (async () => {
+      try {
         await this._render()
 
         if (!this.shadow) {
@@ -798,10 +799,10 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
         this._addIntersectionObserver()
 
         this.dispatchEvent(new CustomEvent(PlayerEvent.Rendered))
-      })()
-    } catch (error) {
-      void this._handleError(error)
-    }
+      } catch (error) {
+        void this._handleError(error)
+      }
+    })()
   }
 
   public convert(_params: ConvertParams): Promise<Result> {
@@ -891,23 +892,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
         throw new Error('Broken or corrupted file')
       }
 
-      const ldScript = this.parentElement?.querySelector('script[type="application/ld+json"]')
-
-      if (ldScript) {
-        const settings = JSON.parse(ldScript.innerHTML) as Settings
-
-        if (settings.selector) {
-          this.selector = settings.selector
-        }
-
-        if (settings.segment) {
-          this.setSegment(settings.segment as Vector2)
-        }
-
-        if (settings.multiAnimationSettings) {
-          this.setMultiAnimationSettings(settings.multiAnimationSettings)
-        }
-      }
+      this._handleLdScript()
 
       this._isBounce = this.mode === PlayMode.Bounce
       if (this._multiAnimationSettings.length > 0 && this._multiAnimationSettings[this._currentAnimation]?.mode) {
@@ -965,11 +950,11 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       this._addEventListeners()
 
       const speed =
-      this._multiAnimationSettings[this._currentAnimation]?.speed ??
-      this.speed,
+          this._multiAnimationSettings[this._currentAnimation]?.speed ??
+          this.speed,
         direction =
-        this._multiAnimationSettings[this._currentAnimation]?.direction ??
-        this.direction
+          this._multiAnimationSettings[this._currentAnimation]?.direction ??
+          this.direction
 
       // Set initial playback speed and direction
       this._lottieInstance.setSpeed(speed)
@@ -1146,7 +1131,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     }
 
     // Extract frame number from either number or percentage value
-    const matches = value.toString().match(/^(\d+)(%?)$/)
+    const matches = RegExp(/^(\d+)(%?)$/).exec(value.toString())
 
     if (!matches) {
       return
@@ -1498,9 +1483,9 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
   }
 
   protected setOptions(_options: {
-    container?: undefined |  HTMLElement
+    container?: undefined | HTMLElement
     rendererType: RendererType
-    initialSegment?: undefined |  Vector2
+    initialSegment?: undefined | Vector2
     hasAutoplay: boolean
     hasLoop: boolean
     preserveAspectRatio: PreserveAspectRatio
@@ -1542,52 +1527,49 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       return
     }
 
-    this._intersectionObserver = new IntersectionObserver((entries) => {
-      const { length } = entries
-
-      for (let i = 0; i < length; i++) {
-        if (!entries[i]?.isIntersecting || document.hidden) {
-          if (this.playerState === PlayerState.Playing) {
-            this._freeze()
-          }
-          this._playerState.visible = false
-          continue
+    this._intersectionObserver = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || document.hidden) {
+        if (this.playerState === PlayerState.Playing) {
+          this._freeze()
         }
+        this._playerState.visible = false
+
+        return
+      }
+      if (
+        !this.animateOnScroll &&
+        !this.playOnVisible &&
+        this.playerState === PlayerState.Frozen
+      ) {
+        this.play()
+      }
+
+      if (this.playOnVisible) {
         if (
-          !this.animateOnScroll &&
-          !this.playOnVisible &&
-          this.playerState === PlayerState.Frozen
+          this.playerState === PlayerState.Completed &&
+          !this.once
         ) {
-          this.play()
+          this.playerState = PlayerState.Playing
+          this._lottieInstance?.goToAndPlay(this.direction === 1 ? 0 : this._lottieInstance.totalFrames)
+        } else {
+          setTimeout(() => {
+            this.play()
+          }, this.delay)
+
         }
+      }
 
-        if (this.playOnVisible) {
-          if (
-            this.playerState === PlayerState.Completed &&
-            !this.once
-          ) {
-            this.playerState = PlayerState.Playing
-            this._lottieInstance?.goToAndPlay(this.direction === 1 ? 0 : this._lottieInstance.totalFrames)
-          } else {
-            setTimeout(() => {
-              this.play()
-            }, this.delay)
-
-          }
-        }
-
-        /**
+      /**
          * If the player is a ways down the page, we need to account for this by
          * setting _playerState.scrollY to the current scroll position. However, we
          * also need to check that the player hasn't been scrolled past, so we check
          * boundingClientRect as well.
          */
-        if (!this._playerState.scrollY && (entries[i]?.boundingClientRect.y || 0) > 0) {
-          this._playerState.scrollY = scrollY
-        }
-        this._playerState.visible = true
-
+      if (!this._playerState.scrollY && (entry.boundingClientRect.y || 0) > 0) {
+        this._playerState.scrollY = scrollY
       }
+      this._playerState.visible = true
+
     })
 
     this._intersectionObserver.observe(this._container)
@@ -1676,8 +1658,8 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       throw new Error('Container not rendered')
     }
     const preserveAspectRatio =
-      this.preserveAspectRatio ??
-      aspectRatio(this.objectfit as ObjectFit),
+        this.preserveAspectRatio ??
+        aspectRatio(this.objectfit as ObjectFit),
       currentAnimationSettings = this._multiAnimationSettings.length > 0
         ? this._multiAnimationSettings[this._currentAnimation]
         : undefined,
@@ -1744,6 +1726,27 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     console.error(error)
   }
 
+  private _handleLdScript() {
+    const ldScript = this.parentElement?.querySelector('script[type="application/ld+json"]')
+
+    if (!ldScript) {
+      return
+    }
+    const settings = JSON.parse(ldScript.innerHTML) as Settings
+
+    if (settings.selector) {
+      this.selector = settings.selector
+    }
+
+    if (settings.segment) {
+      this.setSegment(settings.segment as Vector2)
+    }
+
+    if (settings.multiAnimationSettings) {
+      this.setMultiAnimationSettings(settings.multiAnimationSettings)
+    }
+  }
+
   /**
    * Handle scroll.
    */
@@ -1798,6 +1801,24 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       this.playerState = PlayerState.Playing
       this._lottieInstance?.goToAndStop(currentFrame, true)
     })
+  }
+
+  private _handleSelector(method: 'addEventListener' | 'removeEventListener') {
+    if (!this.selector) {
+      return
+    }
+    const selector = document.getElementById(this.selector)
+
+    if (selector) {
+      if (this.hover) {
+        selector[method]('mouseenter', this._mouseEnter)
+        selector[method]('mouseleave', this._mouseLeave)
+      } else {
+        selector[method]('click', this._handleClick)
+      }
+    } else {
+      this.selector = null
+    }
   }
 
   private _handleWindowBlur({ type }: FocusEvent) {
@@ -2048,20 +2069,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       this._lottieInstance[method](PlayerEvent.DataFailed, this._dataFailed)
     }
 
-    if (this.selector) {
-      const selector = document.getElementById(this.selector)
-
-      if (selector) {
-        if (this.hover) {
-          selector[method]('mouseenter', this._mouseEnter)
-          selector[method]('mouseleave', this._mouseLeave)
-        } else {
-          selector[method]('click', this._handleClick)
-        }
-      } else {
-        this.selector = null
-      }
-    }
+    this._handleSelector(method)
 
     if (this._container && !this.selector) {
       if (this.hover) {

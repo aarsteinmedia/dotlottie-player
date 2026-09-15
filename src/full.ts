@@ -6,7 +6,6 @@ import { DotLottiePlayer } from '@/elements/DotLottiePlayer'
 import { tagName } from '@/utils/enums'
 
 export { PlayerEvent, PlayMode }
-// eslint-disable-next-line import/no-default-export
 export default DotLottiePlayer
 export { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
 export {

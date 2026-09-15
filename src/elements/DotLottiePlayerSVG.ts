@@ -36,9 +36,9 @@ export class DotLottiePlayerSVG extends DotLottiePlayerBase {
     initialSegment,
     preserveAspectRatio,
   }: {
-    container?: undefined |  HTMLElement
+    container?: undefined | HTMLElement
     rendererType: RendererType;
-    initialSegment?: undefined |  Vector2;
+    initialSegment?: undefined | Vector2;
     hasAutoplay: boolean;
     hasLoop: boolean;
     preserveAspectRatio: PreserveAspectRatio

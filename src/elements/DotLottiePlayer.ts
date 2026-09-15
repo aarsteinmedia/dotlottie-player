@@ -42,9 +42,9 @@ export class DotLottiePlayer extends DotLottiePlayerBase {
     preserveAspectRatio,
     rendererType
   }: {
-    container?: undefined |  HTMLElement
+    container?: undefined | HTMLElement
     rendererType: RendererType
-    initialSegment?: undefined |  Vector2
+    initialSegment?: undefined | Vector2
     hasAutoplay: boolean
     hasLoop: boolean
     preserveAspectRatio: PreserveAspectRatio
