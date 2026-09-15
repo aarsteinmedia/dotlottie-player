@@ -11,7 +11,7 @@ import createNoRestrictedSyntax from 'eslint-no-restricted/syntax'
 import fsecond from 'eslint-plugin-fsecond'
 import { importX } from 'eslint-plugin-import-x'
 import perfectionist from 'eslint-plugin-perfectionist'
-import regexpp from 'eslint-plugin-regexp'
+import regexp from 'eslint-plugin-regexp'
 import sonarjs, { configs as sonarConfigs } from 'eslint-plugin-sonarjs'
 import unicorn from 'eslint-plugin-unicorn'
 import { defineConfig } from 'eslint/config'
@@ -140,7 +140,7 @@ export default defineConfig({
     fsecond: fixupPluginRules(fsecond as unknown as Plugin),
     'import-x': importX,
     perfectionist,
-    regexpp: fixupPluginRules(regexpp),
+    regexp,
     sonarjs,
     unicorn
   },
