@@ -204,9 +204,9 @@ const isProd = process.env.NODE_ENV !== 'development',
   }
   ],
 
-  // env = parseEnv(),
+  module = isLight ? 1 : 0,
 
   output = isProd ?
-    [...unpkgs, ...modules] : modules[isLight ? 1 : 0]
+    [...unpkgs, ...modules] : modules[module]
 
 export default output
