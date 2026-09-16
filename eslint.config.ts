@@ -341,6 +341,7 @@ export default defineConfig({
     'perfectionist/sort-objects': 'warn',
     'simple-import-sort/imports': 'off',
     'sonarjs/no-unused-vars': 0,
+    'sonarjs/todo-tag': 1,
     'unicorn/catch-error-name': 2,
     'unicorn/consistent-date-clone': 2,
     'unicorn/consistent-destructuring': 2,

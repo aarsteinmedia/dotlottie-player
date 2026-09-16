@@ -531,10 +531,12 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     prev: PlayerState
     count: number
     loaded: boolean
-    rafId?: number
+    rafId?: number | undefined
+    frame: number
     playTimeout: ReturnType<typeof setTimeout> | null
   } = {
     count: 0,
+    frame: 0,
     loaded: false,
     playTimeout: null,
     prev: PlayerState.Loading,
@@ -1746,6 +1748,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
 
   /**
    * Handle scroll.
+   * TODO: investigate experimental feature ViewTimeline
    */
   private _handleScroll() {
     if (!this.animateOnScroll || !this._lottieInstance || !this._container) {
@@ -1756,21 +1759,41 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
 
       return
     }
-    // console.log(scrollY)
 
-    const { height, top } = this._container.getBoundingClientRect(),
-      viewport = visualViewport?.height ?? innerHeight,
-      { totalFrames } = this._lottieInstance,
-      progress = clamp(
-        (viewport - top) / (viewport + height), 0, 1
-      ),
-      currentFrame = progress * (totalFrames - 1)
+    /**
+     * WebKit dispatches scroll off the rendering loop, so measure in the frame
+     * callback rather than at event time.
+     */
 
-    if (this._playerState.rafId !== undefined) {
-      cancelAnimationFrame(this._playerState.rafId)
-    }
-    this._playerState.rafId = requestAnimationFrame(() => {
-      this._lottieInstance?.goToAndStop(currentFrame, true)
+    this._playerState.rafId ??= requestAnimationFrame(() => {
+      this._playerState.rafId = undefined
+
+      if (!this._lottieInstance || !this._container) {
+        return
+      }
+
+      const {
+          bottom, height, top
+        } = this._container.getBoundingClientRect(),
+        viewport = visualViewport?.height ?? innerHeight
+
+      if (bottom < 0 || top > viewport) {
+        return
+      }
+
+      const { totalFrames } = this._lottieInstance,
+        progress = clamp(
+          (viewport - top) / (viewport + height), 0, 1
+        ),
+        frame = progress * (totalFrames - 1),
+        epsilon = this.subframe ? 0.1 : 0.5
+
+      if (Math.abs(frame - this._playerState.frame) < epsilon) {
+        return
+      }
+
+      this._playerState.frame = frame
+      this._lottieInstance.goToAndStop(frame, true)
     })
   }
 

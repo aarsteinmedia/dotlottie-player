@@ -7,66 +7,25 @@
   <title>DotLottie Player Demo</title>
   <style>
     .preview {
-      width: auto !important;
-      height: auto !important;
-      max-width: 80vw;
-      max-height: 80vh;
-      min-height: 400px;
-      min-width: 400px;
-      shape-rendering: geometricPrecision;
       display: inline-flex;
+      &[renderer="svg"] {
+        width: auto !important;
+        height: auto !important;
+        max-width: 80vw;
+        max-height: 80vh;
+        min-height: 400px;
+        min-width: 400px;
+        shape-rendering: geometricPrecision;
+      }
     }
 
     body {
       font-family: Futura, sans-serif;
       color: #000;
       background-color: rgba(0, 0, 0, .5);
-      /*84c7da*/
-      /* background-image: url('/assets/win95.jpg'); */
-      background-size: cover;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      background-position: center;
       min-height: 100vh;
       padding: 0;
       margin: 0;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100%;
-      /* background-image: url('/assets/win95.jpg'); */
-      background-size: cover;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      background-position: center;
-      opacity: .8;
-      z-index: -1;
-    }
-
-    header {
-      background-color: #000;
-      color: #FFF;
-      position: sticky;
-      display: flex;
-      top: 0;
-      left: 0;
-      right: 0;
-      margin: 0;
-      padding: 10px 30px;
-      z-index: 100;
-    }
-
-    .header-inner {
-      display: flex;
-      width: 100%;
-      justify-content: space-between;
-      align-items: center;
-      gap: 2em;
     }
 
     #preview {
