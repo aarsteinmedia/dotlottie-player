@@ -15,6 +15,108 @@ import { settingsIcon } from '@/templates/icons/settingsIcon'
 import { stopIcon } from '@/templates/icons/stopIcon'
 import { PlayerState } from '@/utils/enums'
 
+function advancedButtons(this: DotLottiePlayerBase) {
+  if (!this.shadow) {
+    return
+  }
+
+  const toggleLoop = this.shadow.querySelector('.toggleLoop')
+
+  if (toggleLoop instanceof HTMLButtonElement) {
+    toggleLoop.onclick = this.toggleLoop
+  }
+
+  const toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
+
+  if (toggleBoomerang instanceof HTMLButtonElement) {
+    toggleBoomerang.onclick = this.toggleBoomerang
+  }
+
+  const convertButton = this.shadow.querySelector('.convert')
+
+  if (convertButton instanceof HTMLButtonElement) {
+    convertButton.onclick = async () => {
+      convertButton.disabled = true
+
+      try {
+        const { convert } = await loadDotLottieTools()
+
+        await convert({
+          isDotLottie: this.isDotLottie,
+          manifest: this.getManifest(),
+          src: this.src || this.source
+        })
+      } finally {
+        convertButton.disabled = false
+      }
+    }
+  }
+
+  const snapshot = this.shadow.querySelector('.snapshot')
+
+  if (snapshot instanceof HTMLButtonElement) {
+    snapshot.onclick = () => this.snapshot(true)
+  }
+
+  const toggleSettings = this.shadow.querySelector('.toggleSettings')
+
+  if (toggleSettings instanceof HTMLButtonElement) {
+    toggleSettings.onclick = this._handleSettingsClick
+    toggleSettings.onblur = this._handleBlur
+  }
+}
+
+function handleButtons(this: DotLottiePlayerBase) {
+  if (!this.shadow) {
+    return
+  }
+
+  const togglePlay = this.shadow.querySelector('.togglePlay')
+
+  if (togglePlay instanceof HTMLButtonElement) {
+    togglePlay.onclick = this.togglePlay
+  }
+
+  const stopButton = this.shadow.querySelector('.stop')
+
+  if (stopButton instanceof HTMLButtonElement) {
+    stopButton.onclick = this.stop
+  }
+
+  const prevButton = this.shadow.querySelector('.prev')
+
+  if (prevButton instanceof HTMLButtonElement) {
+    if (this.animations.length > 0 && this.currentAnimation) {
+      prevButton.hidden = false
+    }
+
+    prevButton.onclick = this.prev
+  }
+
+  const nextButton = this.shadow.querySelector('.next')
+
+  if (nextButton instanceof HTMLButtonElement) {
+    if (this.animations.length > 0 && this.currentAnimation < this.animations.length - 1) {
+      nextButton.hidden = false
+    }
+
+    nextButton.onclick = this.next
+  }
+
+  const seeker = this.shadow.querySelector('.seeker')
+
+  if (seeker instanceof HTMLInputElement) {
+    seeker.onchange = this._handleSeekChange
+    seeker.onmousedown = this._freeze
+  }
+
+  if (this.simple) {
+    return
+  }
+
+  advancedButtons.call(this)
+}
+
 /**
  * Render Controls.
  */
@@ -35,6 +137,9 @@ export function renderControls(this: DotLottiePlayerBase) {
 
     return
   }
+
+  const convertLabel = this.isDotLottie ? 'dotLottie animation to JSON format' : 'JSON animation to dotLottie format',
+    convertButtonText = this.isDotLottie ? 'Convert to JSON' : 'Convert to dotLottie'
 
   slot.innerHTML = /* HTML */ `
     <div
@@ -107,12 +212,11 @@ export function renderControls(this: DotLottiePlayerBase) {
           <div id="${this._identifier}-settings" class="popover" hidden>
             <button
               class="convert"
-              aria-label="Convert JSON animation to dotLottie format"
-              aria-label="Convert ${this.isDotLottie ? 'dotLottie animation to JSON format' : 'JSON animation to dotLottie format'}"
+              aria-label="Convert ${convertLabel}"
               hidden
             >
               ${convertIcon}
-              ${this.isDotLottie ? 'Convert to JSON' : 'Convert to dotLottie'}
+              ${convertButtonText}
             </button>
             <button class="snapshot" aria-label="Download still image">
               ${downloadIcon}
@@ -123,91 +227,7 @@ export function renderControls(this: DotLottiePlayerBase) {
     </div>
   `
 
-  const togglePlay = this.shadow.querySelector('.togglePlay')
-
-  if (togglePlay instanceof HTMLButtonElement) {
-    togglePlay.onclick = this.togglePlay
-  }
-
-  const stopButton = this.shadow.querySelector('.stop')
-
-  if (stopButton instanceof HTMLButtonElement) {
-    stopButton.onclick = this.stop
-  }
-
-  const prevButton = this.shadow.querySelector('.prev')
-
-  if (prevButton instanceof HTMLButtonElement) {
-    if (this.animations.length > 0 && this.currentAnimation) {
-      prevButton.hidden = false
-    }
-
-    prevButton.onclick = this.prev
-  }
-
-  const nextButton = this.shadow.querySelector('.next')
-
-  if (nextButton instanceof HTMLButtonElement) {
-    if (this.animations.length > 0 && this.currentAnimation < this.animations.length - 1) {
-      nextButton.hidden = false
-    }
-
-    nextButton.onclick = this.next
-  }
-
-  const seeker = this.shadow.querySelector('.seeker')
-
-  if (seeker instanceof HTMLInputElement) {
-    seeker.onchange = this._handleSeekChange
-    seeker.onmousedown = this._freeze
-  }
-
-  if (!this.simple) {
-    const toggleLoop = this.shadow.querySelector('.toggleLoop')
-
-    if (toggleLoop instanceof HTMLButtonElement) {
-      toggleLoop.onclick = this.toggleLoop
-    }
-
-    const toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
-
-    if (toggleBoomerang instanceof HTMLButtonElement) {
-      toggleBoomerang.onclick = this.toggleBoomerang
-    }
-
-    const convertButton = this.shadow.querySelector('.convert')
-
-    if (convertButton instanceof HTMLButtonElement) {
-      convertButton.onclick = async () => {
-        convertButton.disabled = true
-
-        try {
-          const { convert } = await loadDotLottieTools()
-
-          await convert({
-            isDotLottie: this.isDotLottie,
-            manifest: this.getManifest(),
-            src: this.src || this.source
-          })
-        } finally {
-          convertButton.disabled = false
-        }
-      }
-    }
-
-    const snapshot = this.shadow.querySelector('.snapshot')
-
-    if (snapshot instanceof HTMLButtonElement) {
-      snapshot.onclick = () => this.snapshot(true)
-    }
-
-    const toggleSettings = this.shadow.querySelector('.toggleSettings')
-
-    if (toggleSettings instanceof HTMLButtonElement) {
-      toggleSettings.onclick = this._handleSettingsClick
-      toggleSettings.onblur = this._handleBlur
-    }
-  }
+  handleButtons.call(this)
 }
 
 export function updatePlayPauseButton(togglePlay: HTMLButtonElement,

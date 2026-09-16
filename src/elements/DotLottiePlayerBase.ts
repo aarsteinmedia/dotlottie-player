@@ -518,8 +518,6 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    */
   protected _container: HTMLElement | null = null
 
-  protected _DOMRect: DOMRect | null = null
-
   protected _errorMessage = 'Something went wrong'
 
   protected _identifier = this.id || createElementID()
@@ -533,16 +531,13 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     prev: PlayerState
     count: number
     loaded: boolean
-    visible: boolean
-    scrollY: number
-    scrollTimeout: ReturnType<typeof setTimeout> | null
+    rafId?: number
+    playTimeout: ReturnType<typeof setTimeout> | null
   } = {
     count: 0,
     loaded: false,
+    playTimeout: null,
     prev: PlayerState.Loading,
-    scrollTimeout: null,
-    scrollY: 0,
-    visible: false,
   }
 
   protected _render = renderPlayer
@@ -791,10 +786,6 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
           document.addEventListener('visibilitychange', this._onVisibilityChange)
         }
 
-        if (this._container) {
-          this._DOMRect = this._container.getBoundingClientRect()
-        }
-
         // Add intersection observer for detecting component being out-of-view.
         this._addIntersectionObserver()
 
@@ -835,6 +826,10 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     if (this._intersectionObserver) {
       this._intersectionObserver.disconnect()
       this._intersectionObserver = undefined
+    }
+
+    if (this._playerState.playTimeout) {
+      clearTimeout(this._playerState.playTimeout)
     }
 
     // Remove the attached Visibility API's change event listener
@@ -960,6 +955,11 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       this._lottieInstance.setSpeed(speed)
       this._lottieInstance.setDirection(direction)
       this._lottieInstance.setSubframe(Boolean(this.subframe))
+
+      // Set progress on load if AnimateOnScroll
+      if (this.animateOnScroll) {
+        this._handleScroll()
+      }
 
       // Start playing if autoplay is enabled
       if (
@@ -1389,7 +1389,13 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    * Handle blur.
    */
   protected _handleBlur() {
-    setTimeout(() => { this._toggleSettings(false) }, 200)
+    const blurTimeout = setTimeout(() => {
+      this._toggleSettings(false)
+    }, 200)
+
+    if (!this._isSettingsOpen) {
+      clearTimeout(blurTimeout)
+    }
   }
 
   /**
@@ -1532,7 +1538,6 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
         if (this.playerState === PlayerState.Playing) {
           this._freeze()
         }
-        this._playerState.visible = false
 
         return
       }
@@ -1544,32 +1549,24 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
         this.play()
       }
 
-      if (this.playOnVisible) {
-        if (
-          this.playerState === PlayerState.Completed &&
-          !this.once
-        ) {
-          this.playerState = PlayerState.Playing
-          this._lottieInstance?.goToAndPlay(this.direction === 1 ? 0 : this._lottieInstance.totalFrames)
-        } else {
-          setTimeout(() => {
-            this.play()
-          }, this.delay)
+      if (!this.playOnVisible) {
+        return
+      }
+      if (
+        this.playerState === PlayerState.Completed &&
+        !this.once
+      ) {
+        this.playerState = PlayerState.Playing
+        this._lottieInstance?.goToAndPlay(this.direction === 1 ? 0 : this._lottieInstance.totalFrames)
+      } else {
+        this._playerState.playTimeout = setTimeout(() => {
+          this.play()
+        }, this.delay)
 
+        if (this.playerState === PlayerState.Playing) {
+          clearTimeout(this._playerState.playTimeout)
         }
       }
-
-      /**
-         * If the player is a ways down the page, we need to account for this by
-         * setting _playerState.scrollY to the current scroll position. However, we
-         * also need to check that the player hasn't been scrolled past, so we check
-         * boundingClientRect as well.
-         */
-      if (!this._playerState.scrollY && (entry.boundingClientRect.y || 0) > 0) {
-        this._playerState.scrollY = scrollY
-      }
-      this._playerState.visible = true
-
     })
 
     this._intersectionObserver.observe(this._container)
@@ -1751,54 +1748,28 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    * Handle scroll.
    */
   private _handleScroll() {
-    if (!this.animateOnScroll || !this._DOMRect || !this._lottieInstance) {
+    if (!this.animateOnScroll || !this._lottieInstance || !this._container) {
       return
     }
     if (isServer) {
-      console.warn('DotLottie: Scroll animations might not work properly in a Server Side Rendering context. Try to wrap this in a client component.')
+      console.warn('DotLottie: Scroll animations will not work in a Server Side Rendering context. Try to wrap this in a client component.')
 
       return
     }
-    if (!this._playerState.visible) {
-      return
+    // console.log(scrollY)
+
+    const { height, top } = this._container.getBoundingClientRect(),
+      viewport = visualViewport?.height ?? innerHeight,
+      { totalFrames } = this._lottieInstance,
+      progress = clamp(
+        (viewport - top) / (viewport + height), 0, 1
+      ),
+      currentFrame = progress * (totalFrames - 1)
+
+    if (this._playerState.rafId !== undefined) {
+      cancelAnimationFrame(this._playerState.rafId)
     }
-    if (this._playerState.scrollTimeout) {
-      clearTimeout(this._playerState.scrollTimeout)
-    }
-    this._playerState.scrollTimeout = setTimeout(() => {
-      this.playerState = PlayerState.Paused
-    }, 400)
-
-    const { totalFrames } = this._lottieInstance
-
-    let scrollPosition = scrollY - this._playerState.scrollY
-
-    if (scrollY <= this._playerState.scrollY) {
-      scrollPosition = this._playerState.scrollY - scrollY
-    }
-
-    const {
-      bottom, height, top
-    } = this._DOMRect
-    let offset = height - bottom
-
-    if (top >= innerHeight) {
-      offset = height
-    }
-
-    const scrollProgress = scrollPosition / (innerHeight + offset),
-      currentFrame = clamp(
-        scrollProgress * (totalFrames - 1), 0, totalFrames
-      )
-
-    requestAnimationFrame(() => {
-      if (currentFrame >= totalFrames) {
-        this.playerState = PlayerState.Paused
-
-        return
-      }
-
-      this.playerState = PlayerState.Playing
+    this._playerState.rafId = requestAnimationFrame(() => {
       this._lottieInstance?.goToAndStop(currentFrame, true)
     })
   }
@@ -1841,8 +1812,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       bottom, left, right, top
     } = this._container.getBoundingClientRect()
 
-
-    this._playerState.visible =
+    const isVisible =
       top >= 0 &&
       left >= 0 &&
       bottom <= innerHeight &&
@@ -1854,11 +1824,13 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       this.playerState === PlayerState.Playing ||
       this.playerState === PlayerState.Frozen
     ) {
-      if (this._playerState.visible) {
+      if (isVisible) {
         this.play()
-      } else {
-        this._freeze()
+
+        return
       }
+
+      this._freeze()
     }
 
   }
@@ -2031,7 +2003,10 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
         this.autoplay
       ) {
         if (this.animateOnScroll) {
-          this._lottieInstance.goToAndStop(0, true)
+          // this._lottieInstance.goToAndStop(0, true)
+
+          this._handleScroll()
+
           this.playerState = PlayerState.Paused
 
           return
