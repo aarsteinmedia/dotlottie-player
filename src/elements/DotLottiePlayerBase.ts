@@ -576,10 +576,12 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    */
   private _multiAnimationSettings: AnimationSettings[] = []
 
+  private _scrollProbe?: Animation
   /**
    * Segment.
    */
   private _segment?: Vector2
+
   constructor() {
     super()
     this._complete = this._complete.bind(this)
@@ -810,6 +812,8 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       return
     }
 
+    this._scrollProbe?.cancel()
+
     this.playerState = PlayerState.Destroyed
 
     this._lottieInstance.destroy()
@@ -825,10 +829,8 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    */
   disconnectedCallback() {
     // Remove intersection observer for detecting component being out-of-view
-    if (this._intersectionObserver) {
-      this._intersectionObserver.disconnect()
-      this._intersectionObserver = undefined
-    }
+    this._intersectionObserver?.disconnect()
+    this._intersectionObserver = undefined
 
     if (this._playerState.playTimeout) {
       clearTimeout(this._playerState.playTimeout)
@@ -1519,22 +1521,6 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       return
     }
 
-    if (!('IntersectionObserver' in window)) {
-      this._intersectionObserverFallback()
-
-      removeEventListener(
-        'scroll', this._intersectionObserverFallback, true
-      )
-      addEventListener(
-        'scroll', this._intersectionObserverFallback, {
-          capture: true,
-          passive: true
-        }
-      )
-
-      return
-    }
-
     this._intersectionObserver = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting || document.hidden) {
         if (this.playerState === PlayerState.Playing) {
@@ -1550,6 +1536,10 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       ) {
         this.play()
       }
+
+      // if (this.animateOnScroll) {
+      //   this._handleScroll()
+      // }
 
       if (!this.playOnVisible) {
         return
@@ -1576,6 +1566,8 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
 
   private _clearPrevious() {
     this._lottieInstance?.destroy()
+
+    this._scrollProbe?.cancel()
 
     const figure = this.shadow?.querySelector('.animation')
 
@@ -1712,6 +1704,33 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     })
   }
 
+  private _getScrollProgress() {
+    if (!this._container) {
+      return null
+    }
+
+    if ('ViewTimeline' in window) {
+      this._scrollProbe ??= this._container.animate({ '--dotlottie-scroll': [0, 1] }, {
+        fill: 'both',
+        rangeEnd: 'cover 100%',
+        rangeStart: 'cover 0%',
+        timeline: new ViewTimeline({
+          axis: 'block',
+          subject: this._container
+        })
+      })
+
+      return this._scrollProbe.effect?.getComputedTiming().progress ?? null
+    }
+
+    const { height, top } = this._container.getBoundingClientRect(),
+      viewport = visualViewport?.height ?? innerHeight
+
+    return clamp(
+      (viewport - top) / (viewport + height), 0, 1
+    )
+  }
+
   private async _handleError(error: unknown) {
     this.playerState = PlayerState.Error
 
@@ -1748,10 +1767,9 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
 
   /**
    * Handle scroll.
-   * TODO: investigate experimental feature ViewTimeline
    */
   private _handleScroll() {
-    if (!this.animateOnScroll || !this._lottieInstance || !this._container) {
+    if (!this.animateOnScroll) {
       return
     }
     if (isServer) {
@@ -1764,7 +1782,6 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
      * WebKit dispatches scroll off the rendering loop, so measure in the frame
      * callback rather than at event time.
      */
-
     this._playerState.rafId ??= requestAnimationFrame(() => {
       this._playerState.rafId = undefined
 
@@ -1772,19 +1789,22 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
         return
       }
 
-      const {
-          bottom, height, top
-        } = this._container.getBoundingClientRect(),
-        viewport = visualViewport?.height ?? innerHeight
+      const progress = this._getScrollProgress()
 
-      if (bottom < 0 || top > viewport) {
+      if (progress === null) {
         return
       }
 
+      if (!('ViewTimeline' in window)) {
+        const { bottom, top } = this._container.getBoundingClientRect(),
+          viewport = visualViewport?.height ?? innerHeight
+
+        if (bottom < 0 || top > viewport) {
+          return
+        }
+      }
+
       const { totalFrames } = this._lottieInstance,
-        progress = clamp(
-          (viewport - top) / (viewport + height), 0, 1
-        ),
         frame = progress * (totalFrames - 1),
         epsilon = this.subframe ? 0.1 : 0.5
 
@@ -1825,37 +1845,6 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     if (this.playerState === PlayerState.Frozen && type === 'focus') {
       this.play()
     }
-  }
-
-  private _intersectionObserverFallback() {
-    if (!this._container) {
-      return
-    }
-    const {
-      bottom, left, right, top
-    } = this._container.getBoundingClientRect()
-
-    const isVisible =
-      top >= 0 &&
-      left >= 0 &&
-      bottom <= innerHeight &&
-      right <= innerWidth
-
-    if (
-      this.autoplay ||
-      this.playOnVisible ||
-      this.playerState === PlayerState.Playing ||
-      this.playerState === PlayerState.Frozen
-    ) {
-      if (isVisible) {
-        this.play()
-
-        return
-      }
-
-      this._freeze()
-    }
-
   }
 
   private _loopComplete() {
@@ -2026,8 +2015,8 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
         this.autoplay
       ) {
         if (this.animateOnScroll) {
-          // this._lottieInstance.goToAndStop(0, true)
 
+          // Get instant scroll position
           this._handleScroll()
 
           this.playerState = PlayerState.Paused

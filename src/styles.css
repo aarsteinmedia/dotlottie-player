@@ -35,6 +35,9 @@
     margin: 0;
     padding: 0;
     contain: content;
+    & svg g {
+      will-change: transform;
+    }
   }
 
   [data-controls='true'] .animation {
