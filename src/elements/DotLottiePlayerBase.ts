@@ -1555,7 +1555,8 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       }
       if (
         !this.playOnVisible &&
-        this.playerState === PlayerState.Frozen
+        this.playerState === PlayerState.Frozen &&
+        !(this.autoplay && hasReducedMotion)
       ) {
         this.play()
       }

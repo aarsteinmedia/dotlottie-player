@@ -128,7 +128,7 @@ function setAttributes(e) {
   loremIpsum.forEach(element => {
     element.hidden =
       attributes !== 'animateOnScroll' &&
-      // attributes !== 'autoplay' &&
+      attributes !== 'autoplay' &&
       attributes !== 'playOnVisible'
   })
 
