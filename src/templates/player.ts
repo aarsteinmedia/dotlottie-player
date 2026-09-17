@@ -34,13 +34,7 @@ export async function renderPlayer(this: DotLottiePlayerBase) {
       <figure
         class="animation"
         style="background:${this.background}"
-        ${this.description ?
-          /* HTML */ `
-            aria-label="${this.description}"
-          `
-            :
-            ''
-        }
+        ${this.description ? `aria-label="${this.description}"` : ''}
       >
       </figure>
       <slot name="controls"></slot>

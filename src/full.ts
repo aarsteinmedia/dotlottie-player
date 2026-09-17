@@ -3,14 +3,13 @@ import {
 } from '@aarsteinmedia/lottie-web/utils'
 
 import { DotLottiePlayer } from '@/elements/DotLottiePlayer'
-import { tagName } from '@/utils/enums'
+import { tagName } from '@/utils/constants'
 
 export { PlayerEvent, PlayMode }
 export default DotLottiePlayer
 export { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
-export {
-  MouseOut, PlayerState, tagName
-} from '@/utils/enums'
+export { tagName } from '@/utils/constants'
+export { MouseOut, PlayerState } from '@/utils/enums'
 export { RendererType } from '@aarsteinmedia/lottie-web/utils'
 
 /**

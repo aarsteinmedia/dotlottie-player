@@ -5,11 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
+Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing notable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
-## [6.5.0] - 16-09-2026
+## [6.5.1] - 17-09-2026
 
 - Change to how Animate On Scroll is handled. From being relative to viewport size and scroll position, progress is now entirely determined by position in viewport. This is to improve useability, and gives a significant performance boost. Listener is moved from `scroll` to `IntersectionObserver`, and for browsers that support this the callback is moved to `ViewTimeline` rather than relying on viewport math.
+- Added accessibility check for `prefers-reduced-motion: reduce`. This overrides and disables `autoplay`, `animateOnScroll`, `playOnVisible`, and `mouseOver`/`mouseLeave`.
 
 ## [6.4.6] - 28-08-2026
 
@@ -41,7 +42,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 ### Changed
 
 - Fixed error causing beziers to be dropped from keyframes.
-- Minor bugrixes.
+- Minor bugfixes.
 
 ## [6.3.11] - 20-07-2026
 
@@ -82,7 +83,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 ### Changed
 
 - Added attributes:
-  - `delay` – Delay playback on playOnVisible, in miliseconds
+  - `delay` – Delay playback on playOnVisible, in milliseconds
   - `mouseout` – Action on mouseout
   - `once` – Whether, if playOnVisible is true, to play once or anytime animation is in view
   - `playOnClick` – Whether to toggle play on click
@@ -128,7 +129,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 ### Changed
 
 - Optimization to animation engine:
-  - Prevented needless function calls to check for rendering context, when only one is sufficiant.
+  - Prevented needless function calls to check for rendering context, when only one is sufficient.
   - Swapped deprecated attributes like xml:href and xml:space for modern equivalents.
 
 ## [5.2.1] - 08-06-2025
@@ -138,7 +139,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 ### Changed
 
 - Fixed several issues with Canvas renderer.
-- Removed Hybrid rendere1
+- Removed Hybrid renderer
 
 ## [5.2.0] - 07-06-2025
 
@@ -266,7 +267,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 
 - Made download optional for snapshot
 
-- Made snapshot work for programatically set instances
+- Made snapshot work for programmatically set instances
 
 - Changed CSS to respect hidden-attribute
 
@@ -405,6 +406,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[6.5.1]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/6.5.1
 [6.3.0]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/6.3.0
 [6.0.1]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/6.0.1
 [5.3.2]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/5.3.2

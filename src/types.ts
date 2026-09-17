@@ -8,7 +8,7 @@ import type { DotLottiePlayer } from '@/elements/DotLottiePlayer'
 import type { DotLottiePlayerCanvas } from '@/elements/DotLottiePlayerCanvas'
 import type { DotLottiePlayerLight } from '@/elements/DotLottiePlayerLight'
 import type { DotLottiePlayerSVG } from '@/elements/DotLottiePlayerSVG'
-import type { tagName } from '@/utils/enums'
+import type { tagName } from '@/utils/constants'
 
 export interface CEMConfig {
   /** Enable special handling for catalyst. */

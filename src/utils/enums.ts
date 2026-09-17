@@ -23,5 +23,3 @@ export enum PlayerState {
   Playing = 'playing',
   Stopped = 'stopped',
 }
-
-export const tagName = 'dotlottie-player'

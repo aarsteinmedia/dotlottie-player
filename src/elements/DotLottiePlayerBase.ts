@@ -43,6 +43,9 @@ import {
   parseHTMLBooleans
 } from '@/utils'
 import {
+  hasIOSupport, hasReducedMotion, hasVTSupport
+} from '@/utils/constants'
+import {
   MouseOut,
   ObjectFit,
   PlayerState,
@@ -655,7 +658,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       }
 
       case 'autoplay': {
-        if (this.animateOnScroll || this.playOnVisible) {
+        if (this.animateOnScroll || this.playOnVisible || hasReducedMotion) {
           return
         }
         if (value === '' || Boolean(value)) {
@@ -1523,7 +1526,8 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
   private _addIntersectionObserver() {
     if (
       !this._container ||
-      this._intersectionObserver
+      this._intersectionObserver ||
+      !hasIOSupport
     ) {
       return
     }
@@ -1531,7 +1535,8 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     this._intersectionObserver = new IntersectionObserver(([{ isIntersecting }]) => {
       this._isIntersecting = isIntersecting
 
-      if (this.animateOnScroll) {
+      // Prevent animate on scroll for users with who prefers reduces motion.
+      if (this.animateOnScroll && !hasReducedMotion) {
         if (isIntersecting) {
           this._startScrollLoop()
         } else {
@@ -1555,7 +1560,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
         this.play()
       }
 
-      if (!this.playOnVisible) {
+      if (!this.playOnVisible || hasReducedMotion) {
         return
       }
       if (
@@ -1721,7 +1726,8 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     if (currentAnimationSettings?.autoplay !== undefined) {
       hasAutoplay = Boolean(currentAnimationSettings.autoplay)
     }
-    if (this.animateOnScroll) {
+    // Disable autoplay on reduced-motion.
+    if (this.animateOnScroll || hasReducedMotion) {
       hasAutoplay = false
     }
 
@@ -1750,7 +1756,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       return null
     }
 
-    if ('ViewTimeline' in window) {
+    if (hasVTSupport) {
       this._scrollProbe ??= this._container.animate({ '--dotlottie-scroll': [0, 1] }, {
         fill: 'both',
         rangeEnd: 'cover 100%',
@@ -1895,7 +1901,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    * Handle MouseEnter.
    */
   private _mouseEnter() {
-    if (!this.hover || !this._lottieInstance || isTouch()) {
+    if (!this.hover || !this._lottieInstance || isTouch() || hasReducedMotion) {
       return
     }
 
@@ -1919,7 +1925,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    * Handle MouseLeave.
    */
   private _mouseLeave() {
-    if (!this.hover || !this._lottieInstance || isTouch()) {
+    if (!this.hover || !this._lottieInstance || isTouch() || hasReducedMotion) {
       return
     }
 

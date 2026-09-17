@@ -61,7 +61,7 @@ Here is [a demo](https://www.aarstein.media/en/dotlottie-player), running on Nex
 
 Because this is a Web Component, you're adding it to the global scope of your web app. Unlike modular components, it should only be imported once – preferably early in your app lifecycle.
 
-If you're using TypeScript and want to import the component type, do it modularly in addition to the global import:
+If you're using TypeScript and want to import the component type, do it modular in addition to the global import:
 
 ```ts
 import '@aarsteinmedia/dotlottie-player' // Do this once globally.

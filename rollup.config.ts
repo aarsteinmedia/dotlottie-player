@@ -37,6 +37,9 @@ const isProd = process.env.NODE_ENV !== 'development',
   isLight = process.env.VER === 'light',
   __dirname = dirname(fileURLToPath(import.meta.url)),
 
+  /** Opening or closing tag of any element, including custom elements. */
+  markup = /<\/?[a-z][a-z\d-]*[\s/>]/i,
+
   external = [
     '@aarsteinmedia/lottie-web',
     '@aarsteinmedia/lottie-web/light',
@@ -80,6 +83,12 @@ const isProd = process.env.NODE_ENV !== 'development',
     typescriptPaths(),
     postcss({
       inject: false,
+      /**
+       * `mergeRules` is disabled because cssnano is not aware of native
+       * nesting, and grouping selectors across vendor-prefixed
+       * pseudo-elements can invalidate a whole selector list.
+       */
+      minimize: isProd && { preset: ['default', { mergeRules: false }] },
       plugins: isProd
         ? [
           flexbugs(), autoprefixer({ flexbox: 'no-2009' }),
@@ -87,20 +96,14 @@ const isProd = process.env.NODE_ENV !== 'development',
         : [],
     }),
     template({
-      include: [
-        resolve(
-          __dirname, 'src', 'elements', 'DotLottiePlayer.ts'
-        ), resolve(
-          __dirname, 'src', 'templates', '*'
-        ),
-      ],
+      include: [resolve(
+        __dirname, 'src', '**'
+      )],
       options: {
         shouldMinify({ parts }: MinifyOptions) {
-          return parts.some(({ text }) =>
-          // Matches Polymer templates that are not tagged
-            text.includes('<figure') ||
-            text.includes('<div') ||
-            text.includes('<svg'))
+          // Templates marked with a /* HTML */ comment are untagged,
+          // so match on the markup itself
+          return parts.some(({ text }) => markup.test(text))
         },
       },
     }),
