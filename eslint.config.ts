@@ -292,6 +292,7 @@ export default defineConfig({
       allowTernary: true,
       enforceForJSX: true
     }],
+    '@typescript-eslint/no-unused-private-class-members': 'error',
     '@typescript-eslint/no-unused-vars': [
       'error', {
         argsIgnorePattern: '^_',
@@ -325,6 +326,11 @@ export default defineConfig({
     'import-x/no-duplicates': [2, { 'prefer-inline': true }],
     'import-x/no-named-as-default': 2,
     'import-x/no-useless-path-segments': [2, { noUselessIndex: true }],
+    'no-console': ['error', {
+      allow: ['warn',
+        'error',
+        'info']
+    }],
     'no-plusplus': 'off',
     'no-restricted-globals': ['error',
       'event',

@@ -9,7 +9,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 
 ## [6.5.0] - 16-09-2026
 
-- Change to how Animate On Scroll is handled. From being relative to viewport size and scroll position, progress is now entirely determined by position in viewport. This is to improve useability, and gives a significant performance boost.
+- Change to how Animate On Scroll is handled. From being relative to viewport size and scroll position, progress is now entirely determined by position in viewport. This is to improve useability, and gives a significant performance boost. Listener is moved from `scroll` to `IntersectionObserver`, and for browsers that support this the callback is moved to `ViewTimeline` rather than relying on viewport math.
 
 ## [6.4.6] - 28-08-2026
 

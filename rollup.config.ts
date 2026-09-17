@@ -49,24 +49,6 @@ const isProd = process.env.NODE_ENV !== 'development',
     'react/jsx-dev-runtime',
   ],
 
-  // parseEnv = (_env = process.env) => {
-  //   const mode: Mode =
-  //     _env.NODE_ENV === 'development' ? 'development' : 'production',
-  //     ver: Ver =
-  //       _env.VER === 'light' ? 'light' : 'full',
-  //     outputType: OutputType =
-  //       _env.TYPE === 'iife' ? 'iife' : 'esm',
-  //     target: Target =
-  //       (_env.TARGET as Target | undefined) ?? 'all'
-
-  //   return {
-  //     mode,
-  //     outputType,
-  //     target,
-  //     ver
-  //   }
-  // },
-
   inputs: readonly InputsDef[] = [
     {
       file: resolve(
