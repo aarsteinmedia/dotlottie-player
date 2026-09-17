@@ -114,7 +114,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
 
   public shadow: ShadowRoot | undefined
   /**
-   * Store source for later use, when player is loaded programatically.
+   * Store source for later use, when player is loaded programmatically.
    */
   public source?: string
 
@@ -269,7 +269,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
   }
 
   /**
-   * Pause between loop intrations, in miliseconds.
+   * Pause between loop iterations, in milliseconds.
    */
   set intermission(value: number) {
     this.setAttribute('intermission', value.toString())
