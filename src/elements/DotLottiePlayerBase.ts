@@ -1953,7 +1953,14 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    * Handle visibility change events.
    */
   private _onVisibilityChange() {
-    if (document.hidden && this.playerState === PlayerState.Playing) {
+    if (this.autoplay && hasReducedMotion) {
+      return
+    }
+
+    if (
+      document.hidden &&
+      this.playerState === PlayerState.Playing
+    ) {
       this._freeze()
 
       return
