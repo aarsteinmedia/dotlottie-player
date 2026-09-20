@@ -119,6 +119,7 @@ function setAttributes(e) {
     attributes = e
   }
 
+  // dotLotties[0].controls = controls
   dotLotties[0].autoplay = attributes === 'autoplay'
   dotLotties[0].animateOnScroll = attributes === 'animateOnScroll'
   dotLotties[0].hover = attributes === 'hover'
@@ -155,6 +156,7 @@ async function changeRenderer(e) {
 
   const selection = localStorage.getItem('selection'),
     attributes = localStorage.getItem('attributes')
+    // controls = Boolean(JSON.parse(localStorage.getItem('controls') ?? 'true'))
 
   if (selection) {
     if (

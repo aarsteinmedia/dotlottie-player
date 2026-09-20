@@ -1582,7 +1582,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       }
     })
 
-    this._intersectionObserver.observe(this._container)
+    this._observeIntersectionTarget()
   }
 
   private _applyScrollProgress() {
@@ -1947,6 +1947,17 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
         this.stop()
       }
     }
+  }
+
+  private _observeIntersectionTarget() {
+    if (!this._intersectionObserver || !this._container) {
+      return
+    }
+
+    this._intersectionObserver.disconnect()
+    // Observing the host is more reliable than inner shadow nodes when ancestors
+    // use overflow-* (IO / layout interaction quirks).
+    this._intersectionObserver.observe(this._container)
   }
 
   /**
