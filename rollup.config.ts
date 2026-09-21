@@ -2,6 +2,7 @@ import type { Plugin, RollupOptions } from 'rollup'
 
 import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
+import replace from '@rollup/plugin-replace'
 import autoprefixer from 'autoprefixer'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -94,6 +95,10 @@ const isProd = process.env.NODE_ENV !== 'development',
           flexbugs(), autoprefixer({ flexbox: 'no-2009' }),
         ]
         : [],
+    }),
+    replace({
+      preventAssignment: true,
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     }),
     template({
       include: [resolve(

@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "6.5.3",
+  "version": "6.5.4",
   "description": "Web Component for playing Lottie animations in your web app.",
   "type": "module",
   "exports": {
@@ -68,7 +68,7 @@
     "clean": "pnpm pm clean && rm -rf dist types"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^1.6.1"
+    "@aarsteinmedia/lottie-web": "^1.6.2"
   },
   "peerDependencies": {
     "@types/react": ">= 16.0.0"
@@ -81,6 +81,7 @@
     "@regru/eslint-plugin-prefer-early-return": "^1.0.0",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-replace": "^6.0.3",
     "@rollup/plugin-typescript": "^12.3.0",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@swc/core": "^1.16.2",
@@ -95,7 +96,7 @@
     "eslint-plugin-fsecond": "^1.5.0",
     "eslint-plugin-import-x": "^4.17.1",
     "eslint-plugin-perfectionist": "^5.11.1",
-    "eslint-plugin-regexp": "^3.3.0",
+    "eslint-plugin-regexp": "^3.3.1",
     "eslint-plugin-sonarjs": "^4.2.1",
     "eslint-plugin-unicorn": "^76.0.0",
     "fflate": "^0.8.3",

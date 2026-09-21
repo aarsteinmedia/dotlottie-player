@@ -1,12 +1,10 @@
 import type {
   AddAnimationParams,
   AnimationConfiguration,
-  AnimationData,
   AnimationDirection,
   AnimationItem,
   AnimationSettings,
   ConvertParams,
-  HTMLBooleanAttribute,
   LottieManifest,
   Result,
   Vector2,
@@ -17,20 +15,17 @@ import {
   createElementID,
   download,
   getFilename,
-  isServer,
   RendererType,
   PlayerEvent,
   PlayMode,
-  PreserveAspectRatio,
-  clamp
+  type PreserveAspectRatio,
 } from '@aarsteinmedia/lottie-web/utils'
 
 import type { Settings } from '@/types'
 
 import { loadControlsModule } from '@/elements/helpers/controlsLoader'
 import { loadErrorModule } from '@/elements/helpers/errorLoader'
-import { PropertyCallbackElement } from '@/elements/helpers/PropertyCallbackElement'
-import styles from '@/styles.css'
+import { ScrollElement } from '@/elements/helpers/ScrollElement'
 import { updatePlayPauseButton } from '@/templates/controls'
 import { renderPlayer } from '@/templates/player'
 import {
@@ -40,32 +35,22 @@ import {
   isEnum,
   isLottie,
   isTouch,
-  parseHTMLBooleans
 } from '@/utils'
-import {
-  hasIOSupport, hasReducedMotion, hasVTSupport
-} from '@/utils/constants'
+import { hasReducedMotion } from '@/utils/constants'
 import {
   MouseOut,
-  ObjectFit,
+  type ObjectFit,
   PlayerState,
 } from '@/utils/enums'
 
-const notImplemented = 'Method is not implemented',
-  getStyles = async () => {
-    const styleSheet = new CSSStyleSheet()
-
-    await styleSheet.replace(styles)
-
-    return styleSheet
-  }
+const notImplemented = 'Method is not implemented'
 
 export { RendererType }
 
 /**
  * DotLottie Player Web Component.
  */
-export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
+export abstract class DotLottiePlayerBase extends ScrollElement {
 
   /**
    * Attributes to observe.
@@ -98,19 +83,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     ] as const
   }
 
-  /**
-   * Return the styles for the component.
-   */
-  static get styles() {
-    return getStyles
-  }
-
   public isLight = false
-
-  /**
-   * Player state.
-   */
-  public playerState: PlayerState = PlayerState.Loading
 
   public shadow: ShadowRoot | undefined
   /**
@@ -120,430 +93,14 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
 
   public template?: HTMLTemplateElement
 
-  /**
-   * Whether to trigger next frame with scroll.
-   */
-  set animateOnScroll(value: HTMLBooleanAttribute) {
-    this.setAttribute('animateOnScroll', Boolean(value).toString())
-  }
-
-  get animateOnScroll() {
-    const val = this.getAttribute('animateOnScroll')
-
-    return parseHTMLBooleans(val)
-  }
-
-  public get animations() {
-    return this._animations
-  }
-
-  /**
-   * Autoplay.
-   */
-  set autoplay(value: HTMLBooleanAttribute) {
-    this.setAttribute('autoplay', Boolean(value).toString())
-  }
-
-  get autoplay() {
-    const val = this.getAttribute('autoplay')
-
-    return parseHTMLBooleans(val)
-  }
-
-  /**
-   * Background color.
-   */
-  set background(value: string) {
-    this.setAttribute('background', value)
-  }
-
-  get background() {
-    return this.getAttribute('background') || 'transparent'
-  }
-
-  /**
-   * Show controls.
-   */
-  set controls(value: HTMLBooleanAttribute) {
-    this.setAttribute('controls', Boolean(value).toString())
-  }
-
-  get controls() {
-    const val = this.getAttribute('controls')
-
-    return parseHTMLBooleans(val)
-  }
-
-  /**
-   * Number of times to loop.
-   */
-  set count(value: number) {
-    this.setAttribute('count', value.toString())
-  }
-
-  get count() {
-    const val = this.getAttribute('count')
-
-    if (val) {
-      return Number(val)
-    }
-
-    return 0
-  }
-
-  public get currentAnimation() {
-    return this._currentAnimation
-  }
-
-  /**
-   * Delay playback on playOnVisible.
-   */
-  set delay(value: number) {
-    this.setAttribute('delay', value.toString())
-  }
-
-  get delay() {
-    const val = this.getAttribute('delay')
-
-    if (val) {
-      return Number(val)
-    }
-
-    return 0
-  }
-
-  /**
-   * Description for screen readers.
-   */
-  set description(value: string | null) {
-    if (value) {
-      this.setAttribute('description', value)
-    }
-  }
-
-  get description() {
-    return this.getAttribute('description')
-  }
-
-  /**
-   * Direction of animation.
-   */
-  set direction(value: AnimationDirection) {
-    this.setAttribute('direction', value.toString())
-  }
-
-  get direction() {
-    const val = Number(this.getAttribute('direction'))
-
-    if (val === -1) {
-      return val
-    }
-
-    return 1
-  }
-
-  /**
-   * Whether to freeze animation when window loses focus.
-   */
-  set dontFreezeOnBlur(value: HTMLBooleanAttribute) {
-    this.setAttribute('dontFreezeOnBlur', Boolean(value).toString())
-  }
-
-  get dontFreezeOnBlur() {
-    const val = this.getAttribute('dontFreezeOnBlur')
-
-    return parseHTMLBooleans(val)
-  }
-
-  /**
-   * Whether to play on mouseover.
-   */
-  set hover(value: HTMLBooleanAttribute) {
-    this.setAttribute('hover', Boolean(value).toString())
-  }
-
-  get hover() {
-    const val = this.getAttribute('hover')
-
-    return parseHTMLBooleans(val)
-  }
-
-  /**
-   * Pause between loop iterations, in milliseconds.
-   */
-  set intermission(value: number) {
-    this.setAttribute('intermission', value.toString())
-  }
-
-  get intermission() {
-    const val = Number(this.getAttribute('intermission'))
-
-    if (!isNaN(val)) {
-      return val
-    }
-
-    return 0
-  }
-
   public get isDotLottie() {
     return this._isDotLottie
   }
 
   /**
-   * Loop animation.
-   */
-  set loop(value: HTMLBooleanAttribute) {
-    this.setAttribute('loop', Boolean(value).toString())
-  }
-
-  get loop() {
-    const val = this.getAttribute('loop')
-
-    return parseHTMLBooleans(val)
-  }
-
-  /**
-   * Play mode.
-   */
-  set mode(value: PlayMode) {
-    this.setAttribute('mode', value)
-  }
-
-  get mode() {
-    const val = this.getAttribute('mode')
-
-    if (val === PlayMode.Bounce) {
-      return val
-    }
-
-    return PlayMode.Normal
-  }
-
-  /**
-   * Action on mouseout.
-   */
-  set mouseout(value: MouseOut) {
-    this.setAttribute('mouseout', value)
-  }
-
-  get mouseout() {
-    const val = this.getAttribute('mouseout')
-
-    switch (val) {
-      case MouseOut.Void:
-      case MouseOut.Pause:
-      case MouseOut.Reverse: {
-        return val
-      }
-      default: {
-        return MouseOut.Stop
-      }
-    }
-  }
-
-  /**
-   * Resizing to container.
-   */
-  set objectfit(value: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down') {
-    this.setAttribute('objectfit', value)
-  }
-
-  get objectfit() {
-    const val = this.getAttribute('objectfit')
-
-    if (isEnum(val, ObjectFit)) {
-      return val
-    }
-
-    return ObjectFit.Contain
-  }
-
-  /**
-   * Whether to play once or reset,
-   * if playOnVisible is true.
-   */
-  set once(value: HTMLBooleanAttribute) {
-    this.setAttribute('once', Boolean(value).toString())
-  }
-
-  get once() {
-    const val = this.getAttribute('once')
-
-    return parseHTMLBooleans(val)
-  }
-
-  /**
-   * Whether to toggle play on click.
-   */
-  set playOnClick(value: HTMLBooleanAttribute) {
-    this.setAttribute('playOnClick', Boolean(value).toString())
-  }
-
-  get playOnClick() {
-    const val = this.getAttribute('playOnClick')
-
-    return parseHTMLBooleans(val)
-  }
-
-  /**
-   * Play when visible.
-   */
-  set playOnVisible(value: HTMLBooleanAttribute) {
-    this.setAttribute('playOnVisible', Boolean(value).toString())
-  }
-
-  get playOnVisible() {
-    const val = this.getAttribute('playOnVisible')
-
-    return parseHTMLBooleans(val)
-  }
-
-  /**
-   * Resizing to container (Deprecated).
-   */
-  set preserveAspectRatio(value: PreserveAspectRatio | null) {
-    this.setAttribute('preserveAspectRatio',
-      value || PreserveAspectRatio.Contain)
-  }
-
-  get preserveAspectRatio() {
-    const val = this.getAttribute('preserveAspectRatio')
-
-    if (isEnum(val, PreserveAspectRatio)) {
-      return val
-    }
-
-    return null
-  }
-
-  /**
-   * Whether to display error screen on load error.
-   */
-  set quiet(value: HTMLBooleanAttribute) {
-    this.setAttribute('quiet', Boolean(value).toString())
-  }
-
-  get quiet() {
-    const val = this.getAttribute('quiet')
-
-    return parseHTMLBooleans(val)
-  }
-
-  /**
-   * Renderer to use: svg, canvas or html.
-   */
-  set renderer(value: RendererType) {
-    this.setAttribute('renderer', value)
-  }
-
-  get renderer() {
-    const val = this.getAttribute('renderer')
-
-    if (val === RendererType.Canvas || val === RendererType.HTML) {
-      return val
-    }
-
-    return RendererType.SVG
-  }
-
-  /**
-   * Play on clicked element by id attribute, other than animation.
-   */
-  set selector(value: string | null) {
-    if (value) {
-      this.setAttribute('selector', value)
-
-      return
-    }
-    this.removeAttribute('selector')
-  }
-
-  get selector() {
-    return this.getAttribute('selector')
-  }
-
-  /**
-   * Hide advanced controls.
-   */
-  set simple(value: HTMLBooleanAttribute) {
-    this.setAttribute('simple', Boolean(value).toString())
-  }
-
-  get simple() {
-    const val = this.getAttribute('simple')
-
-    return parseHTMLBooleans(val)
-  }
-
-  /**
-   * Speed.
-   */
-  set speed(value: number) {
-    this.setAttribute('speed', value.toString())
-  }
-
-  get speed() {
-    const val = this.getAttribute('speed')
-
-    if (val !== null && !isNaN(Number(val))) {
-      return Number(val)
-    }
-
-    return 1
-  }
-
-  /**
-   * Source, either path or JSON string.
-   */
-  set src(value: string | null) {
-    this.setAttribute('src', value || '')
-  }
-
-  get src() {
-    return this.getAttribute('src')
-  }
-
-  /**
-   * Subframe.
-   */
-  set subframe(value: HTMLBooleanAttribute) {
-    this.setAttribute('subframe', Boolean(value).toString())
-  }
-
-  get subframe() {
-    const val = this.getAttribute('subframe')
-
-    return parseHTMLBooleans(val)
-  }
-
-  /**
-   * Animation Container.
-   */
-  protected _container: HTMLElement | null = null
-
-  protected _errorMessage = 'Something went wrong'
-
-  protected _identifier = this.id || createElementID()
-
-  /**
    * Whether settings toolbar is open.
    */
   protected _isSettingsOpen = false
-
-  protected _playerState: {
-    prev: PlayerState
-    count: number
-    loaded: boolean
-    scrollLoopId?: number | undefined
-    frame: number
-    playTimeout: ReturnType<typeof setTimeout> | null
-  } = {
-    count: 0,
-    frame: 0,
-    loaded: false,
-    playTimeout: null,
-    prev: PlayerState.Loading,
-  }
 
   protected _render = renderPlayer
 
@@ -552,27 +109,12 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    */
   protected _seeker = 0
 
-  /**
-   * This is included in watched properties,
-   * so that next-button will show up
-   * on load, if controls are visible.
-   */
-  private _animations: AnimationData[] = []
-
   private _controlsLoadId = 0
-
-  /**
-   * Which animation to show, if several.
-   */
-  private _currentAnimation = 0
 
   private _errorLoadId = 0
 
-  private _intersectionObserver?: undefined | IntersectionObserver
   private _isBounce = false
   private _isDotLottie = false
-  private _isIntersecting = false
-  private _lottieInstance: AnimationItem | null = null
 
   private _manifest?: LottieManifest
 
@@ -580,7 +122,6 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    * Multi-animation settings.
    */
   private _multiAnimationSettings: AnimationSettings[] = []
-  private _scrollProbe?: Animation | undefined
 
   /**
    * Segment.
@@ -603,7 +144,8 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     this._mouseEnter = this._mouseEnter.bind(this)
     this._mouseLeave = this._mouseLeave.bind(this)
     this._onVisibilityChange = this._onVisibilityChange.bind(this)
-    this._scrollLoop = this._scrollLoop.bind(this)
+    this.scrollLoop = this.scrollLoop.bind(this)
+    // this.startScrollLoop = this.startScrollLoop.bind(this)
     this._switchInstance = this._switchInstance.bind(this)
     this._handleSettingsClick = this._handleSettingsClick.bind(this)
 
@@ -642,18 +184,20 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       return
     }
 
+    this.clearDevLog()
+
     switch (name) {
       case 'animateOnScroll': {
         if (value === '' || Boolean(value)) {
           this._lottieInstance.autoplay = false
 
-          if (this._isIntersecting) {
-            this._startScrollLoop()
+          if (this.isIntersecting) {
+            this.startScrollLoop()
           }
 
           return
         }
-        this._stopScrollLoop()
+        this.stopScrollLoop()
         break
       }
 
@@ -813,14 +357,14 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       return
     }
 
-    this._cancelScrollProbe()
+    this.cancelScrollProbe()
 
     this.playerState = PlayerState.Destroyed
 
     this._lottieInstance.destroy()
     this._lottieInstance = null
 
-    this._stopScrollLoop()
+    this.stopScrollLoop()
 
     this.dispatchEvent(new CustomEvent(PlayerEvent.Destroyed))
     this.remove()
@@ -832,11 +376,9 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    * Cleanup on component destroy.
    */
   disconnectedCallback() {
-    // Remove intersection observer for detecting component being out-of-view
-    this._intersectionObserver?.disconnect()
-    this._intersectionObserver = undefined
+    this.cancelIntersectionObserver()
 
-    this._cancelScrollProbe()
+    this.cancelScrollProbe()
 
     if (this._playerState.scrollLoopId) {
       cancelAnimationFrame(this._playerState.scrollLoopId)
@@ -851,6 +393,8 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
 
     // Destroy the animation instance
     this.destroy()
+
+    this.clearDevLog()
   }
 
   /**
@@ -972,7 +516,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
 
       // Set progress on load if AnimateOnScroll
       if (this.animateOnScroll) {
-        this._applyScrollProgress()
+        this.applyScrollProgress()
       }
 
       // Start playing if autoplay is enabled
@@ -1020,7 +564,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       this.dispatchEvent(new CustomEvent(PlayerEvent.Pause))
     } catch(error) {
       hasError = true
-      console.error(error)
+      this.devLog(error)
     } finally {
       this.playerState = hasError ? PlayerState.Error : PlayerState.Paused
     }
@@ -1029,7 +573,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
   /**
    * Play.
    */
-  public play() {
+  public override play() {
     if (!this._lottieInstance) {
       return
     }
@@ -1043,7 +587,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
       this.dispatchEvent(new CustomEvent(PlayerEvent.Play))
     } catch(error) {
       hasError = true
-      console.error(error)
+      this.devLog(error)
     } finally {
       this.playerState = hasError ? PlayerState.Error : PlayerState.Playing
     }
@@ -1276,7 +820,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
 
       return data
     } catch (error) {
-      console.error(error)
+      this.devLog(error)
 
       return null
     }
@@ -1384,7 +928,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    * This internal state pauses animation and is used to differentiate between
    * user requested pauses and component instigated pauses.
    */
-  protected _freeze() {
+  protected override _freeze() {
     if (!this._lottieInstance) {
       return
     }
@@ -1518,99 +1062,6 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
    */
   private _addEventListeners() {
     this._toggleEventListeners('add')
-  }
-
-  /**
-   * Add IntersectionObserver.
-   */
-  private _addIntersectionObserver() {
-    if (
-      !this._container ||
-      this._intersectionObserver ||
-      !hasIOSupport
-    ) {
-      return
-    }
-
-    this._intersectionObserver = new IntersectionObserver(([{ isIntersecting }]) => {
-      this._isIntersecting = isIntersecting
-
-      // Prevent animate on scroll for users with who prefers reduces motion.
-      if (this.animateOnScroll && !hasReducedMotion) {
-        if (isIntersecting) {
-          this._startScrollLoop()
-        } else {
-          this._stopScrollLoop()
-        }
-
-        return
-      }
-
-      if (!isIntersecting || document.hidden) {
-        if (this.playerState === PlayerState.Playing) {
-          this._freeze()
-        }
-
-        return
-      }
-      if (
-        !this.playOnVisible &&
-        this.playerState === PlayerState.Frozen &&
-        !(this.autoplay && hasReducedMotion)
-      ) {
-        this.play()
-      }
-
-      if (!this.playOnVisible || hasReducedMotion) {
-        return
-      }
-      if (
-        this.playerState === PlayerState.Completed &&
-        !this.once
-      ) {
-        this.playerState = PlayerState.Playing
-        this._lottieInstance?.goToAndPlay(this.direction === 1 ? 0 : this._lottieInstance.totalFrames)
-
-        return
-      }
-      this._playerState.playTimeout = setTimeout(() => {
-        this.play()
-      }, this.delay)
-
-      if (this.playerState === PlayerState.Playing) {
-        clearTimeout(this._playerState.playTimeout)
-      }
-    })
-
-    this._observeIntersectionTarget()
-  }
-
-  private _applyScrollProgress() {
-    if (!this.animateOnScroll || !this._lottieInstance) {
-      return
-    }
-
-    const progress = this._getScrollProgress()
-
-    if (progress === null) {
-      return
-    }
-
-    const { totalFrames } = this._lottieInstance,
-      frame = progress * (totalFrames - 1),
-      epsilon = this.subframe ? 0.1 : 0.5
-
-    if (Math.abs(frame - this._playerState.frame) < epsilon) {
-      return
-    }
-
-    this._playerState.frame = frame
-    this._lottieInstance.goToAndStop(frame, true)
-  }
-
-  private _cancelScrollProbe() {
-    this._scrollProbe?.cancel()
-    this._scrollProbe = undefined
   }
 
   private _clearPrevious() {
@@ -1752,33 +1203,6 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     })
   }
 
-  private _getScrollProgress() {
-    if (!this._container) {
-      return null
-    }
-
-    if (hasVTSupport) {
-      this._scrollProbe ??= this._container.animate({ '--dotlottie-scroll': [0, 1] }, {
-        fill: 'both',
-        rangeEnd: 'cover 100%',
-        rangeStart: 'cover 0%',
-        timeline: new ViewTimeline({
-          axis: 'block',
-          subject: this._container
-        })
-      })
-
-      return this._scrollProbe.effect?.getComputedTiming().progress ?? null
-    }
-
-    const { height, top } = this._container.getBoundingClientRect(),
-      viewport = visualViewport?.height ?? innerHeight
-
-    return clamp(
-      (viewport - top) / (viewport + height), 0, 1
-    )
-  }
-
   private async _handleError(error: unknown) {
     this.playerState = PlayerState.Error
 
@@ -1789,7 +1213,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
 
     this.dispatchEvent(new CustomEvent(PlayerEvent.Error))
 
-    console.error(error)
+    this.devLog(error)
   }
 
   private _handleLdScript() {
@@ -1949,17 +1373,6 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     }
   }
 
-  private _observeIntersectionTarget() {
-    if (!this._intersectionObserver || !this._container) {
-      return
-    }
-
-    this._intersectionObserver.disconnect()
-    // Observing the host is more reliable than inner shadow nodes when ancestors
-    // use overflow-* (IO / layout interaction quirks).
-    this._intersectionObserver.observe(this._container)
-  }
-
   /**
    * Handle visibility change events.
    */
@@ -1989,32 +1402,6 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     this._toggleEventListeners('remove')
   }
 
-  private _scrollLoop() {
-    this._playerState.scrollLoopId = requestAnimationFrame(this._scrollLoop)
-    this._applyScrollProgress()
-  }
-
-  private _startScrollLoop() {
-    if (isServer) {
-      console.warn('DotLottie: Scroll animations will not work in a Server Side Rendering context. Try to wrap this in a client component.')
-
-      return
-    }
-
-    this._playerState.scrollLoopId ??= requestAnimationFrame(this._scrollLoop)
-  }
-
-  private _stopScrollLoop() {
-    if (this._playerState.scrollLoopId === undefined) {
-      return
-    }
-
-    cancelAnimationFrame(this._playerState.scrollLoopId)
-    this._playerState.scrollLoopId = undefined
-
-    this._applyScrollProgress()
-  }
-
   private _switchInstance(isPrevious = false) {
     // Bail early if there is not animation to play
     if (!this._animations[this._currentAnimation]) {
@@ -2024,7 +1411,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
     try {
       // Clear previous animation
       this._lottieInstance?.destroy()
-      this._cancelScrollProbe()
+      this.cancelScrollProbe()
 
       // Re-initialize lottie player
       this._lottieInstance = this.loadAnimation({
@@ -2051,7 +1438,7 @@ export abstract class DotLottiePlayerBase extends PropertyCallbackElement {
         if (this.animateOnScroll) {
 
           // Get instant scroll position
-          this._applyScrollProgress()
+          this.applyScrollProgress()
 
           this.playerState = PlayerState.Paused
 
