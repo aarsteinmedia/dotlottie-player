@@ -1,10 +1,10 @@
 import { clamp, isServer } from '@aarsteinmedia/lottie-web/utils'
 
-import { PlayerState } from '@/canvas'
 import { BaseElement } from '@/elements/helpers/BaseElement'
 import {
   hasIOSupport, hasReducedMotion, hasVTSupport
 } from '@/utils/constants'
+import { PlayerState } from '@/utils/enums'
 
 export abstract class ScrollElement extends BaseElement {
 
@@ -92,9 +92,10 @@ export abstract class ScrollElement extends BaseElement {
       if (this.animateOnScroll && !hasReducedMotion) {
         if (isIntersecting) {
           this.startScrollLoop()
-        } else {
-          this.stopScrollLoop()
+
+          return
         }
+        this.stopScrollLoop()
 
         return
       }
@@ -130,9 +131,10 @@ export abstract class ScrollElement extends BaseElement {
         this.play()
       }, this.delay)
 
-      if (this.playerState === PlayerState.Playing) {
-        clearTimeout(this._playerState.playTimeout)
+      if (this.playerState !== PlayerState.Playing) {
+        return
       }
+      clearTimeout(this._playerState.playTimeout)
     })
 
     this._observeIntersectionTarget()

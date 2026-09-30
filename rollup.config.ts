@@ -17,13 +17,13 @@ import { minify, swc } from 'rollup-plugin-swc3'
 import { typescriptPaths } from 'rollup-plugin-typescript-paths'
 
 // type Mode = 'development' | 'production'
-type Ver = 'full' | 'light' | 'svg' | 'canvas'
-// type OutputType = 'esm' | 'iife'
+type Version = 'full' | 'light' | 'svg' | 'canvas'
+type OutputType = 'esm' | 'iife'
 // type Target = 'modules' | 'unpkg' | 'types' | 'all'
 
 interface InputsDef {
   file: string
-  name: Ver
+  name: Version
 }
 
 interface MinifyOptions {
@@ -35,7 +35,8 @@ interface MinifyOptions {
 }
 
 const isProd = process.env.NODE_ENV !== 'development',
-  isLight = process.env.VER === 'light',
+  version = (process.env.VER ?? 'full') as Version,
+  type = (process.env.TYPE ?? 'esm') as OutputType,
   __dirname = dirname(fileURLToPath(import.meta.url)),
 
   /** Opening or closing tag of any element, including custom elements. */
@@ -120,12 +121,12 @@ const isProd = process.env.NODE_ENV !== 'development',
     swc(),
   ],
 
-  onwarn: RollupOptions['onwarn'] = (warning, warn) => {
-    if (warning.code === 'CIRCULAR_DEPENDENCY') {
-      return
-    }
-    warn(warning)
-  },
+  // onwarn: RollupOptions['onwarn'] = (warning, warn) => {
+  //   if (warning.code === 'CIRCULAR_DEPENDENCY') {
+  //     return
+  //   }
+  //   warn(warning)
+  // },
 
   unpkgPlugins = ((): Plugin[] =>
     isProd ? [
@@ -143,7 +144,7 @@ const isProd = process.env.NODE_ENV !== 'development',
       serve({
         browser: 'firefox',
         open: true,
-        openPage: isLight ? 'light.html' : undefined
+        // openPage: isLight ? 'light.html' : undefined
       }),
       livereload(),
     ])(),
@@ -157,7 +158,7 @@ const isProd = process.env.NODE_ENV !== 'development',
 
   unpkgs: RollupOptions[] = inputs.map((input) => ({
     input: input.file,
-    onwarn,
+    // onwarn,
     output: {
       exports: 'named',
       extend: true,
@@ -172,7 +173,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   modules: RollupOptions[] = [{
     external,
     input: jsInput,
-    onwarn,
+    // onwarn,
     output: {
       chunkFileNames: 'chunks/[name]-[hash].js',
       dir: resolve(__dirname, 'dist'),
@@ -194,9 +195,18 @@ const isProd = process.env.NODE_ENV !== 'development',
   }
   ],
 
-  module = isLight ? 1 : 0,
+  ver = version === 'light' ? 1 : 0
 
-  output = isProd ?
-    [...unpkgs, ...modules] : modules[module]
+let output: RollupOptions | RollupOptions[]
+
+if (isProd) {
+  output = [...unpkgs, ...modules]
+} else {
+  if (type === 'iife') {
+    output = unpkgs[ver]
+  } else {
+    output = modules[ver]
+  }
+}
 
 export default output

@@ -1,9 +1,9 @@
-import { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
+import type { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
 
 /**
  * Render Player.
  */
-export async function renderPlayer(this: DotLottiePlayerBase) {
+export function renderPlayer(this: DotLottiePlayerBase) {
 
   if (!this.shadow || !this.template) {
     throw new Error('No Shadow Element or Template')
@@ -41,6 +41,5 @@ export async function renderPlayer(this: DotLottiePlayerBase) {
     </div>
   `
 
-  this.shadow.adoptedStyleSheets = [await DotLottiePlayerBase.styles()]
   this.shadow.appendChild(this.template.content.cloneNode(true))
 }

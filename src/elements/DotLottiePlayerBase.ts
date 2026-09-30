@@ -39,7 +39,6 @@ import {
 import { hasReducedMotion } from '@/utils/constants'
 import {
   MouseOut,
-  type ObjectFit,
   PlayerState,
 } from '@/utils/enums'
 
@@ -102,8 +101,6 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    */
   protected _isSettingsOpen = false
 
-  protected _render = renderPlayer
-
   /**
    * Seeker.
    */
@@ -114,8 +111,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
   private _errorLoadId = 0
 
   private _isBounce = false
-  private _isDotLottie = false
 
+  private _isDotLottie = false
   private _manifest?: LottieManifest
 
   /**
@@ -993,6 +990,15 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     }
   }
 
+  protected async _render() {
+    if (!this.shadow) {
+      return
+    }
+
+    renderPlayer.call(this)
+    this.shadow.adoptedStyleSheets = [await DotLottiePlayerBase.styles()]
+  }
+
   protected _renderControls = async () => {
     const slot = this.shadow?.querySelector('slot[name=controls]')
 
@@ -1148,7 +1154,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     }
     const preserveAspectRatio =
         this.preserveAspectRatio ??
-        aspectRatio(this.objectfit as ObjectFit),
+        aspectRatio(this.objectfit),
       currentAnimationSettings = this._multiAnimationSettings.length > 0
         ? this._multiAnimationSettings[this._currentAnimation]
         : undefined,

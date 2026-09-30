@@ -3,10 +3,12 @@ import type {
 } from '@aarsteinmedia/lottie-web'
 
 import {
-  createElementID, PlayMode, PreserveAspectRatio
+  createElementID,
+  PlayMode,
+  PreserveAspectRatio,
+  RendererType
 } from '@aarsteinmedia/lottie-web/utils'
 
-import { RendererType } from '@/elements/DotLottiePlayerBase'
 import { PropertyCallbackElement } from '@/elements/helpers/PropertyCallbackElement'
 import styles from '@/styles.css'
 import { isEnum, parseHTMLBooleans } from '@/utils'
@@ -261,7 +263,7 @@ export abstract class BaseElement extends PropertyCallbackElement {
     this.setAttribute('objectfit', value)
   }
 
-  get objectfit() {
+  get objectfit(): ObjectFit {
     const val = this.getAttribute('objectfit')
 
     if (isEnum(val, ObjectFit)) {

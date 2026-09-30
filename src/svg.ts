@@ -8,8 +8,8 @@ import { tagName } from '@/utils/constants'
 export { RendererType } from '@aarsteinmedia/lottie-web/utils'
 
 export { PlayerEvent, PlayMode }
-export default DotLottiePlayerSVG
 export { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
+export default DotLottiePlayerSVG
 export { tagName } from '@/utils/constants'
 export { MouseOut, PlayerState } from '@/utils/enums'
 
