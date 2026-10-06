@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing notable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [6.5.6] - 06-10-2026
+
+- Minor performance improvements to animation engine.
+
 ## [6.5.5] - 30-09-2026
 
 - Fixed bug with circular dependency affecting iife output.
@@ -410,6 +414,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[6.5.6]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/6.5.6
 [6.5.5]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/6.5.5
 [6.5.2]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/6.5.2
 [6.3.0]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/6.3.0

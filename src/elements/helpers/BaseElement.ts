@@ -18,13 +18,12 @@ import {
 } from '@/utils/enums'
 
 const getStyles = async () => {
-    const styleSheet = new CSSStyleSheet()
+  const styleSheet = new CSSStyleSheet()
 
-    await styleSheet.replace(styles)
+  await styleSheet.replace(styles)
 
-    return styleSheet
-  },
-  notImplemented = 'Method is not implemented'
+  return styleSheet
+}
 
 export abstract class BaseElement extends PropertyCallbackElement {
   /**
@@ -502,11 +501,7 @@ export abstract class BaseElement extends PropertyCallbackElement {
     }
   }
 
-  public play() {
-    throw new Error(notImplemented)
-  }
+  public abstract play(): void
 
-  protected _freeze() {
-    throw new Error(notImplemented)
-  }
+  protected abstract _freeze(): void
 }

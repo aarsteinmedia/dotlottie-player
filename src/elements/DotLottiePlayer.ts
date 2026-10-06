@@ -18,13 +18,13 @@ import { loadDotLottieTools } from '@/elements/helpers/dotlottieLoader'
  */
 export class DotLottiePlayer extends DotLottiePlayerBase {
 
-  public override async addAnimation(params: AddAnimationParams) {
+  public async addAnimation(params: AddAnimationParams) {
     const { addAnimation } = await loadDotLottieTools()
 
     return await addAnimation(params)
   }
 
-  public override async convert(params: ConvertParams) {
+  public async convert(params: ConvertParams) {
     const { convert } = await loadDotLottieTools()
 
     return await convert(params)

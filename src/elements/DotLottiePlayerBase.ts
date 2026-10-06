@@ -1,12 +1,9 @@
 import type {
-  AddAnimationParams,
   AnimationConfiguration,
   AnimationDirection,
   AnimationItem,
   AnimationSettings,
-  ConvertParams,
   LottieManifest,
-  Result,
   Vector2,
 } from '@aarsteinmedia/lottie-web'
 
@@ -41,8 +38,6 @@ import {
   MouseOut,
   PlayerState,
 } from '@/utils/enums'
-
-const notImplemented = 'Method is not implemented'
 
 export { RendererType }
 
@@ -158,10 +153,6 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
     this.template = document.createElement('template')
     this.shadow = this.attachShadow({ mode: 'open' })
-  }
-
-  public addAnimation(_params: AddAnimationParams): Promise<Result> {
-    throw new Error(notImplemented)
   }
 
   /**
@@ -340,10 +331,6 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
         void this._handleError(error)
       }
     })()
-  }
-
-  public convert(_params: ConvertParams): Promise<Result> {
-    throw new Error(notImplemented)
   }
 
   /**
@@ -533,9 +520,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     }
   }
 
-  public loadAnimation(_config: AnimationConfiguration): AnimationItem {
-    throw new Error(notImplemented)
-  }
+  public abstract loadAnimation(_config: AnimationConfiguration): AnimationItem
 
   /**
    * Skip to next animation.
