@@ -9,7 +9,23 @@ export function renderPlayer(this: DotLottiePlayerBase) {
     throw new Error('No Shadow Element or Template')
   }
 
-  let langAttribute = ''
+  this.template.innerHTML = /* HTML */ `
+    <div class="animation-container main">
+      <figure class="animation"></figure>
+      <slot name="controls"></slot>
+    </div>
+  `
+
+  const fragment = this.template.content.cloneNode(true) as DocumentFragment,
+    container = fragment.querySelector('.animation-container'),
+    figure = fragment.querySelector('figure')
+
+  if (!(container instanceof HTMLDivElement) || !figure) {
+    throw new Error('Template is broken')
+  }
+
+  container.dataset.controls = String(this.controls)
+  figure.style.background = this.background
 
   /**
    * If player has aria-description, it's safe to assume
@@ -20,26 +36,12 @@ export function renderPlayer(this: DotLottiePlayerBase) {
    * not needed.
    */
   if (this.description || this.controls) {
-    const lang = this.description ? document.documentElement.lang : 'en'
-
-    langAttribute = `lang="${lang}"`
+    container.lang = this.description ? document.documentElement.lang : 'en'
   }
 
-  this.template.innerHTML = /* HTML */ `
-    <div
-      class="animation-container main"
-      data-controls="${this.controls ?? false}"
-      ${langAttribute}
-    >
-      <figure
-        class="animation"
-        style="background:${this.background}"
-        ${this.description ? `aria-label="${this.description}"` : ''}
-      >
-      </figure>
-      <slot name="controls"></slot>
-    </div>
-  `
+  if (this.description) {
+    figure.setAttribute('aria-label', this.description)
+  }
 
-  this.shadow.appendChild(this.template.content.cloneNode(true))
+  this.shadow.replaceChildren(fragment)
 }

@@ -6,8 +6,6 @@ import { isServer } from '@aarsteinmedia/lottie-web/utils'
  * Credit to: Leonardo Favre https://github.com/leofavre/observed-properties.
  */
 
-// const updateOnConnected = Symbol('UPDATE_ON_CONNECTED')
-
 if (isServer) {
   // Mock HTMLElement for server-side rendering
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -22,10 +20,6 @@ if (isServer) {
 export abstract class PropertyCallbackElement extends HTMLElement {
   constructor() {
     super()
-
-    // if (updateOnConnected in this) {
-    //   this[updateOnConnected] = []
-    // }
 
     const { observedProperties } =
       this.constructor as unknown as { observedProperties: string[] }
@@ -54,45 +48,8 @@ export abstract class PropertyCallbackElement extends HTMLElement {
           },
         }
       )
-      // if (
-      //   typeof initialValue !== 'undefined' &&
-      //   updateOnConnected in this &&
-      //   Array.isArray(this[updateOnConnected])
-      // ) {
-      //   ; (this[updateOnConnected] as (keyof this)[]).push(observedProperties[i] as keyof this)
-      // }
     }
   }
-
-
-  // connectedCallback() {
-  //   let arr: string[] = []
-
-  //   if (
-  //     updateOnConnected in this &&
-  //     Array.isArray(this[updateOnConnected])
-  //   ) {
-  //     arr = this[updateOnConnected]
-  //   }
-  //   const { length } = arr
-
-  //   for (let i = 0; i < length; i++) {
-  //     if (
-  //       !('propertyChangedCallback' in this) ||
-  //       typeof this.propertyChangedCallback !== 'function'
-  //     ) {
-  //       continue
-  //     }
-
-  //     if (arr[i] ?? '' in this) {
-  //       this.propertyChangedCallback(
-  //         arr[i] ?? '',
-  //         undefined,
-  //         this[arr[i] as keyof this]
-  //       )
-  //     }
-  //   }
-  // }
 
   propertyChangedCallback(
     _name: string, _oldValue: unknown, _value: unknown

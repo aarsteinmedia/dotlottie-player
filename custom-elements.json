@@ -46,11 +46,19 @@
                   "name": "{ container, hasAutoplay, hasLoop, initialSegment, preserveAspectRatio, rendererType }"
                 }
               ]
+            },
+            {
+              "kind": "field",
+              "name": "canConvert",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true"
             }
           ],
           "superclass": {
             "name": "DotLottiePlayerBase",
-            "module": "/dist/chunks/DotLottiePlayerBase-CQuvCdZU.js"
+            "module": "/dist/chunks/DotLottiePlayerBase-BDutF_6O.js"
           },
           "tagName": "tagName",
           "customElement": true

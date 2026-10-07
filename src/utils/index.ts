@@ -28,6 +28,9 @@ export const aspectRatio = (objectFit: ObjectFit) => {
     }
   },
 
+  escapeHTML = (str: string) =>
+    str.replaceAll(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`),
+
   handleErrors = (err: unknown) => {
     const res = {
       message: 'Unknown error',

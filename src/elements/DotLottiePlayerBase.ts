@@ -32,7 +32,7 @@ import {
   isLottie,
   parseHTMLBooleans,
 } from '@/utils'
-import { hasHover, hasReducedMotion } from '@/utils/constants'
+import { hasHover, reducedMotionQuery } from '@/utils/constants'
 import {
   MouseOut,
   PlayerState,
@@ -90,6 +90,19 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     return this._isDotLottie
   }
 
+  protected _controlElements: {
+    togglePlay: HTMLButtonElement
+    stop: HTMLButtonElement
+    prev: HTMLButtonElement
+    next: HTMLButtonElement
+    seeker: HTMLInputElement
+    progress: HTMLProgressElement
+
+    popover: HTMLDivElement | null
+    convert: HTMLButtonElement | null
+    snapshot: HTMLButtonElement | null
+  } | null = null
+
   /**
    * Whether settings toolbar is open.
    */
@@ -99,14 +112,14 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    * Seeker.
    */
   protected _seeker = 0
-
   private _controlsLoadId = 0
   private _errorLoadId = 0
+
   private _isBounce = false
 
   private _isDotLottie = false
-
   private _loadId = 0
+
   private _manifest?: LottieManifest
 
   /**
@@ -188,7 +201,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       }
 
       case 'autoplay': {
-        if (this.animateOnScroll || this.playOnVisible || hasReducedMotion) {
+        if (this.animateOnScroll || this.playOnVisible || reducedMotionQuery?.matches) {
           return
         }
         if (parseHTMLBooleans(value)) {
@@ -591,58 +604,43 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       return
     }
 
-    const togglePlay = this.shadow.querySelector('.togglePlay'),
-      stopButton = this.shadow.querySelector('.stop'),
-      prevButton = this.shadow.querySelector('.prev'),
-      nextButton = this.shadow.querySelector('.next'),
-      seeker = this.shadow.querySelector('.seeker'),
-      progress = this.shadow.querySelector('progress'),
-      popover = this.shadow.querySelector('.popover'),
-      convertButton = this.shadow.querySelector('.convert'),
-      snapshot = this.shadow.querySelector('.snapshot')
+    const elements = this._controlElements
 
-    if (
-      !(togglePlay instanceof HTMLButtonElement) ||
-      !(stopButton instanceof HTMLButtonElement) ||
-      !(nextButton instanceof HTMLButtonElement) ||
-      !(prevButton instanceof HTMLButtonElement) ||
-      !(seeker instanceof HTMLInputElement) ||
-      !(progress instanceof HTMLProgressElement)
-    ) {
+    if (!elements) {
       return
     }
 
     if (name === 'playerState') {
-      updatePlayPauseButton(togglePlay, value as PlayerState)
+      updatePlayPauseButton(elements.togglePlay, value as PlayerState)
 
-      stopButton.dataset.active = (value === PlayerState.Stopped).toString()
+      elements.stop.dataset.active = (value === PlayerState.Stopped).toString()
     }
 
     if (name === '_seeker' && typeof value === 'number') {
-      seeker.value = value.toString()
-      seeker.ariaValueNow = value.toString()
-      progress.value = value
+      elements.seeker.value = value.toString()
+      elements.seeker.ariaValueNow = value.toString()
+      elements.progress.value = value
     }
 
     if (name === '_animations' && Array.isArray(value) && this._currentAnimation + 1 < value.length) {
-      nextButton.hidden = false
+      elements.next.hidden = false
     }
 
     if (name === '_currentAnimation' && typeof value === 'number') {
-      nextButton.hidden = value + 1 >= this._animations.length
-      prevButton.hidden = !value
+      elements.next.hidden = value + 1 >= this._animations.length
+      elements.prev.hidden = !value
     }
 
     if (
       name === '_isSettingsOpen' &&
       typeof value === 'boolean' &&
-      popover instanceof HTMLDivElement &&
-      convertButton instanceof HTMLButtonElement &&
-      snapshot instanceof HTMLButtonElement
+      elements.popover &&
+      elements.convert &&
+      elements.snapshot
     ) {
-      popover.hidden = !value
-      convertButton.hidden = !this.canConvert
-      snapshot.hidden = this.renderer !== RendererType.SVG
+      elements.popover.hidden = !value
+      elements.convert.hidden = !this.canConvert
+      elements.snapshot.hidden = this.renderer !== RendererType.SVG
     }
   }
 
@@ -987,6 +985,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       return
     }
 
+    this._controlElements = null
     renderPlayer.call(this)
     this.shadow.adoptedStyleSheets = [await DotLottiePlayerBase.styles]
   }
@@ -1000,6 +999,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
     if (!this.controls) {
       slot.innerHTML = ''
+      this._controlElements = null
 
       return
     }
@@ -1028,6 +1028,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
     if (controlSlot) {
       controlSlot.innerHTML = ''
+      this._controlElements = null
     }
 
     if (!(figure instanceof HTMLElement)) {
@@ -1168,7 +1169,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       hasAutoplay = Boolean(currentAnimationSettings.autoplay)
     }
     // Disable autoplay on reduced-motion.
-    if (this.animateOnScroll || hasReducedMotion) {
+    if (this.animateOnScroll || reducedMotionQuery?.matches) {
       hasAutoplay = false
     }
 
@@ -1319,7 +1320,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    * Handle MouseEnter.
    */
   private _mouseEnter() {
-    if (!this.hover || !this._lottieInstance || hasHover || hasReducedMotion) {
+    if (!this.hover || !this._lottieInstance || !hasHover || reducedMotionQuery?.matches) {
       return
     }
 
@@ -1343,7 +1344,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    * Handle MouseLeave.
    */
   private _mouseLeave() {
-    if (!this.hover || !this._lottieInstance || hasHover || hasReducedMotion) {
+    if (!this.hover || !this._lottieInstance || !hasHover || reducedMotionQuery?.matches) {
       return
     }
 
@@ -1370,7 +1371,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    * Handle visibility change events.
    */
   private _onVisibilityChange() {
-    if (this.autoplay && hasReducedMotion) {
+    if (this.autoplay && reducedMotionQuery?.matches) {
       return
     }
 

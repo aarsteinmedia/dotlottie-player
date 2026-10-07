@@ -1,5 +1,7 @@
 import { namespaceSVG, PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils'
 
+import { escapeHTML } from '@/utils'
+
 export function errorScreen(message: string) {
   return /* HTML */ `
     <div class="error">
@@ -24,7 +26,7 @@ export function errorScreen(message: string) {
           y="848.017"
           text-anchor="middle"
         >
-          ${message}
+          ${escapeHTML(message)}
         </text>
       </svg>
     </div>

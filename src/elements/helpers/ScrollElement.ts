@@ -2,7 +2,7 @@ import { clamp, isServer } from '@aarsteinmedia/lottie-web/utils'
 
 import { BaseElement } from '@/elements/helpers/BaseElement'
 import {
-  hasIOSupport, hasReducedMotion, hasVTSupport
+  hasIOSupport, reducedMotionQuery, hasVTSupport
 } from '@/utils/constants'
 import { PlayerState } from '@/utils/enums'
 
@@ -12,6 +12,8 @@ export abstract class ScrollElement extends BaseElement {
 
   private _intersectionObserver?: undefined | IntersectionObserver
   private _scrollProbe?: Animation | undefined
+
+  private _useGeometricScroll = false
 
   public applyScrollProgress() {
     if (!this.animateOnScroll || !this._lottieInstance) {
@@ -45,6 +47,7 @@ export abstract class ScrollElement extends BaseElement {
   public cancelScrollProbe() {
     this._scrollProbe?.cancel()
     this._scrollProbe = undefined
+    this._useGeometricScroll = false
   }
 
   public scrollLoop() {
@@ -89,7 +92,7 @@ export abstract class ScrollElement extends BaseElement {
       this.isIntersecting = isIntersecting
 
       // Prevent animate on scroll for users with who prefers reduces motion.
-      if (this.animateOnScroll && !hasReducedMotion) {
+      if (this.animateOnScroll && !reducedMotionQuery?.matches) {
         if (isIntersecting) {
           this.startScrollLoop()
 
@@ -114,12 +117,12 @@ export abstract class ScrollElement extends BaseElement {
       if (
         !this.playOnVisible &&
         this.playerState === PlayerState.Frozen &&
-        !(this.autoplay && hasReducedMotion)
+        !(this.autoplay && reducedMotionQuery?.matches)
       ) {
         this.play()
       }
 
-      if (!this.playOnVisible || hasReducedMotion) {
+      if (!this.playOnVisible || reducedMotionQuery?.matches) {
         return
       }
       if (
@@ -167,35 +170,37 @@ export abstract class ScrollElement extends BaseElement {
   }
 
   private _getScrollProgress() {
-    if (!this._container || this._scrollProbe) {
+    if (!this._container) {
       return null
     }
 
-    if (!hasVTSupport) {
+    if (!hasVTSupport || this._useGeometricScroll) {
       return this._getGeometricScrollProgress()
     }
 
-    const timeline = new ViewTimeline({
+    if (!this._scrollProbe) {
+      const timeline = new ViewTimeline({
         axis: 'block',
         subject: this._container
-      }),
-      canDriveTimeline = this._canDriveTimeline(timeline)
+      })
 
-    if (!canDriveTimeline) {
-      this.devLog('[dotlottie-player] animateOnScroll: the player\'s nearest scrolling ancestor cannot ' +
-        'scroll, so its ViewTimeline would never advance. This is almost always an ancestor ' +
-        'with `overflow: hidden` — use `overflow: clip` instead. Falling back to viewport ' +
-        'measurement.')
+      if (!this._canDriveTimeline(timeline)) {
+        this._useGeometricScroll = true
+        this.devLog('[dotlottie-player] animateOnScroll: the player\'s nearest scrolling ancestor cannot ' +
+          'scroll, so its ViewTimeline would never advance. This is almost always an ancestor ' +
+          'with `overflow: hidden` — use `overflow: clip` instead. Falling back to viewport ' +
+          'measurement.')
 
-      return this._getGeometricScrollProgress()
+        return this._getGeometricScrollProgress()
+      }
+
+      this._scrollProbe ??= this._container.animate({ '--dotlottie-scroll': [0, 1] }, {
+        fill: 'both',
+        rangeEnd: 'cover 100%',
+        rangeStart: 'cover 0%',
+        timeline
+      })
     }
-
-    this._scrollProbe ??= this._container.animate({ '--dotlottie-scroll': [0, 1] }, {
-      fill: 'both',
-      rangeEnd: 'cover 100%',
-      rangeStart: 'cover 0%',
-      timeline
-    })
 
     return this._scrollProbe.effect?.getComputedTiming().progress ?? null
   }

@@ -134,6 +134,7 @@ export function renderControls(this: DotLottiePlayerBase) {
 
   if (!this.controls) {
     slot.innerHTML = ''
+    this._controlElements = null
 
     return
   }
@@ -228,6 +229,31 @@ export function renderControls(this: DotLottiePlayerBase) {
         `}
     </div>
   `
+
+  const query = <T extends Element>(selector: string, type: new () => T) => {
+      const el = slot.querySelector(selector)
+
+      return el instanceof type ? el : null
+    },
+
+    togglePlay = query('.togglePlay', HTMLButtonElement),
+    stop = query('.stop', HTMLButtonElement),
+    prev = query('.prev', HTMLButtonElement),
+    next = query('.next', HTMLButtonElement),
+    seeker = query('.seeker', HTMLInputElement),
+    progress = query('progress', HTMLProgressElement)
+
+  this._controlElements = togglePlay && stop && prev && next && seeker && progress ? {
+    convert: query('.convert', HTMLButtonElement),
+    next,
+    popover: query('.popover', HTMLDivElement),
+    prev,
+    progress,
+    seeker,
+    snapshot: query('.snapshot', HTMLButtonElement),
+    stop,
+    togglePlay
+  } : null
 
   handleButtons.call(this)
 }
