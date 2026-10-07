@@ -50,53 +50,13 @@
           ],
           "superclass": {
             "name": "DotLottiePlayerBase",
-            "module": "/dist/chunks/DotLottiePlayerBase-CsIB0VNt.js"
+            "module": "/dist/chunks/DotLottiePlayerBase-CQuvCdZU.js"
           },
           "tagName": "tagName",
           "customElement": true
         }
       ],
       "exports": [
-        {
-          "kind": "js",
-          "name": "PlayMode",
-          "declaration": {
-            "name": "PlayMode",
-            "package": "@aarsteinmedia/lottie-web/utils"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "PlayerEvent",
-          "declaration": {
-            "name": "PlayerEvent",
-            "package": "@aarsteinmedia/lottie-web/utils"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "RendererType",
-          "declaration": {
-            "name": "RendererType",
-            "package": "@aarsteinmedia/lottie-web/utils"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "MouseOut",
-          "declaration": {
-            "name": "M",
-            "module": "./chunks/DotLottiePlayerBase-CsIB0VNt.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "PlayerState",
-          "declaration": {
-            "name": "P",
-            "module": "./chunks/DotLottiePlayerBase-CsIB0VNt.js"
-          }
-        },
         {
           "kind": "custom-element-definition",
           "name": "tagName",
@@ -118,14 +78,6 @@
           "name": "default",
           "declaration": {
             "name": "DotLottiePlayer",
-            "module": "dist/full.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "tagName",
-          "declaration": {
-            "name": "tagName",
             "module": "dist/full.js"
           }
         }

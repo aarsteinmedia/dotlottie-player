@@ -331,6 +331,7 @@ export default defineConfig({
         'error',
         'info']
     }],
+    'no-duplicate-imports': 1,
     'no-plusplus': 'off',
     'no-restricted-globals': ['error',
       'event',

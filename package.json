@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "6.5.7",
+  "version": "6.6.0",
   "description": "Web Component for playing Lottie animations in your web app.",
   "type": "module",
   "exports": {
@@ -23,6 +23,10 @@
       "types": "./dist/canvas.d.ts",
       "import": "./dist/canvas.js",
       "unpkg": "./dist/unpkg-canvas.js"
+    },
+    "./utils": {
+      "types": "./dist/utilities.d.ts",
+      "import": "./dist/utilities.js"
     }
   },
   "main": "./dist/full.js",

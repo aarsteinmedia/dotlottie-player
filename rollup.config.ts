@@ -1,5 +1,3 @@
-import type { Plugin, RollupOptions } from 'rollup'
-
 import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
@@ -7,6 +5,9 @@ import autoprefixer from 'autoprefixer'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import flexbugs from 'postcss-flexbugs-fixes'
+import {
+  defineConfig, type Plugin, type RollupOptions
+} from 'rollup'
 import { dts } from 'rollup-plugin-dts'
 import template from 'rollup-plugin-html-literals'
 import livereload from 'rollup-plugin-livereload'
@@ -16,10 +17,8 @@ import pluginSummary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
 import { typescriptPaths } from 'rollup-plugin-typescript-paths'
 
-// type Mode = 'development' | 'production'
-type Version = 'full' | 'light' | 'svg' | 'canvas'
+type Version = 'full' | 'light' | 'svg' | 'canvas' | 'utilities'
 type OutputType = 'esm' | 'iife'
-// type Target = 'modules' | 'unpkg' | 'types' | 'all'
 
 interface InputsDef {
   file: string
@@ -78,6 +77,12 @@ const isProd = process.env.NODE_ENV !== 'development',
         __dirname, 'src', 'canvas.ts'
       ),
       name: 'canvas'
+    },
+    {
+      file: resolve(
+        __dirname, 'src', 'utilities.ts'
+      ),
+      name: 'utilities'
     }
   ] as const,
 
@@ -121,13 +126,6 @@ const isProd = process.env.NODE_ENV !== 'development',
     swc(),
   ],
 
-  // onwarn: RollupOptions['onwarn'] = (warning, warn) => {
-  //   if (warning.code === 'CIRCULAR_DEPENDENCY') {
-  //     return
-  //   }
-  //   warn(warning)
-  // },
-
   unpkgPlugins = ((): Plugin[] =>
     isProd ? [
       ...plugins(),
@@ -144,7 +142,6 @@ const isProd = process.env.NODE_ENV !== 'development',
       serve({
         browser: 'firefox',
         open: true,
-        // openPage: isLight ? 'light.html' : undefined
       }),
       livereload(),
     ])(),
@@ -156,9 +153,8 @@ const isProd = process.env.NODE_ENV !== 'development',
     ),
   ])),
 
-  unpkgs: RollupOptions[] = inputs.map((input) => ({
+  unpkgs = inputs.filter(({ name }) => name !== 'utilities').map((input) => defineConfig({
     input: input.file,
-    // onwarn,
     output: {
       exports: 'named',
       extend: true,
@@ -170,10 +166,9 @@ const isProd = process.env.NODE_ENV !== 'development',
     plugins: unpkgPlugins,
   })),
 
-  modules: RollupOptions[] = [{
+  modules = defineConfig([{
     external,
     input: jsInput,
-    // onwarn,
     output: {
       chunkFileNames: 'chunks/[name]-[hash].js',
       dir: resolve(__dirname, 'dist'),
@@ -193,7 +188,7 @@ const isProd = process.env.NODE_ENV !== 'development',
     },
     plugins: [dts()],
   }
-  ],
+  ]),
 
   ver = version === 'light' ? 1 : 0
 

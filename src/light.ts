@@ -1,23 +1,16 @@
-import {
-  isServer, PlayerEvent, PlayMode
-} from '@aarsteinmedia/lottie-web/utils'
+import { isServer } from '@aarsteinmedia/lottie-web/utils'
 
 import { DotLottiePlayerLight } from '@/elements/DotLottiePlayerLight'
 import { tagName } from '@/utils/constants'
 
-export { RendererType } from '@aarsteinmedia/lottie-web/utils'
-
-export { PlayerEvent, PlayMode }
 export { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
 export default DotLottiePlayerLight
-export { tagName } from '@/utils/constants'
-export { MouseOut, PlayerState } from '@/utils/enums'
 
 /**
  * Expose DotLottiePlayer class as global variable.
  */
 globalThis.dotLottiePlayer = () => new DotLottiePlayerLight()
 
-if (!isServer) {
+if (!isServer && !customElements.get(tagName)) {
   customElements.define(tagName, DotLottiePlayerLight)
 }
