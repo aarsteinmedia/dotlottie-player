@@ -77,6 +77,11 @@
   "peerDependencies": {
     "@types/react": ">= 16.0.0"
   },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",
     "@eslint/compat": "^2.1.1",
@@ -144,7 +149,13 @@
     "dist",
     "README.md"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/full.js",
+    "./dist/light.js",
+    "./dist/svg.js",
+    "./dist/canvas.js",
+    "./dist/unpkg-*.js"
+  ],
   "keywords": [
     "lottie",
     "dotlottie",

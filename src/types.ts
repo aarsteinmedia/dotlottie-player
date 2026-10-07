@@ -1,7 +1,11 @@
 import 'react/jsx-runtime'
 import 'react/jsx-dev-runtime'
 
-import type { AnimationSettings } from '@aarsteinmedia/lottie-web'
+import type { AnimationSettings, Vector2 } from '@aarsteinmedia/lottie-web'
+import type {
+  PreserveAspectRatio,
+  RendererType
+} from '@aarsteinmedia/lottie-web/utils'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 
 import type { DotLottiePlayer } from '@/elements/DotLottiePlayer'
@@ -46,6 +50,15 @@ export interface CEMConfig {
   stencil: boolean
   /** Run in watch mode, runs on file changes. */
   watch: boolean
+}
+
+export interface Options {
+  container?: undefined | HTMLElement
+  hasAutoplay: boolean
+  hasLoop: boolean
+  initialSegment?: undefined | Vector2
+  preserveAspectRatio: PreserveAspectRatio
+  rendererType: RendererType
 }
 
 export interface Settings {

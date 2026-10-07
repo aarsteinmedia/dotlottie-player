@@ -4,4 +4,6 @@ export const tagName = 'dotlottie-player',
   hasReducedMotion = !isServer && matchMedia('(prefers-reduced-motion: reduce)').matches,
   hasIOSupport = !isServer && 'IntersectionObserver' in window,
   hasVTSupport = !isServer && 'ViewTimeline' in window,
-  isDev = process.env.NODE_ENV === 'development'
+  isDev = process.env.NODE_ENV === 'development',
+  // isTouch = !isServer && 'ontouchstart' in window,
+  hasHover = !isServer && matchMedia('(hover: hover)')

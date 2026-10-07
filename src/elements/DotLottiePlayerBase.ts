@@ -15,10 +15,9 @@ import {
   RendererType,
   PlayerEvent,
   PlayMode,
-  type PreserveAspectRatio,
 } from '@aarsteinmedia/lottie-web/utils'
 
-import type { Settings } from '@/types'
+import type { Options, Settings } from '@/types'
 
 import { loadControlsModule } from '@/elements/helpers/controlsLoader'
 import { loadErrorModule } from '@/elements/helpers/errorLoader'
@@ -31,9 +30,9 @@ import {
   handleErrors,
   isEnum,
   isLottie,
-  isTouch,
+  parseHTMLBooleans,
 } from '@/utils'
-import { hasReducedMotion } from '@/utils/constants'
+import { hasHover, hasReducedMotion } from '@/utils/constants'
 import {
   MouseOut,
   PlayerState,
@@ -51,15 +50,15 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    */
   static get observedAttributes() {
     return [
-      'animateOnScroll',
+      'animateonscroll',
       'autoplay',
       'controls',
       'direction',
       'hover',
       'loop',
       'mode',
-      'playOnClick',
-      'playOnVisible',
+      'playonclick',
+      'playonvisible',
       'selector',
       'speed',
       'src',
@@ -77,7 +76,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     ] as const
   }
 
-  public isLight = false
+  public canConvert = false
 
   public shadow: ShadowRoot | undefined
   /**
@@ -102,12 +101,12 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
   protected _seeker = 0
 
   private _controlsLoadId = 0
-
   private _errorLoadId = 0
-
   private _isBounce = false
 
   private _isDotLottie = false
+
+  private _loadId = 0
   private _manifest?: LottieManifest
 
   /**
@@ -137,7 +136,6 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     this._mouseLeave = this._mouseLeave.bind(this)
     this._onVisibilityChange = this._onVisibilityChange.bind(this)
     this.scrollLoop = this.scrollLoop.bind(this)
-    // this.startScrollLoop = this.startScrollLoop.bind(this)
     this._switchInstance = this._switchInstance.bind(this)
     this._handleSettingsClick = this._handleSettingsClick.bind(this)
 
@@ -175,8 +173,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     this.clearDevLog()
 
     switch (name) {
-      case 'animateOnScroll': {
-        if (value === '' || Boolean(value)) {
+      case 'animateonscroll': {
+        if (parseHTMLBooleans(value)) {
           this._lottieInstance.autoplay = false
 
           if (this.isIntersecting) {
@@ -193,7 +191,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
         if (this.animateOnScroll || this.playOnVisible || hasReducedMotion) {
           return
         }
-        if (value === '' || Boolean(value)) {
+        if (parseHTMLBooleans(value)) {
           this.play()
 
           return
@@ -218,7 +216,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       }
 
       case 'hover': {
-        if (value === '' || Boolean(value)) {
+        if (parseHTMLBooleans(value)) {
           this._container.addEventListener('mouseenter', this._mouseEnter)
           this._container.addEventListener('mouseleave', this._mouseLeave)
 
@@ -253,8 +251,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
         break
       }
 
-      case 'playOnClick': {
-        if (value === '' || Boolean(value)) {
+      case 'playonclick': {
+        if (parseHTMLBooleans(value)) {
           this._lottieInstance.autoplay = false
           this._container.addEventListener('click', this._handleClick)
 
@@ -264,8 +262,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
         break
       }
 
-      case 'playOnVisible': {
-        if (value === '' || Boolean(value)) {
+      case 'playonvisible': {
+        if (parseHTMLBooleans(value)) {
           this._lottieInstance.autoplay = false
         }
         break
@@ -294,7 +292,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       }
 
       case 'subframe': {
-        this.setSubframe(value === '' || Boolean(value))
+        this.setSubframe(parseHTMLBooleans(value))
         break
       }
     }
@@ -303,8 +301,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
   /**
    * Initialize everything on component first render.
    */
-  override connectedCallback() {
-    super.connectedCallback()
+  connectedCallback() {
+    // super.connectedCallback()
     void (async () => {
       try {
         await this._render()
@@ -317,11 +315,6 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
         // Setup lottie player
         await this.load(this.src)
-
-        // Add listener for Visibility API's change event.
-        if (typeof document.hidden !== 'undefined') {
-          document.addEventListener('visibilitychange', this._onVisibilityChange)
-        }
 
         // Add intersection observer for detecting component being out-of-view.
         this._addIntersectionObserver()
@@ -353,7 +346,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     this.dispatchEvent(new CustomEvent(PlayerEvent.Destroyed))
     this.remove()
 
-    document.removeEventListener('visibilitychange', this._onVisibilityChange)
+    this._removeEventListeners()
   }
 
   /**
@@ -372,8 +365,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       clearTimeout(this._playerState.playTimeout)
     }
 
-    // Remove the attached Visibility API's change event listener
-    document.removeEventListener('visibilitychange', this._onVisibilityChange)
+    this._removeEventListeners()
 
     // Destroy the animation instance
     this.destroy()
@@ -415,6 +407,12 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
   public async load(src: string | null) {
     try {
       if (!this.shadowRoot || !src) {
+        return
+      }
+
+      const loadId = ++this._loadId
+
+      if (loadId !== this._loadId) {
         return
       }
 
@@ -643,7 +641,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       snapshot instanceof HTMLButtonElement
     ) {
       popover.hidden = !value
-      convertButton.hidden = this.isLight
+      convertButton.hidden = !this.canConvert
       snapshot.hidden = this.renderer !== RendererType.SVG
     }
   }
@@ -652,11 +650,10 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    * Reload animation.
    */
   public async reload() {
-    if (!this._lottieInstance || !this.src) {
+    if (!this.src) {
       return
     }
 
-    this._lottieInstance.destroy()
     await this.load(this.src)
   }
 
@@ -671,19 +668,29 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     }
 
     // Extract frame number from either number or percentage value
-    const matches = RegExp(/^(\d+)(%?)$/).exec(value.toString())
+    const str = String(value).trim(),
+      matches = /^([+-]?(?:\d+(?:\.\d*)?|\.\d+))\s*(%?)$/.exec(str)
 
     if (!matches) {
       return
     }
 
+    const { totalFrames } = this._lottieInstance,
+      frame = parseInt(matches[1]),
+      isPercentage = matches[2] === '%'
+
     // Calculate and set the frame number
-    const frame = Math.round(matches[2] === '%'
-      ? this._lottieInstance.totalFrames * Number(matches[1]) / 100
-      : Number(matches[1]))
+    let percentage: number
+
+    // Check if value is a percentage string
+    if (isPercentage) {
+      percentage = Math.round(totalFrames * frame / 100)
+    } else {
+      percentage = Math.round(frame / totalFrames * 100)
+    }
 
     // Set seeker to new frame number
-    this._seeker = frame
+    this._seeker = percentage
 
     // Send lottie player to the new frame
     if (
@@ -773,7 +780,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    */
   public snapshot(shouldDownload = true, name = 'AM Lottie') {
     try {
-      if (!this.shadowRoot) {
+      if (!this.shadowRoot || !this._lottieInstance) {
         throw new Error('Unknown error')
       }
 
@@ -796,7 +803,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       if (shouldDownload) {
         download(data, {
           mimeType: 'image/svg+xml',
-          name: `${getFilename(this.src || name)}-${frameOutput(this._seeker)}.svg`,
+          name: `${getFilename(this.src || name)}-${frameOutput(this._seeker * this._lottieInstance.totalFrames / 100)}.svg`,
         })
       }
 
@@ -981,7 +988,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     }
 
     renderPlayer.call(this)
-    this.shadow.adoptedStyleSheets = [await DotLottiePlayerBase.styles()]
+    this.shadow.adoptedStyleSheets = [await DotLottiePlayerBase.styles]
   }
 
   protected _renderControls = async () => {
@@ -1037,16 +1044,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     figure.innerHTML = errorScreen(this._errorMessage)
   }
 
-  protected setOptions(_options: {
-    container?: undefined | HTMLElement
-    rendererType: RendererType
-    initialSegment?: undefined | Vector2
-    hasAutoplay: boolean
-    hasLoop: boolean
-    preserveAspectRatio: PreserveAspectRatio
-  }): AnimationConfiguration {
-    throw new Error('Method not implemented')
-  }
+  protected abstract setOptions(options: Options): AnimationConfiguration
 
   /**
    * Add event listeners.
@@ -1208,23 +1206,27 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
   }
 
   private _handleLdScript() {
-    const ldScript = this.parentElement?.querySelector('script[type="application/ld+json"]')
+    const ldScript = this.parentElement?.querySelector(':scope > script[type="application/ld+json"]')
 
     if (!ldScript) {
       return
     }
-    const settings = JSON.parse(ldScript.innerHTML) as Settings
+    try {
+      const settings = JSON.parse(ldScript.innerHTML) as Settings
 
-    if (settings.selector) {
-      this.selector = settings.selector
-    }
+      if (settings.selector) {
+        this.selector = settings.selector
+      }
 
-    if (settings.segment) {
-      this.setSegment(settings.segment as Vector2)
-    }
+      if (settings.segment) {
+        this.setSegment(settings.segment as Vector2)
+      }
 
-    if (settings.multiAnimationSettings) {
-      this.setMultiAnimationSettings(settings.multiAnimationSettings)
+      if (settings.multiAnimationSettings) {
+        this.setMultiAnimationSettings(settings.multiAnimationSettings)
+      }
+    } catch (error) {
+      this.devLog(error)
     }
   }
 
@@ -1317,7 +1319,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    * Handle MouseEnter.
    */
   private _mouseEnter() {
-    if (!this.hover || !this._lottieInstance || isTouch() || hasReducedMotion) {
+    if (!this.hover || !this._lottieInstance || hasHover || hasReducedMotion) {
       return
     }
 
@@ -1341,7 +1343,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    * Handle MouseLeave.
    */
   private _mouseLeave() {
-    if (!this.hover || !this._lottieInstance || isTouch() || hasReducedMotion) {
+    if (!this.hover || !this._lottieInstance || hasHover || hasReducedMotion) {
       return
     }
 
@@ -1458,6 +1460,11 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    */
   private _toggleEventListeners(action: 'add' | 'remove') {
     const method = action === 'add' ? 'addEventListener' : 'removeEventListener'
+
+    // Toggle the attached Visibility API's change event listener
+    if (typeof document.hidden !== 'undefined') {
+      document[method]('visibilitychange', this._onVisibilityChange)
+    }
 
     if (this._lottieInstance) {
       this._lottieInstance[method](PlayerEvent.EnterFrame, this._enterFrame)

@@ -159,7 +159,7 @@ export function renderControls(this: DotLottiePlayerBase) {
       <button class="stop" data-active="${!this.autoplay}" aria-label="Stop">
         ${stopIcon}
       </button>
-      <button class="prev" aria-label="Previous animation" hidden="false">
+      <button class="prev" aria-label="Previous animation" hidden>
         ${prevIcon}
       </button>
       <button class="next" aria-label="Next animation" hidden>
@@ -187,6 +187,7 @@ export function renderControls(this: DotLottiePlayerBase) {
           <button
             class="toggleLoop"
             data-active="${this.loop}"
+            aria-pressed="${this.loop}"
             tabindex="0"
             aria-label="Toggle loop"
           >
@@ -195,6 +196,7 @@ export function renderControls(this: DotLottiePlayerBase) {
           <button
             class="toggleBoomerang"
             data-active="${this.mode === PlayMode.Bounce}"
+            aria-pressed="${this.mode === PlayMode.Bounce}" 
             aria-label="Toggle boomerang"
             tabindex="0"
           >

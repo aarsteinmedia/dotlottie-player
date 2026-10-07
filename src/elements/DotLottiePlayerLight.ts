@@ -1,13 +1,9 @@
-import type {
-  AnimationConfiguration,
-  Vector2,
-} from '@aarsteinmedia/lottie-web'
+import type { AnimationConfiguration } from '@aarsteinmedia/lottie-web'
 
 import { loadAnimation } from '@aarsteinmedia/lottie-web/light'
-import {
-  type PreserveAspectRatio,
-  RendererType,
-} from '@aarsteinmedia/lottie-web/utils'
+import { RendererType } from '@aarsteinmedia/lottie-web/utils'
+
+import type { Options } from '@/types'
 
 import { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
 
@@ -20,11 +16,6 @@ export class DotLottiePlayerLight extends DotLottiePlayerBase {
     return RendererType.SVG
   }
 
-  constructor() {
-    super()
-    this.isLight = true
-  }
-
   public override loadAnimation(config: AnimationConfiguration) {
     return loadAnimation(config)
   }
@@ -35,14 +26,7 @@ export class DotLottiePlayerLight extends DotLottiePlayerBase {
     hasLoop,
     initialSegment,
     preserveAspectRatio,
-  }: {
-    container?: HTMLElement
-    rendererType: RendererType;
-    initialSegment?: Vector2;
-    hasAutoplay: boolean;
-    hasLoop: boolean;
-    preserveAspectRatio: PreserveAspectRatio
-  }) {
+  }: Options) {
     const options: AnimationConfiguration<RendererType.SVG> = {
       autoplay: hasAutoplay,
       container,

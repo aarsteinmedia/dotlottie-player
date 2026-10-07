@@ -18,6 +18,12 @@ import { loadDotLottieTools } from '@/elements/helpers/dotlottieLoader'
  */
 export class DotLottiePlayer extends DotLottiePlayerBase {
 
+  constructor() {
+    super()
+    this.canConvert = true
+  }
+
+
   public async addAnimation(params: AddAnimationParams) {
     const { addAnimation } = await loadDotLottieTools()
 

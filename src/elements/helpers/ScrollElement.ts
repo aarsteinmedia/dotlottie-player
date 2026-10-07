@@ -105,6 +105,10 @@ export abstract class ScrollElement extends BaseElement {
           this._freeze()
         }
 
+        if (this._playerState.playTimeout) {
+          clearTimeout(this._playerState.playTimeout)
+        }
+
         return
       }
       if (
@@ -163,7 +167,7 @@ export abstract class ScrollElement extends BaseElement {
   }
 
   private _getScrollProgress() {
-    if (!this._container) {
+    if (!this._container || this._scrollProbe) {
       return null
     }
 

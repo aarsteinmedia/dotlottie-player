@@ -18,19 +18,20 @@ import {
 } from '@/utils/enums'
 
 const getStyles = async () => {
-  const styleSheet = new CSSStyleSheet()
+    const styleSheet = new CSSStyleSheet()
 
-  await styleSheet.replace(styles)
+    await styleSheet.replace(styles)
 
-  return styleSheet
-}
+    return styleSheet
+  },
+  stylePromise = getStyles()
 
 export abstract class BaseElement extends PropertyCallbackElement {
   /**
    * Return the styles for the component.
    */
   static get styles() {
-    return getStyles
+    return stylePromise
   }
 
   /**
