@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player",
-  "version": "6.5.6",
+  "version": "6.5.7",
   "description": "Web Component for playing Lottie animations in your web app.",
   "type": "module",
   "exports": {
@@ -68,7 +68,7 @@
     "clean": "pnpm pm clean && rm -rf dist types"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^1.6.4"
+    "@aarsteinmedia/lottie-web": "^1.6.5"
   },
   "peerDependencies": {
     "@types/react": ">= 16.0.0"
@@ -158,5 +158,5 @@
     "type": "paypal",
     "url": "https://www.paypal.com/donate/?hosted_button_id=E7C7DMN8KSQ6A"
   },
-  "packageManager": "pnpm@12.8.1"
+  "packageManager": "pnpm@12.9.1"
 }

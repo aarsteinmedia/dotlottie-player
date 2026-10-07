@@ -59,7 +59,6 @@ export class DotLottiePlayer extends DotLottiePlayerBase {
     }
 
     switch (this.renderer) {
-      case RendererType.HTML:
       case RendererType.SVG: {
         options.rendererSettings = {
           ...options.rendererSettings,

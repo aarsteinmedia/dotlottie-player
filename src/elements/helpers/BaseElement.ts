@@ -344,7 +344,7 @@ export abstract class BaseElement extends PropertyCallbackElement {
   }
 
   /**
-   * Renderer to use: svg, canvas or html.
+   * Renderer to use: svg or canvas.
    */
   set renderer(value: RendererType) {
     this.setAttribute('renderer', value)
@@ -353,7 +353,7 @@ export abstract class BaseElement extends PropertyCallbackElement {
   get renderer() {
     const val = this.getAttribute('renderer')
 
-    if (val === RendererType.Canvas || val === RendererType.HTML) {
+    if (val === RendererType.Canvas) {
       return val
     }
 
