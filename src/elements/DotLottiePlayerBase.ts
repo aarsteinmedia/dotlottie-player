@@ -1207,7 +1207,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
   }
 
   private _handleInlineScript() {
-    const inlineScript = this.parentElement?.querySelector(':scope > script#aamd_inline_script')
+    const inlineScript = this.parentElement?.querySelector(':scope > script.aamd_inline_script')
 
     if (!inlineScript) {
       return

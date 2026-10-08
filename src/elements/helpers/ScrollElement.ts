@@ -122,26 +122,7 @@ export abstract class ScrollElement extends BaseElement {
         this.play()
       }
 
-      if (!this.playOnVisible || reducedMotionQuery?.matches) {
-        return
-      }
-      if (
-        this.playerState === PlayerState.Completed &&
-        !this.once
-      ) {
-        this.playerState = PlayerState.Playing
-        this._lottieInstance?.goToAndPlay(this.direction === 1 ? 0 : this._lottieInstance.totalFrames)
-
-        return
-      }
-      this._playerState.playTimeout = setTimeout(() => {
-        this.play()
-      }, this.delay)
-
-      if (this.playerState !== PlayerState.Playing) {
-        return
-      }
-      clearTimeout(this._playerState.playTimeout)
+      this._playOnVisible()
     })
 
     this._observeIntersectionTarget()
@@ -214,5 +195,28 @@ export abstract class ScrollElement extends BaseElement {
     // Observing the host is more reliable than inner shadow nodes when ancestors
     // use overflow-* (IO / layout interaction quirks).
     this._intersectionObserver.observe(this._container)
+  }
+
+  private _playOnVisible() {
+    if (!this.playOnVisible || reducedMotionQuery?.matches) {
+      return
+    }
+    if (
+      this.playerState === PlayerState.Completed &&
+      !this.once
+    ) {
+      this.playerState = PlayerState.Playing
+      this._lottieInstance?.goToAndPlay(this.direction === 1 ? 0 : this._lottieInstance.totalFrames)
+
+      return
+    }
+    this._playerState.playTimeout = setTimeout(() => {
+      this.play()
+    }, this.delay)
+
+    if (this.playerState !== PlayerState.Playing) {
+      return
+    }
+    clearTimeout(this._playerState.playTimeout)
   }
 }
