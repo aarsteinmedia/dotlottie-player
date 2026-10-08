@@ -440,7 +440,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
         throw new Error('Broken or corrupted file')
       }
 
-      this._handleLdScript()
+      this._handleInlineScript()
 
       this._isBounce = this.mode === PlayMode.Bounce
       if (this._multiAnimationSettings.length > 0 && this._multiAnimationSettings[this._currentAnimation]?.mode) {
@@ -1206,14 +1206,14 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     this.devLog(error)
   }
 
-  private _handleLdScript() {
-    const ldScript = this.parentElement?.querySelector(':scope > script[type="application/ld+json"]')
+  private _handleInlineScript() {
+    const inlineScript = this.parentElement?.querySelector(':scope > script#aamd_inline_script')
 
-    if (!ldScript) {
+    if (!inlineScript) {
       return
     }
     try {
-      const settings = JSON.parse(ldScript.innerHTML) as Settings
+      const settings = JSON.parse(inlineScript.innerHTML) as Settings
 
       if (settings.selector) {
         this.selector = settings.selector
