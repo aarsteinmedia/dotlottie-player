@@ -10,6 +10,9 @@
     "**/*.dev.ts",
     "**/*.config.ts",
     "**/dist",
-    "**/preview"
+    "**/preview",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/*.setup.ts"
   ]
 }

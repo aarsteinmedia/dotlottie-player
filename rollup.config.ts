@@ -134,7 +134,6 @@ const isProd = process.env.NODE_ENV !== 'development',
     ] : plugins())(),
 
   modulePlugins = ((): Plugin[] =>
-
     isProd ? [
       ...plugins(true), pluginSummary()
     ] : [

@@ -13,6 +13,14 @@ import { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
 export class DotLottiePlayerCanvas extends DotLottiePlayerBase {
 
   override get renderer() {
+    if (super.renderer !== RendererType.Canvas) {
+      this.devLog(`[dotlottie-player] renderer "${super.renderer}" is not available in ` +
+        '@aarsteinmedia/dotlottie-player/canvas, falling back to "canvas". Import from ' +
+        '@aarsteinmedia/dotlottie-player to use other renderers.',
+      'warn')
+    }
+
+
     return RendererType.Canvas
   }
 

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.2.3], so it's not exhaustive. [Please report any missing notable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [6.6.5] - 09-10-2026
+
+- Fixed bug with observedProperties, causing some attributes to be less dynamic than intended.
+- Registered side-effects, for better tree-shaking.
+- More efficient caching.
+- More economic handling of ViewTimeline.
+- `snapshot` is now async, and can capture png images in Canvas Renderer.
+- Added vitest.
+
 ## [6.5.7] - 07-10-2026
 
 - Minor performance improvements to animation engine.
@@ -414,6 +423,7 @@ Changelog was only added since [3.2.3], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[6.5.5]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/6.6.5
 [6.5.7]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/6.5.7
 [6.5.6]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/6.5.6
 [6.5.5]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player/v/6.5.5

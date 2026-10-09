@@ -6,6 +6,7 @@ import {
 import eslintJs from '@eslint/js'
 import preferEarlyReturn from '@regru/eslint-plugin-prefer-early-return'
 import stylistic from '@stylistic/eslint-plugin'
+import vitest from '@vitest/eslint-plugin'
 import createNoRestrictedProperties from 'eslint-no-restricted/properties'
 import createNoRestrictedSyntax from 'eslint-no-restricted/syntax'
 import fsecond from 'eslint-plugin-fsecond'
@@ -142,7 +143,8 @@ export default defineConfig({
     perfectionist,
     regexp,
     sonarjs,
-    unicorn
+    unicorn,
+    vitest
   },
   rules: {
     ...sonarConfigs.recommended.rules,
