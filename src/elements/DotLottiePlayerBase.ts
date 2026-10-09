@@ -640,7 +640,6 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     ) {
       elements.popover.hidden = !value
       elements.convert.hidden = !this.canConvert
-      elements.snapshot.hidden = this.renderer !== RendererType.SVG
     }
   }
 
@@ -776,32 +775,49 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
   /**
    * Snapshot and download the current frame as SVG.
    */
-  public snapshot(shouldDownload = true, name = 'AM Lottie') {
+  public async snapshot(shouldDownload = true, name = 'AM Lottie') {
     try {
       if (!this.shadowRoot || !this._lottieInstance) {
         throw new Error('Unknown error')
       }
 
-      // Get SVG element and serialize markup
-      const svgElement = this.shadowRoot.querySelector('.animation svg')
+      let data: ArrayBuffer | string | null = null
 
-      if (!svgElement) {
+      // Get animation element and handle markup
+      const animationElement = this.shadowRoot.querySelector(`.animation ${this.renderer}`)
+
+      if (!animationElement) {
         throw new Error('Could not retrieve animation from DOM')
       }
 
-      const data =
-        svgElement instanceof Node
-          ? new XMLSerializer().serializeToString(svgElement)
-          : null
+      const isSVG = this.renderer === RendererType.SVG
+
+      if (isSVG) {
+        data =
+          animationElement instanceof Node
+            ? new XMLSerializer().serializeToString(animationElement)
+            : null
+      } else {
+        const blob = await new Promise<Blob | null>((resolve) => {
+          if (animationElement instanceof HTMLCanvasElement) {
+            animationElement.toBlob(resolve, 'image/png')
+          }
+        })
+
+        data = await blob?.arrayBuffer() ?? null
+      }
 
       if (!data) {
         throw new Error('Could not serialize SVG element')
       }
 
+      const mimeType = isSVG ? 'image/svg+xml' : 'image/png',
+        extension = isSVG ? 'svg' : 'png'
+
       if (shouldDownload) {
         download(data, {
-          mimeType: 'image/svg+xml',
-          name: `${getFilename(this.src || name)}-${frameOutput(this._seeker * this._lottieInstance.totalFrames / 100)}.svg`,
+          mimeType,
+          name: `${getFilename(this.src || name)}-${frameOutput(this._seeker * this._lottieInstance.totalFrames / 100)}.${extension}`,
         })
       }
 
