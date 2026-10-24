@@ -20,9 +20,7 @@ rendererSelect?.addEventListener('change', changeRenderer)
 attributesSelect?.addEventListener('change', setAttributes)
 mouseoutSelect?.addEventListener('change', setMouseout)
 
-const { length } = files.sort()
-
-for (let i = 0; i < length; i++) {
+for (let i = 0; i < files.sort().length; i++) {
   const opt = document.createElement('option')
 
   opt.innerText = files[i]

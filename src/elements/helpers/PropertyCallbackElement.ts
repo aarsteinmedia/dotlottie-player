@@ -24,9 +24,7 @@ export abstract class PropertyCallbackElement extends HTMLElement {
     const { observedProperties } =
       this.constructor as unknown as { observedProperties: string[] }
 
-    const { length } = observedProperties
-
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < observedProperties.length; i++) {
       const initialValue = this[observedProperties[i] as keyof this],
         cachedValue = Symbol(observedProperties[i]) as keyof this
 

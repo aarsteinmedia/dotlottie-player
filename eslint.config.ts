@@ -365,7 +365,7 @@ export default defineConfig({
     'unicorn/no-array-sort': 2,
     'unicorn/no-await-expression-member': 2,
     'unicorn/no-await-in-promise-methods': 2,
-    'unicorn/no-for-loop': 2,
+    'unicorn/no-for-loop': 0,
     'unicorn/no-immediate-mutation': 2,
     'unicorn/no-instanceof-array': 2,
     'unicorn/no-invalid-file-input-accept': 2,
