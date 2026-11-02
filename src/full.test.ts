@@ -3,7 +3,7 @@ import {
   describe, expect, test, vi
 } from 'vitest'
 
-import '../dist/full'
+import '../dist/full.js'
 
 vi.mock('@aarsteinmedia/lottie-web', () => ({ loadAnimation: vi.fn() }))
 
