@@ -78,8 +78,8 @@ export const aspectRatio = (objectFit: ObjectFit) => {
       Object.hasOwn(json, field))
   },
 
-  frameOutput = (frame?: number) =>
-    ((frame ?? 0) + 1).toString().padStart(3, '0'),
+  frameOutput = (frame = 0) =>
+    (frame + 1).toString().padStart(3, '0'),
 
   parseHTMLBooleans = (val: string | null) => val !== null && [
     'true',
