@@ -1,4 +1,4 @@
-import { namespaceSVG, PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils'
+import { NAMESPACE_SVG, PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils'
 
 import { escapeHTML } from '@/utils'
 
@@ -7,7 +7,7 @@ export function errorScreen(message: string) {
     <div class="error">
       <svg
         preserveAspectRatio="${PreserveAspectRatio.Cover}"
-        xmlns="${namespaceSVG}"
+        xmlns="${NAMESPACE_SVG}"
         width="1920"
         height="1080"
         viewBox="0 0 1920 1080"

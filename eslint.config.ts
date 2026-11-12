@@ -224,7 +224,7 @@ export default defineConfig({
         trailingUnderscore: 'forbid',
       },
       {
-        format: ['camelCase'],
+        format: ['camelCase', 'UPPER_CASE'],
         leadingUnderscore: 'allowSingleOrDouble',
         modifiers: ['const'],
         selector: 'variable',
@@ -244,13 +244,12 @@ export default defineConfig({
         trailingUnderscore: 'forbid',
       },
       {
-        format: ['PascalCase'],
+        custom: {
+          match: true,
+          regex: '^(?i:is|in|has|can|should)'
+        },
+        format: ['camelCase', 'UPPER_CASE'],
         leadingUnderscore: 'allowSingleOrDouble',
-        prefix: ['is',
-          'are',
-          'has',
-          'should',
-          'can'],
         selector: 'variable',
         trailingUnderscore: 'forbid',
         types: ['boolean'],

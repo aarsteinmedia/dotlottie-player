@@ -8,7 +8,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "DotLottie Player Web Component.",
+          "description": "",
           "name": "DotLottiePlayer",
           "members": [
             {
@@ -58,16 +58,16 @@
           ],
           "superclass": {
             "name": "DotLottiePlayerBase",
-            "module": "/dist/chunks/DotLottiePlayerBase-B33-lAel.js"
+            "module": "/dist/chunks/DotLottiePlayerBase-B5lk338Q.js"
           },
-          "tagName": "tagName",
+          "tagName": "TAG_NAME",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "custom-element-definition",
-          "name": "tagName",
+          "name": "TAG_NAME",
           "declaration": {
             "name": "DotLottiePlayer",
             "module": "dist/full.js"

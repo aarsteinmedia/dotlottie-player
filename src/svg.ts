@@ -1,7 +1,7 @@
-import { isServer } from '@aarsteinmedia/lottie-web/utils'
+import { IS_SERVER } from '@aarsteinmedia/lottie-web/utils'
 
 import { DotLottiePlayerSVG } from '@/elements/DotLottiePlayerSVG'
-import { tagName } from '@/utils/constants'
+import { TAG_NAME } from '@/utils/constants'
 
 export { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
 export default DotLottiePlayerSVG
@@ -10,6 +10,6 @@ export default DotLottiePlayerSVG
  */
 globalThis.dotLottiePlayer = () => new DotLottiePlayerSVG()
 
-if (!isServer && !customElements.get(tagName)) {
-  customElements.define(tagName, DotLottiePlayerSVG)
+if (!IS_SERVER && !customElements.get(TAG_NAME)) {
+  customElements.define(TAG_NAME, DotLottiePlayerSVG)
 }

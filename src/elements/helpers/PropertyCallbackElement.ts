@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { isServer } from '@aarsteinmedia/lottie-web/utils'
+import { IS_SERVER } from '@aarsteinmedia/lottie-web/utils'
 
 /**
  * Credit to: Leonardo Favre https://github.com/leofavre/observed-properties.
  */
 
-if (isServer) {
+if (IS_SERVER) {
   // Mock HTMLElement for server-side rendering
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   globalThis.HTMLElement ??=

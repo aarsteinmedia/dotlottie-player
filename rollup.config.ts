@@ -1,6 +1,7 @@
 import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
+import { parseSync, printSync } from '@swc/core'
 import autoprefixer from 'autoprefixer'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -32,6 +33,26 @@ interface MinifyOptions {
     end: number;
   }[]
 }
+
+/**
+ * Strip all comments (incl. JSDoc) without minifying:
+ * parsing without comment tracking and re-printing drops them.
+ */
+const stripComments = (): Plugin => ({
+  name: 'strip-comments',
+  renderChunk(code) {
+    const ast = parseSync(code, {
+      comments: false,
+      syntax: 'ecmascript',
+      target: 'es2024'
+    })
+
+    return {
+      code: printSync(ast, { minify: false }).code,
+      map: null
+    }
+  }
+})
 
 const isProd = process.env.NODE_ENV !== 'development',
   version = (process.env.VER ?? 'full') as Version,
@@ -135,7 +156,9 @@ const isProd = process.env.NODE_ENV !== 'development',
 
   modulePlugins = ((): Plugin[] =>
     isProd ? [
-      ...plugins(true), pluginSummary()
+      ...plugins(true),
+      stripComments(),
+      pluginSummary()
     ] : [
       ...plugins(true),
       serve({

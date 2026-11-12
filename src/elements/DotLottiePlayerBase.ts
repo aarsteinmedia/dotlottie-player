@@ -32,7 +32,7 @@ import {
   isLottie,
   parseHTMLBooleans,
 } from '@/utils'
-import { hasHover, reducedMotionQuery } from '@/utils/constants'
+import { HAS_HOVER, reducedMotionQuery } from '@/utils/constants'
 import {
   MouseOut,
   PlayerState,
@@ -1336,7 +1336,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    * Handle MouseEnter.
    */
   private _mouseEnter() {
-    if (!this.hover || !this._lottieInstance || !hasHover || reducedMotionQuery?.matches) {
+    if (!this.hover || !this._lottieInstance || !HAS_HOVER || reducedMotionQuery?.matches) {
       return
     }
 
@@ -1360,7 +1360,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    * Handle MouseLeave.
    */
   private _mouseLeave() {
-    if (!this.hover || !this._lottieInstance || !hasHover || reducedMotionQuery?.matches) {
+    if (!this.hover || !this._lottieInstance || !HAS_HOVER || reducedMotionQuery?.matches) {
       return
     }
 

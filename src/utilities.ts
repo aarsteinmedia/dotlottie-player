@@ -1,4 +1,4 @@
-export { tagName } from '@/utils/constants'
+export { TAG_NAME } from '@/utils/constants'
 export {
   MouseOut, ObjectFit, PlayerState
 } from '@/utils/enums'

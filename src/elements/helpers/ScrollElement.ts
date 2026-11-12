@@ -1,8 +1,8 @@
-import { clamp, isServer } from '@aarsteinmedia/lottie-web/utils'
+import { clamp, IS_SERVER } from '@aarsteinmedia/lottie-web/utils'
 
 import { BaseElement } from '@/elements/helpers/BaseElement'
 import {
-  hasIOSupport, reducedMotionQuery, hasVTSupport
+  HAS_IO_SUPPORT, reducedMotionQuery, HAS_VT_SUPPORT
 } from '@/utils/constants'
 import { PlayerState } from '@/utils/enums'
 
@@ -56,7 +56,7 @@ export abstract class ScrollElement extends BaseElement {
   }
 
   public startScrollLoop() {
-    if (isServer) {
+    if (IS_SERVER) {
       this.devLog('DotLottie: Scroll animations will not work in a Server Side Rendering context. Try to wrap this in a client component.')
 
       return
@@ -83,7 +83,7 @@ export abstract class ScrollElement extends BaseElement {
     if (
       !this._container ||
       this._intersectionObserver ||
-      !hasIOSupport
+      !HAS_IO_SUPPORT
     ) {
       return
     }
@@ -155,7 +155,7 @@ export abstract class ScrollElement extends BaseElement {
       return null
     }
 
-    if (!hasVTSupport || this._useGeometricScroll) {
+    if (!HAS_VT_SUPPORT || this._useGeometricScroll) {
       return this._getGeometricScrollProgress()
     }
 

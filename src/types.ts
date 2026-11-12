@@ -12,7 +12,7 @@ import type { DotLottiePlayer } from '@/elements/DotLottiePlayer'
 import type { DotLottiePlayerCanvas } from '@/elements/DotLottiePlayerCanvas'
 import type { DotLottiePlayerLight } from '@/elements/DotLottiePlayerLight'
 import type { DotLottiePlayerSVG } from '@/elements/DotLottiePlayerSVG'
-import type { tagName } from '@/utils/constants'
+import type { TAG_NAME } from '@/utils/constants'
 
 export interface CEMConfig {
   /** Enable special handling for catalyst. */
@@ -68,7 +68,7 @@ export interface Settings {
 }
 
 declare global {
-  interface HTMLElementTagNameMap { [tagName]: DotLottiePlayer | DotLottiePlayerLight }
+  interface HTMLElementTagNameMap { [TAG_NAME]: DotLottiePlayer | DotLottiePlayerLight }
   var dotLottiePlayer: () => DotLottiePlayer | DotLottiePlayerLight | DotLottiePlayerSVG | DotLottiePlayerCanvas
 }
 
@@ -81,18 +81,18 @@ type JSXLottiePlayer = Omit<Partial<DotLottiePlayer | DotLottiePlayerLight>, 'st
 
 declare module 'react' {
   namespace JSX {
-    interface IntrinsicElements { [tagName]: JSXLottiePlayer }
+    interface IntrinsicElements { [TAG_NAME]: JSXLottiePlayer }
   }
 }
 
 declare module 'react/jsx-runtime' {
   namespace JSX {
-    interface IntrinsicElements { [tagName]: JSXLottiePlayer }
+    interface IntrinsicElements { [TAG_NAME]: JSXLottiePlayer }
   }
 }
 
 declare module 'react/jsx-dev-runtime' {
   namespace JSX {
-    interface IntrinsicElements { [tagName]: JSXLottiePlayer }
+    interface IntrinsicElements { [TAG_NAME]: JSXLottiePlayer }
   }
 }

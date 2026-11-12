@@ -1,6 +1,6 @@
 import type { AnimationData } from '@aarsteinmedia/lottie-web'
 
-import { isServer, PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils'
+import { IS_SERVER, PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils'
 
 import { ObjectFit } from '@/utils/enums'
 
@@ -34,7 +34,7 @@ export const aspectRatio = (objectFit: ObjectFit) => {
   handleErrors = (err: unknown) => {
     const res = {
       message: 'Unknown error',
-      status: isServer ? 500 : 400,
+      status: IS_SERVER ? 500 : 400,
     }
 
     if (err && typeof err === 'object') {

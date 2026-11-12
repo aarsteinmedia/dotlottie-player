@@ -12,7 +12,7 @@ import {
 import { PropertyCallbackElement } from '@/elements/helpers/PropertyCallbackElement'
 import styles from '@/styles.css'
 import { isEnum, parseHTMLBooleans } from '@/utils'
-import { isDev } from '@/utils/constants'
+import { IS_DEV } from '@/utils/constants'
 import {
   MouseOut, ObjectFit, PlayerState
 } from '@/utils/enums'
@@ -476,7 +476,7 @@ export abstract class BaseElement extends PropertyCallbackElement {
   }
 
   public devLog(toLog: unknown, type: 'error' | 'info' | 'warn' = 'error') {
-    if (!isDev) {
+    if (!IS_DEV) {
       return
     }
 
