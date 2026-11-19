@@ -46,8 +46,7 @@ function advancedButtons(this: DotLottiePlayerBase) {
           manifest: this.getManifest(),
           src: this.src || this.source
         })
-      }
-      finally {
+      } finally {
         convertButton.disabled = false
       }
     }

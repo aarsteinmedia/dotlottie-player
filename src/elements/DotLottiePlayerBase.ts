@@ -332,8 +332,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
         this._addIntersectionObserver()
 
         this.dispatchEvent(new CustomEvent(PlayerEvent.Rendered))
-      }
-      catch (error) {
+      } catch (error) {
         void this._handleError(error)
       }
     })()
@@ -522,8 +521,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       }
 
       await this._renderControls()
-    }
-    catch (error) {
+    } catch (error) {
       await this._handleError(error)
     }
   }
@@ -552,12 +550,10 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     try {
       this._lottieInstance.pause()
       this.dispatchEvent(new CustomEvent(PlayerEvent.Pause))
-    }
-    catch (error) {
+    } catch (error) {
       hasError = true
       this.devLog(error)
-    }
-    finally {
+    } finally {
       this.playerState = hasError ? PlayerState.Error : PlayerState.Paused
     }
   }
@@ -577,12 +573,10 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       this._lottieInstance.play()
 
       this.dispatchEvent(new CustomEvent(PlayerEvent.Play))
-    }
-    catch (error) {
+    } catch (error) {
       hasError = true
       this.devLog(error)
-    }
-    finally {
+    } finally {
       this.playerState = hasError ? PlayerState.Error : PlayerState.Playing
     }
   }
@@ -682,8 +676,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     // Check if value is a percentage string
     if (isPercentage) {
       percentage = Math.round(totalFrames * frame / 100)
-    }
-    else {
+    } else {
       percentage = Math.round(frame / totalFrames * 100)
     }
 
@@ -795,8 +788,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
           = animationElement instanceof Node
             ? new XMLSerializer().serializeToString(animationElement)
             : null
-      }
-      else {
+      } else {
         const blob = await new Promise<Blob | null>((resolve) => {
           if (animationElement instanceof HTMLCanvasElement) {
             animationElement.toBlob(resolve, 'image/png')
@@ -821,8 +813,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       }
 
       return data
-    }
-    catch (error) {
+    } catch (error) {
       this.devLog(error)
 
       return null
@@ -842,8 +833,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     try {
       this._lottieInstance.stop()
       this.dispatchEvent(new CustomEvent(PlayerEvent.Stop))
-    }
-    finally {
+    } finally {
       this.playerState = PlayerState.Stopped
     }
   }
@@ -942,8 +932,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     try {
       this._lottieInstance.pause()
       this.dispatchEvent(new CustomEvent(PlayerEvent.Freeze))
-    }
-    finally {
+    } finally {
       this.playerState = PlayerState.Frozen
     }
   }
@@ -1244,8 +1233,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       if (settings.multiAnimationSettings) {
         this.setMultiAnimationSettings(settings.multiAnimationSettings)
       }
-    }
-    catch (error) {
+    } catch (error) {
       this.devLog(error)
     }
   }
@@ -1260,12 +1248,10 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       if (this.hover) {
         selector[method]('mouseenter', this._mouseEnter)
         selector[method]('mouseleave', this._mouseLeave)
-      }
-      else {
+      } else {
         selector[method]('click', this._handleClick)
       }
-    }
-    else {
+    } else {
       this.selector = null
     }
   }
@@ -1298,8 +1284,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     if (this.count) {
       if (this._isBounce) {
         this._playerState.count += 0.5
-      }
-      else {
+      } else {
         this._playerState.count += 1
       }
 
@@ -1468,8 +1453,7 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
       this._lottieInstance.goToAndStop(0, true)
       this.playerState = PlayerState.Stopped
-    }
-    catch (error) {
+    } catch (error) {
       this._errorMessage = handleErrors(error).message
 
       this.playerState = PlayerState.Error

@@ -158,6 +158,7 @@ export default defineConfig({
     '@regru/prefer-early-return/prefer-early-return': [2, { maximumStatements: 1 }],
     '@stylistic/array-bracket-newline': [1, { minItems: 3 }],
     '@stylistic/array-element-newline': [1, { minItems: 3 }],
+    '@stylistic/brace-style': [1, '1tbs'],
     '@stylistic/comma-dangle': [1, 'only-multiline'],
     '@stylistic/comma-spacing': 1,
     '@stylistic/curly-newline': 1,
