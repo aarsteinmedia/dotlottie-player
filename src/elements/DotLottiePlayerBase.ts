@@ -460,16 +460,14 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       this._isDotLottie = isDotLottie
       this._animations = animations
       this._manifest = manifest ?? {
-        animations: [
-          {
-            autoplay: !this.animateOnScroll && !this.playOnVisible && this.autoplay,
-            direction: this.direction,
-            id: createElementID(),
-            loop: this.loop,
-            mode: this.mode,
-            speed: this.speed,
-          },
-        ],
+        animations: [{
+          autoplay: !this.animateOnScroll && !this.playOnVisible && this.autoplay,
+          direction: this.direction,
+          id: createElementID(),
+          loop: this.loop,
+          mode: this.mode,
+          speed: this.speed,
+        }],
       }
 
       // Clear previous animation, if any

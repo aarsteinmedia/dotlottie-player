@@ -44,6 +44,14 @@
     height: calc(100% - 35px);
   }
 
+  & *[data-renderer='canvas'][data-object-fit='cover'] {
+    & canvas {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover;
+    }
+  }
+
   & .animation-container {
     position: relative;
   }

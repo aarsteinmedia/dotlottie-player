@@ -120,9 +120,11 @@ export default defineConfig({
     tsConfigs.strictTypeChecked,
   ],
   files: ['**/*.{ts,js}'],
-  ignores: ['**/node_modules/*',
+  ignores: [
+    '**/node_modules/*',
     './types/*',
-    './dist/*'],
+    './dist/*'
+  ],
   languageOptions: {
     ecmaVersion: 2024,
     globals: {
@@ -149,34 +151,36 @@ export default defineConfig({
   rules: {
     ...sonarConfigs.recommended.rules,
     '@regru/prefer-early-return/prefer-early-return': [2, { maximumStatements: 1 }],
-    '@stylistic/array-element-newline': ['warn', { minItems: 3 }],
-    '@stylistic/comma-dangle': ['warn', 'only-multiline'],
-    '@stylistic/comma-spacing': 'warn',
-    '@stylistic/function-call-spacing': 'warn',
-    '@stylistic/function-paren-newline': ['warn', { minItems: 3 }],
-    '@stylistic/indent': ['warn', 2],
-    '@stylistic/indent-binary-ops': ['warn', 2],
-    '@stylistic/jsx-quotes': ['warn', 'prefer-double'],
-    '@stylistic/key-spacing': 'warn',
-    '@stylistic/lines-between-class-members': ['warn', {
-      enforce: [
-        {
-          blankLine: 'always',
-          next: 'method',
-          prev: 'method'
-        }
-      ]
+    '@stylistic/array-bracket-newline': [1, { minItems: 3 }],
+    '@stylistic/array-element-newline': [1, { minItems: 3 }],
+    '@stylistic/comma-dangle': [1, 'only-multiline'],
+    '@stylistic/comma-spacing': 1,
+    '@stylistic/curly-newline': 1,
+    '@stylistic/function-call-spacing': 1,
+    '@stylistic/function-paren-newline': [1, { minItems: 3 }],
+    '@stylistic/indent': [1, 2],
+    '@stylistic/indent-binary-ops': [1, 2],
+    '@stylistic/jsx-quotes': [1, 'prefer-double'],
+    '@stylistic/jsx-wrap-multilines': 1,
+    '@stylistic/key-spacing': 1,
+    '@stylistic/linebreak-style': 1,
+    '@stylistic/lines-between-class-members': [1, {
+      enforce: [{
+        blankLine: 'always',
+        next: 'method',
+        prev: 'method'
+      }]
     }],
-    '@stylistic/no-extra-parens': 'warn',
-    '@stylistic/no-multi-spaces': 'warn',
-    '@stylistic/no-multiple-empty-lines': 'warn',
-    '@stylistic/no-trailing-spaces': 'warn',
-    '@stylistic/object-curly-newline': ['warn', {
+    '@stylistic/no-extra-parens': 1,
+    '@stylistic/no-multi-spaces': 1,
+    '@stylistic/no-multiple-empty-lines': 1,
+    '@stylistic/no-trailing-spaces': 1,
+    '@stylistic/object-curly-newline': [1, {
       minProperties: 3,
       multiline: true
     }],
-    '@stylistic/object-curly-spacing': ['warn', 'always'],
-    '@stylistic/object-property-newline': 'warn',
+    '@stylistic/object-curly-spacing': [1, 'always'],
+    '@stylistic/object-property-newline': 1,
     '@stylistic/padding-line-between-statements': [
       2,
       {
@@ -195,11 +199,11 @@ export default defineConfig({
         prev: '*'
       }
     ],
-    '@stylistic/quotes': ['warn', 'single'],
-    '@stylistic/semi': ['warn', 'never'],
-    '@stylistic/space-before-blocks': 'warn',
-    '@stylistic/space-in-parens': 'warn',
-    '@stylistic/type-annotation-spacing': 'warn',
+    '@stylistic/quotes': [1, 'single'],
+    '@stylistic/semi': [1, 'never'],
+    '@stylistic/space-before-blocks': 1,
+    '@stylistic/space-in-parens': 1,
+    '@stylistic/type-annotation-spacing': 1,
     '@typescript-eslint/array-type': 2,
     '@typescript-eslint/ban-ts-comment': [2, {
       'ts-check': false,
@@ -246,9 +250,14 @@ export default defineConfig({
       {
         custom: {
           match: true,
-          regex: '^(?i:is|in|has|can|should)'
+          // A bug in NodeJS bug causes ?i: to trigger memory threshold
+          regex: '^(is|IS|in|IN|has|HAS|can|CAN|should|SHOULD|was|WAS)'
         },
-        format: ['camelCase', 'UPPER_CASE'],
+        format: [
+          'camelCase',
+          'PascalCase',
+          'UPPER_CASE'
+        ],
         leadingUnderscore: 'allowSingleOrDouble',
         selector: 'variable',
         trailingUnderscore: 'forbid',
@@ -294,14 +303,12 @@ export default defineConfig({
       enforceForJSX: true
     }],
     '@typescript-eslint/no-unused-private-class-members': 'error',
-    '@typescript-eslint/no-unused-vars': [
-      'error', {
-        argsIgnorePattern: '^_',
-        caughtErrors: 'none',
-        caughtErrorsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-      },
-    ],
+    '@typescript-eslint/no-unused-vars': ['error', {
+      argsIgnorePattern: '^_',
+      caughtErrors: 'none',
+      caughtErrorsIgnorePattern: '^_',
+      varsIgnorePattern: '^_',
+    }],
     '@typescript-eslint/no-use-before-define': ['error', {
       classes: false,
       functions: false
@@ -310,9 +317,7 @@ export default defineConfig({
     '@typescript-eslint/prefer-nullish-coalescing': [2, { ignorePrimitives: true }],
     '@typescript-eslint/prefer-optional-chain': 2,
     '@typescript-eslint/prefer-string-starts-ends-with': 2,
-    '@typescript-eslint/restrict-template-expressions': [
-      'error', { allowNumber: true },
-    ],
+    '@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
     '@typescript-eslint/switch-exhaustiveness-check': ['error', { considerDefaultExhaustiveForUnions: true }],
     '@typescript-eslint/unbound-method': 0,
     '@typescript-eslint/use-unknown-in-catch-callback-variable': 0,
@@ -328,15 +333,19 @@ export default defineConfig({
     'import-x/no-named-as-default': 2,
     'import-x/no-useless-path-segments': [2, { noUselessIndex: true }],
     'no-console': ['error', {
-      allow: ['warn',
+      allow: [
+        'warn',
         'error',
-        'info']
+        'info'
+      ]
     }],
     'no-duplicate-imports': 1,
     'no-plusplus': 'off',
-    'no-restricted-globals': ['error',
+    'no-restricted-globals': [
+      'error',
       'event',
-      'fdescribe'],
+      'fdescribe'
+    ],
     'no-restricted-syntax/noAccessModifiers': 'off',
     'no-restricted-syntax/noClasses': 'off',
     'no-restricted-syntax/noEnums': 'off',

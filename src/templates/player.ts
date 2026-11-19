@@ -25,6 +25,8 @@ export function renderPlayer(this: DotLottiePlayerBase) {
   }
 
   container.dataset.controls = String(this.controls)
+  container.dataset.renderer = this.renderer
+  container.dataset.objectFit = this.objectfit
   figure.style.background = this.background
 
   /**

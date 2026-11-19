@@ -118,9 +118,7 @@ const isProd = process.env.NODE_ENV !== 'development',
        */
       minimize: isProd && { preset: ['default', { mergeRules: false }] },
       plugins: isProd
-        ? [
-          flexbugs(), autoprefixer({ flexbox: 'no-2009' }),
-        ]
+        ? [flexbugs(), autoprefixer({ flexbox: 'no-2009' })]
         : [],
     }),
     replace({
@@ -169,11 +167,9 @@ const isProd = process.env.NODE_ENV !== 'development',
     ])(),
 
   jsInput = Object.fromEntries(inputs.map((i) => [i.name, i.file])),
-  dtsInput = Object.fromEntries(inputs.map((i) => [
-    i.name, resolve(
-      __dirname, 'types', `${i.name}.d.ts`
-    ),
-  ])),
+  dtsInput = Object.fromEntries(inputs.map((i) => [i.name, resolve(
+    __dirname, 'types', `${i.name}.d.ts`
+  )])),
 
   unpkgs = inputs.filter(({ name }) => name !== 'utilities').map((input) => defineConfig({
     input: input.file,
@@ -209,8 +205,7 @@ const isProd = process.env.NODE_ENV !== 'development',
       format: 'esm',
     },
     plugins: [dts()],
-  }
-  ]),
+  }]),
 
   ver = version === 'light' ? 1 : 0
 
