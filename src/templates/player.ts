@@ -4,7 +4,6 @@ import type { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
  * Render Player.
  */
 export function renderPlayer(this: DotLottiePlayerBase) {
-
   if (!this.shadow || !this.template) {
     throw new Error('No Shadow Element or Template')
   }

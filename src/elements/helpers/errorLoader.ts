@@ -1,4 +1,6 @@
-type ErrorModule = typeof import('@/templates/errorScreen')
+import type * as ErrorScreen from '@/templates/errorScreen'
+
+type ErrorModule = typeof ErrorScreen
 
 let modulePromise: Promise<ErrorModule> | null = null
 

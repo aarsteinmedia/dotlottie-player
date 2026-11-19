@@ -46,7 +46,8 @@ function advancedButtons(this: DotLottiePlayerBase) {
           manifest: this.getManifest(),
           src: this.src || this.source
         })
-      } finally {
+      }
+      finally {
         convertButton.disabled = false
       }
     }
@@ -121,7 +122,6 @@ function handleButtons(this: DotLottiePlayerBase) {
  * Render Controls.
  */
 export function renderControls(this: DotLottiePlayerBase) {
-
   if (!this.shadow) {
     throw new Error('No Shadow Element')
   }
@@ -243,17 +243,19 @@ export function renderControls(this: DotLottiePlayerBase) {
     seeker = query('.seeker', HTMLInputElement),
     progress = query('progress', HTMLProgressElement)
 
-  this._controlElements = togglePlay && stop && prev && next && seeker && progress ? {
-    convert: query('.convert', HTMLButtonElement),
-    next,
-    popover: query('.popover', HTMLDivElement),
-    prev,
-    progress,
-    seeker,
-    snapshot: query('.snapshot', HTMLButtonElement),
-    stop,
-    togglePlay
-  } : null
+  this._controlElements = togglePlay && stop && prev && next && seeker && progress
+    ? {
+      convert: query('.convert', HTMLButtonElement),
+      next,
+      popover: query('.popover', HTMLDivElement),
+      prev,
+      progress,
+      seeker,
+      snapshot: query('.snapshot', HTMLButtonElement),
+      stop,
+      togglePlay
+    }
+    : null
 
   handleButtons.call(this)
 }

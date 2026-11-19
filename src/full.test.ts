@@ -24,6 +24,5 @@ describe('SSR', () => {
     const container = dotLottiePlayer?.shadowRoot?.querySelector('figure')
 
     expect(container).not.toBeNull()
-
   })
 })

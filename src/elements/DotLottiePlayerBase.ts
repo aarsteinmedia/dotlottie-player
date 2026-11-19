@@ -44,7 +44,6 @@ export { RendererType }
  * DotLottie Player Web Component.
  */
 export abstract class DotLottiePlayerBase extends ScrollElement {
-
   /**
    * Attributes to observe.
    */
@@ -176,9 +175,9 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     value: string
   ) {
     if (
-      !this._lottieInstance ||
-      !this.shadow ||
-      !this._container
+      !this._lottieInstance
+      || !this.shadow
+      || !this._container
     ) {
       return
     }
@@ -333,7 +332,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
         this._addIntersectionObserver()
 
         this.dispatchEvent(new CustomEvent(PlayerEvent.Rendered))
-      } catch (error) {
+      }
+      catch (error) {
         void this._handleError(error)
       }
     })()
@@ -444,9 +444,9 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
       this._isBounce = this.mode === PlayMode.Bounce
       if (this._multiAnimationSettings.length > 0 && this._multiAnimationSettings[this._currentAnimation]?.mode) {
-        this._isBounce =
-          this._multiAnimationSettings[this._currentAnimation]?.mode ===
-          PlayMode.Bounce
+        this._isBounce
+          = this._multiAnimationSettings[this._currentAnimation]?.mode
+            === PlayMode.Bounce
       }
 
       // Relevant for dotLotties with multiple animations
@@ -475,12 +475,12 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
       this.playerState = PlayerState.Stopped
       if (
-        !this.animateOnScroll &&
+        !this.animateOnScroll
         // !this.playOnVisible &&
-        (
-          this.autoplay ||
-          this._multiAnimationSettings[this._currentAnimation]?.autoplay ||
-          this.playOnVisible
+        && (
+          this.autoplay
+          || this._multiAnimationSettings[this._currentAnimation]?.autoplay
+          || this.playOnVisible
         )
       ) {
         this.playerState = PlayerState.Playing
@@ -492,15 +492,14 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
         animationData: animations[this._currentAnimation],
       })
 
-
       this._addEventListeners()
 
-      const speed =
-          this._multiAnimationSettings[this._currentAnimation]?.speed ??
-          this.speed,
-        direction =
-          this._multiAnimationSettings[this._currentAnimation]?.direction ??
-          this.direction
+      const speed
+          = this._multiAnimationSettings[this._currentAnimation]?.speed
+            ?? this.speed,
+        direction
+          = this._multiAnimationSettings[this._currentAnimation]?.direction
+            ?? this.direction
 
       // Set initial playback speed and direction
       this._lottieInstance.setSpeed(speed)
@@ -514,17 +513,17 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
       // Start playing if autoplay is enabled
       if (
-        (this.autoplay ||
-          this.animateOnScroll ||
-          this.playOnVisible) &&
-          this.direction === -1
+        (this.autoplay
+          || this.animateOnScroll
+          || this.playOnVisible)
+        && this.direction === -1
       ) {
         this.seek('99%')
       }
 
       await this._renderControls()
-
-    } catch (error) {
+    }
+    catch (error) {
       await this._handleError(error)
     }
   }
@@ -553,10 +552,12 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     try {
       this._lottieInstance.pause()
       this.dispatchEvent(new CustomEvent(PlayerEvent.Pause))
-    } catch(error) {
+    }
+    catch (error) {
       hasError = true
       this.devLog(error)
-    } finally {
+    }
+    finally {
       this.playerState = hasError ? PlayerState.Error : PlayerState.Paused
     }
   }
@@ -576,10 +577,12 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       this._lottieInstance.play()
 
       this.dispatchEvent(new CustomEvent(PlayerEvent.Play))
-    } catch(error) {
+    }
+    catch (error) {
       hasError = true
       this.devLog(error)
-    } finally {
+    }
+    finally {
       this.playerState = hasError ? PlayerState.Error : PlayerState.Playing
     }
   }
@@ -630,11 +633,11 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     }
 
     if (
-      name === '_isSettingsOpen' &&
-      typeof value === 'boolean' &&
-      elements.popover &&
-      elements.convert &&
-      elements.snapshot
+      name === '_isSettingsOpen'
+      && typeof value === 'boolean'
+      && elements.popover
+      && elements.convert
+      && elements.snapshot
     ) {
       elements.popover.hidden = !value
       elements.convert.hidden = !this.canConvert
@@ -654,7 +657,6 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
   /**
    * Seek to a given frame.
-   *
    * @param value - Frame to seek to.
    */
   public seek(value: number | string) {
@@ -680,7 +682,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     // Check if value is a percentage string
     if (isPercentage) {
       percentage = Math.round(totalFrames * frame / 100)
-    } else {
+    }
+    else {
       percentage = Math.round(frame / totalFrames * 100)
     }
 
@@ -689,9 +692,9 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
     // Send lottie player to the new frame
     if (
-      this.playerState === PlayerState.Playing ||
-      this.playerState === PlayerState.Frozen &&
-      this._playerState.prev === PlayerState.Playing
+      (this.playerState === PlayerState.Playing
+        || this.playerState === PlayerState.Frozen)
+      && this._playerState.prev === PlayerState.Playing
     ) {
       this._lottieInstance.goToAndPlay(frame, true)
       this.playerState = PlayerState.Playing
@@ -711,7 +714,6 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
   /**
    * Animation play direction.
-   *
    * @param value - Animation direction.
    */
   public setDirection(value: AnimationDirection) {
@@ -748,7 +750,6 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
   /**
    * Set animation playback speed.
-   *
    * @param value - Playback speed.
    */
   public setSpeed(value = 1) {
@@ -760,7 +761,6 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
   /**
    * Toggles subframe, for more smooth animations.
-   *
    * @param value - Whether animation uses subframe.
    */
   public setSubframe(value: boolean) {
@@ -791,11 +791,12 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       const isSVG = this.renderer === RendererType.SVG
 
       if (isSVG) {
-        data =
-          animationElement instanceof Node
+        data
+          = animationElement instanceof Node
             ? new XMLSerializer().serializeToString(animationElement)
             : null
-      } else {
+      }
+      else {
         const blob = await new Promise<Blob | null>((resolve) => {
           if (animationElement instanceof HTMLCanvasElement) {
             animationElement.toBlob(resolve, 'image/png')
@@ -820,7 +821,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       }
 
       return data
-    } catch (error) {
+    }
+    catch (error) {
       this.devLog(error)
 
       return null
@@ -840,7 +842,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     try {
       this._lottieInstance.stop()
       this.dispatchEvent(new CustomEvent(PlayerEvent.Stop))
-    } finally {
+    }
+    finally {
       this.playerState = PlayerState.Stopped
     }
   }
@@ -939,7 +942,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     try {
       this._lottieInstance.pause()
       this.dispatchEvent(new CustomEvent(PlayerEvent.Freeze))
-    } finally {
+    }
+    finally {
       this.playerState = PlayerState.Frozen
     }
   }
@@ -973,9 +977,9 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
    */
   protected _handleSeekChange({ target }: Event) {
     if (
-      !(target instanceof HTMLInputElement) ||
-      !this._lottieInstance ||
-      isNaN(Number(target.value))
+      !(target instanceof HTMLInputElement)
+      || !this._lottieInstance
+      || isNaN(Number(target.value))
     ) {
       return
     }
@@ -1150,14 +1154,14 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     if (!this._container) {
       throw new Error('Container not rendered')
     }
-    const preserveAspectRatio =
-        this.preserveAspectRatio ??
-        aspectRatio(this.objectfit),
+    const preserveAspectRatio
+        = this.preserveAspectRatio
+          ?? aspectRatio(this.objectfit),
       currentAnimationSettings = this._multiAnimationSettings.length > 0
         ? this._multiAnimationSettings[this._currentAnimation]
         : undefined,
-      currentAnimationManifest =
-        this._manifest?.animations[this._currentAnimation]
+      currentAnimationManifest
+        = this._manifest?.animations[this._currentAnimation]
 
     // Loop
     let hasLoop = Boolean(this.loop)
@@ -1190,10 +1194,10 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     // Segment
     let initialSegment = this._segment
 
-    if (this._segment?.every((val) => val > 0)) {
+    if (this._segment?.every(val => val > 0)) {
       initialSegment = [this._segment[0] - 1, this._segment[1] - 1]
     }
-    if (this._segment?.some((val) => val < 0)) {
+    if (this._segment?.some(val => val < 0)) {
       initialSegment = undefined
     }
 
@@ -1240,7 +1244,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       if (settings.multiAnimationSettings) {
         this.setMultiAnimationSettings(settings.multiAnimationSettings)
       }
-    } catch (error) {
+    }
+    catch (error) {
       this.devLog(error)
     }
   }
@@ -1255,10 +1260,12 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       if (this.hover) {
         selector[method]('mouseenter', this._mouseEnter)
         selector[method]('mouseleave', this._mouseLeave)
-      } else {
+      }
+      else {
         selector[method]('click', this._handleClick)
       }
-    } else {
+    }
+    else {
       this.selector = null
     }
   }
@@ -1291,7 +1298,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     if (this.count) {
       if (this._isBounce) {
         this._playerState.count += 0.5
-      } else {
+      }
+      else {
         this._playerState.count += 1
       }
 
@@ -1390,8 +1398,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
     }
 
     if (
-      document.hidden &&
-      this.playerState === PlayerState.Playing
+      document.hidden
+      && this.playerState === PlayerState.Playing
     ) {
       this._freeze()
 
@@ -1428,9 +1436,9 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       })
       // Check play mode for current animation
       if (this._multiAnimationSettings[this._currentAnimation]?.mode) {
-        this._isBounce =
-          this._multiAnimationSettings[this._currentAnimation]?.mode ===
-          PlayMode.Bounce
+        this._isBounce
+          = this._multiAnimationSettings[this._currentAnimation]?.mode
+            === PlayMode.Bounce
       }
 
       // Remove event listeners to new Lottie instance, and add new
@@ -1440,11 +1448,10 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
       this.dispatchEvent(new CustomEvent(isPrevious ? PlayerEvent.Previous : PlayerEvent.Next))
 
       if (
-        this._multiAnimationSettings[this._currentAnimation]?.autoplay ??
-        this.autoplay
+        this._multiAnimationSettings[this._currentAnimation]?.autoplay
+        ?? this.autoplay
       ) {
         if (this.animateOnScroll) {
-
           // Get instant scroll position
           this.applyScrollProgress()
 
@@ -1461,7 +1468,8 @@ export abstract class DotLottiePlayerBase extends ScrollElement {
 
       this._lottieInstance.goToAndStop(0, true)
       this.playerState = PlayerState.Stopped
-    } catch (error) {
+    }
+    catch (error) {
       this._errorMessage = handleErrors(error).message
 
       this.playerState = PlayerState.Error

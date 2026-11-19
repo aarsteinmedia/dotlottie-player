@@ -7,7 +7,6 @@ import {
 import { PlayerState } from '@/utils/enums'
 
 export abstract class ScrollElement extends BaseElement {
-
   public isIntersecting = false
 
   private _intersectionObserver?: undefined | IntersectionObserver
@@ -81,9 +80,9 @@ export abstract class ScrollElement extends BaseElement {
    */
   protected _addIntersectionObserver() {
     if (
-      !this._container ||
-      this._intersectionObserver ||
-      !HAS_IO_SUPPORT
+      !this._container
+      || this._intersectionObserver
+      || !HAS_IO_SUPPORT
     ) {
       return
     }
@@ -115,9 +114,9 @@ export abstract class ScrollElement extends BaseElement {
         return
       }
       if (
-        !this.playOnVisible &&
-        this.playerState === PlayerState.Frozen &&
-        !(this.autoplay && reducedMotionQuery?.matches)
+        !this.playOnVisible
+        && this.playerState === PlayerState.Frozen
+        && !(this.autoplay && reducedMotionQuery?.matches)
       ) {
         this.play()
       }
@@ -133,8 +132,8 @@ export abstract class ScrollElement extends BaseElement {
       return true
     }
 
-    return getComputedStyle(source).overflowY !== 'hidden' &&
-      source.scrollHeight > source.clientHeight
+    return getComputedStyle(source).overflowY !== 'hidden'
+      && source.scrollHeight > source.clientHeight
   }
 
   private _getGeometricScrollProgress() {
@@ -167,10 +166,10 @@ export abstract class ScrollElement extends BaseElement {
 
       if (!this._canDriveTimeline(timeline)) {
         this._useGeometricScroll = true
-        this.devLog('[dotlottie-player] animateOnScroll: the player\'s nearest scrolling ancestor cannot ' +
-          'scroll, so its ViewTimeline would never advance. This is almost always an ancestor ' +
-          'with `overflow: hidden` — use `overflow: clip` instead. Falling back to viewport ' +
-          'measurement.')
+        this.devLog('[dotlottie-player] animateOnScroll: the player\'s nearest scrolling ancestor cannot '
+          + 'scroll, so its ViewTimeline would never advance. This is almost always an ancestor '
+          + 'with `overflow: hidden` — use `overflow: clip` instead. Falling back to viewport '
+          + 'measurement.')
 
         return this._getGeometricScrollProgress()
       }
@@ -202,8 +201,8 @@ export abstract class ScrollElement extends BaseElement {
       return
     }
     if (
-      this.playerState === PlayerState.Completed &&
-      !this.once
+      this.playerState === PlayerState.Completed
+      && !this.once
     ) {
       this.playerState = PlayerState.Playing
       this._lottieInstance?.goToAndPlay(this.direction === 1 ? 0 : this._lottieInstance.totalFrames)

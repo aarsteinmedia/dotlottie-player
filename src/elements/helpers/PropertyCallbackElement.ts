@@ -9,9 +9,9 @@ import { IS_SERVER } from '@aarsteinmedia/lottie-web/utils'
 if (IS_SERVER) {
   // Mock HTMLElement for server-side rendering
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  globalThis.HTMLElement ??=
+  globalThis.HTMLElement
     // eslint-disable-next-line @typescript-eslint/no-extraneous-class
-    class EmptyHTMLElement { } as unknown as typeof globalThis.HTMLElement
+    ??= class EmptyHTMLElement { } as unknown as typeof globalThis.HTMLElement
 }
 
 /**
@@ -21,8 +21,8 @@ export abstract class PropertyCallbackElement extends HTMLElement {
   constructor() {
     super()
 
-    const { observedProperties } =
-      this.constructor as unknown as { observedProperties: string[] }
+    const { observedProperties }
+      = this.constructor as unknown as { observedProperties: string[] }
 
     for (let i = 0; i < observedProperties.length; i++) {
       const initialValue = this[observedProperties[i] as keyof this],

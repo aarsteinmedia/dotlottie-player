@@ -11,12 +11,11 @@ import { DotLottiePlayerBase } from '@/elements/DotLottiePlayerBase'
  * DotLottie Player Web Component.
  */
 export class DotLottiePlayerSVG extends DotLottiePlayerBase {
-
   override get renderer() {
     if (super.renderer !== RendererType.SVG) {
-      this.devLog(`[dotlottie-player] renderer "${super.renderer}" is not available in ` +
-        '@aarsteinmedia/dotlottie-player/svg, falling back to "svg". Import from ' +
-        '@aarsteinmedia/dotlottie-player to use other renderers.',
+      this.devLog(`[dotlottie-player] renderer "${super.renderer}" is not available in `
+        + '@aarsteinmedia/dotlottie-player/svg, falling back to "svg". Import from '
+        + '@aarsteinmedia/dotlottie-player to use other renderers.',
       'warn')
     }
 

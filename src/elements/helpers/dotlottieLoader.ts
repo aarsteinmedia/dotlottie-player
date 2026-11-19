@@ -6,12 +6,12 @@ type Convert = (params: ConvertParams) => Promise<Result>
 type AddAnimation = (params: AddAnimationParams) => Promise<Result>
 
 interface InlineInterface {
-  addAnimation: AddAnimation;
-  convert: Convert,
+  addAnimation: AddAnimation
+  convert: Convert
 }
 let dotlottieTools: null | InlineInterface = null,
   loadPromise: Promise<{
-    convert: Convert,
+    convert: Convert
     addAnimation: AddAnimation
   }> | null = null
 

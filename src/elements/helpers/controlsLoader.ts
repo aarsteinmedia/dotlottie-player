@@ -1,4 +1,6 @@
-type ControlsModule = typeof import('@/templates/controls')
+import type * as Controls from '@/templates/controls'
+
+type ControlsModule = typeof Controls
 
 let modulePromise: Promise<ControlsModule> | null
 

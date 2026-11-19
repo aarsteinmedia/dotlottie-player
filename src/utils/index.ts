@@ -29,7 +29,7 @@ export const aspectRatio = (objectFit: ObjectFit) => {
   },
 
   escapeHTML = (str: string) =>
-    str.replaceAll(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`),
+    str.replaceAll(/[&<>"']/g, char => `&#${char.charCodeAt(0)};`),
 
   handleErrors = (err: unknown) => {
     const res = {
@@ -58,9 +58,9 @@ export const aspectRatio = (objectFit: ObjectFit) => {
     }
 
     // Numeric enums have reverse-mapping keys like "0", "1", etc.
-    const enumKeys = Object.keys(_enum).filter((k) => Number.isNaN(Number(k)))
+    const enumKeys = Object.keys(_enum).filter(k => Number.isNaN(Number(k)))
 
-    return enumKeys.some((k) => _enum[k] === (val as T[keyof T]))
+    return enumKeys.some(k => _enum[k] === (val as T[keyof T]))
   },
 
   isLottie = (json: AnimationData) => {
